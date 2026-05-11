@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "description": "命名规则配置",
+  "class_name": {
+    "conversion": "pascal_case",
+    "description": "表名转类名使用大驼峰命名",
+    "examples": {
+      "student": "Student",
+      "sys_class": "SysClass",
+      "student_course": "StudentCourse"
+    }
+  },
+  "file_name": {
+    "conversion": "snake_case",
+    "description": "表名转文件名使用蛇形命名",
+    "examples": {
+      "student": "student.py",
+      "sys_class": "sys_class.py",
+      "student_course": "student_course.py"
+    }
+  },
+  "resource_name": {
+    "singular": "snake_case",
+    "plural": "plural_snake_case",
+    "description": "API路由资源名",
+    "plural_rules": {
+      "default": "add_s",
+      "exceptions": {
+        "class": "classes",
+        "category": "categories",
+        "child": "children",
+        "man": "men",
+        "woman": "women"
+      }
+    },
+    "examples": {
+      "student": {
+        "singular": "student",
+        "plural": "students"
+      },
+      "sys_class": {
+        "singular": "sys_class",
+        "plural": "sys_classes"
+      }
+    }
+  },
+  "service_name": {
+    "conversion": "snake_case_with_suffix",
+    "suffix": "_service",
+    "description": "服务类文件名",
+    "examples": {
+      "student": "student_service.py",
+      "sys_class": "sys_class_service.py"
+    }
+  },
+  "field_name": {
+    "conversion": "snake_case",
+    "description": "数据库字段名转Python属性名使用蛇形命名",
+    "examples": {
+      "student_id": "student_id",
+      "userID": "user_id",
+      "phoneNumber": "phone_number"
+    }
+  }
+}
