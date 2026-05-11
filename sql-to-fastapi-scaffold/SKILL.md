@@ -7,13 +7,13 @@ description: "从SQL CREATE TABLE语句生成完整的FastAPI项目脚手架，�
 
 ## 概述
 
-`sql-to-fastapi-scaffold` 是一个基于资源驱动的技能，用于从 SQL CREATE TABLE 语句自动生成完整的 FastAPI 项目脚手架代码。该技能不依赖脚本，而是通过资源文件（模板、配置等）驱动大模型生成代码。
+`sql-to-fastapi-scaffold` 是一个基于资源驱动的技能，用于从SQL表结构语句自动生成完整的 FastAPI 项目脚手架代码。该技能不依赖脚本，而是通过资源文件（模板、配置等）驱动大模型生成代码。
 
 ## 什么时候使用此技能
 
 使用此技能的场景：
 - 用户提供 SQL CREATE TABLE 语句
-- 用户要求从数据库表生成 FastAPI 代码
+- 用户要求从数据库表生成 FastAPI 接口代码，符合RESTful 风格
 - 用户要求搭建 API 或创建 API 端点
 - 用户提到 "SQL 转 FastAPI"、"表到 API"、"生成脚手架" 等类似表述
 
