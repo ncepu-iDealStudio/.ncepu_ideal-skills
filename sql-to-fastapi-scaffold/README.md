@@ -52,10 +52,6 @@ sql-to-fastapi-scaffold/
 - 操作文档请参考
 [Trea IDE 配置技能](../docs/Trea中使用skill配置.md)
 
-- 如果你使用的是VS Code，你可以通过扩展来配置技能环境。
-- 操作文档请参考
-[VS Code 配置技能](../docs/VSCode中使用skill配置.md)
-
 - 如果你使用的是claude code ，你可以通过扩展来配置技能环境。
 - 操作文档请参考
 [claude code 配置技能](../docs/claude中使用skill配置.md)
