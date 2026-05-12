@@ -18,11 +18,48 @@
 
 ## 技能项目结构
 
-
+```
+sql-to-fastapi-scaffold/
+├── resources/                          # 技能资源目录
+│   ├── config/                         # 配置文件
+│   │   ├── naming_rules.json          # 命名规则配置
+│   │   └── type_mappings.json         # SQL类型映射配置
+│   ├── specifications/                 # 规范文档
+│   │   └── coding_standards.md        # 代码规范标准
+│   └── templates/                      # 代码模板
+│       ├── layers/                    # 分层模板
+│       │   ├── model/                 # 数据模型模板
+│       │   ├── resource/             # API路由模板
+│       │   ├── schema/                # Pydantic模式模板
+│       │   └── service/               # 服务层模板
+│       └── project_structure/         # 项目结构模板
+│           ├── app/                   # 应用核心
+│           ├── config/                # 配置模块
+│           ├── core/                  # 核心模块
+│           ├── models/                # 数据模型
+│           ├── schemas/               # 数据验证模型
+│           ├── service/              # 业务逻辑层
+│           ├── api/                   # API路由
+│           └── utils/                 # 工具函数
+├── README.md                          # 技能说明文档
+└── SKILL.md                          # 技能元数据配置
+```
 
 ## 使用方法
 
-### 1 拷贝技能文件到目标项目中
+### 1 配置技能到目标开发IDE中
+- 如果你使用的是Trea IDE，你可以直接在IDE中配置技能环境。
+- 操作文档请参考
+[Trea IDE 配置技能](../../docs/Trea中使用skill配置.md)
+
+- 如果你使用的是VS Code，你可以通过扩展来配置技能环境。
+- 操作文档请参考
+[VS Code 配置技能](../../docs/VSCode中使用skill配置.md)
+
+- 如果你使用的是claude code ，你可以通过扩展来配置技能环境。
+- 操作文档请参考
+[claude code 配置技能](../../docs/claude中使用skill配置.md)
+
 
 
 ### 2 准备SQL语句
@@ -30,6 +67,26 @@
 向技能提供 SQL CREATE TABLE 语句，例如：
 
 ```sql
+CREATE TABLE student (
+    studentID VARCHAR(20) PRIMARY KEY COMMENT '学号',
+    userID VARCHAR(22) COMMENT '用户ID',
+    name VARCHAR(100) NOT NULL COMMENT '学生姓名',
+    phoneNumber VARCHAR(20) COMMENT '电话号码',
+    age INT COMMENT '年龄',
+    is_deleted BOOLEAN DEFAULT FALSE COMMENT '是否删除',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (userID) REFERENCES sso_user(userID)
+);
+```
+当然也可以使用sql语句初始化项目
+
+### 3 请求技能生成代码
+
+向ai开发工具进行对话: 
+例如：
+```
+请根据以下SQL CREATE TABLE 语句（或者是sql文件），生成对应的 FastAPI 项目脚手架代码：
 CREATE TABLE student (
     studentID VARCHAR(20) PRIMARY KEY COMMENT '学号',
     userID VARCHAR(22) COMMENT '用户ID',
@@ -96,6 +153,21 @@ fastapi_project/
 2. **schemas/{table_name}.py** - Pydantic 验证模型（Base、Create、Update、Response）
 3. **api/v1/{resource_plural}/{resource_plural}Resource.py** - FastAPI 路由（5个CRUD端点）
 4. **service/{table_name}_service.py** - 服务层（5个业务方法）
+
+**路由结构**：
+- `api/__init__.py` → `api_router` (prefix="/api")
+- `api/v1/__init__.py` → `v1_router` (prefix="/v1")
+- 子路由不额外加前缀，由具体API文件定义
+
+**中间件结构**：
+- `app/middleware.py` 直接注册中间件
+- `middleware/` 目录保留，用于后续扩展中间件实现
+
+**不生成的文件**（根据用户要求）：
+- 测试代码
+- 部署相关配置（Docker、Nginx等）
+- 数据库初始化脚本
+- 监控和日志系统
 
 ## 特性说明
 
