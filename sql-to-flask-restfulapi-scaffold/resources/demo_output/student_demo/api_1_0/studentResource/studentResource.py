@@ -12,10 +12,10 @@ from utils.response_code import RET, error_map_EN
 class StudentResource(Resource):
 
     @classmethod
-    def get(cls, student_id=None):
+    def get(cls, auto_id=None):
         kwargs = request.args.to_dict(flat=True)
-        if student_id is not None:
-            kwargs["studentID"] = student_id
+        if auto_id is not None:
+            kwargs["autoID"] = auto_id
 
         kwargs = commons.put_remove_none(**kwargs)
         res = StudentService.get(**kwargs)
@@ -32,24 +32,24 @@ class StudentResource(Resource):
         return jsonify(**res)
 
     @classmethod
-    def put(cls, student_id):
-        if student_id is None:
+    def put(cls, auto_id):
+        if auto_id is None:
             return jsonify(code=RET.PARAMERR, message=error_map_EN.get(RET.PARAMERR, "Parameter error"), data={"error": "primary key is required"})
 
         payload = request.get_json(silent=True)
         if not payload:
             payload = request.form.to_dict(flat=True)
         payload = commons.put_remove_none(**(payload or {}))
-        payload["studentID"] = student_id
+        payload["autoID"] = auto_id
 
         res = StudentService.update(**payload)
         return jsonify(**res)
 
     @classmethod
-    def delete(cls, student_id=None):
+    def delete(cls, auto_id=None):
         kwargs = {}
-        if student_id is not None:
-            kwargs["studentID"] = student_id
+        if auto_id is not None:
+            kwargs["autoID"] = auto_id
         else:
             kwargs.update(request.args.to_dict(flat=True))
 

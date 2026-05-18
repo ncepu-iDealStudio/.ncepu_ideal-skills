@@ -8,6 +8,6 @@ from flask import jsonify
 class StudentOtherResource(Resource):
 
     @classmethod
-    def sensitive_update(cls, student_id):
+    def sensitive_update(cls, auto_id):
         # Placeholder endpoint kept for compatibility with target structure.
-        return jsonify(code=0, message="OK", data={"student_id": student_id})
+        return jsonify(code=0, message="OK", data={"auto_id": auto_id})

@@ -60,8 +60,8 @@ class StudentController(Student):
             if hasattr(cls, "isDelete"):
                 query = query.filter(getattr(cls, "isDelete") == 0)
 
-            if "studentID" in kwargs and kwargs.get("studentID") is not None:
-                query = query.filter(getattr(cls, "studentID") == kwargs.get("studentID"))
+            if "autoID" in kwargs and kwargs.get("autoID") is not None:
+                query = query.filter(getattr(cls, "autoID") == kwargs.get("autoID"))
             else:
                 for key, value in kwargs.items():
                     if value is None:
@@ -95,7 +95,7 @@ class StudentController(Student):
     @classmethod
     def update(cls, **kwargs):
         try:
-            pk_value = kwargs.get("studentID")
+            pk_value = kwargs.get("autoID")
             if pk_value is None:
                 return {
                     "code": RET.PARAMERR,
@@ -103,7 +103,7 @@ class StudentController(Student):
                     "data": {"error": "primary key is required"}
                 }
 
-            query = db.session.query(cls).filter(getattr(cls, "studentID") == pk_value)
+            query = db.session.query(cls).filter(getattr(cls, "autoID") == pk_value)
             if hasattr(cls, "isDelete"):
                 query = query.filter(getattr(cls, "isDelete") == 0)
 
@@ -116,7 +116,7 @@ class StudentController(Student):
                 }
 
             for key, value in kwargs.items():
-                if key == "studentID" or value is None:
+                if key == "autoID" or value is None:
                     continue
                 if hasattr(model, key):
                     setattr(model, key, value)
@@ -141,7 +141,7 @@ class StudentController(Student):
     @classmethod
     def delete(cls, **kwargs):
         try:
-            pk_value = kwargs.get("studentID")
+            pk_value = kwargs.get("autoID")
             if pk_value is None:
                 return {
                     "code": RET.PARAMERR,
@@ -149,7 +149,7 @@ class StudentController(Student):
                     "data": {"error": "primary key is required"}
                 }
 
-            query = db.session.query(cls).filter(getattr(cls, "studentID") == pk_value)
+            query = db.session.query(cls).filter(getattr(cls, "autoID") == pk_value)
             model = query.first()
             if not model:
                 return {
@@ -167,7 +167,7 @@ class StudentController(Student):
             return {
                 "code": RET.OK,
                 "message": error_map_EN.get(RET.OK, "OK"),
-                "data": {"studentID": pk_value}
+                "data": {"autoID": pk_value}
             }
         except Exception as exc:
             db.session.rollback()

@@ -100,6 +100,7 @@ V1 仅覆盖常见 MySQL DDL：
 - 字段名尽量保持 SQL 原样，不自动改名
 - 软删除字段识别：`is_delete`、`is_deleted`、`isDelete`、`isDeleted`
 - `get/update` 默认过滤已软删除记录
+- Model 字段行由渲染器根据 `entities[].fields` 自动拼接（不依赖手写 `fields_block`）
 
 ## 统一响应协议
 
@@ -156,6 +157,8 @@ sql-to-flask-restfulapi-scaffold/
 	├── tools/
 	│   ├── preview_generation_plan.py
 	│   ├── render_demo_single_entity.py
+	│   ├── render_preview_bundle.py
+	│   ├── render_utils.py
 	│   └── validate_template_context.py
 	└── demo_output/
 		└── student_demo/
@@ -182,6 +185,22 @@ python resources/tools/render_demo_single_entity.py
 ```
 
 演示输出目录：`resources/demo_output/student_demo/`
+
+### 4) table + view 组合渲染预览（含 manifest）
+
+```bash
+python resources/tools/render_preview_bundle.py
+```
+
+输出目录：`resources/demo_output/bundle_preview/`
+
+manifest 示例：`resources/demo_output/bundle_preview/manifest.json`
+
+## 使用文档
+
+- Trae 使用说明：`../docs/Trea中使用skill配置.md`
+- Claude 使用说明：`../docs/claude中使用skill配置.md`
+- GitHub Copilot 使用说明：`../docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`
 
 ## 验收标准
 
