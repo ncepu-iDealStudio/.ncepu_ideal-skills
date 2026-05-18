@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "description": "命名规则配置",
+  "class_name": {
+    "conversion": "pascal_case",
+    "description": "表名转类名使用大驼峰命名",
+    "examples": {
+      "student": "Student",
+      "sys_class": "SysClass",
+      "student_course": "StudentCourse"
+    }
+  },
+  "file_name": {
+    "conversion": "pascal_case",
+    "description": "表名转文件名使用大驼峰命名",
+    "examples": {
+      "student": "Student.java",
+      "sys_class": "SysClass.java",
+      "student_course": "StudentCourse.java"
+    }
+  },
+  "resource_name": {
+    "singular": "snake_case",
+    "plural": "plural_snake_case",
+    "description": "API路由资源名",
+    "plural_rules": {
+      "default": "add_s",
+      "exceptions": {
+        "class": "classes",
+        "category": "categories",
+        "child": "children",
+        "man": "men",
+        "woman": "women"
+      }
+    },
+    "examples": {
+      "student": {
+        "singular": "/student",
+        "plural": "/students"
+      },
+      "sys_class": {
+        "singular": "/sys_class",
+        "plural": "/sys_classes"
+      }
+    }
+  },
+  "service_name": {
+    "conversion": "pascal_case_with_suffix",
+    "suffix": "Service",
+    "description": "服务类文件名",
+    "examples": {
+      "student": "StudentService.java",
+      "sys_class": "SysClassService.java"
+    }
+  },
+  "field_name": {
+    "conversion": "camel_case",
+    "description": "数据库字段名转Java属性名使用驼峰命名",
+    "examples": {
+      "student_id": "studentId",
+      "user_id": "userId",
+      "phone_number": "phoneNumber",
+      "created_at": "createdAt"
+    }
+  },
+  "db_column_name": {
+    "conversion": "snake_case_upper",
+    "description": "Java属性名转数据库列名使用大写下划线",
+    "examples": {
+      "studentId": "STUDENT_ID",
+      "userId": "USER_ID",
+      "phoneNumber": "PHONE_NUMBER"
+    }
+  },
+  "repository_name": {
+    "conversion": "pascal_case_with_suffix",
+    "suffix": "Repository",
+    "description": "Repository接口文件名",
+    "examples": {
+      "student": "StudentRepository.java",
+      "sys_class": "SysClassRepository.java"
+    }
+  },
+  "request_dto_name": {
+    "conversion": "pascal_case_with_suffix",
+    "suffix": "Request",
+    "description": "请求DTO文件名",
+    "examples": {
+      "student": "StudentRequest.java"
+    }
+  },
+  "response_dto_name": {
+    "conversion": "pascal_case_with_suffix",
+    "suffix": "Response",
+    "description": "响应DTO文件名",
+    "examples": {
+      "student": "StudentResponse.java"
+    }
+  },
+  "controller_name": {
+    "conversion": "pascal_case_with_suffix",
+    "suffix": "Controller",
+    "description": "控制器文件名",
+    "examples": {
+      "student": "StudentController.java"
+    }
+  },
+  "package_name": {
+    "base": "com.security.apisecurity",
+    "layers": {
+      "entity": "entity",
+      "repository": "repository",
+      "service": "service",
+      "controller": "controller",
+      "dto": "dto",
+      "dto_request": "dto.request",
+      "dto_response": "dto.response",
+      "config": "config",
+      "exception": "exception",
+      "security": "security"
+    }
+  }
+}

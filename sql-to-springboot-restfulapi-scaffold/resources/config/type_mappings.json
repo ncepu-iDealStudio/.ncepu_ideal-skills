@@ -1,0 +1,171 @@
+{
+  "version": "1.0.0",
+  "description": "SQL类型到Java和JPA的类型映射配置",
+  "type_mappings": [
+    {
+      "sql_types": ["VARCHAR", "VARCHAR2", "CHAR"],
+      "java_type": "String",
+      "jpa_column_type": "String",
+      "requires_length": true,
+      "default_length": 255
+    },
+    {
+      "sql_types": ["INT", "INTEGER", "SMALLINT"],
+      "java_type": "Integer",
+      "jpa_column_type": "Integer",
+      "requires_length": false
+    },
+    {
+      "sql_types": ["BIGINT"],
+      "java_type": "Long",
+      "jpa_column_type": "BigInteger",
+      "requires_length": false
+    },
+    {
+      "sql_types": ["BOOLEAN", "BOOL", "TINYINT(1)"],
+      "java_type": "Boolean",
+      "jpa_column_type": "Boolean",
+      "requires_length": false
+    },
+    {
+      "sql_types": ["DATETIME", "TIMESTAMP"],
+      "java_type": "LocalDateTime",
+      "jpa_column_type": "LocalDateTime",
+      "requires_length": false,
+      "import_required": "java.time.LocalDateTime"
+    },
+    {
+      "sql_types": ["DATE"],
+      "java_type": "LocalDate",
+      "jpa_column_type": "Date",
+      "requires_length": false,
+      "import_required": "java.time.LocalDate"
+    },
+    {
+      "sql_types": ["TIME"],
+      "java_type": "LocalTime",
+      "jpa_column_type": "Time",
+      "requires_length": false,
+      "import_required": "java.time.LocalTime"
+    },
+    {
+      "sql_types": ["TEXT", "LONGTEXT", "MEDIUMTEXT"],
+      "java_type": "String",
+      "jpa_column_type": "Text",
+      "requires_length": false
+    },
+    {
+      "sql_types": ["DECIMAL", "NUMERIC"],
+      "java_type": "BigDecimal",
+      "jpa_column_type": "Numeric",
+      "requires_length": true,
+      "import_required": "java.math.BigDecimal"
+    },
+    {
+      "sql_types": ["FLOAT"],
+      "java_type": "Float",
+      "jpa_column_type": "Float",
+      "requires_length": false
+    },
+    {
+      "sql_types": ["DOUBLE", "DOUBLE PRECISION"],
+      "java_type": "Double",
+      "jpa_column_type": "Double",
+      "requires_length": false
+    },
+    {
+      "sql_types": ["JSON", "JSONB"],
+      "java_type": "String",
+      "jpa_column_type": "Text",
+      "requires_length": false
+    }
+  ],
+  "field_validators": [
+    {
+      "pattern": "phone|mobile|tel",
+      "type": "phone",
+      "description": "中国手机号格式验证",
+      "annotation": "@Pattern(regexp = \"^[1][3-9]\\\\d{9}$\", message = \"手机号格式不正确\")"
+    },
+    {
+      "pattern": "email",
+      "type": "email",
+      "description": "邮箱格式验证",
+      "annotation": "@Pattern(regexp = \"^[\\\\w\\\\.-]+@[\\\\w\\\\.-]+\\\\.\\\\w+$\", message = \"邮箱格式不正确\")"
+    },
+    {
+      "pattern": "^age$",
+      "type": "age",
+      "description": "年龄范围验证",
+      "annotation": "@Min(value = 0, message = \"年龄不能小于0\") @Max(value = 150, message = \"年龄不能大于150\")"
+    },
+    {
+      "pattern": "gender|sex",
+      "type": "gender",
+      "description": "性别枚举验证",
+      "annotation": "@Pattern(regexp = \"^[男女其他]$\", message = \"性别只能是：男、女、其他\")"
+    }
+  ],
+  "soft_delete_fields": [
+    "is_deleted",
+    "is_delete",
+    "deleted",
+    "isDelete",
+    "is_enabled",
+    "isEnable",
+    "enabled"
+  ],
+  "exclude_from_request": [
+    "id",
+    "auto_id",
+    "autoId",
+    "uuid",
+    "uuid_id",
+    "uuidId",
+    "create_time",
+    "createTime",
+    "created_at",
+    "createdAt",
+    "update_time",
+    "updateTime",
+    "updated_at",
+    "updatedAt",
+    "is_deleted",
+    "is_delete",
+    "deleted",
+    "isDelete",
+    "status",
+    "state",
+    "version",
+    "creator",
+    "modifier",
+    "create_by",
+    "update_by",
+    "create_by",
+    "modify_by"
+  ],
+  "exclude_from_response": [
+    "password",
+    "pwd",
+    "passwd",
+    "secret",
+    "token"
+  ],
+  "sensitive_fields": [
+    {
+      "pattern": "phone|mobile|tel",
+      "min_length": 11,
+      "masking": "prefix3****suffix4"
+    },
+    {
+      "pattern": "email",
+      "min_length": 6,
+      "masking": "prefix3****suffix4"
+    },
+    {
+      "pattern": "id_card|idcard|identity",
+      "min_length": 15,
+      "masking": "prefix3****suffix4"
+    }
+  ]
+}
