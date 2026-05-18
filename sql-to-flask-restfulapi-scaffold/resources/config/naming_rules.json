@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "module_name": {
+    "conversion": "snake_case",
+    "description": "All generated Python module names use snake_case"
+  },
+  "url": {
+    "path_style": "snake_case",
+    "path_param_style": "snake_case",
+    "description": "URL paths and route parameters are generated in snake_case"
+  },
+  "class_name": {
+    "conversion": "pascal_case",
+    "description": "Class names use PascalCase"
+  },
+  "resource_folder": {
+    "suffix": "Resource",
+    "description": "API resource folder naming suffix"
+  },
+  "route_key": {
+    "source": "sql_primary_key",
+    "description": "Route key must use primary key defined in SQL DDL"
+  }
+}

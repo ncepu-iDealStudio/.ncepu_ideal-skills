@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "default_profile": "standard",
+  "profiles": {
+    "minimal": {
+      "include_utils_core": true,
+      "include_utils_business": false,
+      "include_utils_security": false,
+      "generate_other_resource": true,
+      "supports_batch_add": false
+    },
+    "standard": {
+      "include_utils_core": true,
+      "include_utils_business": true,
+      "include_utils_security": false,
+      "generate_other_resource": true,
+      "supports_batch_add": false
+    },
+    "secure": {
+      "include_utils_core": true,
+      "include_utils_business": true,
+      "include_utils_security": true,
+      "generate_other_resource": true,
+      "supports_batch_add": false
+    }
+  }
+}

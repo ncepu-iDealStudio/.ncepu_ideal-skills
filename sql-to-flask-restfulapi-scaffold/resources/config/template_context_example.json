@@ -1,0 +1,134 @@
+{
+  "project": {
+    "project_name": "api.study-flask.com",
+    "api_version_prefix": "/api_1_0",
+    "run_mode_default": "develop",
+    "module_style": "snake_case",
+    "sql_source_type": "file",
+    "sql_source_path": "test/study_flask_api.sql",
+    "generator_name": "sql-to-flask-restfulapi-scaffold"
+  },
+  "options": {
+    "first_scaffold": true,
+    "generate_other_resource": true,
+    "supports_batch_add": false,
+    "auto_permission_whitelist": false,
+    "overwrite_strategy": "merge",
+    "conflict_policy": "warn",
+    "security_profile": "standard"
+  },
+  "entities": [
+    {
+      "entity_kind": "table",
+      "table_name_raw": "student",
+      "module_name": "student",
+      "class_name": "Student",
+      "resource_slug": "student",
+      "endpoint_base": "student",
+      "url_collection": "/student",
+      "url_item": "/student/<student_id>",
+      "route_param_name": "student_id",
+      "primary_key_field": "studentID",
+      "primary_key_type": "str",
+      "supports_crud": true,
+      "supports_query": true,
+      "supports_other_resource": true,
+      "has_soft_delete": true,
+      "soft_delete_field": "isDelete",
+      "soft_delete_active_value": 1,
+      "soft_delete_inactive_value": 0,
+      "fields": [
+        {
+          "field_name_raw": "studentID",
+          "sql_type_raw": "varchar(20)",
+          "sqlalchemy_type": "db.String(20)",
+          "python_type": "str",
+          "nullable": true,
+          "is_primary_key": false,
+          "is_auto_increment": false,
+          "is_soft_delete_field": false,
+          "in_get_filter": true,
+          "in_post_payload": true,
+          "in_put_payload": false
+        },
+        {
+          "field_name_raw": "name",
+          "sql_type_raw": "varchar(20)",
+          "sqlalchemy_type": "db.String(20)",
+          "python_type": "str",
+          "nullable": true,
+          "is_primary_key": false,
+          "is_auto_increment": false,
+          "is_soft_delete_field": false,
+          "in_get_filter": true,
+          "in_post_payload": true,
+          "in_put_payload": true
+        },
+        {
+          "field_name_raw": "isDelete",
+          "sql_type_raw": "tinyint(1)",
+          "sqlalchemy_type": "db.Integer",
+          "python_type": "int",
+          "nullable": true,
+          "is_primary_key": false,
+          "is_auto_increment": false,
+          "is_soft_delete_field": true,
+          "in_get_filter": false,
+          "in_post_payload": false,
+          "in_put_payload": false
+        }
+      ]
+    },
+    {
+      "entity_kind": "view",
+      "table_name_raw": "v_student_course_score",
+      "module_name": "v_student_course_score",
+      "class_name": "VStudentCourseScore",
+      "resource_slug": "v_student_course_score",
+      "endpoint_base": "v_student_course_score",
+      "url_collection": "/v_student_course_score/query",
+      "url_item": "",
+      "route_param_name": "",
+      "primary_key_field": "",
+      "primary_key_type": "",
+      "supports_crud": false,
+      "supports_query": true,
+      "supports_other_resource": true,
+      "has_soft_delete": false,
+      "soft_delete_field": "",
+      "fields": [
+        {
+          "field_name_raw": "studentID",
+          "sql_type_raw": "varchar(20)",
+          "sqlalchemy_type": "db.String(20)",
+          "python_type": "str",
+          "nullable": true,
+          "is_primary_key": false,
+          "is_auto_increment": false,
+          "is_soft_delete_field": false,
+          "in_get_filter": true,
+          "in_post_payload": false,
+          "in_put_payload": false
+        },
+        {
+          "field_name_raw": "courseName",
+          "sql_type_raw": "varchar(50)",
+          "sqlalchemy_type": "db.String(50)",
+          "python_type": "str",
+          "nullable": true,
+          "is_primary_key": false,
+          "is_auto_increment": false,
+          "is_soft_delete_field": false,
+          "in_get_filter": true,
+          "in_post_payload": false,
+          "in_put_payload": false
+        }
+      ]
+    }
+  ],
+  "diagnostics": {
+    "parse_errors": [],
+    "fallback_warnings": [],
+    "conflict_warnings": []
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "version": "1.0.0",
+  "description": "MySQL to Flask-SQLAlchemy type mapping",
+  "type_mappings": [
+    {
+      "sql_types": ["VARCHAR", "CHAR", "TEXT", "LONGTEXT", "MEDIUMTEXT"],
+      "sqlalchemy_type": "db.String",
+      "python_type": "str"
+    },
+    {
+      "sql_types": ["INT", "INTEGER", "SMALLINT", "TINYINT"],
+      "sqlalchemy_type": "db.Integer",
+      "python_type": "int"
+    },
+    {
+      "sql_types": ["BIGINT"],
+      "sqlalchemy_type": "db.BigInteger",
+      "python_type": "int"
+    },
+    {
+      "sql_types": ["FLOAT", "DOUBLE", "DECIMAL", "NUMERIC"],
+      "sqlalchemy_type": "db.Float",
+      "python_type": "float"
+    },
+    {
+      "sql_types": ["DATE"],
+      "sqlalchemy_type": "db.Date",
+      "python_type": "date"
+    },
+    {
+      "sql_types": ["DATETIME", "TIMESTAMP"],
+      "sqlalchemy_type": "db.DateTime",
+      "python_type": "datetime"
+    },
+    {
+      "sql_types": ["JSON"],
+      "sqlalchemy_type": "db.JSON",
+      "python_type": "dict"
+    }
+  ],
+  "soft_delete_field_candidates": [
+    "is_delete",
+    "is_deleted",
+    "isDelete",
+    "isDeleted"
+  ],
+  "pagination": {
+    "page_param": "Page",
+    "size_param": "Size",
+    "default_page": 1,
+    "default_size": 10,
+    "max_size": 100
+  }
+}
