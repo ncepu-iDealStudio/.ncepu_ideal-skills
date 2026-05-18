@@ -1,0 +1,45 @@
+{
+  "project": {
+    "project_name": "api.study-flask.com",
+    "api_version_prefix": "/api_1_0",
+    "run_mode_default": "develop",
+    "module_style": "snake_case",
+    "sql_source_type": "file",
+    "sql_source_path": "test/study_flask_api.sql",
+    "generator_name": "sql-to-flask-restfulapi-scaffold"
+  },
+  "summary": {
+    "tables": 1,
+    "views": 1,
+    "generated_files": 13
+  },
+  "entities": [
+    {
+      "entity_kind": "table",
+      "module_name": "student",
+      "class_name": "Student",
+      "generated_files": [
+        "models/student.py",
+        "controller/StudentController.py",
+        "service/StudentService.py",
+        "api_1_0/studentResource/studentResource.py",
+        "api_1_0/studentResource/studentOtherResource.py",
+        "api_1_0/studentResource/__init__.py",
+        "api_1_0/studentResource/urls.py"
+      ]
+    },
+    {
+      "entity_kind": "view",
+      "module_name": "v_student_course_score",
+      "class_name": "VStudentCourseScore",
+      "generated_files": [
+        "models/v_student_course_score.py",
+        "controller/VStudentCourseScoreController.py",
+        "service/VStudentCourseScoreService.py",
+        "api_1_0/v_student_course_scoreResource/v_student_course_scoreOtherResource.py",
+        "api_1_0/v_student_course_scoreResource/__init__.py",
+        "api_1_0/v_student_course_scoreResource/urls.py"
+      ]
+    }
+  ]
+}
