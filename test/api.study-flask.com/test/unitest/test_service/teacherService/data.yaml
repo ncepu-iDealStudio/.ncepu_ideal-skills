@@ -1,0 +1,21 @@
+-
+  module_name: teacherService
+  class_name: teacherService
+  function_name: xxx
+  params:
+      autoID: 
+      teacherID: 
+      userID: 
+      departmentID: 
+      name: 
+      email: 
+      phone: 
+      officeAddress: 
+      isDelete: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

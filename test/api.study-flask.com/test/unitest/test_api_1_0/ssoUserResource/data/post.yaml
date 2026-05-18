@@ -1,0 +1,24 @@
+- name: ssoUser添加接口
+  request:
+    method: post
+    url: /api_1_0/ssoUser
+    headers:
+      token: token
+  test_cases:
+  - case_name:"your case name1"
+    data:
+      id: 2024040720004078
+    validate:
+      eq:
+        status_code: 200
+        code: "2000"
+
+  - case_name: "your case name2"
+    data:
+      id: 111
+    validate:
+      eq:
+        status_code: 200
+        code: "2000"
+
+    

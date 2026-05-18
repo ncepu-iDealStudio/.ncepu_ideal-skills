@@ -1,0 +1,19 @@
+-
+  module_name: sysDepartmentinfoService
+  class_name: sysDepartmentinfoService
+  function_name: xxx
+  params:
+      autoID: 
+      departmentID: 
+      parentDepartmentID: 
+      collegeID: 
+      departmentName: 
+      departmentType: 
+      isDeleted: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

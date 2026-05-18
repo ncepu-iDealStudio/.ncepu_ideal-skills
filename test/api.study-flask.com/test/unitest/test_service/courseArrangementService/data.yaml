@@ -1,0 +1,18 @@
+-
+  module_name: courseArrangementService
+  class_name: courseArrangementService
+  function_name: xxx
+  params:
+      autoID: 
+      courseID: 
+      termID: 
+      classTime: 
+      count: 
+      isDelete: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

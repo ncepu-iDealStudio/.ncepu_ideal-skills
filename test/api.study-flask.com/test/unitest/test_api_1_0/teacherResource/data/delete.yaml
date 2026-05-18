@@ -1,0 +1,25 @@
+api_name: teacher删除接口
+  request:
+    method: delete
+    url: /api_1_0/teacher
+    headers:
+      token: token
+      content-type: application/json
+  test_cases:
+  - case_name:"your case name1"
+    data:
+      id: 2024040720004078
+    validate:
+      eq:
+        status_code: 200
+        code: "2000"
+
+  - case_name: "your case name2"
+    data:
+      id: 111
+    validate:
+      eq:
+        status_code: 200
+        code: "2000"
+
+    

@@ -1,0 +1,113 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*- 
+
+from flask_restful import Resource, reqparse
+from flask import jsonify
+
+from controller.sysCollegeInfoController import SysCollegeInfoController
+from utils import commons
+from utils.response_code import RET, error_map_EN
+import json
+
+
+class SysCollegeInfoResource(Resource):
+
+    # get
+    @classmethod
+    def get(cls, collegeID=None):
+        if collegeID:
+            kwargs = {
+                'collegeID': collegeID
+            }
+
+            res = SysCollegeInfoController.get(**kwargs)
+            if res['code'] == RET.OK:
+                return jsonify(code=res['code'], message=res['message'], data=res['data'])
+            else:
+                return jsonify(code=res['code'], message=res['message'], data=res['data'])
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('autoID', location='args', required=False, help='autoID参数类型不正确或缺失')
+        parser.add_argument('collegeID', location='args', required=False, help='collegeID参数类型不正确或缺失')
+        parser.add_argument('collegeName', location='args', required=False, help='collegeName参数类型不正确或缺失')
+        parser.add_argument('isDelete', location='args', required=False, help='isDelete参数类型不正确或缺失')
+        parser.add_argument('addTime', location='args', required=False, help='addTime参数类型不正确或缺失')
+        
+        parser.add_argument('Page', location='args', required=False, help='Page参数类型不正确或缺失')
+        parser.add_argument('Size', location='args', required=False, help='Size参数类型不正确或缺失')
+
+        kwargs = parser.parse_args()
+        kwargs = commons.put_remove_none(**kwargs)
+
+        res = SysCollegeInfoController.get(**kwargs)
+        if res['code'] == RET.OK:
+            return jsonify(code=res['code'], message=res['message'], data=res['data'], totalPage=res['totalPage'], totalCount=res['totalCount'])
+        else:
+            return jsonify(code=res['code'], message=res['message'], data=res['data']) 
+
+    
+    # delete
+    @classmethod
+    def delete(cls, collegeID=None):
+        if collegeID:
+            kwargs = {
+                'collegeID': collegeID
+            }
+
+        else:
+            return jsonify(code=RET.PARAMERR, message=error_map_EN[RET.PARAMERR], data='id不能为空')
+
+        res = SysCollegeInfoController.delete(**kwargs)
+
+        return jsonify(code=res['code'], message=res['message'], data=res['data'])
+
+    
+    # put
+    @classmethod
+    def put(cls, collegeID):
+        if not collegeID:
+            return jsonify(code=RET.NODATA, message='primary key missed', error='primary key missed')
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('collegeName', location='form', required=False, help='collegeName参数类型不正确或缺失')
+        parser.add_argument('addTime', location='form', required=False, help='addTime参数类型不正确或缺失')
+        
+        kwargs = parser.parse_args()
+        kwargs = commons.put_remove_none(**kwargs)
+        kwargs['collegeID'] = collegeID
+
+        res = SysCollegeInfoController.update(**kwargs)
+
+        return jsonify(code=res['code'], message=res['message'], data=res['data'])
+
+    
+    # add
+    @classmethod
+    def post(cls):
+        '''
+        SysCollegeInfoList: Pass in values in JSON format to batch add
+        eg.[{k1:v1,k2:v2,...},...]
+        '''
+        parser = reqparse.RequestParser()
+        parser.add_argument('SysCollegeInfoList', type=str, location='form', required=False, help='SysCollegeInfoList参数类型不正确或缺失')
+
+        kwargs = parser.parse_args()
+        kwargs = commons.put_remove_none(**kwargs)
+
+        if kwargs.get('SysCollegeInfoList'):
+            kwargs['SysCollegeInfoList'] = json.loads(kwargs['SysCollegeInfoList'])
+            for data in kwargs['SysCollegeInfoList']:
+                for key in []:
+                    data.pop(key, None)
+            res = SysCollegeInfoController.add_list(**kwargs)
+
+        else:
+            parser.add_argument('collegeName', location='form', required=False, help='collegeName参数类型不正确或缺失')
+            parser.add_argument('addTime', location='form', required=False, help='addTime参数类型不正确或缺失')
+            
+            kwargs = parser.parse_args()
+            kwargs = commons.put_remove_none(**kwargs)
+
+            res = SysCollegeInfoController.add(**kwargs)
+
+        return jsonify(code=res['code'], message=res['message'], data=res['data'])

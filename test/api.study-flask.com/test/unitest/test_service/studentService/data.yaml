@@ -1,0 +1,22 @@
+-
+  module_name: studentService
+  class_name: studentService
+  function_name: xxx
+  params:
+      autoID: 
+      studentID: 
+      userID: 
+      classID: 
+      collegeID: 
+      name: 
+      phoneNumber: 
+      age: 
+      agenda: 
+      isDelete: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

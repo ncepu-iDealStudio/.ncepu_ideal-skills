@@ -1,0 +1,17 @@
+-
+  module_name: studentSelectedCourseService
+  class_name: studentSelectedCourseService
+  function_name: xxx
+  params:
+      autoID: 
+      studentID: 
+      courseID: 
+      score: 
+      isDelete: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

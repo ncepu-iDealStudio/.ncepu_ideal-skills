@@ -1,0 +1,29 @@
+-
+  module_name: vStudentCourseScoreService
+  class_name: vStudentCourseScoreService
+  function_name: xxx
+  params:
+      autoID: 
+      studentID: 
+      userID: 
+      classID: 
+      collegeID: 
+      studentName: 
+      phoneNumber: 
+      age: 
+      agenda: 
+      isDelete: 
+      className: 
+      courseID: 
+      score: 
+      courseName: 
+      teacherID: 
+      teacherName: 
+      phone: 
+      email: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

@@ -1,0 +1,18 @@
+-
+  module_name: ssoUserService
+  class_name: ssoUserService
+  function_name: xxx
+  params:
+      autoID: 
+      userID: 
+      account: 
+      password: 
+      userType: 
+      status: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

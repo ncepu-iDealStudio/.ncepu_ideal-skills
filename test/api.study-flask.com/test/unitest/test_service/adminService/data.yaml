@@ -1,0 +1,21 @@
+-
+  module_name: adminService
+  class_name: adminService
+  function_name: xxx
+  params:
+      auto_id: 
+      admin_id: 
+      user_id: 
+      department_id: 
+      name: 
+      email: 
+      phone: 
+      office_address: 
+      is_delete: 
+      add_time: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

@@ -1,0 +1,18 @@
+-
+  module_name: courseService
+  class_name: courseService
+  function_name: xxx
+  params:
+      autoID: 
+      courseID: 
+      courseName: 
+      teacherID: 
+      credit: 
+      isDelete: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

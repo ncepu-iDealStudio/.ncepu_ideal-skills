@@ -1,0 +1,17 @@
+-
+  module_name: sysClassinfoService
+  class_name: sysClassinfoService
+  function_name: xxx
+  params:
+      autoID: 
+      classID: 
+      collegeID: 
+      className: 
+      isDeleted: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    

@@ -1,0 +1,16 @@
+-
+  module_name: sysCollegeinfoService
+  class_name: sysCollegeinfoService
+  function_name: xxx
+  params:
+      autoID: 
+      collegeID: 
+      collegeName: 
+      isDelete: 
+      addTime: 
+
+  validate:
+    - eq:
+        - code
+        - "2000"
+    
