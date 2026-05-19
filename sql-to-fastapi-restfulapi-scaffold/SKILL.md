@@ -122,7 +122,20 @@ resources/
 
 ### 步骤 4: 生成代码
 
-使用 `resources/templates/project_structure/` 下的模板生成项目骨架。
+**重要**：使用 `resources/templates/project_structure/` 下的模板生成项目骨架时，必须完整准确地复制模板文件内容，**不能遗漏任何内容**。
+
+生成项目骨架时应复制以下文件：
+- `requirements.txt` - 依赖清单，**必须包含所有依赖项**
+- `.env.example` - 环境变量模板，**必须包含所有配置项**
+- `start.py` - 应用启动脚本
+- `app/` 目录下的所有文件
+- `config/` 目录下的所有文件
+- `core/` 目录下的所有文件
+- `models/` 目录下的所有文件
+- `schemas/` 目录下的所有文件
+- `utils/` 目录下的所有文件
+- `api/` 目录下的所有文件
+
 使用 `resources/templates/layers/` 下的模板生成各层代码。
 
 ### 步骤 5: 输出生成结果
