@@ -121,24 +121,6 @@ CREATE TABLE student (
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + Project Skeleton |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + Project Skeleton |
 
----
-
-### 3️⃣ Run Generated Example Projects
-
-After code generation, you can run the example projects for verification:
-
-| ⚡ Skill | 📂 Example Directory | 🚀 Start Command |
-|--------|-----------|-----------|
-| **FastAPI** | `test/sql-to-fastapi-example/` | `uvicorn start:app --reload` |
-| **Flask** | `test/sql-to-flask-exmaple.com/` | `python manage.py runserver` |
-| **Spring Boot** | `test/sql-to-springboot-example/` | `mvn spring-boot:run` |
-
-**🌐 Access URLs**：
-
-- 📖 **Swagger UI**: `http://127.0.0.1:8000/docs`
-- 📚 **ReDoc**: `http://127.0.0.1:8000/redoc`
-
----
 
 ## 🗺️ Roadmap
 

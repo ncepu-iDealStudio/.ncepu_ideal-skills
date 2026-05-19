@@ -121,25 +121,6 @@ CREATE TABLE student (
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + 项目骨架 |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + 项目骨架 |
 
----
-
-### 3️⃣ 运行生成的示例项目
-
-完成代码生成后，可以运行示例项目进行验证：
-
-| ⚡ 技能 | 📂 示例目录 | 🚀 启动命令 |
-|--------|-----------|-----------|
-| **FastAPI** | `test/sql-to-fastapi-example/` | `uvicorn start:app --reload` |
-| **Flask** | `test/sql-to-flask-exmaple.com/` | `python manage.py runserver` |
-| **Spring Boot** | `test/sql-to-springboot-example/` | `mvn spring-boot:run` |
-
-**🌐 访问地址**：
-
-- 📖 **Swagger UI**: `http://127.0.0.1:8000/docs`
-- 📚 **ReDoc**: `http://127.0.0.1:8000/redoc`
-
----
-
 ## 🗺️ 未来规划
 
 - [ ] 🔮 新增更多面向企业后端的技能（脚手架、治理、工程化等）
