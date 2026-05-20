@@ -1,350 +1,252 @@
-# SQL-to-Flask-RESTfulAPI-Scaffold
+# sql-to-flask-restfulapi-scaffold
 
 ## 项目简介
 
-`sql-to-flask-restfulapi-scaffold` 是一个 Skill 项目，目标是基于 MySQL DDL 脚本自动生成 Flask + Flask-RESTful 风格的企业级接口项目脚手架。
+### 1. 本项目是干嘛的
 
-目标结构参考：`test/api.study-flask.com`。
+`sql-to-flask-restfulapi-scaffold` 是一个面向 AI 开发场景的 Skill 项目，用于把 MySQL DDL（`CREATE TABLE` / `CREATE VIEW`）转换为 Flask + Flask-RESTful 分层接口脚手架。
 
-输入样例 SQL：`test/study_flask_api.sql`。
+本项目的核心价值：
 
-## V1 目标
+1. 将规则（命名、类型、分页、软删除）和模板解耦，降低后续维护成本。
+2. 通过上下文校验、生成计划预览、渲染预览提高生成可控性。
+3. 支持增量生成与注册合并，减少覆盖人工代码的风险。
 
-V1 聚焦三件事：
+参考目标工程：`test/sql-to-flask-example`。  
+基线 SQL：`test/study_flask_api.sql`。
 
-- 生成可运行的 Flask RESTful 分层项目骨架
-- 基于 SQL 自动生成表/视图对应接口代码
-- 支持首次全量生成与后续增量生成
+### 2. 技术栈和依赖版本
 
-## 技术与风格对齐
+本项目包含两类依赖：
 
-- Flask
-- Flask-RESTful
-- Flask-SQLAlchemy
-- MySQL（PyMySQL）
-- 分层结构：`models / controller / service / api_1_0`
+1. 目标项目模板依赖（`resources/templates/project_structure/requirements.txt`）
+- Flask: `3.0.1`
+- Flask-RESTful: `0.3.10`
+- Flask-SQLAlchemy: `3.1.1`
+- Flask-Session: `0.6.0`
+- SQLAlchemy: `2.0.25`
+- PyMySQL: `1.1.0`
+- loguru: `0.7.2`
 
-## 解析边界（V1）
+2. Skill 工具链依赖（`resources/tools/*.py`）
+- Python: 建议 `3.10+`
+- 使用标准库为主（`json`、`pathlib`、`sys` 等），无额外第三方依赖要求。
 
-V1 仅覆盖常见 MySQL DDL：
-
-- `CREATE TABLE`
-- `CREATE VIEW`
-- 主键
-- 默认值
-- 注释
-
-超出边界语法处理：
-
-- 跳过
-- 输出告警
-
-## 生成清单（V1）
-
-### 1. 首次生成（项目骨架）
-
-- `manage.py`
-- `app/`
-- `api_1_0/`
-- `models/`
-- `controller/`
-- `service/`
-- `config/`
-- `utils/`
-- `requirements.txt`
-
-### 2. 表实体生成（每张表）
-
-- `models/{module_name}.py`
-- `controller/{ClassName}Controller.py`
-- `service/{ClassName}Service.py`
-- `api_1_0/{resource_slug}Resource/__init__.py`
-- `api_1_0/{resource_slug}Resource/{resource_slug}Resource.py`
-- `api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py`
-- `api_1_0/{resource_slug}Resource/urls.py`
-
-### 3. 视图生成（每个 view）
-
-- 只读 model
-- 查询 controller/service
-- 查询 resource（仅集合查询路由）
-
-### 4. 增量生成
-
-- 合并注册文件
-- 已存在实体文件跳过
-- 输出冲突告警
-
-## 不生成清单（V1）
-
-- 自动化测试代码
-- 部署文件（Docker/Nginx/Gunicorn）
-- CI/CD 配置
-- 自动写入权限白名单
-- 复杂联表分析接口
-
-## 命名与主键规则
-
-- `module_name` 统一为下划线风格（snake_case）
-- URL 路径统一下划线风格
-- 路径参数名统一下划线风格
-- 接口主键统一使用 SQL 表定义的主键
-
-说明：
-
-- 若主键是 `auto_id/autoID`，则按该主键生成
-- 若想使用业务主键，请在建表时定义为主键
-
-## 字段与软删除规则
-
-- 字段名尽量保持 SQL 原样，不自动改名
-- 软删除字段识别：`is_delete`、`is_deleted`、`isDelete`、`isDeleted`
-- `get/update` 默认过滤已软删除记录
-- Model 字段行由渲染器根据 `entities[].fields` 自动拼接（不依赖手写 `fields_block`）
-
-## 统一响应协议
-
-统一响应字段：
-
-- `code`
-- `message`
-- `data`
-- `totalCount`
-- `totalPage`
-
-错误响应最小字段：
-
-- `code`
-- `message`
-- `data`
-
-## 分页约定
-
-- `Page` 默认 `1`
-- `Size` 默认 `10`
-- `Size` 最大 `100`
-
-超出上限时按 `100` 处理并提示。
-
-## 依赖策略
-
-为降低兼容性问题，V1 使用精确版本锁定的 `requirements.txt`。
-
-## 目录建议（Skill 项目）
+### 3. 本项目的代码文件夹结构详细说明
 
 ```text
 sql-to-flask-restfulapi-scaffold/
 ├── README.md
 ├── SKILL.md
 └── resources/
-	├── config/
-	│   ├── generation_profiles.json
-	│   ├── naming_rules.json
-	│   ├── template_context_example.json
-	│   └── type_mappings.json
-	├── specifications/
-	│   ├── coding_standards.md
-	│   ├── field_rendering_rules.md
-	│   ├── generation_preview_study_flask_api.md
-	│   ├── router_registry_merge_strategy.md
-	│   ├── sql_parser_contract.md
-	│   └── template_context_schema.md
-	├── static/
-	│   └── utils/
-	├── templates/
-	│   ├── project_structure/
-	│   └── layers/
-	├── tools/
-	│   ├── preview_generation_plan.py
-	│   ├── render_demo_single_entity.py
-	│   ├── render_preview_bundle.py
-	│   ├── render_utils.py
-	│   └── validate_template_context.py
-	└── demo_output/
-		└── student_demo/
+    ├── config/
+    │   ├── generation_profiles.json
+    │   ├── naming_rules.json
+    │   ├── template_context_example.json
+    │   └── type_mappings.json
+    ├── specifications/
+    │   ├── coding_standards.md
+    │   ├── field_rendering_rules.md
+    │   ├── generation_preview_study_flask_api.md
+    │   ├── router_registry_merge_strategy.md
+    │   ├── sql_parser_contract.md
+    │   └── template_context_schema.md
+    ├── templates/
+    │   ├── project_structure/
+    │   │   ├── manage.py
+    │   │   ├── requirements.txt
+    │   │   ├── app/
+    │   │   ├── api_1_0/
+    │   │   ├── models/
+    │   │   ├── controller/
+    │   │   ├── service/
+    │   │   ├── config/
+    │   │   └── utils/
+    │   └── layers/
+    │       ├── model/
+    │       ├── controller/
+    │       ├── service/
+    │       └── resource/
+    ├── tools/
+    │   ├── validate_template_context.py
+    │   ├── preview_generation_plan.py
+    │   ├── render_demo_single_entity.py
+    │   ├── render_preview_bundle.py
+    │   └── render_utils.py
+    ├── demo_output/
+    │   ├── student_demo/
+    │   └── bundle_preview/
+    └── static/
+        └── utils/
 ```
 
-## resources 资源说明（维护重点）
+目录职责：
 
-本技能的可维护性核心在 `resources/`。可以把它理解为“技能的知识库 + 模板库 + 辅助工具”。
+1. `resources/config/`
+- 管理可配置策略（命名规则、类型映射、生成档位、上下文样例）。
 
-### 1) config（规则配置层）
+2. `resources/specifications/`
+- 管理契约与规范（解析边界、上下文 schema、合并策略、字段渲染规则）。
 
-目录：`resources/config/`
+3. `resources/templates/`
+- 管理代码模板：
+- `project_structure/` 负责项目骨架。
+- `layers/` 负责实体分层代码渲染。
 
-- `generation_profiles.json`
-	- 定义不同生成档位（minimal/standard/secure）启用哪些能力。
-	- 维护建议：新增可选能力时，先改这里，再改模板，不要反过来。
-- `naming_rules.json`
-	- 定义命名策略：module、URL、路径参数、资源目录命名。
-	- 维护建议：若命名风格要调整，优先改此文件并补回归验证。
-- `type_mappings.json`
-	- 定义 SQL 类型到 Flask-SQLAlchemy 类型映射、软删除字段候选、分页默认值。
-	- 维护建议：新增数据库类型支持时只扩展映射，不直接改模板硬编码。
-- `template_context_example.json`
-	- 模板渲染上下文样例（含 table 与 view）。
-	- 维护建议：每次修改渲染逻辑后同步更新这个样例，作为最小回归输入。
+4. `resources/tools/`
+- 管理开发辅助脚本（校验、预览、渲染）。
 
-### 2) specifications（规范与契约层）
+5. `resources/demo_output/`
+- 存放渲染演示产物和 manifest，作为评审与对照依据。
 
-目录：`resources/specifications/`
+---
 
-- `coding_standards.md`
-	- 生成代码风格规范（命名、响应、分页、软删除、冲突策略）。
-- `sql_parser_contract.md`
-	- SQL 解析边界契约（支持语法、跳过策略、view 规则）。
-- `template_context_schema.md`
-	- 模板上下文字段说明。
-- `router_registry_merge_strategy.md`
-	- 增量场景下 `api_1_0/__init__.py` 的合并策略与 marker 规则。
-- `field_rendering_rules.md`
-	- 字段行渲染规则（primary_key/nullable/default/info 的顺序与含义）。
-- `generation_preview_study_flask_api.md`
-	- 基于样例 SQL 的预估生成清单，便于评审与回归对照。
+## 生成的目标项目说明
 
-维护建议：
+### 1. 生成的目标项目结构
 
-- 先改 specification 再改模板，避免“实现和文档脱节”。
-- 如果出现生成歧义，优先补契约文档而不是临时改脚本。
+目标项目是 Flask 分层接口工程，典型结构如下（参考 `test/sql-to-flask-example`）：
 
-### 3) templates（代码模板层）
+```text
+target-project/
+├── manage.py
+├── app/
+├── api_1_0/
+├── models/
+├── controller/
+├── service/
+├── config/
+├── utils/
+├── test/
+└── requirements.txt
+```
 
-目录：`resources/templates/`
+分层职责：
 
-- `project_structure/`
-	- 首次生成时的工程骨架模板（app/api_1_0/models/config 等）。
-	- 适合改“项目级结构”。
-- `layers/`
-	- 按实体（table/view）渲染的分层代码模板。
-	- `model/`：模型模板（table 与 view）
-	- `controller/`：控制器模板（CRUD 或 query）
-	- `service/`：服务模板
-	- `resource/`：路由资源模板（table urls 与 view urls 分离）
+1. `models/`
+- SQLAlchemy 模型定义。
 
-维护建议：
+2. `controller/`
+- 业务控制层，封装接口调用前后的业务逻辑。
 
-- 改骨架去 `project_structure`，改实体逻辑去 `layers`。
-- view 与 table 的模板分离维护，避免在单模板里堆大量条件分支。
+3. `service/`
+- 数据访问与通用查询封装。
 
-### 4) static（静态资源层）
+4. `api_1_0/`
+- RESTful 资源与路由注册。
 
-目录：`resources/static/`
+5. `app/`
+- 应用工厂与运行模式配置。
 
-- `utils/core/`：必备基础工具（响应码、日志、通用函数）
-- `utils/business/`：通用业务辅助工具（ID、校验、重复检查）
-- `utils/security/`：安全相关占位或可选模块（按 profile 启用）
+6. `test/`
+- 单元测试与性能测试样例目录。
 
-维护建议：
+### 2. 目标项目启动和测试方法
 
-- core 保持最小且稳定，尽量不引入业务耦合。
-- security 默认可选，避免对非安全场景造成强依赖。
+以下步骤基于 `test/sql-to-flask-example`：
 
-### 5) tools（开发辅助层）
+1. 安装依赖
+- `cd test/sql-to-flask-example`
+- `python -m pip install -r requirements.txt`
 
-目录：`resources/tools/`
+2. 启动项目
+- `python manage.py`
 
-- `validate_template_context.py`
-	- 校验上下文 JSON 结构是否满足渲染要求。
-- `preview_generation_plan.py`
-	- 从 SQL 预览 table/view 解析结果与文件生成计划。
-- `render_utils.py`
-	- 公共渲染函数（字段自动拼接、模板替换）。
-- `render_demo_single_entity.py`
-	- 单实体渲染演示。
-- `render_preview_bundle.py`
-	- table + view 组合渲染，并输出 manifest。
+3. 本地冒烟验证
+- 默认启动后访问配置端口对应 API 路由。
+- 如需要，先在 `manage.py` 的 permission 列表和配置文件中确认鉴权放行策略。
 
-维护建议：
+4. 单元测试
+- 示例工程包含 `test/unitest/`。
+- 建议命令：`python -m unittest discover -s test/unitest -p "test_*.py"`
 
-- 所有渲染脚本共享逻辑尽量收敛到 `render_utils.py`。
-- 新增脚本时要保证输入/输出可复用，避免一次性脚本。
+5. 性能测试（可选）
+- 示例目录包含 `test/performance_test/`，可按其中脚本进行压测准备。
 
-### 6) demo_output（演示产物层）
+---
 
-目录：`resources/demo_output/`
+## 本项目的使用指南
 
-- 存放演示渲染结果与 manifest。
-- 用于评审模板效果，不是最终业务代码仓库。
+### 1. 在 AI 开发工具中使用的指南或文档
 
-维护建议：
+优先阅读 `docs/` 下文档：
 
-- 演示目录可定期清理并重建。
-- 提交前确保示例结果与当前模板一致。
+1. `docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`
+2. `docs/claude中使用skill配置.md`
+3. `docs/Trea中使用skill配置.md`
 
-## 维护与优化建议流程
+说明：
 
-建议按下面顺序做变更，能显著降低回归风险：
+- 上述文档覆盖 AI 工具中 Skill 接入与调用方式。
+- 本 README 重点补充 Flask Skill 的工程结构与维护流程。
 
-1. 先修改契约：`specifications/*.md`
-2. 再修改规则：`config/*.json`
-3. 再修改模板：`templates/**`
-4. 用 `tools/` 执行校验与渲染预览
-5. 对照 `demo_output/**/manifest.json` 检查影响范围
+### 2. 本地最小可用命令
 
-推荐最小验证命令：
+在仓库根目录执行：
 
 ```bash
-python resources/tools/validate_template_context.py resources/config/template_context_example.json
-python resources/tools/preview_generation_plan.py ../test/study_flask_api.sql
-python resources/tools/render_preview_bundle.py
+python sql-to-flask-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to-flask-restfulapi-scaffold/resources/config/template_context_example.json
+python sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/study_flask_api.sql
+python sql-to-flask-restfulapi-scaffold/resources/tools/render_preview_bundle.py
 ```
 
-## 工具脚本（当前可用）
+执行顺序建议：先校验 context，再预览计划，最后渲染预览产物。
 
-### 1) 校验模板上下文
+---
 
-```bash
-python resources/tools/validate_template_context.py resources/config/template_context_example.json
-```
+## 项目的进一步开发与维护
 
-### 2) 预览 SQL 的生成计划
+建议遵循以下流程，避免“文档、规则、模板、产物”失配：
 
-```bash
-python resources/tools/preview_generation_plan.py ../test/study_flask_api.sql
-```
+1. 先改规范再改实现
+- 先更新 `resources/specifications/*.md`，再调整 `config` 和 `templates`。
 
-### 3) 单实体模板渲染演示
+2. 保持规则集中化
+- 命名与类型策略优先落到 `resources/config/*.json`，避免散落到模板中硬编码。
 
-```bash
-python resources/tools/render_demo_single_entity.py
-```
+3. 模板分层维护
+- 项目骨架问题优先改 `templates/project_structure/`。
+- 实体渲染问题优先改 `templates/layers/`。
 
-演示输出目录：`resources/demo_output/student_demo/`
+4. 每次变更都做最小回归
+- 至少执行：context 校验 + 计划预览 + bundle 渲染。
+- 核对 `resources/demo_output/` 产物是否符合预期。
 
-### 4) table + view 组合渲染预览（含 manifest）
+5. 提交前补齐说明
+- 在提交说明中写清楚：改动文件、影响范围、验证命令与结果。
 
-```bash
-python resources/tools/render_preview_bundle.py
-```
+---
 
-输出目录：`resources/demo_output/bundle_preview/`
+## 项目中其他工具的使用说明
 
-manifest 示例：`resources/demo_output/bundle_preview/manifest.json`
+`resources/tools/` 工具说明：
 
-## 使用文档
+1. `validate_template_context.py`
+- 输入：context JSON。
+- 输出：结构校验结果（通过/失败与错误信息）。
+- 作用：防止模板渲染时出现缺字段问题。
 
-- Trae 使用说明：`../docs/Trea中使用skill配置.md`
-- Claude 使用说明：`../docs/claude中使用skill配置.md`
-- GitHub Copilot 使用说明：`../docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`
+2. `preview_generation_plan.py`
+- 输入：SQL 文件。
+- 输出：解析结果和预计生成文件清单。
+- 作用：在真正渲染前预估影响面。
 
-## 验收标准
+3. `render_demo_single_entity.py`
+- 输入：示例上下文（默认内置或配置）。
+- 输出：单实体渲染样例。
+- 作用：调试单个模板最快路径。
 
-至少覆盖：
+4. `render_preview_bundle.py`
+- 输入：完整上下文。
+- 输出：`resources/demo_output/bundle_preview/` 及 manifest。
+- 作用：评估 table + view 组合渲染结果。
 
-- 单表样例
-- 复杂多表样例
+5. `render_utils.py`
+- 作用：脚本公共渲染函数集合（字段拼接、模板替换等复用逻辑）。
 
-通过标准：
+建议工具链顺序：
 
-- 生成项目可启动
-- 路由可访问
-- CRUD 可跑通
-
-## 下一步建议
-
-建议按以下顺序推进实现：
-
-1. 先完成 `resources/config` 与 `resources/specifications`
-2. 再完成 `project_structure` 基础模板
-3. 最后实现 `layers` 分层模板与增量注册逻辑
-
+1. `validate_template_context.py`
+2. `preview_generation_plan.py`
+3. `render_demo_single_entity.py`
+4. `render_preview_bundle.py`
