@@ -2,31 +2,28 @@ package middlewares
 
 import (
 	"context"
-	"github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/peer"
 	"study_flask_api/utils/loggers"
 	"time"
+
+	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/peer"
 )
 
 func GrpcLogger() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 		startTime := time.Now()
 		defer func() {
+			clientIP := ""
 			remoteCon, ok := peer.FromContext(ctx)
-			if !ok {
-				remoteCon.Addr.String()
-			}
-			md, ok := metadata.FromIncomingContext(ctx)
-			if !ok {
-				md.Len()
+			if ok && remoteCon != nil && remoteCon.Addr != nil {
+				clientIP = remoteCon.Addr.String()
 			}
 
 			log := loggers.GetLogger()
 			if err != nil {
 				log.WithFields(logrus.Fields{
-					"client_ip":    remoteCon.Addr.String(),
+					"client_ip":    clientIP,
 					"req_method":   info.FullMethod,
 					"req_string":   req,
 					"error":        err.Error(),
@@ -34,7 +31,7 @@ func GrpcLogger() grpc.UnaryServerInterceptor {
 				}).Error()
 			} else {
 				log.WithFields(logrus.Fields{
-					"client_ip":    remoteCon.Addr.String(),
+					"client_ip":    clientIP,
 					"req_method":   info.FullMethod,
 					"req_string":   req,
 					"res_string":   resp,
