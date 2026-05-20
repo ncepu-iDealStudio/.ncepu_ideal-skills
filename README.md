@@ -75,26 +75,26 @@ ncepu_ideal-skills/
 │   ├── Trea中使用skill配置.md
 │   ├── claude中使用skill配置.md
 │   └── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
-├── 📁 sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI 技能
+├── 📁 sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI项目生成 技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
 │       ├── config/
 │       ├── specifications/
 │       └── templates/
-├── 📁 sql-to-flask-restfulapi-scaffold/           # 🐍 Flask 技能
+├── 📁 sql-to-flask-restfulapi-scaffold/           # 🐍 Flask接口项目生成 技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
-├── 📁 sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot 技能
+├── 📁 sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot 项目生成  技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
-├── 📁 sql-to-gin-restfulapi-scaffold/             # 🌀 Gin 技能
+├── 📁 sql-to-gin-restfulapi-scaffold/             # 🌀 Gin接口项目生成 技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
-└── 📁 test/                                        # 🧪 技能生成示例
+└── 📁 test/                                        # 🧪 技能生成示例项目
     ├── sql-to-fastapi-example/
     ├── sql-to-flask-exmaple.com/
     ├── sql-to-gin-example/
