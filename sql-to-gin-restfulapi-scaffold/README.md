@@ -78,7 +78,13 @@ sql-to-gin-restfulapi-scaffold/
     │   ├── regression_report_study_gin_api.md
     │   └── snapshots/
     └── static/
-        └── utils/
+      └── utils/
+        ├── README.md
+        └── core/
+          ├── path.go
+          ├── errors.go
+          ├── case.go
+          └── struct_map.go
 ```
 
 目录职责说明：
@@ -97,6 +103,9 @@ sql-to-gin-restfulapi-scaffold/
 
 5. `resources/demo_output/`
 - 存放演示产物与回归证据，便于结果审查与防回归。
+
+6. `resources/static/utils/`
+- 存放可复用的轻量 runtime 工具资产（当前包含 `core` 通用方法）。
 
 ---
 
