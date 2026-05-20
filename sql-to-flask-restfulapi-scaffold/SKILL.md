@@ -9,7 +9,6 @@ description: "从 MySQL DDL（CREATE TABLE/CREATE VIEW）生成 Flask + Flask-RE
 
 `sql-to-flask-restfulapi-scaffold` 是一个资源驱动技能，用于从 SQL 建表/视图语句生成 Flask RESTful 风格的接口项目脚手架。
 
-目标对齐项目结构参考：`test/api.study-flask.com`。
 
 本技能强调：
 
@@ -24,7 +23,6 @@ description: "从 MySQL DDL（CREATE TABLE/CREATE VIEW）生成 Flask + Flask-RE
 
 - 提供 SQL 脚本并要求生成 Flask RESTful API 项目
 - 根据数据库表结构自动生成分层代码
-- 需要与 `api.study-flask.com` 类似的工程结构
 
 ## V1 解析边界
 
@@ -142,6 +140,17 @@ V1 仅支持常见 MySQL DDL：
 - 语法跳过告警
 - 冲突告警
 - 成功/失败统计
+
+## 生成 README.md
+
+在生成完所有文件后，AI 应读取生成的项目结构，动态生成一份详细的 README.md 文档，包含：
+- 项目简介和技术栈
+- 完整的项目结构说明
+- 所有生成的 API 接口说明（包含请求/响应示例）
+- 配置说明
+- 快速开始步骤
+- 统一响应协议说明
+- 软删除机制说明
 
 ## V1 不生成清单
 

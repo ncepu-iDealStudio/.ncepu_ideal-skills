@@ -1,133 +1,149 @@
-# ncepu_ideal-skills
+# 🎯 ncepu_ideal-skills
 
-A collection of reusable backend engineering skills for enterprise projects.  
-The first production-ready skill is already implemented: `sql-to-fastapi-scaffold`, which generates layered FastAPI project code from SQL table definitions.
+> Enterprise Backend Engineering Skills Collection | Resource-driven design for rapid scaffolding of standardized project code
 
-中文版: [README.md](README.md)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-v0.100%2B-orange)
+![Flask](https://img.shields.io/badge/Flask-v2.0%2B-purple)
+![SpringBoot](https://img.shields.io/badge/Spring%20Boot-2.7%2B-green)
 
-## Goals
+[中文](./README.md) | 📝 English
 
-- Build reusable backend skills for team-wide delivery.
-- Package best practices as Skills using templates, configurations, and standards.
-- Grow into a multi-skill repository (database, API, architecture, engineering productivity, etc.).
+---
 
-## Current Skills
+## ✨ Key Features
 
-### 1) sql-to-fastapi-scaffold (implemented)
+- 🔄 **Resource-driven Architecture** - Templates + Configurations + Standards, completely driven by resource files
+- 🚀 **One-click Scaffolding** - Auto-generate complete project code from SQL table definitions
+- 🎨 **Multi-framework Support** - FastAPI / Flask / Spring Boot three major frameworks
+- 📦 **Incremental Generation** - Full initial generation + incremental updates
+- 🔒 **Built-in Security** - Auto soft-delete/hard-delete, sensitive data masking, input validation
 
-Location: `sql-to-fastapi-scaffold/`
+---
 
-What it does:
+## 🎯 Current Skills
 
-- Parses SQL `CREATE TABLE` statements
-- Generates layered FastAPI code (Model / Schema / Resource / Service)
-- Produces full project skeleton on first run, then supports incremental table-based generation
-- Supports automatic soft-delete / hard-delete strategy
-- Includes type mapping, naming rules, validation rules, and sensitive data masking rules
+### 1️⃣ sql-to-fastapi-restfulapi-scaffold
 
-Details:
+Generate complete FastAPI RESTful API project scaffolding from SQL `CREATE TABLE` statements
 
-- Skill guide: `sql-to-fastapi-scaffold/README.md`
-- Skill definition: `sql-to-fastapi-scaffold/SKILL.md`
+📖 **Details**：[View Documentation](sql-to-fastapi-restfulapi-scaffold/README.md)
 
-## Repository Structure
+---
 
-```text
+### 2️⃣ sql-to-flask-restfulapi-scaffold
+
+Generate Flask + Flask-RESTful enterprise API project scaffolding from MySQL DDL scripts
+
+📖 **Details**：[View Documentation](sql-to-flask-restfulapi-scaffold/README.md)
+
+---
+
+### 3️⃣ sql-to-springboot-restfulapi-scaffold
+
+Generate complete Spring Boot RESTful API project scaffolding from SQL `CREATE TABLE` statements
+
+📖 **Details**：[View Documentation](sql-to-springboot-restfulapi-scaffold/README.md)
+
+---
+
+## 🏗️ Repository Structure
+
+```
 ncepu_ideal-skills/
-├── README.md
-├── README.en.md
-├── docs/
-│   └── Trea中使用skill配置.md
-├── sql-to-fastapi-scaffold/
+├── 📄 README.md                                    # Project documentation
+├── 📄 README.en.md                                 # English documentation
+├── 📄 .gitignore
+├── 📁 docs/                                        # Configuration guides
+│   ├── Trea中使用skill配置.md
+│   ├── claude中使用skill配置.md
+│   └── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
+├── 📁 sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI skill
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
 │       ├── config/
-│       │   ├── naming_rules.json
-│       │   └── type_mappings.json
 │       ├── specifications/
-│       │   └── coding_standards.md
 │       └── templates/
-│           ├── project_structure/
-│           └── layers/
-└── test/
-	└── sql-to-fastapi-example/
+├── 📁 sql-to-flask-restfulapi-scaffold/           # 🐍 Flask skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+├── 📁 sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+└── 📁 test/                                        # 🧪 Generated example projects
+    ├── sql-to-fastapi-example/
+    ├── sql-to-flask-exmaple.com/
+    └── sql-to-springboot-example/
 ```
 
-Notes:
+---
 
-- `sql-to-fastapi-scaffold/resources/`: core skill assets (templates, mapping rules, standards)
-- `test/sql-to-fastapi-example/`: generated sample project for validation
-- `docs/`: usage and integration notes
+## 🚀 Quick Start
 
-## Quick Start
+### 1️⃣ Configure Skills in Your AI Tool
 
-### 1) Use the skill
+> Choose the configuration guide based on your AI coding assistant:
 
-Provide SQL containing `CREATE TABLE` statements and ask the skill to scaffold a FastAPI API project.
+| 🤖 AI Tool | 📚 Documentation | ✨ Features |
+|-----------|-----------|--------|
+| 🚀 **Trae IDE** | [Configuration Guide](docs/Trea中使用skill配置.md) |
+| 💻 **Claude Code** | [Configuration Guide](docs/claude中使用skill配置.md) |
+| ⚡ **GitHub Copilot** | [Configuration Guide](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
 
-Example (simplified):
+> 📝 **Note**: Please refer to the `docs/` directory for detailed configuration guides
+
+---
+
+### 2️⃣ Use the Skill
+
+After configuring the skill, provide SQL containing `CREATE TABLE` statements and request generation of the corresponding project scaffolding.
+
+**📥 Example Input**：
 
 ```sql
 CREATE TABLE student (
-	studentID VARCHAR(20) PRIMARY KEY COMMENT 'Student ID',
-	name VARCHAR(100) NOT NULL COMMENT 'Student Name',
-	age INT COMMENT 'Age',
-	is_deleted BOOLEAN DEFAULT FALSE COMMENT 'Soft delete flag'
+    student_id VARCHAR(20) PRIMARY KEY COMMENT 'Student ID',
+    name VARCHAR(100) NOT NULL COMMENT 'Student Name',
+    age INT COMMENT 'Age',
+    is_deleted BOOLEAN DEFAULT FALSE COMMENT 'Soft delete flag'
 );
 ```
 
-### 2) Run the generated sample project
+**📤 Skill Generators Reference**：
 
-Sample path: `test/sql-to-fastapi-example/`
+| ⚡ Skill | 📥 Input | 
+|--------|-----------|
+| **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + Project Skeleton |
+| **Flask** | MySQL DDL | Model / Controller / Service / Resource + Project Skeleton |
+| **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + Project Skeleton |
 
-```bash
-cd test/sql-to-fastapi-example
-pip install -r requirements.txt
-uvicorn start:app --reload
-```
 
-Default endpoints:
+## 🗺️ Roadmap
 
-- Swagger: `http://127.0.0.1:8000/docs`
-- ReDoc: `http://127.0.0.1:8000/redoc`
+- [ ] 🔮 Add more enterprise backend skills (scaffolding, governance, engineering, etc.)
+- [ ] 🧪 Improve validation samples and regression tests
+- [ ] 📋 Standardize naming/versioning/documentation conventions for all skills
 
-### 3) Configure skill in Trae
+---
 
-See: `docs/Trea中使用skill配置.md`
+## 🤝 Contribution
 
-## Design Approach
+Contributions are welcome, especially new Skills or improvements to existing ones!
 
-This repository follows a resource-driven approach:
+**💡 Recommended Workflow**：
 
-- Structure is generated from templates (`resources/templates/`)
-- Rules are controlled by configs (`resources/config/`)
-- Output quality is constrained by standards (`resources/specifications/`)
+1. 🍴 Fork this repository and create a feature branch
+2. 📁 Implement new Skill in an isolated folder (`SKILL.md`, `README.md`, `resources/`)
+3. 🧪 Add a runnable sample under `test/`
+4. 📝 Update root README skill list
+5. 🔄 Submit a Pull Request
 
-Benefits:
+---
 
-- Maintainable: centralized and traceable rules
-- Extensible: new skills can be added independently
-- Reusable: one skill can serve multiple project contexts
-
-## Roadmap
-
-- Add more enterprise backend skills
-- Improve validation samples and regression checks
-- Standardize naming/versioning/documentation conventions for all skills
-
-## Contribution
-
-Contributions are welcome, especially new Skills or improvements to existing ones.
-
-Recommended workflow:
-
-1. Fork and create a feature branch
-2. Add your skill in an isolated folder (`SKILL.md`, `README.md`, `resources/`)
-3. Add a runnable sample under `test/`
-4. Update root README skill list
-5. Submit a Pull Request
-
-## License
+## 📄 License
 
 No license file is currently declared. Add a `LICENSE` before external distribution.
