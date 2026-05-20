@@ -1,136 +1,36 @@
-# SQL-to-Gin-RESTfulAPI-Scaffold
-
-## 里程碑状态
-
-- 当前阶段：V1 可用
-- 全量覆盖：11/11（基于 `test/study_flask_api.sql`）
-- 回归方式：支持一键执行
-    - `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
-- 防回归机制：已启用快照校验（context + manifest）
+# sql-to-gin-restfulapi-scaffold
 
 ## 项目简介
 
-`sql-to-gin-restfulapi-scaffold` 是一个 Skill 项目，目标是基于 MySQL DDL 自动生成 Gin + GORM 风格的企业级 RESTful API 脚手架。
+### 1. 本项目是干嘛的
 
-目标结构参考：`test/sql-to-gin-example`。
+`sql-to-gin-restfulapi-scaffold` 是一个面向 AI 开发场景的 Skill 项目，用于将 MySQL DDL（`CREATE TABLE` / `CREATE VIEW`）转换为 Gin + GORM 风格的分层 RESTful API 脚手架。
 
-输入样例 SQL：`test/study_flask_api.sql`。
+它的核心目标是：
 
-## V1 目标
+1. 通过规则和模板把生成行为标准化。
+2. 通过上下文校验、计划预览、快照比对保证可验证。
+3. 通过路由增量合并机制支持后续演进，避免覆盖人工代码。
 
-V1 聚焦三件事：
+当前参考生成对象为 `test/sql-to-gin-example`，基线 SQL 为 `test/study_flask_api.sql`。
 
-- 生成可运行的 Gin 分层项目骨架
-- 基于 SQL 自动生成表/视图对应接口代码
-- 支持首次全量生成与后续增量生成
+### 2. 技术栈和依赖版本
 
-## 技术与风格对齐
+本项目分为两类依赖：
 
-- Gin
-- GORM
-- Viper
-- Cobra
-- 分层结构：`models / dao / services / apis`
+1. 生成目标项目（Go）依赖模板
+- Go: `1.21`
+- `github.com/gin-gonic/gin`: `v1.9.1`
+- `gorm.io/gorm`: `v1.25.10`
+- `gorm.io/driver/mysql`: `v1.5.7`
+- `github.com/spf13/cobra`: `v1.8.0`
+- `github.com/spf13/viper`: `v1.18.2`
 
-## 解析边界（V1）
+2. Skill 工具链（Python）依赖
+- Python: 建议 `3.10+`
+- 当前 `resources/tools/*.py` 使用标准库（`json`、`argparse`、`pathlib`、`subprocess`、`re` 等），无需额外第三方包。
 
-V1 仅覆盖常见 MySQL DDL：
-
-- `CREATE TABLE`
-- `CREATE VIEW`
-- 主键
-- 默认值
-- 注释
-
-超出边界语法处理：
-
-- 跳过
-- 输出告警
-
-## 生成清单（V1）
-
-### 1. 首次生成（项目骨架）
-
-- `main.go`
-- `cmd/`
-- `apis/`
-- `internal/`
-- `configs/`
-- `utils/`
-- `go.mod`
-
-### 2. 表实体生成（每张表）
-
-- `internal/models/{Entity}.go`
-- `internal/dao/{Entity}.go`
-- `internal/services/{Entity}.go`
-- `apis/api_1_0/{resource}/urls.go`
-- `apis/api_1_0/{resource}/{Entity}Resource.go`
-- `apis/api_1_0/urls.go` 增量注册
-
-### 3. 视图生成（每个 view）
-
-- 只读 model
-- 查询 service
-- 查询 resource（仅集合查询路由）
-
-### 4. 增量生成
-
-- 合并注册文件
-- 已存在实体文件跳过
-- 输出冲突告警
-
-## 不生成清单（V1）
-
-- 自动化测试代码
-- 部署文件（Docker/Nginx）
-- CI/CD 配置
-- 自动鉴权白名单
-- 复杂联表分析接口
-
-## 命名与主键规则
-
-- `module_name` 统一为 snake_case
-- URL 路径统一 snake_case 风格
-- 路径参数名统一 snake_case 风格
-- 接口主键统一使用 SQL 表定义的主键
-
-说明：
-
-- 若主键是 `auto_id/autoID`，则按该主键生成
-- 若想使用业务主键，请在建表时定义为主键
-
-## 字段与软删除规则
-
-- 字段名尽量保持 SQL 原样，不自动改名
-- 软删除字段识别：`is_delete`、`is_deleted`、`isDelete`、`isDeleted`
-- `get/update` 默认过滤已软删除记录
-
-## 统一响应协议
-
-统一响应字段：
-
-- `code`
-- `message`
-- `data`
-- `totalCount`
-- `totalPage`
-
-错误响应最小字段：
-
-- `code`
-- `message`
-- `err`
-
-## 分页约定
-
-- `Page` 默认 `1`
-- `Size` 默认 `10`
-- `Size` 最大 `100`
-
-超出上限时按 `100` 处理并提示。
-
-## 目录建议（Skill 项目）
+### 3. 本项目代码文件夹结构详细说明
 
 ```text
 sql-to-gin-restfulapi-scaffold/
@@ -138,60 +38,215 @@ sql-to-gin-restfulapi-scaffold/
 ├── SKILL.md
 └── resources/
     ├── config/
+    │   ├── naming_rules.json
+    │   ├── type_mappings.json
+    │   ├── generation_profiles.json
+    │   └── template_context_example.json
     ├── specifications/
+    │   ├── coding_standards.md
+    │   ├── sql_parser_contract.md
+    │   ├── template_context_schema.md
+    │   ├── router_registry_merge_strategy.md
+    │   ├── field_rendering_rules.md
+    │   └── generation_preview_study_gin_api.md
     ├── templates/
     │   ├── project_structure/
+    │   │   ├── main.go
+    │   │   ├── go.mod
+    │   │   ├── apis/
+    │   │   ├── cmd/
+    │   │   ├── configs/
+    │   │   ├── internal/
+    │   │   └── utils/
     │   └── layers/
-    ├── static/
-    │   └── utils/
+    │       ├── model/
+    │       ├── dao/
+    │       ├── service/
+    │       └── resource/
     ├── tools/
-    └── demo_output/
+    │   ├── generate_context_from_sql.py
+    │   ├── validate_template_context.py
+    │   ├── preview_generation_plan.py
+    │   ├── render_demo_single_entity.py
+    │   ├── render_preview_bundle.py
+    │   ├── merge_router_registry.py
+    │   ├── check_snapshots.py
+    │   └── run_regression_pipeline.py
+    ├── demo_output/
+    │   ├── generated_context_study_flask_api.json
+    │   ├── pipeline_report.json
+    │   ├── regression_report_study_gin_api.md
+    │   └── snapshots/
+    └── static/
+        └── utils/
 ```
 
-## 下一步开发顺序
+目录职责说明：
 
-1. 完成 `resources/config/` 的规则文件（命名、类型映射、生成档位、上下文样例）。
-2. 完成 `resources/specifications/` 的规范契约文档（解析边界、路由合并、字段渲染规则）。
-3. 补齐 `resources/templates/` 的项目骨架模板与分层模板。
-4. 增加 `resources/tools/` 的校验与预览脚本。
-5. 用 `test/study_flask_api.sql` 做预览渲染与回归比对。
+1. `resources/config/`
+- 管理命名规则、类型映射、生成档位等策略输入。
 
-## 本地预演命令
+2. `resources/specifications/`
+- 定义解析契约、模板上下文约束、路由合并策略与编码规范。
 
-在仓库根目录执行以下命令可快速验证 Skill 资源闭环：
+3. `resources/templates/`
+- 存放项目骨架模板与分层代码模板，是最终代码产出的渲染来源。
 
-```bash
-python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+4. `resources/tools/`
+- 提供从 SQL 到 context、校验、预览、渲染、合并、快照、回归的一体化工具链。
 
-# initialize/refresh snapshots when expected output intentionally changes
-python sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py --update
+5. `resources/demo_output/`
+- 存放演示产物与回归证据，便于结果审查与防回归。
 
-# validate snapshots only
-python sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py
+---
 
-# or run each step manually
-python sql-to-gin-restfulapi-scaffold/resources/tools/generate_context_from_sql.py test/study_flask_api.sql sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json study_flask_api study_flask_api
-python sql-to-gin-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json
-python sql-to-gin-restfulapi-scaffold/resources/tools/preview_generation_plan.py sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json
-python sql-to-gin-restfulapi-scaffold/resources/tools/render_demo_single_entity.py sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json 0
-python sql-to-gin-restfulapi-scaffold/resources/tools/render_preview_bundle.py sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json
-python sql-to-gin-restfulapi-scaffold/resources/tools/merge_router_registry.py sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json sql-to-gin-restfulapi-scaffold/resources/templates/project_structure/apis/api_1_0/urls.go
+## 生成的目标项目说明
 
-# legacy example-context quick checks
-python sql-to-gin-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to-gin-restfulapi-scaffold/resources/config/template_context_example.json
-python sql-to-gin-restfulapi-scaffold/resources/tools/preview_generation_plan.py sql-to-gin-restfulapi-scaffold/resources/config/template_context_example.json
-python sql-to-gin-restfulapi-scaffold/resources/tools/render_demo_single_entity.py sql-to-gin-restfulapi-scaffold/resources/config/template_context_example.json 0
-python sql-to-gin-restfulapi-scaffold/resources/tools/render_preview_bundle.py sql-to-gin-restfulapi-scaffold/resources/config/template_context_example.json
-python sql-to-gin-restfulapi-scaffold/resources/tools/merge_router_registry.py sql-to-gin-restfulapi-scaffold/resources/config/template_context_example.json sql-to-gin-restfulapi-scaffold/resources/templates/project_structure/apis/api_1_0/urls.go
+### 1. 生成的目标项目结构
+
+目标项目为 Gin 分层结构，典型目录如下（参考 `test/sql-to-gin-example`）：
+
+```text
+target-project/
+├── main.go
+├── cmd/
+├── apis/
+│   ├── start.go
+│   ├── routers/
+│   └── api_1_0/
+├── internal/
+│   ├── models/
+│   ├── dao/
+│   ├── services/
+│   ├── globals/
+│   └── settings/
+├── configs/
+├── utils/
+└── go.mod
 ```
+
+各层职责：
+
+1. `models`
+- GORM 模型定义，字段映射数据库结构。
+
+2. `dao`
+- 数据访问层，封装 CRUD 和查询逻辑。
+
+3. `services`
+- 业务编排层，连接 resource 与 dao。
+
+4. `apis/api_1_0`
+- 接口资源与路由注册层，承载 HTTP 输入输出。
+
+5. `internal/globals` 与 `internal/settings`
+- 全局能力与基础设施初始化（数据库、解析器、引擎配置等）。
+
+### 2. 目标项目启动和测试方法
+
+以下步骤基于 `test/sql-to-gin-example`：
+
+1. 启动前准备
+- 进入目录：`cd test/sql-to-gin-example`
+- 确认 `configs/config.yaml` 中 `system.SysIP`、`system.SysPort`、数据库连接等配置可用。
+- 如首次运行，先拉取依赖：`go mod tidy`
+
+2. 启动服务
+- 方式一：`go run main.go`
+- 方式二：`go build -o app.exe .` 后执行 `./app.exe`
+
+3. 基础验证
+- 端口监听以 `configs/config.yaml` 为准（默认 `0.0.0.0:8000`）。
+- 可通过健康检查路由或已生成业务路由做 smoke test。
+
+4. 测试说明
+- 当前示例工程中未发现 `_test.go` 单元测试文件。
+- 建议最小验证命令：`go test ./...`（用于快速检查编译与基础行为）。
+
+---
+
+## 本项目的使用指南
+
+### 1. 在 AI 开发工具中使用的指南
+
+可先阅读 `docs/` 下通用使用文档，再结合本 README 操作本 Skill：
+
+1. `docs/claude中使用skill配置.md`
+2. `docs/Trea中使用skill配置.md`
+3. `docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`
 
 说明：
 
-- `run_regression_pipeline.py`：一键执行 generate + validate + preview + render + merge + coverage，并输出 pipeline_report.json。
-- `check_snapshots.py`：校验（或用 `--update` 刷新）context 与 manifest 的快照基线。
-- `generate_context_from_sql.py`：从 SQL DDL 自动生成完整 context JSON。
-- `validate_template_context.py`：校验渲染上下文字段完整性。
-- `preview_generation_plan.py`：预览实体对应文件生成计划。
-- `render_demo_single_entity.py`：渲染单实体样例。
-- `render_preview_bundle.py`：渲染全部实体预览并生成 manifest。
-- `merge_router_registry.py`：按标记块增量合并 `urls.go` 的导入和路由注册。
+- 当前 `docs/` 中暂无 Gin 专项使用文档，上述文档可作为 AI 工具接入流程参考。
+- Gin Skill 的具体执行步骤与命令，请以本 README 和 `SKILL.md` 为准。
+
+常用命令（仓库根目录执行）：
+
+```bash
+python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+```
+
+该命令会串联执行：context 生成、context 校验、计划预览、模板渲染、路由合并预演、覆盖率统计、快照校验。
+
+---
+
+## 项目的进一步开发与维护
+
+建议遵循以下维护原则：
+
+1. 先规范后实现
+- 先修改 `resources/specifications/`，再改 `templates/` 与 `tools/`。
+
+2. 先跑回归再提交
+- 每次改动后执行 `run_regression_pipeline.py`，并检查 `resources/demo_output/pipeline_report.json`。
+
+3. 快照变更要可解释
+- 先 compare，确认是预期变化后再 update：
+  - `python sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py`
+  - `python sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py --update`
+
+4. 增量合并保持幂等
+- 路由注册合并依赖 marker 机制，避免直接覆盖注册文件。
+
+5. 保持跨 Skill 一致性
+- 新能力优先抽象为可复用规则/规范，减少与 FastAPI/Flask/SpringBoot Skill 的行为漂移。
+
+---
+
+## 项目中其他工具的使用说明
+
+`resources/tools/` 主要工具及用途：
+
+1. `generate_context_from_sql.py`
+- 输入 SQL DDL，输出统一 context JSON。
+
+2. `validate_template_context.py`
+- 校验 context 必填字段和结构合法性。
+
+3. `preview_generation_plan.py`
+- 输出实体与文件的生成计划，不落盘代码。
+
+4. `render_demo_single_entity.py`
+- 渲染单实体示例，便于调试模板。
+
+5. `render_preview_bundle.py`
+- 渲染全量预览产物并生成 manifest。
+
+6. `merge_router_registry.py`
+- 基于 marker 对路由注册做增量合并与幂等处理。
+
+7. `check_snapshots.py`
+- 对 context 与 manifest 做快照 compare/update。
+
+8. `run_regression_pipeline.py`
+- 一键执行完整回归流水线，是日常开发默认入口。
+
+推荐操作顺序：
+
+1. `generate_context_from_sql.py`
+2. `validate_template_context.py`
+3. `preview_generation_plan.py`
+4. `render_preview_bundle.py`
+5. `merge_router_registry.py`
+6. `check_snapshots.py`
+7. `run_regression_pipeline.py`（或直接作为唯一入口）
