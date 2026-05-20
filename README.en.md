@@ -16,7 +16,7 @@
 
 - 🔄 **Resource-driven Architecture** - Templates + Configurations + Standards, completely driven by resource files
 - 🚀 **One-click Scaffolding** - Auto-generate complete project code from SQL table definitions
-- 🎨 **Multi-framework Support** - FastAPI / Flask / Spring Boot three major frameworks
+- 🎨 **Multi-framework Support** - FastAPI / Flask / Gin / Spring Boot four major frameworks
 - 📦 **Incremental Generation** - Full initial generation + incremental updates
 - 🔒 **Built-in Security** - Auto soft-delete/hard-delete, sensitive data masking, input validation
 
@@ -48,6 +48,22 @@ Generate complete Spring Boot RESTful API project scaffolding from SQL `CREATE T
 
 ---
 
+### 4️⃣ sql-to-gin-restfulapi-scaffold
+
+Generate Gin + GORM enterprise API project scaffolding from MySQL DDL scripts
+
+Status: ✅ Production-ready workflow with one-command regression (context generation, template rendering, router merge, snapshot checks)
+
+Quick command:
+
+```bash
+python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+```
+
+📖 **Details**：[View Documentation](sql-to-gin-restfulapi-scaffold/README.md)
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -74,9 +90,14 @@ ncepu_ideal-skills/
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
+├── 📁 sql-to-gin-restfulapi-scaffold/             # 🌀 Gin skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
 └── 📁 test/                                        # 🧪 Generated example projects
     ├── sql-to-fastapi-example/
     ├── sql-to-flask-exmaple.com/
+    ├── sql-to-gin-example/
     └── sql-to-springboot-example/
 ```
 
@@ -115,10 +136,11 @@ CREATE TABLE student (
 
 **📤 Skill Generators Reference**：
 
-| ⚡ Skill | 📥 Input | 
-|--------|-----------|
+| ⚡ Skill | 📥 Input | 📤 Output |
+|--------|-----------|-----------|
 | **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + Project Skeleton |
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + Project Skeleton |
+| **Gin** | MySQL DDL | Model / DAO / Service / Resource + Project Skeleton |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + Project Skeleton |
 
 

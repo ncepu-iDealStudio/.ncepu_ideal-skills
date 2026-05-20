@@ -1,6 +1,6 @@
 # 🎯 ncepu_ideal-skills
 
-> 企业级服务端项目技能（Skills）集合仓库 | 基于资源驱动设计，快速生成符合团队标准的项目脚手架
+> 企业级服务端接口项目技能（Skills）集合仓库 | 基于资源驱动设计，快速生成符合团队标准的项目脚手架
 
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
@@ -16,7 +16,7 @@
 
 - 🔄 **资源驱动架构** - 模板 + 配置 + 规范，完全由资源文件驱动代码生成
 - 🚀 **一键生成脚手架** - 从 SQL 表结构自动生成完整项目代码
-- 🎨 **多框架支持** - FastAPI / Flask / Spring Boot 三大主流框架
+- 🎨 **多框架支持** - FastAPI / Flask / Gin / Spring Boot 四大主流框架
 - 📦 **增量生成** - 支持首次全量生成和后续增量更新
 - 🔒 **安全内置** - 自动软删除/硬删除、敏感数据脱敏、输入验证
 
@@ -48,6 +48,22 @@
 
 ---
 
+### 4️⃣ sql-to-gin-restfulapi-scaffold
+
+从 MySQL DDL 脚本生成 Gin + GORM 风格的企业级接口项目脚手架
+
+状态：✅ 已具备一键回归能力（含 context 生成、模板渲染、路由合并、快照校验）
+
+快速命令：
+
+```bash
+python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+```
+
+📖 **详细说明**：[查看文档](sql-to-gin-restfulapi-scaffold/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```
@@ -74,9 +90,14 @@ ncepu_ideal-skills/
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
+├── 📁 sql-to-gin-restfulapi-scaffold/             # 🌀 Gin 技能
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
 └── 📁 test/                                        # 🧪 技能生成示例
     ├── sql-to-fastapi-example/
     ├── sql-to-flask-exmaple.com/
+    ├── sql-to-gin-example/
     └── sql-to-springboot-example/
 ```
 
@@ -119,6 +140,7 @@ CREATE TABLE student (
 |--------|--------|-----------|
 | **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + 项目骨架 |
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + 项目骨架 |
+| **Gin** | MySQL DDL | Model / DAO / Service / Resource + 项目骨架 |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + 项目骨架 |
 
 ## 🗺️ 未来规划

@@ -1,0 +1,49 @@
+{
+  "pipeline": "sql-to-gin-regression",
+  "ok": true,
+  "steps": [
+    {
+      "name": "generate_context",
+      "exit_code": 0,
+      "ok": true,
+      "output": "{\n  \"output\": \"E:\\\\Open_source_project\\\\ncepu_ideal-skills\\\\sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\generated_context_study_flask_api.json\",\n  \"tables\": 10,\n  \"views\": 1,\n  \"entities\": 11\n}"
+    },
+    {
+      "name": "validate_context",
+      "exit_code": 0,
+      "ok": true,
+      "output": "Context validation passed."
+    },
+    {
+      "name": "preview_plan",
+      "exit_code": 0,
+      "ok": true,
+      "output": "entities: 11\n\n[table] admin\n- internal/models/Admin.go\n- internal/dao/Admin.go\n- internal/services/Admin.go\n- apis/api_1_0/admin/urls.go\n- apis/api_1_0/admin/AdminResource.go\n\n[table] course\n- internal/models/Course.go\n- internal/dao/Course.go\n- internal/services/Course.go\n- apis/api_1_0/course/urls.go\n- apis/api_1_0/course/CourseResource.go\n\n[table] course_arrangement\n- internal/models/CourseArrangement.go\n- internal/dao/CourseArrangement.go\n- internal/services/CourseArrangement.go\n- apis/api_1_0/course_arrangement/urls.go\n- apis/api_1_0/course_arrangement/CourseArrangementResource.go\n\n[table] sso_user\n- internal/models/SsoUser.go\n- internal/dao/SsoUser.go\n- internal/services/SsoUser.go\n- apis/api_1_0/sso_user/urls.go\n- apis/api_1_0/sso_user/SsoUserResource.go\n\n[table] student\n- internal/models/Student.go\n- internal/dao/Student.go\n- internal/services/Student.go\n- apis/api_1_0/student/urls.go\n- apis/api_1_0/student/StudentResource.go\n\n[table] student_selected_course\n- internal/models/StudentSelectedCourse.go\n- internal/dao/StudentSelectedCourse.go\n- internal/services/StudentSelectedCourse.go\n- apis/api_1_0/student_selected_course/urls.go\n- apis/api_1_0/student_selected_course/StudentSelectedCourseResource.go\n\n[table] sys_classInfo\n- internal/models/SysClassInfo.go\n- internal/dao/SysClassInfo.go\n- internal/services/SysClassInfo.go\n- apis/api_1_0/sys_class_info/urls.go\n- apis/api_1_0/sys_class_info/SysClassInfoResource.go\n\n[table] sys_collegeInfo\n- internal/models/SysCollegeInfo.go\n- internal/dao/SysCollegeInfo.go\n- internal/services/SysCollegeInfo.go\n- apis/api_1_0/sys_college_info/urls.go\n- apis/api_1_0/sys_college_info/SysCollegeInfoResource.go\n\n[table] sys_departmentInfo\n- internal/models/SysDepartmentInfo.go\n- internal/dao/SysDepartmentInfo.go\n- internal/services/SysDepartmentInfo.go\n- apis/api_1_0/sys_department_info/urls.go\n- apis/api_1_0/sys_department_info/SysDepartmentInfoResource.go\n\n[table] teacher\n- internal/models/Teacher.go\n- internal/dao/Teacher.go\n- internal/services/Teacher.go\n- apis/api_1_0/teacher/urls.go\n- apis/api_1_0/teacher/TeacherResource.go\n\n[view] v_student_course_score\n- internal/models/VStudentCourseScore.go\n- internal/services/VStudentCourseScore.go\n- apis/api_1_0/v_student_course_score/urls.go\n- apis/api_1_0/v_student_course_score/VStudentCourseScoreResource.go\n\nplanned files: 54"
+    },
+    {
+      "name": "render_bundle",
+      "exit_code": 0,
+      "ok": true,
+      "output": "bundle files: 11\nmanifest: E:\\Open_source_project\\ncepu_ideal-skills\\sql-to-gin-restfulapi-scaffold\\resources\\demo_output\\bundle_preview\\manifest.json"
+    },
+    {
+      "name": "merge_registry_preview",
+      "exit_code": 0,
+      "ok": true,
+      "output": "{\n  \"inserted_imports_count\": 9,\n  \"duplicate_imports_removed_count\": 0,\n  \"import_merge_skipped\": false,\n  \"import_skip_reason\": \"\",\n  \"inserted_registry_entries_count\": 9,\n  \"duplicate_registry_entries_removed_count\": 0,\n  \"registry_merge_skipped\": false,\n  \"registry_skip_reason\": \"\",\n  \"target_file\": \"E:\\\\Open_source_project\\\\ncepu_ideal-skills\\\\sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\urls_merge_preview.go\"\n}"
+    },
+    {
+      "name": "check_snapshots",
+      "exit_code": 0,
+      "ok": true,
+      "output": "{\n  \"ok\": true,\n  \"update_mode\": false,\n  \"checks\": [\n    {\n      \"target\": \"sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\generated_context_study_flask_api.json\",\n      \"snapshot\": \"sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\snapshots\\\\generated_context_study_flask_api.snapshot.json\",\n      \"exists\": true,\n      \"snapshot_exists\": true,\n      \"ok\": true,\n      \"updated\": false,\n      \"reason\": \"match\",\n      \"target_hash\": \"2149c2179f05c993c977a6a6b69d8fea029758a4441d75692d9e0f56eb388087\",\n      \"snapshot_hash\": \"2149c2179f05c993c977a6a6b69d8fea029758a4441d75692d9e0f56eb388087\"\n    },\n    {\n      \"target\": \"sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\bundle_preview\\\\manifest.json\",\n      \"snapshot\": \"sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\snapshots\\\\bundle_manifest.snapshot.json\",\n      \"exists\": true,\n      \"snapshot_exists\": true,\n      \"ok\": true,\n      \"updated\": false,\n      \"reason\": \"match\",\n      \"target_hash\": \"d98fea959a0bec65edb1cd23fec5d7a3e8df2e73725c21b175b6240f2e0d8cb8\",\n      \"snapshot_hash\": \"d98fea959a0bec65edb1cd23fec5d7a3e8df2e73725c21b175b6240f2e0d8cb8\"\n    }\n  ]\n}"
+    }
+  ],
+  "coverage": {
+    "sql_tables": 10,
+    "sql_views": 1,
+    "sql_entities": 11,
+    "context_entities": 11,
+    "coverage_percent": 100.0
+  }
+}

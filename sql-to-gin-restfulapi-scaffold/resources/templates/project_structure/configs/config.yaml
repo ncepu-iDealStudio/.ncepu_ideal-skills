@@ -1,0 +1,7 @@
+system:
+  mode: debug
+  host: 0.0.0.0
+  port: "8000"
+
+database:
+  mysql_dsn: root:root@tcp(127.0.0.1:3306)/{{project_name}}?charset=utf8mb4&parseTime=True&loc=Local

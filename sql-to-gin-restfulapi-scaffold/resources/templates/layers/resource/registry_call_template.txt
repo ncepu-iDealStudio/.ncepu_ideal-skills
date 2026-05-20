@@ -1,0 +1,1 @@
+{{module_name_snake}}.{{router_init_func}}(Api)

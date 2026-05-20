@@ -1,0 +1,120 @@
+{
+  "project": {
+    "project_name": "study_flask_api",
+    "module_name": "study_flask_api",
+    "generator_name": "sql-to-gin-restfulapi-scaffold",
+    "api_group": "api",
+    "api_version_package": "api_1_0",
+    "sql_source_type": "file",
+    "sql_source_path": "test/study_flask_api.sql"
+  },
+  "options": {
+    "first_scaffold": true,
+    "overwrite_strategy": "merge",
+    "conflict_policy": "warn",
+    "security_profile": "standard",
+    "generate_view_resource": true,
+    "supports_batch_add": false
+  },
+  "entities": [
+    {
+      "entity_kind": "table",
+      "table_name_raw": "student",
+      "module_name": "student",
+      "entity_name": "Student",
+      "resource_slug": "student",
+      "router_init_func": "InitStudentRouterGroup",
+      "url_collection": "/student",
+      "url_item": "/student/:auto_id",
+      "route_param_name": "auto_id",
+      "primary_key_field": "autoID",
+      "primary_key_type": "int",
+      "supports_crud": true,
+      "supports_query": true,
+      "has_soft_delete": true,
+      "soft_delete_field": "isDelete",
+      "soft_delete_active_value": 1,
+      "soft_delete_inactive_value": 0,
+      "fields": [
+        {
+          "field_name_raw": "autoID",
+          "go_field_name": "AutoID",
+          "sql_type_raw": "int",
+          "gorm_type": "int",
+          "go_type": "int",
+          "gorm_tag": "column:autoID;primaryKey;type:int;not null;",
+          "json_tag": "autoID",
+          "form_tag": "autoID",
+          "nullable": false,
+          "is_primary_key": true,
+          "is_auto_increment": true,
+          "is_soft_delete_field": false,
+          "default_value": null,
+          "comment": "自增字段",
+          "in_get_filter": true,
+          "in_post_payload": false,
+          "in_put_payload": false
+        },
+        {
+          "field_name_raw": "studentID",
+          "go_field_name": "StudentID",
+          "sql_type_raw": "varchar(20)",
+          "gorm_type": "string",
+          "go_type": "string",
+          "gorm_tag": "column:studentID;type:varchar(20);",
+          "json_tag": "studentID",
+          "form_tag": "studentID",
+          "nullable": true,
+          "is_primary_key": false,
+          "is_auto_increment": false,
+          "is_soft_delete_field": false,
+          "default_value": null,
+          "comment": "学号",
+          "in_get_filter": true,
+          "in_post_payload": true,
+          "in_put_payload": true
+        }
+      ]
+    },
+    {
+      "entity_kind": "view",
+      "table_name_raw": "v_student_course_score",
+      "module_name": "v_student_course_score",
+      "entity_name": "VStudentCourseScore",
+      "resource_slug": "v_student_course_score",
+      "router_init_func": "InitVStudentCourseScoreRouterGroup",
+      "url_collection": "/v_student_course_score/list",
+      "url_item": "",
+      "route_param_name": "",
+      "primary_key_field": "",
+      "primary_key_type": "",
+      "supports_crud": false,
+      "supports_query": true,
+      "has_soft_delete": false,
+      "fields": [
+        {
+          "field_name_raw": "studentID",
+          "go_field_name": "StudentID",
+          "sql_type_raw": "varchar(20)",
+          "gorm_type": "string",
+          "go_type": "string",
+          "gorm_tag": "column:studentID;type:varchar(20);",
+          "json_tag": "studentID",
+          "form_tag": "studentID",
+          "nullable": true,
+          "is_primary_key": false,
+          "is_auto_increment": false,
+          "is_soft_delete_field": false,
+          "in_get_filter": true,
+          "in_post_payload": false,
+          "in_put_payload": false
+        }
+      ]
+    }
+  ],
+  "diagnostics": {
+    "parse_errors": [],
+    "fallback_warnings": [],
+    "conflict_warnings": []
+  }
+}

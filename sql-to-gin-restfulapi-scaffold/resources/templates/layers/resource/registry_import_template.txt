@@ -1,0 +1,1 @@
+"{{module_name}}/apis/api_1_0/{{resource_slug}}"

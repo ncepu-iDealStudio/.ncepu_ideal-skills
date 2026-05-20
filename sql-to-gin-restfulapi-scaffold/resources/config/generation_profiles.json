@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "default_profile": "standard",
+  "profiles": {
+    "minimal": {
+      "generate_cmd": true,
+      "generate_rpc_stub": false,
+      "generate_view_resource": true,
+      "generate_session_support": false,
+      "include_static_utils_core": true,
+      "include_static_utils_security": false,
+      "supports_batch_add": false
+    },
+    "standard": {
+      "generate_cmd": true,
+      "generate_rpc_stub": true,
+      "generate_view_resource": true,
+      "generate_session_support": true,
+      "include_static_utils_core": true,
+      "include_static_utils_security": false,
+      "supports_batch_add": false
+    },
+    "secure": {
+      "generate_cmd": true,
+      "generate_rpc_stub": true,
+      "generate_view_resource": true,
+      "generate_session_support": true,
+      "include_static_utils_core": true,
+      "include_static_utils_security": true,
+      "supports_batch_add": false
+    }
+  }
+}

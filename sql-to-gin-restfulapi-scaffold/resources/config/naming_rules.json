@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "module_name": {
+    "conversion": "snake_case",
+    "description": "All generated Go package folder names use snake_case"
+  },
+  "entity_name": {
+    "conversion": "pascal_case",
+    "description": "Entity struct and file stem use PascalCase"
+  },
+  "file_name": {
+    "conversion": "pascal_case",
+    "description": "Generated Go layer files keep PascalCase stem, e.g. Student.go"
+  },
+  "url": {
+    "path_style": "snake_case",
+    "path_param_style": "snake_case",
+    "collection_pattern": "/{resource}",
+    "item_pattern": "/{resource}/:{route_key}",
+    "description": "URL paths and route parameters are generated in snake_case"
+  },
+  "route_key": {
+    "source": "sql_primary_key",
+    "fallback": "auto_id",
+    "description": "Route key must use primary key defined in SQL DDL"
+  },
+  "router_group": {
+    "root": "api",
+    "version_group": "api_1_0",
+    "description": "Routers are registered under apis/api_1_0"
+  },
+  "layers": {
+    "model": "internal/models",
+    "dao": "internal/dao",
+    "service": "internal/services",
+    "resource": "apis/api_1_0"
+  }
+}

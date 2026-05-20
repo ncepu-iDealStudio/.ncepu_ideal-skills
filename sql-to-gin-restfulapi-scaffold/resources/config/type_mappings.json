@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "description": "MySQL to GORM and Go type mapping",
+  "type_mappings": [
+    {
+      "sql_types": ["VARCHAR", "CHAR", "TEXT", "LONGTEXT", "MEDIUMTEXT"],
+      "gorm_type": "string",
+      "go_type": "string"
+    },
+    {
+      "sql_types": ["INT", "INTEGER", "SMALLINT", "TINYINT"],
+      "gorm_type": "int",
+      "go_type": "int"
+    },
+    {
+      "sql_types": ["BIGINT"],
+      "gorm_type": "int64",
+      "go_type": "int64"
+    },
+    {
+      "sql_types": ["FLOAT", "DOUBLE"],
+      "gorm_type": "float64",
+      "go_type": "float64"
+    },
+    {
+      "sql_types": ["DECIMAL", "NUMERIC"],
+      "gorm_type": "float64",
+      "go_type": "float64"
+    },
+    {
+      "sql_types": ["BOOLEAN", "BOOL", "TINYINT(1)"],
+      "gorm_type": "bool",
+      "go_type": "bool"
+    },
+    {
+      "sql_types": ["DATE"],
+      "gorm_type": "time.Time",
+      "go_type": "time.Time",
+      "imports": ["time"]
+    },
+    {
+      "sql_types": ["DATETIME", "TIMESTAMP"],
+      "gorm_type": "time.Time",
+      "go_type": "time.Time",
+      "imports": ["time"]
+    },
+    {
+      "sql_types": ["JSON"],
+      "gorm_type": "string",
+      "go_type": "string"
+    }
+  ],
+  "soft_delete_field_candidates": [
+    "is_delete",
+    "is_deleted",
+    "isDelete",
+    "isDeleted"
+  ],
+  "pagination": {
+    "page_param": "Page",
+    "size_param": "Size",
+    "order_param": "Order",
+    "default_page": 1,
+    "default_size": 10,
+    "max_size": 100
+  },
+  "view_policy": {
+    "readonly": true,
+    "allow_list": true,
+    "allow_get_one": false,
+    "allow_create": false,
+    "allow_update": false,
+    "allow_delete": false
+  }
+}
