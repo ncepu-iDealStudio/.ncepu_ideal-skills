@@ -16,7 +16,7 @@ from schemas.{{table_name}} import (
 from schemas.response import SuccessResponse, PaginationResponse, success_response, paginated_response
 
 
-router = APIRouter(prefix="/{{resource_plural}}", tags=["{{table_comment}}管理"])
+router = APIRouter(prefix="/{{resource_singular}}", tags=["{{table_comment}}管理"])
 
 
 @router.get(

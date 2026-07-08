@@ -20,9 +20,8 @@
     }
   },
   "resource_name": {
-    "singular": "snake_case",
-    "plural": "plural_snake_case",
-    "description": "API路由资源名",
+    "conversion": "singular_snake_case",
+    "description": "API路由资源名（单数）：同时用于【文件夹命名】与【路由前缀】，禁止使用复数。例如表 student -> 文件夹 api/v1/student/、路由前缀 /student",
     "plural_rules": {
       "default": "add_s",
       "exceptions": {
@@ -42,7 +41,8 @@
         "singular": "sys_class",
         "plural": "sys_classes"
       }
-    }
+    },
+    "note": "生成代码时，文件夹名与路由前缀一律使用 singular（单数）形式；plural 仅作参考，不用于路径。"
   },
   "service_name": {
     "conversion": "snake_case_with_suffix",

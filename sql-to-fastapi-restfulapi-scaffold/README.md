@@ -147,7 +147,7 @@ fastapi_project/
 
 1. **models/{table_name}.py** - SQLAlchemy 数据模型
 2. **schemas/{table_name}.py** - Pydantic 验证模型（Base、Create、Update、Response）
-3. **api/v1/{resource_plural}/{resource_plural}Resource.py** - FastAPI 路由（5个CRUD端点）
+3. **api/v1/{resource_singular}/{resource_singular}Resource.py** - FastAPI 路由（5个CRUD端点，路由前缀与文件夹均为单数）
 4. **service/{table_name}_service.py** - 服务层（5个业务方法）
 
 **路由结构**：

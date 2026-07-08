@@ -178,7 +178,8 @@ class ModelName(BaseModel):
 
 ### 7.1 路由前缀
 
-- 使用 `APIRouter(prefix="/{resource_plural}")`
+- 使用 `APIRouter(prefix="/{resource_singular}")`（路由前缀使用**单数**）
+- 文件夹命名使用单数：`api/v1/{resource_singular}/{resource_singular}Resource.py`
 - tags 使用中文说明
 
 ### 7.2 端点方法
