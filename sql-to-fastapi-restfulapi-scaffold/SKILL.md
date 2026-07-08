@@ -161,7 +161,7 @@ resources/
 |-----|-------|------|
 | 表名（snake_case） | 类名（PascalCase） | `student` → `Student` |
 | 表名 | 文件名（snake_case） | `sys_class` → `sys_class.py` |
-| 表名 | 资源路由名（复数） | `student` → `students` |
+| 表名 | 资源路由名（snake_case） | `student` → `student` |
 
 ### 文件结构
 
