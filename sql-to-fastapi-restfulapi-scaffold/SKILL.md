@@ -90,6 +90,16 @@ resources/
 3. FastAPI Resource 层 - API 路由端点 (`api/v1/{resource_name}/{resource_name}Resource.py`)
 4. Service 层 - 业务逻辑 (`service/{table_name}_service.py`)
 
+> ⚠️ **【强制规则】资源文件夹与路由前缀必须全部使用单数（singular）**
+> `resource_name` 由**表名原样**作为单数使用，**严禁**对资源名做任何复数化处理。
+> - 表 `company_file` → 文件夹 `api/v1/company_file/`（❌ 错误：`api/v1/company_files/`）
+> - 表 `company_file` → 路由前缀 `/company-file`（❌ 错误：`/company-files`）
+> - 表 `student` → 文件夹 `api/v1/student/`、路由前缀 `/student`
+> - 表 `sys_class` → 文件夹 `api/v1/sys_class/`、路由前缀 `/sys-class`
+>
+> 只有以下位置使用表名/单数形式，其余（文件名、类名、前缀）均不得加 `s` 或变复数。
+> 复数（`company_files`、`students`）只会出现在 `tags=["xxx管理"]` 的中文展示文案里，绝不进入任何路径或文件名。
+
 **不生成的文件**（根据用户要求）：
 - 测试代码
 - 部署相关配置（Docker、Nginx等）
@@ -161,7 +171,12 @@ resources/
 |-----|-------|------|
 | 表名（snake_case） | 类名（PascalCase） | `student` → `Student` |
 | 表名 | 文件名（snake_case） | `sys_class` → `sys_class.py` |
-| 表名 | 资源名（**单数**，用于文件夹与路由前缀） | `student` → `student`；文件夹 `api/v1/student/`、路由前缀 `/student` |
+| 表名（**原样，强制单数**） | 资源名（**单数**，用于文件夹与路由前缀，**禁止任何形式的复数化**） | `company_file` → `company_file`；文件夹 `api/v1/company_file/`（❌`company_files`）、路由前缀 `/company-file`（❌`/company-files`） |
+| 表名（**原样，强制单数**） | 资源名（**单数**） | `student` → `student`；文件夹 `api/v1/student/`、路由前缀 `/student` |
+
+> 🔴 **再次强调**：`resource_name` = 表名单数形式，**绝不要**对资源名做复数转换。
+> 即使表名是 `company_file`，文件夹也必须是 `company_file`（不是 `company_files`），路由前缀必须是 `/company-file`（不是 `/company-files`）。
+> 复数只用于中文 tag 文案（如 `tags=["企业管理"]`），绝不进入路径/文件名/前缀。
 
 ### 文件结构
 
@@ -415,3 +430,15 @@ fastapi_project/
 3. **低耦合**：Service 类不继承任何基类，直接注入 `db: Session`
 4. **中文文档**：所有文档字符串、注释、API 文档使用中文
 5. **安全性**：所有端点必须包含异常处理，认证根据业务需求添加
+6. **🔴 资源名必须单数（最高优先级）**：生成 `api/v1/{resource_name}/` 文件夹与路由前缀时，
+   `resource_name` 必须严格等于**表名单数形式**，**绝对禁止**复数化。
+   以下为错误 ↔ 正确对照（务必避免左侧）：
+
+   | 表名 | ❌ 错误（复数） | ✅ 正确（单数） |
+   |------|----------------|----------------|
+   | `company_file` | `api/v1/company_files/`、前缀 `/company-files` | `api/v1/company_file/`、前缀 `/company-file` |
+   | `student` | `api/v1/students/`、前缀 `/students` | `api/v1/student/`、前缀 `/student` |
+   | `sys_class` | `api/v1/sys_classes/`、前缀 `/sys-classes` | `api/v1/sys_class/`、前缀 `/sys-class` |
+
+   - 复数**只**允许出现在中文展示文案（`tags=["企业文件管理"]` 等），**永不**进入文件夹名、文件名、路由前缀。
+   - 生成前务必自检：`resource_name` 是否等于表名原样？若发现 `s`/`es` 结尾的文件夹或前缀，即为错误，必须改回单数。

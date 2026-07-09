@@ -22,6 +22,21 @@
   "resource_name": {
     "conversion": "singular_snake_case",
     "description": "API路由资源名（单数）：同时用于【文件夹命名】与【路由前缀】，禁止使用复数。例如表 student -> 文件夹 api/v1/student/、路由前缀 /student",
+    "forbidden": "严禁对 resource_name 做任何复数化处理。resource_name 直接等于表名单数形式，不得加 s、不得加 es、不得使用不规则复数。复数（students / company_files）只出现在 tags 的中文展示文案中，绝不进入文件夹名、文件名或路由前缀。",
+    "anti_patterns": {
+      "company_file": {
+        "wrong_folder": "api/v1/company_files/",
+        "wrong_prefix": "/company-files",
+        "right_folder": "api/v1/company_file/",
+        "right_prefix": "/company-file"
+      },
+      "student": {
+        "wrong_folder": "api/v1/students/",
+        "wrong_prefix": "/students",
+        "right_folder": "api/v1/student/",
+        "right_prefix": "/student"
+      }
+    },
     "plural_rules": {
       "default": "add_s",
       "exceptions": {
@@ -40,9 +55,13 @@
       "sys_class": {
         "singular": "sys_class",
         "plural": "sys_classes"
+      },
+      "company_file": {
+        "singular": "company_file",
+        "plural": "company_files"
       }
     },
-    "note": "生成代码时，文件夹名与路由前缀一律使用 singular（单数）形式；plural 仅作参考，不用于路径。"
+    "note": "生成代码时，文件夹名与路由前缀一律使用 singular（单数）形式；plural 仅作参考与反例展示，绝不用于路径。"
   },
   "service_name": {
     "conversion": "snake_case_with_suffix",
