@@ -7,6 +7,6 @@
 
 from sqlalchemy.orm import declarative_base
 
-Base = declarative_base()
+BaseMode = declarative_base()
 
-__all__ = ["Base"]
+__all__ = ["BaseMode"]

@@ -25,8 +25,8 @@ async def lifespan_manager(app: FastAPI):
 
     logger.info("🚀 应用正在启动...")
 
-    from models import Base
-    Base.metadata.create_all(bind=engine)
+    from models import BaseMode
+    BaseMode.metadata.create_all(bind=engine)
     logger.info("✅ 数据库表初始化完成")
 
     logger.info(f"🎉 应用启动成功 - {settings.APP_NAME} v{settings.APP_VERSION}")
