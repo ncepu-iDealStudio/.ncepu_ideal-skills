@@ -4,10 +4,9 @@
 此文件由 SQL-to-FastAPI-Scaffold 自动生成
 """
 
-from fastapi import Request, status
-from fastapi.responses import JSONResponse
-from typing import Optional, Callable
-import traceback
+from typing import Callable
+
+from fastapi import status
 
 
 class BaseException(Exception):
@@ -65,56 +64,32 @@ class InternalServerError(BaseException):
         self.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-async def handle_service_exceptions(request: Request, call_next: Callable):
+def handle_service_exceptions(func: Callable):
+    """路由装饰器：业务异常向上抛出，由全局异常处理器统一响应。
+
+    未知异常包装为 InternalServerError 再抛出。
     """
-    服务层异常处理中间件
-    """
-    try:
-        response = await call_next(request)
-        return response
-    except BadRequestException as e:
-        return JSONResponse(
-            status_code=e.status_code,
-            content={
-                "code": e.code,
-                "message": e.message,
-                "data": None
-            }
-        )
-    except NotFoundException as e:
-        return JSONResponse(
-            status_code=e.status_code,
-            content={
-                "code": e.code,
-                "message": e.message,
-                "data": None
-            }
-        )
-    except UnauthorizedException as e:
-        return JSONResponse(
-            status_code=e.status_code,
-            content={
-                "code": e.code,
-                "message": e.message,
-                "data": None
-            }
-        )
-    except ForbiddenException as e:
-        return JSONResponse(
-            status_code=e.status_code,
-            content={
-                "code": e.code,
-                "message": e.message,
-                "data": None
-            }
-        )
-    except Exception as e:
-        traceback.print_exc()
-        return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "code": "INTERNAL_SERVER_ERROR",
-                "message": "服务器内部错误",
-                "data": None
-            }
-        )
+    from functools import wraps
+    import inspect
+
+    @wraps(func)
+    async def async_wrapper(*args, **kwargs):
+        try:
+            return await func(*args, **kwargs)
+        except BaseException:
+            raise
+        except Exception as e:
+            raise InternalServerError(f"服务异常: {e}") from e
+
+    @wraps(func)
+    def sync_wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except BaseException:
+            raise
+        except Exception as e:
+            raise InternalServerError(f"服务异常: {e}") from e
+
+    if inspect.iscoroutinefunction(func):
+        return async_wrapper
+    return sync_wrapper

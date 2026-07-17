@@ -4,6 +4,30 @@
 
 本文档定义了 SQL-to-FastAPI-Scaffold 生成代码时应遵循的规范和最佳实践。
 
+## 1.1 包管理与启动（uv）
+
+目标项目默认使用 [uv](https://docs.astral.sh/uv/) 管理依赖与启动，细则见 `resources/config/package_manager.json`。
+
+| 文件 | 作用 |
+|------|------|
+| `pyproject.toml` | **主**依赖清单（PEP 621 + `[dependency-groups].dev`） |
+| `.python-version` | uv 使用的 Python 版本钉选 |
+| `requirements.txt` | 与运行时依赖同步的 pip 兼容清单 |
+
+推荐命令：
+
+```bash
+uv sync
+uv run uvicorn start:app --reload
+uv run python start.py
+uv run pytest -c tests/pytest.ini -v
+uv add <package>            # 运行时依赖
+uv add --dev <package>      # 开发/测试依赖
+```
+
+生成 README 与对话「下一步」时优先写 uv；可附带 `pip install -r requirements.txt` 作为兼容路径。  
+`start.py` 须提供 `main()`，便于 `uv run python start.py`。
+
 ## 2. 格式规范
 
 ### 2.1 缩进与空格
@@ -161,16 +185,23 @@ class ModelName(BaseModel):
 - `{ClassName}Update`：所有字段使用 `Optional`
 - 设置 `extra = "forbid"` 防止批量赋值
 - 不包含主键字段
+- **不包含**状态/标识位字段（见 `status_flag_fields.json`）
 
-### 6.4 响应模型
+### 6.4 状态更新模型（有状态字段时）
+
+- `{ClassName}StatusUpdate`：仅含识别出的状态/标识位字段
+- 字段必填（`...`），`extra = "forbid"`
+- 供专用改状态接口使用，禁止混入通用 Update
+
+### 6.5 响应模型
 
 - `{ClassName}Response`：包含所有字段 + `is_delete` + `add_time`
 - 设置 `from_attributes = True`
 - 包含完整示例
 
-### 6.5 字段验证器
+### 6.6 字段验证器
 
-- 使用 `@validator` 装饰器
+- 使用 `@field_validator` 装饰器
 - 验证器命名格式：`validate_{field_name}`
 - 处理 `None` 值情况
 
@@ -187,113 +218,119 @@ class ModelName(BaseModel):
 - GET /：获取列表，分页
 - GET /{id}：获取详情
 - POST /：创建
-- PUT /{id}：更新
-- DELETE /{id}：软删除
+- PUT /{id}：更新（不含状态/标识位）
+- PATCH /{id}/status：修改状态/标识位（**表含状态字段时必须生成**）
+- DELETE /{id}：软删除或硬删除（由 Repository 决定，经 Service 委托）
 
-### 7.3 装饰器与依赖
+### 7.3 依赖与异常
 
-**必须添加**：
-- 所有端点必须添加 `@handle_service_exceptions` 装饰器
-- 所有端点必须包含 `container: ServiceContainer = Depends(ServiceContainer)` 依赖
+**必须**：
+- 所有端点添加 `@handle_service_exceptions`（或项目等价装饰器）
+- 通过 `Depends(get_{table}_service)` 注入 **Service**（**禁止** Resource 直接注入 Repository）
+- 请求体/字段格式校验由 Pydantic Schema 在进入端点前完成
 
-**可选依赖（根据业务需求）**：
-- `current_user: dict = Depends(get_current_user)` - 需要认证的端点添加（如管理后台）
-- 公开接口（如登录、注册、公共数据查询）不需要添加认证依赖
+**可选**：
+- `current_user: dict = Depends(get_current_user)` — 需要认证时添加
 
 ### 7.4 OpenAPI 文档
 
-- 必须设置 `summary` 和 `description`
-- 必须设置 `response_model`
-- 必须设置 `status_code`
+- 必须设置 `summary`、`response_model`、`status_code`
 
-## 8. Service 层规范
+## 8. 分层：API → Service → Repository
 
-### 8.1 类定义
+### 8.1 总体约定
 
-每个资源对应一个独立的 Service 类，直接注入 `db: Session`：
-
-```python
-from typing import Dict
-from sqlalchemy.orm import Session
-
-from models.{{table_name}} import {{ClassName}}
-from schemas.{{table_name}} import {{ClassName}}Create, {{ClassName}}Update, {{ClassName}}Response
-
-
-class {{ClassName}}Service:
-    """
-    {{table_comment}}服务类
-    """
-
-    def __init__(self, db: Session):
-        self.db = db
+```text
+api (Resource) → service（单条委托 + 列表等业务） → repository（仅 create/delete/update/get，增删改查顺序） → model
+（Schema 负责进入 API 前的数据校验）
 ```
 
-### 8.2 方法规范
+| 层 | 路径 | Skill 覆盖 | 职责 |
+|----|------|------------|------|
+| Repository | `repository/{table}_repository.py` | **可覆盖** | 仅单条 CRUD |
+| Service | `service/{table}_service.py` | **仅不存在时生成** | 单条委托；列表/状态等业务 |
+| Resource | `api/v1/...` | 可覆盖基础 CRUD | HTTP；只调 Service |
 
-#### create
+### 8.2 Repository 规范
 
-1. 检查主键唯一性
-2. 检查外键存在性
-3. 创建对象
-4. 提交事务
-5. 清除缓存
-6. 返回响应模型
+```python
+class {{ClassName}}Repository:
+    def __init__(self, db: AsyncSession):
+        self.db = db
 
-#### get_list
+    async def create(...): ...    # 增
+    async def delete(...): ...    # 删
+    async def update(...): ...    # 改；可接受 Update Schema 或字段字典
+    async def get(...): ...       # 查；单条，按主键
+```
 
-1. 构建查询（过滤 `is_delete = False`）
-2. 计算总数
-3. 分页查询
-4. 转换为响应模型
+- 使用异步 SQLAlchemy（`AsyncSession` + `select()`）
+- **仅**上述 4 个方法；源码定义顺序固定为 **增删改查**：`create` → `delete` → `update` → `get`
+- 禁止 `get_list` / `update_status` / `update_fields` / `exists_by_pk` 等
+- 禁止写业务规则（分页列表、跨表流程、复杂校验编排）
+- 文件头标注 `AUTO-GENERATED`
 
-#### get_detail
+### 8.3 Service 规范
 
-1. 查询对象
-2. 检查存在性
-3. 返回响应模型
+```python
+class {{ClassName}}Service:
+    def __init__(self, db: AsyncSession):
+        self.db = db
+        self.repo = {{ClassName}}Repository(db)
 
-#### update
+    # -------------------- 单条 CRUD（委托 Repository）--------------------
+    async def create(self, data):
+        obj = await self.repo.create(data)
+        return {{ClassName}}Response.model_validate(obj)
 
-1. 查询对象
-2. 检查存在性
-3. 检查外键
-4. 更新字段
-5. 提交事务
-6. 清除缓存
-7. 返回响应模型
+    async def get_detail(...):
+        obj = await self.repo.get(...)
+        ...
 
-#### delete
+    async def update(...): ...  # 不含状态字段
+    async def delete(...): ...
 
-1. 查询对象
-2. 检查存在性
-3. 软删除（设置 `is_delete = True`）
-4. 提交事务
-5. 清除缓存
+    # -------------------- 业务逻辑：列表 --------------------
+    async def get_list(...):
+        # 分页 / 过滤 / 软删排除：在本层用 self.db + Model 查询
+        ...
 
-### 8.3 错误处理
+    # -------------------- 业务逻辑：状态/标识位（有则生成）--------------------
+    async def update_status(self, pk, data: StatusUpdate):
+        obj = await self.repo.update(pk, data.model_dump(exclude_unset=True))
+        return {{ClassName}}Response.model_validate(obj)
+
+    # ---------- 在下方添加商业逻辑方法 ----------
+```
+
+- **组合** Repository，不要继承 Repository
+- 单条操作委托 `repo.create` / `repo.delete` / `repo.update` / `repo.get`
+- 列表、状态变更等业务写在本层
+- 文件头标注 `HAND-WRITTEN`；已存在则 skill **跳过**
+
+### 8.3.1 状态/标识位字段
+
+识别规则见 `resources/config/status_flag_fields.json`。
+
+- 命中后：Schema `StatusUpdate` + Service `update_status` + Resource `PATCH /{pk}/status`
+- Repository 仅 `create/delete/update/get`（增删改查顺序），不暴露 `update_status`
+- 软删除字段走 DELETE，不走本规则
+- 示例：`sso_user.status` → `PATCH /sso-user/{pk}/status`
+
+### 8.4 错误处理
 
 使用 `utils.custom_exceptions` 中的异常类：
 
 ```python
 from utils.custom_exceptions import BadRequestException, NotFoundException
 
-# 抛出400错误
 raise BadRequestException("{{table_comment}}已存在")
-
-# 抛出404错误
 raise NotFoundException("{{table_comment}}不存在")
 ```
 
-### 8.4 缓存管理
+### 8.5 缓存（可选）
 
-数据修改后调用缓存清除方法：
-
-```python
-from core.cache import clear_cache
-
-clear_cache()
-```
+数据修改后如项目启用缓存，在 Service 层按需清理，不要在 Repository 强耦合缓存实现。
 
 ## 9. 安全规范
 
@@ -321,7 +358,7 @@ clear_cache()
 **需要认证时的规范**：
 - 通过 `get_current_user` 获取当前用户
 - 执行操作时记录 `current_user_id`
-- 在 Service 层的 create/update/delete 方法中传入 current_user_id
+- 在 Service 的业务方法中传入 current_user_id（CRUD 委托方法可按需扩展）
 
 ### 9.5 SQL 注入防护
 
@@ -385,3 +422,32 @@ CREATE TABLE student (
     FOREIGN KEY (class_id) REFERENCES sys_class(class_id)
 ) COMMENT='学生表';
 ```
+
+## 13. 测试规范
+
+### 13.1 目录与命名
+
+| 类型 | 路径 | 命名 |
+|------|------|------|
+| 单元（Service） | `tests/unit/` | `test_{table_name}_service.py` |
+| 集成（API） | `tests/integration/api/v1/` | `test_{table_name}.py` |
+
+### 13.2 单元测试占位
+
+- 面向 `{{ClassName}}Service`，使用 `session` fixture（sqlite）
+- 默认 `@pytest.mark.skip`，不阻塞 CI
+- 覆盖单条委托与 `get_list`；有状态字段时含 `update_status` 占位
+- 文件已存在则 skill **跳过**
+
+### 13.3 集成测试
+
+- 使用 `app` fixture（真实 MySQL）+ `Authorization: Bearer test-token`
+- **必须**生成可执行的基础 CRUD 流程：`POST` → `GET` 列表 → `GET` 详情 → `PUT` →（可选 `PATCH .../status`）→ `DELETE`
+- 按软删/硬删校验库表副作用
+- 同文件保留商业逻辑接口测试占位（默认 skip）
+- 唯一约束字段使用随机值；文件已存在则 skill **跳过**
+
+### 13.4 模板位置
+
+- `resources/templates/layers/test/unit/test_service_template.py`
+- `resources/templates/layers/test/integration/test_api_template.py`

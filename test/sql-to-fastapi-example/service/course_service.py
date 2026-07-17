@@ -1,81 +1,109 @@
 """
-课程基本信息业务服务
+课程基本信息业务服务（Service）
 
-此文件由 SQL-to-FastAPI-Scaffold 自动生成
+【HAND-WRITTEN】业务逻辑写在本文件；skill 仅在文件不存在时生成一次，之后不再覆盖。
+
+约定：
+- API/Resource 层统一只依赖本 Service，不直接调用 Repository。
+- Repository 仅提供单条 CRUD：create / get / update / delete。
+- 列表分页、过滤、状态变更、跨表流程等均视为业务逻辑，写在本层。
 """
 
-from typing import Dict
-from sqlalchemy.orm import Session
+from typing import Any, Dict, Optional
+
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.course import Course
-from schemas.course import CourseCreate, CourseUpdate, CourseResponse
-from utils.custom_exceptions import BadRequestException, NotFoundException
+from repository.course_repository import CourseRepository
+from schemas.course import (
+    CourseCreate,
+    CourseUpdate,
+    CourseResponse,
+    
+)
 
 
 class CourseService:
     """
-    课程基本信息服务类
+    课程基本信息业务服务
+
+    - 单条 CRUD：委托 Repository.create / get / update / delete
+    - 列表及其他业务：在本类实现
     """
 
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
+        self.repo = CourseRepository(db)
 
-    def create(self, data: CourseCreate) -> CourseResponse:
-        obj_data = data.model_dump(exclude={"auto_id"})
-        obj = Course(**obj_data)
-        self.db.add(obj)
-        self.db.commit()
-        self.db.refresh(obj)
+    # -------------------- 单条 CRUD（委托 Repository）--------------------
 
+    async def create(self, data: CourseCreate) -> CourseResponse:
+        """创建课程基本信息"""
+        obj = await self.repo.create(data)
         return CourseResponse.model_validate(obj)
 
-    def get_list(self, page: int, size: int) -> Dict:
-        query = self.db.query(Course).filter(Course.is_delete == False)
+    async def get_detail(self, auto_id: int) -> CourseResponse:
+        """详情（单条）"""
+        obj = await self.repo.get(auto_id)
+        return CourseResponse.model_validate(obj)
 
-        total = query.count()
-        items = query.offset((page - 1) * size).limit(size).all()
+    async def update(
+        self,
+        auto_id: int,
+        data: CourseUpdate,
+    ) -> CourseResponse:
+        """更新（不含状态/标识位字段；状态请用 update_status）"""
+        obj = await self.repo.update(auto_id, data)
+        return CourseResponse.model_validate(obj)
 
+    async def delete(self, auto_id: int) -> None:
+        """删除"""
+        await self.repo.delete(auto_id)
+
+    # -------------------- 业务逻辑：列表 --------------------
+
+    async def get_list(
+        self,
+        page: int = 1,
+        size: int = 10,
+        filters: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """分页列表（业务逻辑：分页 / 过滤 / 排除软删除）"""
+        
+        conditions = [Course.is_delete == False]  # noqa: E712
+        
+        if filters:
+            for field, value in filters.items():
+                if value is not None and hasattr(Course, field):
+                    conditions.append(getattr(Course, field) == value)
+
+        stmt = select(Course).order_by(Course.auto_id.asc())
+        count_stmt = select(func.count()).select_from(Course)
+        for cond in conditions:
+            stmt = stmt.where(cond)
+            count_stmt = count_stmt.where(cond)
+
+        total = await self.db.scalar(count_stmt) or 0
+        offset = (page - 1) * size
+        rows = (await self.db.execute(stmt.offset(offset).limit(size))).scalars().all()
         return {
-            "items": [CourseResponse.model_validate(item) for item in items],
-            "total": total
+            "items": [CourseResponse.model_validate(item) for item in rows],
+            "total": total,
+            "page": page,
+            "size": size,
+            "pages": (total + size - 1) // size if size else 0,
         }
 
-    def get_detail(self, auto_id: int) -> CourseResponse:
-        obj = self.db.query(Course).filter(
-            Course.auto_id == auto_id,
-            Course.is_delete == False
-        ).first()
+    
 
-        if not obj:
-            raise NotFoundException("课程不存在")
-
-        return CourseResponse.model_validate(obj)
-
-    def update(self, auto_id: int, data: CourseUpdate) -> CourseResponse:
-        obj = self.db.query(Course).filter(
-            Course.auto_id == auto_id,
-            Course.is_delete == False
-        ).first()
-
-        if not obj:
-            raise NotFoundException("课程不存在")
-
-        for key, value in data.model_dump(exclude_unset=True).items():
-            setattr(obj, key, value)
-
-        self.db.commit()
-        self.db.refresh(obj)
-
-        return CourseResponse.model_validate(obj)
-
-    def delete(self, auto_id: int) -> None:
-        obj = self.db.query(Course).filter(
-            Course.auto_id == auto_id,
-            Course.is_delete == False
-        ).first()
-
-        if not obj:
-            raise NotFoundException("课程不存在")
-
-        setattr(obj, "is_delete", True)
-        self.db.commit()
+    # ---------- 在下方添加商业逻辑方法 ----------
+    # 示例：
+    # async def transfer_department(
+    #     self,
+    #     auto_id: int,
+    #     new_department_id: int,
+    # ) -> CourseResponse:
+    #     obj = await self.repo.get(auto_id)
+    #     # ... 业务规则 / 跨表操作 ...
+    #     return CourseResponse.model_validate(obj)

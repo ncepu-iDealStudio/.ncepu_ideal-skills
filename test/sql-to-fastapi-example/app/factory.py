@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from loguru import logger
 
 from config import settings
+from utils.loguru import setup_logging
 from .events import lifespan_manager
 from .middleware import setup as register_middlewares
 from .exceptions import setup_exception_handlers
@@ -22,6 +23,7 @@ def create_app() -> FastAPI:
     Returns:
         FastAPI: 配置完成的FastAPI应用实例
     """
+    setup_logging()
     logger.info("📦 开始创建FastAPI应用实例...")
 
     app = FastAPI(

@@ -1,34 +1,90 @@
 """
-用户账号信息数据模型
+用户账号信息（登录中心）数据模型
 
 此文件由 SQL-to-FastAPI-Scaffold 自动生成
 """
 
-from datetime import datetime
-from sqlalchemy import Column, String, BigInteger, Integer, Boolean, DateTime
-from models import Base
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    Float,
+    Integer,
+    BigInteger,
+    String,
+    Text,
+    Numeric,
+    Date,
+    Time,
+    JSON,
+    ForeignKey,
+    text,
+)
+from sqlalchemy.orm import relationship
+
+from models.base import BaseModel
 
 
-class SsoUser(Base):
+class SsoUser(BaseModel):
     """
-    用户账号信息
+    用户账号信息（登录中心）
     """
+
     __tablename__ = "sso_user"
 
-    auto_id = Column("autoID", BigInteger, primary_key=True, nullable=False)
-    user_id = Column("userID", String(22), nullable=True, comment="用户ID")
-    account = Column("account", String(255), nullable=True, comment="登录账号-默认为手机号")
-    password = Column("password", String(255), nullable=True, comment="密码")
-    user_type = Column("userType", Integer, nullable=True, comment="账号类型：1--学生；2--老师；3--管理人员")
-    status = Column("status", Integer, nullable=True, comment="账号的状态：1--可用；0--锁定")
-    add_time = Column("addTime", DateTime, default=datetime.now, nullable=True, comment="记录添加时间")
 
-    @property
-    def masked_password(self) -> str:
-        return "******"
+    auto_id = Column(
+        "autoID",
+        BigInteger,
+        primary_key=True,
+        autoincrement=True,
+        nullable=False,
+        comment="物理主键，自增",
+    )
 
-    @property
-    def masked_phone(self) -> str:
-        if self.account and len(self.account) >= 11:
-            return f"{self.account[:3]}****{self.account[-4:]}"
-        return "****"
+    user_id = Column(
+        "userID",
+        String(22),
+        nullable=False,
+        unique=True,
+        comment="用户业务ID，被业务表 userID 引用",
+    )
+
+    account = Column(
+        "account",
+        String(255),
+        nullable=False,
+        unique=True,
+        comment="登录账号（手机号/邮箱/用户名）",
+    )
+
+    password = Column(
+        "password",
+        String(255),
+        nullable=False,
+        comment="密码哈希（新数据请用 bcrypt）",
+    )
+
+    user_type = Column(
+        "userType",
+        Integer,
+        nullable=True,
+        comment="账号类型：1学生 2教师 3管理员",
+    )
+
+    status = Column(
+        "status",
+        Integer,
+        nullable=False,
+        default=1,
+        comment="账号状态：1-可用; 0--锁定",
+    )
+
+    add_time = Column(
+        "addTime",
+        DateTime,
+        nullable=False,
+        server_default=text("CURRENT_TIMESTAMP"),
+        comment="创建时间",
+    )
+

@@ -5,33 +5,28 @@
 定义应用启动和关闭时的生命周期处理
 """
 
+import os
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from loguru import logger
-import os
 
 from config import settings
-from core.database import engine
+from core.database import close_database_pool, create_database_pool
 
 
 @asynccontextmanager
 async def lifespan_manager(app: FastAPI):
-    """
-    应用生命周期管理器
-
-    在应用启动时创建数据库表，在关闭时执行清理操作
-    """
+    """应用生命周期管理器：启动时初始化异步连接池，关闭时释放。"""
     os.makedirs("logs", exist_ok=True)
 
     logger.info("🚀 应用正在启动...")
-
-    from models import Base
-    Base.metadata.create_all(bind=engine)
-    logger.info("✅ 数据库表初始化完成")
-
+    await create_database_pool()
+    logger.info("✅ 数据库连接池初始化完成")
     logger.info(f"🎉 应用启动成功 - {settings.APP_NAME} v{settings.APP_VERSION}")
 
     yield
 
     logger.info("🔄 应用正在关闭...")
+    await close_database_pool()
     logger.info("👋 应用已安全关闭")

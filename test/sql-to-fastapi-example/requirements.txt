@@ -1,7 +1,16 @@
-fastapi>=0.100.0
+# 兼容清单：与 pyproject.toml 中 [project].dependencies 保持同步。
+# 推荐使用 uv 管理依赖与启动：
+#   uv sync
+#   uv run uvicorn start:app --reload
+#   uv run python start.py
+# 未安装 uv 时仍可：pip install -r requirements.txt
+
+fastapi>=0.115.0
 uvicorn[standard]>=0.23.0
 sqlalchemy>=2.0.0
 pymysql>=1.1.0
+aiomysql>=0.2.0
+greenlet>=3.0.0
 pydantic>=2.0.0
 pydantic-settings>=2.0.0
 python-multipart>=0.0.6

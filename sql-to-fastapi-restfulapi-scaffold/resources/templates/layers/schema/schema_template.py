@@ -63,10 +63,42 @@ class {{class_name}}Create({{class_name}}Base):
 class {{class_name}}Update(BaseModel):
     """
     {{table_comment}}更新模型
+
+    注意：状态/标识位字段不在此模型中，请使用专用改状态接口。
     """
     {% for field in non_primary_fields %}
+    {% if not field.is_status_flag %}
     {{field.name}}: {{field.pydantic_type}} | None = Field(
         default=None,
+        {% if field.max_length %}max_length={{field.max_length}},{% endif %}
+        {% if field.ge %}ge={{field.ge}},{% endif %}
+        {% if field.le %}le={{field.le}},{% endif %}
+        description="{{field.comment}}"
+    )
+    {% endif %}
+    {% endfor %}
+
+    class Config:
+        extra = "forbid"
+        json_schema_extra = {
+            "example": {
+                {% for field in non_primary_fields %}
+                {% if not field.is_status_flag %}
+                "{{field.name}}": {{field.example}},
+                {% endif %}
+                {% endfor %}
+            }
+        }
+
+
+{% if status_flag_fields %}
+class {{class_name}}StatusUpdate(BaseModel):
+    """
+    {{table_comment}}状态/标识位更新模型（专用）
+    """
+    {% for field in status_flag_fields %}
+    {{field.name}}: {{field.pydantic_type}} = Field(
+        ...,
         {% if field.max_length %}max_length={{field.max_length}},{% endif %}
         {% if field.ge %}ge={{field.ge}},{% endif %}
         {% if field.le %}le={{field.le}},{% endif %}
@@ -78,11 +110,12 @@ class {{class_name}}Update(BaseModel):
         extra = "forbid"
         json_schema_extra = {
             "example": {
-                {% for field in non_primary_fields %}
+                {% for field in status_flag_fields %}
                 "{{field.name}}": {{field.example}},
                 {% endfor %}
             }
         }
+{% endif %}
 
 
 class {{class_name}}Response(BaseModel):
@@ -102,4 +135,3 @@ class {{class_name}}Response(BaseModel):
                 {% endfor %}
             }
         }
-

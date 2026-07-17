@@ -8,6 +8,9 @@ from loguru import logger
 
 
 def setup_logging():
+    """
+    配置日志系统
+    """
     logger.remove()
 
     logger.add(
@@ -29,4 +32,10 @@ def setup_logging():
 
 
 def get_logger(name: str):
+    """
+    获取日志记录器
+
+    Args:
+        name: 模块名称
+    """
     return logger.bind(name=name)

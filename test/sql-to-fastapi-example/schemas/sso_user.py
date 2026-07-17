@@ -1,55 +1,202 @@
 """
-用户账号信息数据验证模型
+用户账号信息（登录中心）数据验证模型
 
 此文件由 SQL-to-FastAPI-Scaffold 自动生成
 """
 
-from typing import Optional
 from datetime import datetime
 from pydantic import BaseModel, Field, field_validator
 
 
 class SsoUserBase(BaseModel):
-    user_id: Optional[str] = Field(None, max_length=22, description="用户ID")
-    account: Optional[str] = Field(None, max_length=255, description="登录账号-默认为手机号")
-    password: Optional[str] = Field(None, max_length=255, description="密码")
-    user_type: Optional[int] = Field(None, ge=1, le=3, description="账号类型：1--学生；2--老师；3--管理人员")
-    status: Optional[int] = Field(None, ge=0, le=1, description="账号的状态：1--可用；0--锁定")
-    add_time: Optional[datetime] = Field(None, description="记录添加时间")
+    """
+    用户账号信息（登录中心）基础模型
+    """
 
-    @field_validator("account")
-    @classmethod
-    def validate_account(cls, v):
-        if v is not None:
-            import re
-            if re.match(r"^1[3-9]\d{9}$", v):
-                pass
-        return v
+    user_id: str = Field(
+        ...,
+        max_length=22,
+        description="用户业务ID，被业务表 userID 引用",
+    )
+
+    account: str = Field(
+        ...,
+        max_length=255,
+        description="登录账号（手机号/邮箱/用户名）",
+    )
+
+    password: str = Field(
+        ...,
+        max_length=255,
+        description="密码哈希（新数据请用 bcrypt）",
+    )
+
+    user_type: int | None = Field(
+        None,
+        description="账号类型：1学生 2教师 3管理员",
+    )
+
+    status: int = Field(
+        ...,
+        description="账号状态：1-可用; 0--锁定",
+    )
+
+
 
 
 class SsoUserCreate(SsoUserBase):
-    auto_id: int = Field(..., description="自增序号")
+    """
+    用户账号信息（登录中心）创建模型
+    """
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+
+                "user_id": "demo_user_id",
+
+                "account": "demo_account",
+
+                "password": "hashed_password_example",
+
+                "user_type": 1,
+
+                "status": 1,
+
+            }
+        }
 
 
 class SsoUserUpdate(BaseModel):
-    user_id: Optional[str] = Field(None, max_length=22, description="用户ID")
-    account: Optional[str] = Field(None, max_length=255, description="登录账号-默认为手机号")
-    password: Optional[str] = Field(None, max_length=255, description="密码")
-    user_type: Optional[int] = Field(None, ge=1, le=3, description="账号类型：1--学生；2--老师；3--管理人员")
-    status: Optional[int] = Field(None, ge=0, le=1, description="账号的状态：1--可用；0--锁定")
+    """
+    用户账号信息（登录中心）更新模型
+
+    注意：状态/标识位字段不在此模型中，请使用专用改状态接口。
+    """
+
+
+    user_id: str | None = Field(
+        default=None,
+        max_length=22,
+        description="用户业务ID，被业务表 userID 引用",
+    )
+
+
+
+    account: str | None = Field(
+        default=None,
+        max_length=255,
+        description="登录账号（手机号/邮箱/用户名）",
+    )
+
+
+
+    password: str | None = Field(
+        default=None,
+        max_length=255,
+        description="密码哈希（新数据请用 bcrypt）",
+    )
+
+
+
+    user_type: int | None = Field(
+        default=None,
+        description="账号类型：1学生 2教师 3管理员",
+    )
+
+
+
+
 
     class Config:
         extra = "forbid"
+        json_schema_extra = {
+            "example": {
+
+
+                "user_id": "demo_user_id",
+
+
+
+                "account": "demo_account",
+
+
+
+                "password": "hashed_password_example",
+
+
+
+                "user_type": 1,
+
+
+
+
+            }
+        }
+
+
+
+class SsoUserStatusUpdate(BaseModel):
+    """
+    用户账号信息（登录中心）状态/标识位更新模型（专用）
+    """
+
+    status: int = Field(
+        ...,
+        description="账号状态：1-可用; 0--锁定",
+    )
+
+
+    class Config:
+        extra = "forbid"
+        json_schema_extra = {
+            "example": {
+
+                "status": 1,
+
+            }
+        }
+
 
 
 class SsoUserResponse(BaseModel):
+    """
+    用户账号信息（登录中心）响应模型
+    """
+
     auto_id: int
-    user_id: Optional[str] = None
-    account: Optional[str] = None
-    password: Optional[str] = None
-    user_type: Optional[int] = None
-    status: Optional[int] = None
-    add_time: Optional[datetime] = None
+
+    user_id: str
+
+    account: str
+
+    password: str
+
+    user_type: int | None
+
+    status: int
+
+    add_time: datetime
+
 
     class Config:
         from_attributes = True
+        json_schema_extra = {
+            "example": {
+
+                "auto_id": 1,
+
+                "user_id": "demo_user_id",
+
+                "account": "demo_account",
+
+                "password": "hashed_password_example",
+
+                "user_type": 1,
+
+                "status": 1,
+
+                "add_time": "2026-01-01T00:00:00",
+
+            }
+        }

@@ -11,10 +11,10 @@ from sqlalchemy import (
     ForeignKey
 )
 from sqlalchemy.orm import relationship
-from models import BaseMode
+from models.base import BaseModel
 
 
-class {{class_name}}(BaseMode):
+class {{class_name}}(BaseModel):
     """
     {{table_comment}}
     """

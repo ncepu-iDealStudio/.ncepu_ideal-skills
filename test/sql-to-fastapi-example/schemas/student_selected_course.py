@@ -4,40 +4,142 @@
 此文件由 SQL-to-FastAPI-Scaffold 自动生成
 """
 
-from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class StudentSelectedCourseBase(BaseModel):
-    student_id: str = Field(..., max_length=20, description="学号")
-    course_id: str = Field(..., max_length=15, description="课程编号")
-    score: Optional[int] = Field(None, ge=0, le=100, description="成绩")
-    is_delete: Optional[bool] = Field(None, description="是否删除")
-    add_time: Optional[datetime] = Field(None, description="记录添加时间")
+    """
+    学生选课情况基础模型
+    """
+
+    student_id: str = Field(
+        ...,
+        max_length=20,
+        description="学号",
+    )
+
+    course_id: str = Field(
+        ...,
+        max_length=15,
+        description="课程编号",
+    )
+
+    score: int | None = Field(
+        None,
+        description="成绩",
+    )
+
+
 
 
 class StudentSelectedCourseCreate(StudentSelectedCourseBase):
-    auto_id: int = Field(..., description="自增序号字段")
+    """
+    学生选课情况创建模型
+    """
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+
+                "student_id": "demo_student_id",
+
+                "course_id": "demo_course_id",
+
+                "score": 1,
+
+            }
+        }
 
 
 class StudentSelectedCourseUpdate(BaseModel):
-    student_id: Optional[str] = Field(None, max_length=20, description="学号")
-    course_id: Optional[str] = Field(None, max_length=15, description="课程编号")
-    score: Optional[int] = Field(None, ge=0, le=100, description="成绩")
-    is_delete: Optional[bool] = Field(None, description="是否删除")
+    """
+    学生选课情况更新模型
+
+    注意：状态/标识位字段不在此模型中，请使用专用改状态接口。
+    """
+
+
+    student_id: str | None = Field(
+        default=None,
+        max_length=20,
+        description="学号",
+    )
+
+
+
+    course_id: str | None = Field(
+        default=None,
+        max_length=15,
+        description="课程编号",
+    )
+
+
+
+    score: int | None = Field(
+        default=None,
+        description="成绩",
+    )
+
+
 
     class Config:
         extra = "forbid"
+        json_schema_extra = {
+            "example": {
+
+
+                "student_id": "demo_student_id",
+
+
+
+                "course_id": "demo_course_id",
+
+
+
+                "score": 1,
+
+
+            }
+        }
+
+
 
 
 class StudentSelectedCourseResponse(BaseModel):
+    """
+    学生选课情况响应模型
+    """
+
     auto_id: int
+
     student_id: str
+
     course_id: str
-    score: Optional[int] = None
-    is_delete: Optional[bool] = None
-    add_time: Optional[datetime] = None
+
+    score: int | None
+
+    is_delete: bool | None
+
+    add_time: datetime | None
+
 
     class Config:
         from_attributes = True
+        json_schema_extra = {
+            "example": {
+
+                "auto_id": 1,
+
+                "student_id": "demo_student_id",
+
+                "course_id": "demo_course_id",
+
+                "score": 1,
+
+                "is_delete": False,
+
+                "add_time": "2026-01-01T00:00:00",
+
+            }
+        }

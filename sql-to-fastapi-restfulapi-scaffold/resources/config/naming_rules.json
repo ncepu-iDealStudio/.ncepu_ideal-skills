@@ -66,11 +66,73 @@
   "service_name": {
     "conversion": "snake_case_with_suffix",
     "suffix": "_service",
-    "description": "服务类文件名",
+    "description": "业务服务：单条委托 Repository.create/get/update/delete；列表/状态等业务写在本层；skill 仅在不存在时生成。DI 名为 get_{table}_service；Resource 统一注入 Service",
+    "di_factory": "get_{table}_service",
     "examples": {
       "student": "student_service.py",
-      "sys_class": "sys_class_service.py"
+      "sys_class": "sys_class_service.py",
+      "admin": {
+        "file": "admin_service.py",
+        "di": "get_admin_service"
+      }
     }
+  },
+  "repository_name": {
+    "conversion": "snake_case_with_suffix",
+    "suffix": "_repository",
+    "description": "仓储：skill 可覆盖；仅单条 create/delete/update/get（增删改查顺序）。由 Service 委托调用；Resource 不直接注入",
+    "path": "repository/",
+    "di_factory": "get_{table}_repository",
+    "examples": {
+      "student": "repository/student_repository.py",
+      "sys_class": "repository/sys_class_repository.py",
+      "admin": {
+        "file": "repository/admin_repository.py",
+        "di": "get_admin_repository"
+      }
+    }
+  },
+  "layer_ownership": {
+    "description": "各层所有权与覆盖策略",
+    "rules": {
+      "repository": "AUTO-GENERATED：可被 skill 反复覆盖；仅单条 create/delete/update/get（增删改查顺序）；禁止 get_list/业务方法",
+      "service": "HAND-WRITTEN：单条委托 Repository；get_list/update_status 等业务写在本层；文件已存在则跳过",
+      "resource": "可覆盖生成基础 CRUD 路由；有状态字段时含 PATCH /{pk}/status；HTTP 统一 Depends Service，禁止直接依赖 Repository",
+      "model": "可覆盖生成（或按项目约定跳过手改模型）",
+      "schema": "可覆盖生成基础 DTO；状态字段从 Update 排除并生成 StatusUpdate；请求校验在进入 Resource 时由 Schema 完成",
+      "unit_test": "HAND-WRITTEN 占位：tests/unit/test_{table}_service.py；仅不存在时生成；默认 skip",
+      "integration_test": "tests/integration/api/v1/test_{table}.py；仅不存在时生成；含可跑 CRUD + 业务 skip 占位"
+    }
+  },
+  "test_files": {
+    "description": "按表生成测试文件命名与路径",
+    "unit": {
+      "path": "tests/unit/test_{table_name}_service.py",
+      "template": "resources/templates/layers/test/unit/test_service_template.py",
+      "strategy": "create_if_missing",
+      "focus": "Service 层单元测试占位"
+    },
+    "integration": {
+      "path": "tests/integration/api/v1/test_{table_name}.py",
+      "template": "resources/templates/layers/test/integration/test_api_template.py",
+      "strategy": "create_if_missing",
+      "focus": "API CRUD 集成测试（可跑）+ 商业逻辑占位"
+    }
+  },
+  "repository_methods": {
+    "description": "Repository 方法名强制约定：仅单表单条记录；源码中方法定义顺序按增删改查：create → delete → update → get",
+    "allowed": ["create", "delete", "update", "get"],
+    "order": ["create", "delete", "update", "get"],
+    "forbidden": ["get_list", "get_by_pk", "update_fields", "update_status", "exists_by_pk"]
+  },
+  "status_flag_api": {
+    "description": "状态/标识位专用接口命名；识别规则见 status_flag_fields.json；业务入口仅在 Service",
+    "schema_class": "{ClassName}StatusUpdate",
+    "service_method": "update_status",
+    "repository_method": "update",
+    "http_method": "PATCH",
+    "path_suffix": "/status",
+    "full_path_example": "/sso-user/{user_id}/status"
   },
   "field_name": {
     "conversion": "snake_case",
