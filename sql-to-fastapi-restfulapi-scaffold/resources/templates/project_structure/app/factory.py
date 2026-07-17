@@ -1,50 +1,62 @@
-"""应用工厂函数
+"""应用工厂：lifespan + 中间件 + 异常 + 路由。"""
 
-此文件由 SQL-to-FastAPI-Scaffold 自动生成
-
-创建和配置FastAPI应用实例
-"""
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
 from fastapi import FastAPI
-from loguru import logger
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from config import settings
-from utils.loguru import setup_logging
-from .events import lifespan_manager
-from .middleware import setup as register_middlewares
+from utils.logger import setup_logging, get_logger
+from .config import AppConfig
+from .middleware import setup_middleware
 from .exceptions import setup_exception_handlers
-from .router import register_routes
+from .routes import setup_routes
+from api import register_routers
+from core.database import create_database_pool, close_database_pool
+from core.cache import init_cache, close_cache
+from core.queue import start_queue, stop_queue
+
+logger = get_logger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """日志 → DB → 缓存 → 队列。HTTPS/TLS 由反向代理负责，此处不强制跳转。"""
+    logger.info("正在启动应用...")
+    try:
+        setup_logging(level=getattr(settings, "log_level", "INFO"))
+        await create_database_pool()
+        await init_cache()
+        await start_queue()
+        logger.info("应用启动成功 - 环境: %s", settings.environment)
+        yield
+    except Exception as e:
+        logger.error("应用启动失败: %s", e)
+        raise
+    finally:
+        logger.info("正在关闭应用资源...")
+        try:
+            await stop_queue()
+            await close_cache()
+            await close_database_pool()
+            logger.info("应用已安全关闭")
+        except Exception as e:
+            logger.error("关闭资源时出错: %s", e)
 
 
 def create_app() -> FastAPI:
-    """
-    创建并配置FastAPI应用实例
+    app = FastAPI(**AppConfig.get_app_config(), lifespan=lifespan)
 
-    Returns:
-        FastAPI: 配置完成的FastAPI应用实例
-    """
-    setup_logging()
-    logger.info("📦 开始创建FastAPI应用实例...")
+    # 非 debug 时限制 Host（Docker/本地可在 .env 配置 ALLOWED_HOSTS）
+    if not settings.debug:
+        app.add_middleware(
+            TrustedHostMiddleware,
+            allowed_hosts=getattr(settings, "allowed_hosts", ["*"]),
+        )
 
-    app = FastAPI(
-        title=settings.APP_NAME,
-        version=settings.APP_VERSION,
-        description=settings.APP_DESCRIPTION,
-        lifespan=lifespan_manager
-    )
-
-    logger.info("🔧 正在注册中间件...")
-    register_middlewares(app)
-    logger.info("✅ 中间件注册完成")
-
-    logger.info("🔧 正在注册异常处理器...")
+    setup_middleware(app)
     setup_exception_handlers(app)
-    logger.info("✅ 异常处理器注册完成")
-
-    logger.info("🔧 正在注册路由...")
-    register_routes(app)
-    logger.info("✅ 路由注册完成")
-
-    logger.info(f"🎉 FastAPI应用创建成功 - {settings.APP_NAME} v{settings.APP_VERSION}")
-
+    setup_routes(app)
+    register_routers(app)
     return app

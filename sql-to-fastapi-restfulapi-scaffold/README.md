@@ -41,7 +41,8 @@ sql-to-fastapi-restfulapi-scaffold/
 │   │   ├── naming_rules.json
 │   │   ├── type_mappings.json
 │   │   ├── status_flag_fields.json
-│   │   └── package_manager.json    # uv 包管理与启动约定
+│   │   ├── package_manager.json    # uv 包管理与启动约定
+│   │   └── project_baseline.json   # utils 等基线包清单与复用策略
 │   ├── specifications/
 │   │   └── coding_standards.md
 │   └── templates/
@@ -59,12 +60,28 @@ sql-to-fastapi-restfulapi-scaffold/
 │           ├── .python-version
 │           ├── requirements.txt    # pip 兼容
 │           ├── start.py
+│           ├── utils/              # 基线工具包（与 project_baseline 对齐）
+│           ├── middleware/         # 基线中间件：安全头 / 限流 / 审计
+│           ├── docker/             # 起步 Docker：app + MySQL（Redis 可选）
+│           ├── deploy/             # 进阶运维配置（Nginx/监控/日志等）
 │           ├── repository/
 │           ├── service/
+│           ├── .env.docker
 │           └── ...
 ├── README.md
 └── SKILL.md
 ```
+
+## 基线包 utils / middleware / docker / deploy
+
+目标项目若已有常用工具、中间件或部署目录，技能通过 `resources/config/project_baseline.json` 声明：
+
+- 默认 `brownfield_prefer_existing`：检测到对应目录已存在 → **整包跳过**
+- 空项目从 `project_structure/` 写入：`utils/`、`middleware/`、`docker/`、`deploy/`、`.env.docker`
+- **docker**：`Dockerfile` + `docker-compose.yml`（app + MySQL；`--profile redis` 可选）
+- **deploy**：进阶运维素材，**不**进入默认 compose 必跑栈
+- 层代码 import 必须以 `canonical_imports` 为准
+- 禁止为单表新建 `utils/{table}_*.py` 或 `middleware/{table}_*.py`
 
 ## 使用方法
 
@@ -72,11 +89,11 @@ sql-to-fastapi-restfulapi-scaffold/
 
 - 如果你使用的是 Trae IDE，你可以直接在 IDE 中配置技能环境。
 - 操作文档请参考
-[Trea IDE 配置技能](../Trea中使用skill配置.md)
+[Trea IDE 配置技能](docs/Trea中使用skill配置.md)
 
 - 如果你使用的是 Claude Code，你可以通过扩展来配置技能环境。
 - 操作文档请参考
-[claude code 配置技能](../claude中使用skill配置.md)
+[claude code 配置技能](docs/claude中使用skill配置.md)
 
 ### 2 准备SQL语句
 
@@ -136,7 +153,9 @@ fastapi_project/
 │   └── router.py
 ├── config/
 │   ├── __init__.py
-│   └── settings.py
+│   ├── config_unified.py
+│   ├── config_factory.py
+│   └── manage.py
 ├── core/
 │   ├── __init__.py
 │   ├── database.py
@@ -160,10 +179,18 @@ fastapi_project/
 │       ├── __init__.py
 │       └── student/            # 单数资源名
 │           └── studentResource.py
-├── utils/
+├── middleware/                 # BASELINE：安全头 / 限流 / 审计（配置开关默认关）
 │   ├── __init__.py
-│   ├── loguru.py
-│   └── custom_exceptions.py
+│   ├── security_headers.py
+│   ├── rate_limiter.py
+│   └── audit_middleware.py
+├── utils/                      # BASELINE：已存在则跳过（project_baseline.json）
+│   ├── __init__.py
+│   ├── logger.py
+│   ├── custom_exceptions.py
+│   ├── response_code.py
+│   ├── validators.py / masking.py / ids.py
+│   ├── auth.py / security.py / audit.py
 ├── start.py
 ├── pyproject.toml          # uv / PEP 621 主依赖清单
 ├── .python-version         # uv Python 版本钉选
@@ -180,7 +207,9 @@ fastapi_project/
 5. **api/v1/{resource_singular}/{resource_singular}Resource.py** - 统一只调 Service（有状态字段时含 `PATCH /{pk}/status`）
 6. **tests/unit/test_{table_name}_service.py** - Service 单元测试占位（仅不存在时新建）
 7. **tests/integration/api/v1/test_{table_name}.py** - 接口 CRUD 集成测试 + 商业逻辑占位（仅不存在时新建）
-8. **core/dependencies.py** - 注册 `get_*_service`（及可选 `get_*_repository`）
+8. **service/dependencies.py** - 注册 `get_*_service`（及可选 `get_*_repository`）
+
+> 增量生成时 **不**覆盖 `utils/**`、`middleware/**`；import 使用 `project_baseline.json` 的 `canonical_imports`。
 
 **路由结构**：
 
@@ -190,14 +219,14 @@ fastapi_project/
 
 **中间件结构**：
 
-- `app/middleware.py` 直接注册中间件
-- `middleware/` 目录保留，用于后续扩展中间件实现
+- `middleware/`：基线三件套（`security_headers` / `rate_limiter` / `audit_middleware`）
+- `app/middleware.py`：统一注册；CORS 始终开启；安全中间件按 `middleware_*_enabled` 开关（默认关闭）
 
-**不生成的文件**（根据用户要求）：
+**不强制首次生成的进阶内容**（可选基线，见 `project_baseline.json`）：
 
-- 部署相关配置（Docker、Nginx等）
-- 数据库初始化脚本
-- 监控和日志系统
+- `deploy/` 进阶运维（Nginx / 监控等）；起步用 `docker/` 即可
+- 完整业务表 SQL（由用户 `database/` 提供）
+- 按表的业务规则实现（Service 占位，人手补齐）
 
 ## 特性说明
 
@@ -263,13 +292,13 @@ Content-Type: application/json
 
 ### 依赖注入
 
-在 `core/dependencies.py` 中为每张表生成：
+在 `service/dependencies.py` 中为每张表生成：
 
 - `get_{table}_service` — **Resource 统一使用**
 - `get_{table}_repository` — 一般仅供 Service 内部或特殊场景
 
 ```python
-from core.dependencies import get_student_service
+from service.dependencies import get_student_service
 
 async def get_student_list(
     ...,

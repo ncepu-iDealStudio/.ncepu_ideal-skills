@@ -247,6 +247,10 @@ api (Resource) → service（单条委托 + 列表等业务） → repository（
 
 | 层 | 路径 | Skill 覆盖 | 职责 |
 |----|------|------------|------|
+| utils（基线） | `utils/` | **已存在则跳过**（`project_baseline.json`） | 通用工具；不按表生成 |
+| middleware（基线） | `middleware/` | **已存在则跳过** | 安全头 / 限流 / 审计；配置开关默认关 |
+| docker（基线） | `docker/` | **已存在则跳过** | 起步 Docker：app + MySQL（Redis 可选） |
+| deploy（基线） | `deploy/` | **已存在则跳过** | 进阶运维配置；非默认 compose 必跑 |
 | Repository | `repository/{table}_repository.py` | **可覆盖** | 仅单条 CRUD |
 | Service | `service/{table}_service.py` | **仅不存在时生成** | 单条委托；列表/状态等业务 |
 | Resource | `api/v1/...` | 可覆盖基础 CRUD | HTTP；只调 Service |
@@ -319,13 +323,66 @@ class {{ClassName}}Service:
 
 ### 8.4 错误处理
 
-使用 `utils.custom_exceptions` 中的异常类：
+使用基线包 `utils.custom_exceptions`（见 `project_baseline.json` 的 `canonical_imports`）：
 
 ```python
-from utils.custom_exceptions import BadRequestException, NotFoundException
+from utils.custom_exceptions import NotFoundException, ValidationException, BusinessException
+from utils.response_code import ResponseCode
 
-raise BadRequestException("{{table_comment}}已存在")
 raise NotFoundException("{{table_comment}}不存在")
+raise ValidationException("请求参数错误")
+raise BusinessException(ResponseCode.BAD_REQUEST, detail="业务校验失败")
+```
+
+Resource 统一：
+
+```python
+from utils.custom_exceptions import handle_service_exceptions
+```
+
+禁止另造 `BadRequestException` / `BaseException`（旧模板名）或新建 `utils/{table}_exceptions.py`。
+
+### 8.4.1 utils 基线复用
+
+细则见 `resources/config/project_baseline.json`。
+
+| 规则 | 说明 |
+|------|------|
+| 策略 | 默认 `brownfield_prefer_existing`：目标已有 `utils/` 则整包跳过 |
+| 日志 | `from utils.logger import get_logger`（不是 loguru） |
+| 脱敏 | `from utils.masking import mask_phone, mask_email` |
+| ID | `from utils.ids import new_business_id` |
+| 禁止 | 按表生成 utils 模块；utils 内引用 models/service |
+
+### 8.4.2 middleware 基线
+
+企业级常用三件套随骨架拷贝（见 `project_baseline.json` → `packages.middleware`）：
+
+| 中间件 | 作用 | 配置开关（默认 `false`） |
+|--------|------|--------------------------|
+| `SecurityHeadersMiddleware` | 安全响应头 | `middleware_security_headers_enabled` |
+| `RateLimitMiddleware` | 内存令牌桶限流 | `middleware_rate_limit_enabled` |
+| `AuditMiddleware` | HTTP 审计 | `middleware_audit_enabled` |
+
+- 注册入口：`app/middleware.py`（CORS 始终注册；上述三套按开关）
+- 已有 `middleware/` 则跳过；禁止按表新建中间件文件
+- SQL 注入防护依赖 ORM 参数化，不单独做请求体扫描中间件
+
+### 8.4.3 docker / deploy 基线
+
+首次骨架必须从 `project_structure/` 复制（已存在则跳过）：
+
+| 目录/文件 | 作用 |
+|-----------|------|
+| `docker/` | 起步栈：`Dockerfile` + `compose`（api + mysql；redis 为 profile） |
+| `.env.docker` | Compose 环境覆盖 |
+| `deploy/` | 进阶：Nginx、库/缓存调优、Prometheus/Grafana、Logstash、Supervisor 等 |
+
+生成 README 时写明 Docker 启动命令（项目根目录）：
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+REDIS_HOST=redis docker compose -f docker/docker-compose.yml --profile redis up --build
 ```
 
 ### 8.5 缓存（可选）

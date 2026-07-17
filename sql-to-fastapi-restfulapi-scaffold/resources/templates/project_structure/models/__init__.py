@@ -1,12 +1,16 @@
-"""Models包
+"""Models 包
 
-此文件由 SQL-to-FastAPI-Scaffold 自动生成
-
-导出共享的Base供所有模型使用
+导出 ORM 基类；具体表模型由脚手架按 DDL 生成后在此追加 import。
 """
 
-from sqlalchemy.orm import declarative_base
+from .base import BaseModel, TimestampMixin, SoftDeleteMixin
 
-BaseMode = declarative_base()
+# 与 core.database.Base 同源，便于 metadata.create_all / 测试建表
+from core.database import Base
 
-__all__ = ["BaseMode"]
+__all__ = [
+    "Base",
+    "BaseModel",
+    "TimestampMixin",
+    "SoftDeleteMixin",
+]

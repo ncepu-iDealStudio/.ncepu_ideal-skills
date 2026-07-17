@@ -101,8 +101,16 @@
       "model": "可覆盖生成（或按项目约定跳过手改模型）",
       "schema": "可覆盖生成基础 DTO；状态字段从 Update 排除并生成 StatusUpdate；请求校验在进入 Resource 时由 Schema 完成",
       "unit_test": "HAND-WRITTEN 占位：tests/unit/test_{table}_service.py；仅不存在时生成；默认 skip",
-      "integration_test": "tests/integration/api/v1/test_{table}.py；仅不存在时生成；含可跑 CRUD + 业务 skip 占位"
+      "integration_test": "tests/integration/api/v1/test_{table}.py；仅不存在时生成；含可跑 CRUD + 业务 skip 占位",
+      "utils": "BASELINE：见 project_baseline.json；skip_if_exists；禁止按表生成；import 仅用 canonical_imports（logger/custom_exceptions/masking/ids 等）",
+      "middleware": "BASELINE：security_headers / rate_limiter / audit_middleware；skip_if_exists；由 app/middleware.py 配置开关注册（默认关闭）",
+      "docker": "BASELINE：Dockerfile + docker-compose.yml（app+MySQL，Redis 可选 profile）；skip_if_exists；并生成根目录 .env.docker",
+      "deploy": "BASELINE：进阶运维配置（Nginx/监控/日志等）；skip_if_exists；非起步 compose 必跑依赖"
     }
+  },
+  "project_baseline": {
+    "config": "resources/config/project_baseline.json",
+    "description": "基线包（utils、middleware、docker、deploy 等）探测与复用；默认 brownfield_prefer_existing"
   },
   "test_files": {
     "description": "按表生成测试文件命名与路径",

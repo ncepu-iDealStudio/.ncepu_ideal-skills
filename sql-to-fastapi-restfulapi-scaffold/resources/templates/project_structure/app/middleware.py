@@ -1,27 +1,37 @@
-"""中间件配置
+"""中间件统一注册入口（配置驱动）
 
-此文件由 SQL-to-FastAPI-Scaffold 自动生成
-
-直接在app层注册中间件
+- CORS：始终注册（按环境收紧 cors_origins）
+- 安全头 / 限流 / 审计：由 middleware_*_enabled 控制，默认关闭
 """
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
+from utils.logger import get_logger
+from .config import AppConfig
+from middleware import (
+    RateLimitMiddleware,
+    SecurityHeadersMiddleware,
+    AuditMiddleware,
+)
+
+logger = get_logger(__name__)
 
 
-def setup(app: FastAPI) -> None:
-    """
-    注册所有中间件
+def setup_middleware(app: FastAPI) -> None:
+    cors_config = AppConfig.get_cors_config()
+    app.add_middleware(CORSMiddleware, **cors_config)
+    logger.info("中间件已启用: CORSMiddleware")
 
-    Args:
-        app: FastAPI应用实例
-    """
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.CORS_ORIGINS,
-        allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
-        allow_methods=settings.CORS_ALLOW_METHODS,
-        allow_headers=settings.CORS_ALLOW_HEADERS,
-    )
+    if getattr(settings, "middleware_security_headers_enabled", False):
+        app.add_middleware(SecurityHeadersMiddleware)
+        logger.info("中间件已启用: SecurityHeadersMiddleware")
+
+    if getattr(settings, "middleware_rate_limit_enabled", False):
+        app.add_middleware(RateLimitMiddleware)
+        logger.info("中间件已启用: RateLimitMiddleware")
+
+    if getattr(settings, "middleware_audit_enabled", False):
+        app.add_middleware(AuditMiddleware)
+        logger.info("中间件已启用: AuditMiddleware")

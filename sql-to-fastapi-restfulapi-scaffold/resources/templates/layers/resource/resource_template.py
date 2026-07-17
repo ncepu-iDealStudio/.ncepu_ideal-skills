@@ -5,13 +5,15 @@
 
 约定：
 - HTTP 层统一只依赖 Service，不直接依赖 Repository。
+- 默认要求登录（get_current_active_user）；公开接口请显式去掉该 Depends。
 - 字段校验由 Schema 在进入端点前完成。
 {% if status_flag_fields %}- 状态/标识位字段通过 PATCH /{{{primary_key_param}}}/status 专用修改。
 {% endif %}"""
 
 from fastapi import APIRouter, Depends, Path, Query, status
 
-from core.dependencies import get_{{service_name}}
+from core.permissions import get_current_active_user
+from service.dependencies import get_{{service_name}}
 from service.{{table_name}}_service import {{class_name}}Service
 from schemas.{{table_name}} import (
     {{class_name}}Create,
@@ -43,6 +45,7 @@ router = APIRouter(prefix="/{{resource_singular}}", tags=["{{table_comment}}管�
 async def get_{{resource_singular}}_list(
     page: int = Query(1, ge=1, description="页码"),
     page_size: int = Query(20, ge=1, le=100, description="每页数量"),
+    _user=Depends(get_current_active_user),
     service: {{class_name}}Service = Depends(get_{{service_name}}),
 ):
     """获取{{table_comment}}分页列表"""
@@ -64,6 +67,7 @@ async def get_{{resource_singular}}_list(
 @handle_service_exceptions
 async def get_{{resource_singular}}_detail(
     {{primary_key_param}}: {{primary_key_type}} = Path(..., description="{{primary_key_comment}}"),
+    _user=Depends(get_current_active_user),
     service: {{class_name}}Service = Depends(get_{{service_name}}),
 ):
     """获取{{table_comment}}详情"""
@@ -80,6 +84,7 @@ async def get_{{resource_singular}}_detail(
 @handle_service_exceptions
 async def create_{{resource_singular}}(
     data: {{class_name}}Create,
+    _user=Depends(get_current_active_user),
     service: {{class_name}}Service = Depends(get_{{service_name}}),
 ):
     """创建{{table_comment}}"""
@@ -96,6 +101,7 @@ async def create_{{resource_singular}}(
 async def update_{{resource_singular}}(
     {{primary_key_param}}: {{primary_key_type}} = Path(..., description="{{primary_key_comment}}"),
     data: {{class_name}}Update = ...,
+    _user=Depends(get_current_active_user),
     service: {{class_name}}Service = Depends(get_{{service_name}}),
 ):
     """更新{{table_comment}}（不含状态/标识位字段）"""
@@ -113,6 +119,7 @@ async def update_{{resource_singular}}(
 async def update_{{resource_singular}}_status(
     {{primary_key_param}}: {{primary_key_type}} = Path(..., description="{{primary_key_comment}}"),
     data: {{class_name}}StatusUpdate = ...,
+    _user=Depends(get_current_active_user),
     service: {{class_name}}Service = Depends(get_{{service_name}}),
 ):
     """
@@ -131,6 +138,7 @@ async def update_{{resource_singular}}_status(
 @handle_service_exceptions
 async def delete_{{resource_singular}}(
     {{primary_key_param}}: {{primary_key_type}} = Path(..., description="{{primary_key_comment}}"),
+    _user=Depends(get_current_active_user),
     service: {{class_name}}Service = Depends(get_{{service_name}}),
 ):
     """删除{{table_comment}}"""

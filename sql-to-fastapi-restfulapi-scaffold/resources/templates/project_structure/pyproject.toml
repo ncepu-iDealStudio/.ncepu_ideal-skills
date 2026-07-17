@@ -2,7 +2,7 @@
 # 包管理与启动推荐使用 uv（https://github.com/astral-sh/uv）
 #
 # 占位符（生成时替换）：
-#   {{project_name}}         — 项目名（PEP 503：建议用连字符，如 api-security-demo）
+#   {{project_name}}         — 项目名（PEP 503：建议用连字符，如 fastapi_project_starter）
 #   {{project_description}}  — 项目描述
 
 [project]
@@ -21,10 +21,9 @@ dependencies = [
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "python-multipart>=0.0.6",
-    "python-jose[cryptography]>=3.3.0",
+    "PyJWT>=2.8.0",
     "passlib[bcrypt]>=1.7.4",
     "python-dotenv>=1.0.0",
-    "loguru>=0.7.0",
 ]
 
 [dependency-groups]

@@ -1,6 +1,6 @@
 ---
 name: sql-to-fastapi-restfulapi-scaffold
-description: "从SQL CREATE TABLE生成FastAPI脚手架：Model/Schema/Repository/Service/Resource/测试。API统一只调Service。Repository仅单条CRUD且按增删改查顺序：create/delete/update/get；列表与状态等业务写在Service。按表生成unit占位与integration CRUD测试。表含status时额外生成PATCH /{pk}/status。目标项目默认用uv（pyproject.toml）管理依赖与启动。"
+description: "从SQL CREATE TABLE生成FastAPI脚手架：Model/Schema/Repository/Service/Resource/测试。API统一只调Service。Repository仅单条CRUD。utils/middleware/docker/deploy为基线（project_baseline.json）：已存在则跳过；docker为app+MySQL（Redis可选）；deploy为进阶运维配置。按表生成unit占位与integration测试。表含status时生成PATCH /{pk}/status。默认uv管理依赖。"
 ---
 
 # SQL-to-FastAPI-Scaffold Skill
@@ -45,9 +45,14 @@ resources/
 │   │   ├── schemas/        # 响应模型
 │   │   ├── api/            # API路由
 │   │   ├── service/        # 服务层
-│   │   ├── utils/          # 工具模块
+│   │   ├── utils/          # 工具模块（基线）
+│   │   ├── middleware/     # 安全中间件（基线）
+│   │   ├── docker/         # Dockerfile + compose（基线）
+│   │   ├── deploy/         # 进阶运维配置（基线）
 │   │   ├── app/            # 应用模块
 │   │   ├── start.py        # 应用入口
+│   │   ├── .env.example
+│   │   ├── .env.docker     # Docker Compose 环境覆盖
 │   │   ├── pyproject.toml  # uv / PEP 621 主依赖清单
 │   │   ├── .python-version # uv Python 版本
 │   │   └── requirements.txt # pip 兼容清单
@@ -64,7 +69,8 @@ resources/
 │   ├── type_mappings.json      # 类型映射配置
 │   ├── naming_rules.json       # 命名规则配置
 │   ├── status_flag_fields.json # 状态/标识位敏感字段识别
-│   └── package_manager.json    # 包管理与启动（默认 uv）
+│   ├── package_manager.json    # 包管理与启动（默认 uv）
+│   └── project_baseline.json   # 基线包（utils 等）清单与覆盖策略
 └── specifications/         # 规范文档
     └── coding_standards.md # 代码规范
 ```
@@ -72,31 +78,37 @@ resources/
 ### 生成范围
 
 **首次生成时生成完整的项目骨架**：
-- `app/__init__.py` - 应用初始化包，导出create_app
-- `app/factory.py` - 应用工厂函数，调用各模块注册
-- `app/events.py` - 生命周期管理器（lifespan）
+- `app/__init__.py` - 应用初始化包，导出 create_app
+- `app/factory.py` - 应用工厂（含 lifespan：DB/cache/queue）
+- `app/config.py` - AppConfig（FastAPI/CORS 装配）
 - `app/exceptions.py` - 异常处理器
-- `app/middleware.py` - 中间件注册（直接在app层）
-- `app/router.py` - 路由注册（调用api模块）
+- `app/middleware.py` - 中间件注册（CORS 始终；安全中间件可开关）
+- `app/routes.py` - 基础路由（/health 等）
 - `config/__init__.py` - 配置包
-- `config/settings.py` - 应用配置（CORS、日志等）
-- `middleware/__init__.py` - 中间件包（仅占位，具体实现可能在app层）
+- `config/` - 多环境配置单轨（`config_unified.py` + `config_factory.py` + `manage.py`）
+- `middleware/` - **基线中间件包**（`security_headers` / `rate_limiter` / `audit_middleware`；`app/middleware.py` 配置开关注册，默认关闭）
 - `core/__init__.py` - 核心模块
 - `core/database.py` - 数据库连接
-- `core/dependencies.py` - 依赖注入容器
-- `models/__init__.py` - 模型包（导出Base）
+- `core/permissions.py` - 业务认证 / 授权 Depends
+- `core/security.py` - 密码 / JWT 薄封装（实现在 utils）
+- `core/cache.py` / `core/queue.py` - 缓存与进程内队列
+- `service/dependencies.py` - 服务依赖工厂（Resource 注入 get_*_service）
+- `models/base.py` - ORM BaseModel
+- `models/__init__.py` - 模型包（导出 Base / BaseModel）
 - `schemas/__init__.py` - Schema包
-- `schemas/response.py` - 统一响应模型（含ErrorResponse）
-- `utils/__init__.py` - 工具包
-- `utils/loguru.py` - loguru日志配置
-- `utils/custom_exceptions.py` - 自定义异常
-- `api/__init__.py` - API包（导出api_router）
-- `api/v1/__init__.py` - API v1路由注册（导出v1_router）
-- `start.py` - 应用启动脚本（含 `main()`，支持 `uv run python start.py`）
+- `schemas/response.py` - 统一响应模型（success/code/data/meta）
+- `utils/` - **基线工具包**（见 `project_baseline.json`；含 `logger` / `custom_exceptions` / `validators` / `masking` / `ids` / `auth` / `security` / `response_code` / `audit` 等）
+- `middleware/` - **基线中间件**（`security_headers` / `rate_limiter` / `audit_middleware`；由 `app/middleware.py` 配置开关控制，默认关闭）
+- `docker/` - **基线 Docker**（`Dockerfile` + `docker-compose.yml`：app + MySQL，Redis 为 `--profile redis` 可选项）
+- `deploy/` - **基线进阶运维**（Nginx / MySQL·Redis 调优 / Prometheus·Grafana / Logstash / Supervisor / 部署脚本）
+- `api/__init__.py` - API包（导出 api_router + register_routers）
+- `api/v1/__init__.py` - API v1路由注册（导出 v1_router）
+- `start.py` - 应用启动脚本
 - `pyproject.toml` - **uv / PEP 621 依赖与工具配置（主清单，必须生成）**
 - `.python-version` - uv 使用的 Python 版本钉选
-- `requirements.txt` - 与 pyproject 运行时依赖同步的兼容清单（次选 pip）
-- `.env.example` - 环境变量模板
+- `requirements.txt` - 与企业起步对齐的 pip 兼容清单
+- `.env.example` - 环境变量模板（对齐 config_unified 字段名）
+- `.env.docker` - Docker Compose 可选环境覆盖
 
 **路由结构**：
 - `api/__init__.py` → `api_router` (prefix="/api")
@@ -104,8 +116,8 @@ resources/
 - 子路由不额外加前缀，由具体API文件定义
 
 **中间件结构**：
-- `app/middleware.py` 直接注册中间件
-- `middleware/` 目录保留，用于后续扩展中间件实现
+- `middleware/`：基线实现（安全头 / 限流 / 审计），见 `project_baseline.json`
+- `app/middleware.py`：统一注册入口；CORS 始终开启；三套安全中间件按配置开关（默认关闭）
 
 **每个表生成的文件**：
 1. SQLAlchemy Model - `models/{table_name}.py`
@@ -145,13 +157,52 @@ resources/
 ### 步骤 2: 检查项目是否存在
 
 检查是否为首次生成：
-- 如果项目骨架不存在，先生成完整的项目骨架（含 `repository/` 包）
+- 如果项目骨架不存在，先生成完整的项目骨架（含 `repository/` 包与基线 `utils/`）
 - 如果已有项目骨架，只生成/更新该表相关文件（遵守覆盖策略）
+
+### 步骤 2.0: 基线包 utils / middleware / docker / deploy（强制，读 project_baseline.json）
+
+读取 `resources/config/project_baseline.json`，默认 mode=`brownfield_prefer_existing`：
+
+| 包 | 探测 | 行为 |
+|----|------|------|
+| `utils/` | 已有 `__init__.py` + `custom_exceptions.py` | **整包跳过**，绝不覆盖 |
+| `middleware/` | 已有 `__init__.py` + `security_headers.py` | **整包跳过**，绝不覆盖 |
+| `docker/` | 已有 `Dockerfile` + `docker-compose.yml` | **整包跳过**，绝不覆盖 |
+| `deploy/` | 已有 `nginx.conf` 等 | **整包跳过**，绝不覆盖 |
+| 空项目 | 无上述文件 | 从 `project_structure/` **完整复制**对应目录，并复制根目录 `.env.docker` |
+| mode=`brownfield_fill_missing` | — | 已存在文件不覆盖；仅补清单中缺失的文件 |
+
+**utils 强制**：
+- 层模板 import **只能**使用 `canonical_imports`。
+- **禁止**为单表新建 `utils/{table}_*.py`；日志为 `utils.logger`；异常基类为 `BaseAPIException`。
+
+**middleware 强制**（企业级常用三件套，首次骨架一并拷贝）：
+- `SecurityHeadersMiddleware` / `RateLimitMiddleware` / `AuditMiddleware`
+- 由 `app/middleware.py` 按开关注册；默认 **全部关闭**。
+
+**docker 强制**（起步可运行栈，首次骨架一并拷贝）：
+- 完整复制 `project_structure/docker/`（含 `Dockerfile`、`docker-compose.yml`、`README.md`）与根目录 `.env.docker`。
+- 默认服务：`api` + `mysql`；Redis 使用 compose profile `redis`（可选）。
+- 生成后的 README / 对话收尾须写明：在项目根执行  
+  `docker compose -f docker/docker-compose.yml up --build`  
+  启用 Redis：`REDIS_HOST=redis docker compose -f docker/docker-compose.yml --profile redis up --build`。
+- MySQL init 卷指向 `database/` 下 SQL dump：若用户提供了建库脚本或 dump，写入对应路径；若暂无，可注释该 volume 或生成占位并在 README 说明。
+
+**deploy 强制**（进阶运维素材，首次骨架一并拷贝）：
+- 完整复制 `project_structure/deploy/`（Nginx、MySQL/Redis 调优、Prometheus/Grafana、Logstash、Supervisor、docker-deploy 脚本等）。
+- **不**要求默认 compose 启动 deploy 内组件；README 标明其为进阶可选。
+- `docker-deploy.sh` / `.ps1` 可能仍含历史 compose 文件名，引导用户以 `docker/docker-compose.yml` 为准。
 
 ### 步骤 2.1: 覆盖策略（强制）
 
 | 文件 | 策略 |
 |------|------|
+| `utils/**` | **BASELINE**：已存在则跳过；空项目才从模板写入（见 `project_baseline.json`） |
+| `middleware/**` | **BASELINE**：已存在则跳过；空项目写入 security_headers / rate_limiter / audit_middleware |
+| `docker/**` | **BASELINE**：已存在则跳过；空项目写入 Dockerfile + compose + README |
+| `deploy/**` | **BASELINE**：已存在则跳过；空项目写入进阶运维配置全集 |
+| `.env.docker` | **BASELINE**：空项目写入；已存在则跳过 |
 | `repository/{table}_repository.py` | **始终覆盖**（AUTO-GENERATED） |
 | `service/{table}_service.py` | **仅当文件不存在时生成**；已存在则跳过并提示 |
 | `models/{table}.py` / `schemas/{table}.py` | 默认可覆盖；若用户声明已手改则询问后跳过 |
@@ -167,6 +218,7 @@ resources/
 - 约束处理规则
 - **状态/标识位识别**：按 `status_flag_fields.json` 标记敏感字段（见下文）
 - **包管理与启动**：按 `package_manager.json`，目标项目默认用 **uv**（`pyproject.toml` + `uv sync` / `uv run`）
+- **基线包**：按 `project_baseline.json` 处理 `utils/`、`middleware/`、`docker/`、`deploy/`、`.env.docker`（已存在则跳过；层 import 用 `canonical_imports`）
 
 ### 步骤 3.1: 状态/标识位字段（强制）
 
@@ -206,7 +258,11 @@ resources/
 - `core/` 目录下的所有文件
 - `models/` 目录下的所有文件
 - `schemas/` 目录下的所有文件
-- `utils/` 目录下的所有文件
+- `utils/` 目录下的所有文件（基线；已存在则跳过）
+- `middleware/` 目录下的所有文件（基线三件套；已存在则跳过）
+- `docker/` 目录下的所有文件（Dockerfile + compose；已存在则跳过）
+- `deploy/` 目录下的所有文件（进阶运维配置；已存在则跳过）
+- `.env.docker`（Docker 环境覆盖；已存在则跳过）
 - `repository/` 目录（含 `__init__.py`）
 - `service/` 目录
 - `api/` 目录下的所有文件
@@ -263,9 +319,9 @@ fastapi_project/
 │   └── router.py           # 路由注册
 ├── config/
 │   ├── __init__.py
-│   └── settings.py         # 应用配置
-├── middleware/
-│   └── __init__.py        # 中间件包（仅占位）
+│   ├── config_unified.py   # BaseConfig + 各环境
+│   ├── config_factory.py   # FASTAPI_ENV + settings 门面
+│   └── manage.py           # 可选 CLI
 ├── core/
 │   ├── __init__.py
 │   ├── database.py        # 数据库连接
@@ -275,10 +331,30 @@ fastapi_project/
 ├── schemas/
 │   ├── __init__.py
 │   └── response.py        # 统一响应模型（含ErrorResponse）
-├── utils/
+├── middleware/            # BASELINE：安全头 / 限流 / 审计（配置开关，默认关）
 │   ├── __init__.py
-│   ├── loguru.py         # 日志配置
-│   └── custom_exceptions.py # 自定义异常
+│   ├── security_headers.py
+│   ├── rate_limiter.py
+│   └── audit_middleware.py
+├── utils/                 # BASELINE：已存在则跳过（project_baseline.json）
+│   ├── __init__.py
+│   ├── logger.py          # 标准 logging（非 loguru）
+│   ├── custom_exceptions.py
+│   ├── response_code.py
+│   ├── validators.py
+│   ├── masking.py
+│   ├── ids.py
+│   ├── auth.py
+│   ├── security.py
+│   └── audit.py
+├── docker/                # BASELINE：起步 Docker（app+MySQL，Redis 可选）
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── README.md
+├── deploy/                # BASELINE：进阶运维（Nginx/监控/日志等，非默认必跑）
+│   ├── nginx.conf / nginx-prod.conf
+│   ├── mysql.cnf / redis.conf / ...
+│   └── README.md
 ├── repository/            # 数据访问层（仅 create/delete/update/get，增删改查，可覆盖）
 │   └── {table_name}_repository.py
 ├── service/               # 业务服务（单条委托 + 列表等业务；已存在则跳过）
@@ -293,7 +369,8 @@ fastapi_project/
 ├── pyproject.toml         # uv / PEP 621 主依赖清单
 ├── .python-version        # uv Python 版本钉选
 ├── requirements.txt       # 兼容 pip 的依赖导出（与 pyproject 同步）
-└── .env.example          # 环境变量模板
+├── .env.example          # 环境变量模板
+└── .env.docker           # Docker Compose 环境覆盖
 ```
 
 **后续生成 - 按表增量（遵守覆盖策略）**：
@@ -304,7 +381,8 @@ fastapi_project/
 - `api/v1/{resource_name}/{resource_name}Resource.py`
 - `tests/unit/test_{table_name}_service.py`（**仅不存在时创建**，Service 占位）
 - `tests/integration/api/v1/test_{table_name}.py`（**仅不存在时创建**，CRUD + 业务占位）
-- 更新 `api/v1/__init__.py`、`core/dependencies.py` 注册
+- 更新 `api/v1/__init__.py`、`service/dependencies.py` 注册
+- **不**再生成或覆盖 `utils/**`、`middleware/**`、`docker/**`、`deploy/**`
 
 ## 各层代码详细说明
 
@@ -489,9 +567,9 @@ tests/
 │   └── router.py           # 路由注册
 ├── config/
 │   ├── __init__.py
-│   └── settings.py         # 应用配置
-├── middleware/
-│   └── __init__.py        # 中间件包（仅占位）
+│   ├── config_unified.py   # BaseConfig + 各环境
+│   ├── config_factory.py   # FASTAPI_ENV + settings 门面
+│   └── manage.py           # 可选 CLI
 ├── core/
 │   ├── __init__.py
 │   ├── database.py        # 数据库连接
@@ -501,10 +579,18 @@ tests/
 ├── schemas/
 │   ├── __init__.py
 │   └── response.py        # 统一响应模型（含ErrorResponse）
-├── utils/
+├── middleware/            # BASELINE（已有则跳过）
+│   ├── security_headers.py
+│   ├── rate_limiter.py
+│   └── audit_middleware.py
+├── utils/                 # BASELINE（已有则跳过）
 │   ├── __init__.py
-│   ├── loguru.py         # loguru日志配置
-│   └── custom_exceptions.py # 自定义异常
+│   ├── logger.py
+│   ├── custom_exceptions.py
+│   ├── response_code.py
+│   └── ...（见 project_baseline.json）
+├── docker/                # BASELINE（起步 compose）
+├── deploy/                # BASELINE（进阶运维）
 ├── repository/            # 数据访问层（仅 create/delete/update/get，增删改查，可覆盖）
 │   └── {table_name}_repository.py
 ├── service/               # 业务服务（单条委托 + 列表等业务）
@@ -519,9 +605,11 @@ tests/
 ├── pyproject.toml
 ├── .python-version
 ├── requirements.txt
-└── .env.example
+├── .env.example
+└── .env.docker
 
 🔒 分层约定：
+- utils / middleware / docker / deploy = 基线包（已存在不覆盖；中间件默认配置关闭）
 - Repository = 仅单条 `create` / `delete` / `update` / `get`（增删改查顺序，可覆盖）
 - Service = 单条委托 + 列表/状态等业务（已存在不覆盖）
 - Schema = 进入 API 前的字段校验
@@ -533,6 +621,7 @@ tests/
 3. cp .env.example .env 并配置数据库
 4. uv run uvicorn start:app --reload
    （或：uv run python start.py）
+5. （可选 Docker）docker compose -f docker/docker-compose.yml up --build
 
 （兼容）未使用 uv 时：pip install -r requirements.txt && uvicorn start:app --reload
 ```
@@ -549,7 +638,7 @@ tests/
 5. api/v1/{resource_name}/{resource_name}Resource.py
 6. tests/unit/test_{table_name}_service.py（仅不存在时新建，占位）
 7. tests/integration/api/v1/test_{table_name}.py（仅不存在时新建，CRUD+业务占位）
-8. 注册：api/v1/__init__.py、core/dependencies.py（Resource 使用 get_*_service）
+8. 注册：api/v1/__init__.py、service/dependencies.py（Resource 使用 get_*_service）
 
 📝 下一步：
 1. 重启应用即可使用新接口（`uv run uvicorn start:app --reload`）
@@ -577,12 +666,13 @@ tests/
 4. **分层**：API → Service（单条委托 + 列表等业务）→ Repository（仅单条 CRUD）→ Model；**禁止** API 直调 Repository。Schema 负责请求校验。
 5. **Repository 方法名固定**：仅 `create` / `delete` / `update` / `get`（单条；源码按增删改查顺序）
 6. **测试**：按表生成 `tests/unit/test_{table}_service.py`（占位）与 `tests/integration/api/v1/test_{table}.py`（CRUD 可跑 + 业务占位）；已存在则跳过
-7. **覆盖策略**：Repository 可覆盖；Service / 测试文件已存在则跳过
+7. **覆盖策略**：Repository 可覆盖；Service / 测试文件已存在则跳过；**utils / middleware / docker / deploy 为 BASELINE，已存在绝不覆盖**
 8. **异步**：使用 `AsyncSession` + `select()`
 9. **中文文档**：文档字符串、注释、API 文档使用中文
-10. **安全性**：端点含异常处理；认证按业务可选；状态字段不走通用 PUT
+10. **安全性**：端点含异常处理；认证按业务可选；状态字段不走通用 PUT；骨架含安全头/限流/审计中间件（默认关，配置开启）
 11. **包管理默认 uv**：首次骨架必须生成 `pyproject.toml` + `.python-version`；README 与收尾步骤优先 `uv sync` / `uv run`；`requirements.txt` 仅兼容
-12. **🔴 资源名必须单数（最高优先级）**：生成 `api/v1/{resource_name}/` 文件夹与路由前缀时，
+12. **基线包**：遵守 `project_baseline.json`；含 utils、middleware、**docker（起步栈）**、**deploy（进阶运维）**、`.env.docker`
+13. **🔴 资源名必须单数（最高优先级）**：生成 `api/v1/{resource_name}/` 文件夹与路由前缀时，
    `resource_name` 必须严格等于**表名单数形式**，**绝对禁止**复数化。
    以下为错误 ↔ 正确对照（务必避免左侧）：
 
