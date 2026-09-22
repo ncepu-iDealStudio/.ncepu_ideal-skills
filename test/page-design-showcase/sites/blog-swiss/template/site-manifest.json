@@ -1,0 +1,75 @@
+{
+  "site": {
+    "name": "砚田笔记",
+    "language": "zh-CN",
+    "designPack": "swiss-minimal",
+    "generatedAt": "2026-09-22"
+  },
+  "outputRoot": "tmp/tests/blog-swiss/",
+  "pages": [
+    {
+      "file": "index.html",
+      "type": "home",
+      "title": "砚田笔记 · 写字的地方"
+    },
+    {
+      "file": "list.html",
+      "type": "list",
+      "title": "全部文章 · 砚田笔记"
+    },
+    {
+      "file": "post.html",
+      "type": "detail",
+      "title": "用三十行 CSS 做一套网格系统 · 砚田笔记"
+    },
+    {
+      "file": "about.html",
+      "type": "about",
+      "title": "关于 · 砚田笔记"
+    },
+    {
+      "file": "contact.html",
+      "type": "contact",
+      "title": "联系 · 砚田笔记"
+    },
+    {
+      "file": "404.html",
+      "type": "error",
+      "title": "页面不存在 · 砚田笔记"
+    }
+  ],
+  "components": [
+    "site-header",
+    "site-footer",
+    "post-card"
+  ],
+  "collections": {
+    "posts": {
+      "fields": [
+        "title",
+        "summary",
+        "url",
+        "category",
+        "date"
+      ],
+      "sample": true
+    }
+  },
+  "contentSample": {
+    "generated": true,
+    "note": "所有内容为演示用样例数据，非真实机构信息"
+  },
+  "modules": [
+    {
+      "feature": "移动端菜单",
+      "implementation": "details/summary + CSS，无 JS"
+    },
+    {
+      "feature": "动效",
+      "implementation": "无刻意动效，仅 hover 变色（阅读类页面不动）"
+    }
+  ],
+  "external": {
+    "cdn": []
+  }
+}

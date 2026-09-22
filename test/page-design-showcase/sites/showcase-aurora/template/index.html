@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>光年计划 · 动态视觉作品集</title>
+<meta name="description" content="光年计划：动态设计与视觉作品的作品集，含滚动动效与视差。">
+<link rel="stylesheet" href="css/base.css">
+
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header class="site-header" data-component="site-header">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="text-decoration:none">光年计划</a></div>
+    <nav class="nav" aria-label="主导航">
+      <ul><li><a href="index.html" aria-current="page">首页</a></li><li><a href="list.html">作品</a></li><li><a href="detail.html">作品详情</a></li><li><a href="about.html">关于</a></li></ul>
+    </nav>
+    <details class="menu">
+      <summary>菜单</summary>
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">作品</a></li><li><a href="detail.html">作品详情</a></li><li><a href="about.html">关于</a></li></ul>
+    </details>
+  </div>
+</header>
+<main>
+<div class="hero">
+  <div class="wrap">
+    <h1>把静止的画面，做成会呼吸的东西</h1>
+    <p class="lead">光年计划是一组关于时间与运动的视觉实验，包含动态海报、数据短片与交互装置概念。</p>
+    <p><a class="btn" href="list.html">看全部作品</a></p>
+  </div>
+</div>
+<section class="block"><div class="wrap">
+  <h2>精选作品</h2>
+  <ul class="cards" style="list-style:none" data-collection="works">
+    <article class="card reveal" data-component="work-card">
+      <p><img src="image/work.svg" alt="光年计划 · 主视觉 作品缩略图" data-slot="work.cover"></p>
+      <h3><a href="detail.html" data-slot="work.url"><span data-slot="work.title">光年计划 · 主视觉</span></a></h3>
+      <p data-slot="work.summary">为一支独立乐队做的巡演主视觉，含动态海报与现场背景。</p>
+      <p class="meta" data-slot="work.year">2026</p>
+    </article>
+    <article class="card reveal" data-component="work-card">
+      <p><img src="image/work.svg" alt="深海信号 作品缩略图" data-slot="work.cover"></p>
+      <h3><a href="detail.html" data-slot="work.url"><span data-slot="work.title">深海信号</span></a></h3>
+      <p data-slot="work.summary">数据可视化短片，把一年的海洋温度记录压缩成九十秒。</p>
+      <p class="meta" data-slot="work.year">2025</p>
+    </article>
+    <article class="card reveal" data-component="work-card">
+      <p><img src="image/work.svg" alt="折叠城市 作品缩略图" data-slot="work.cover"></p>
+      <h3><a href="detail.html" data-slot="work.url"><span data-slot="work.title">折叠城市</span></a></h3>
+      <p data-slot="work.summary">交互装置的概念设计，观众走近时建筑立面会随距离展开。</p>
+      <p class="meta" data-slot="work.year">2025</p>
+    </article>
+  </ul>
+</div></section>
+<section class="para" aria-label="视差引言">
+  <div class="wrap para-inner">
+    <p>动效不是装饰。它是让人知道接下来该看哪一处的路标。</p>
+  </div>
+</section>
+<section class="block"><div class="wrap reveal">
+  <h2>工作方式</h2>
+  <div class="grid-3">
+    <article class="card"><h3>先定节奏</h3><p>动效的时长与缓动先定下来，画面再往里填。</p></article>
+    <article class="card"><h3>再定焦点</h3><p>一屏只让一个东西动，其余静止，观众才不会迷路。</p></article>
+    <article class="card"><h3>留一处不动</h3><p>总有一个元素全程安静，用来兜住整页的重量。</p></article>
+  </div>
+</div></section>
+<section class="block"><div class="wrap">
+  <h2>合作</h2>
+  <p class="lead">接受视觉设计、动态海报与数据可视化委托。</p>
+  <p><a class="btn" href="about.html">了解工作方式</a></p>
+</div></section>
+</main>
+<footer class="site-footer" data-component="site-footer">
+  <div class="wrap">
+    <span>光年计划 · 静态站点原型（演示用样例内容）</span>
+    <span>设计包 tech-aurora · 可直接双击浏览</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

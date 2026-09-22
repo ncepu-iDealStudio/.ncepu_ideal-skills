@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>用三十行 CSS 做一套网格系统 · 砚田笔记</title>
+<meta name="description" content="不用框架，只用 CSS grid 与自定义属性搭一套可复用的网格系统。">
+<link rel="stylesheet" href="css/base.css">
+
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header class="site-header" data-component="site-header">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="text-decoration:none">砚田笔记</a></div>
+    <nav class="nav" aria-label="主导航">
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">文章</a></li><li><a href="about.html">关于</a></li><li><a href="contact.html">联系</a></li></ul>
+    </nav>
+    <details class="menu">
+      <summary>菜单</summary>
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">文章</a></li><li><a href="about.html">关于</a></li><li><a href="contact.html">联系</a></li></ul>
+    </details>
+  </div>
+</header>
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">首页</a> / <a href="list.html">文章</a> / 前端</p>
+  <article class="post-body">
+    <h1>用三十行 CSS 做一套网格系统</h1>
+    <p class="meta">发布于 <time datetime="2026-08-12">2026 年 8 月 12 日</time> · 分类 前端</p>
+    <p>先承认一件事：过去我每次新建项目都会从上一份代码里把 grid 相关的样式抄过来，抄了三年，从来没想过它为什么长这样。这次决定把它拆干净，看看最少需要多少行。</p>
+    <p>答案是三十行左右。核心不在 grid 本身，而在把间距和列宽收敛成两个自定义属性。一旦这两件事定了，页面上的每个区块都只是同一个系统的不同组合，而不是各写一份 margin。</p>
+    <p>剩下的工作反而变难了：要忍住不为某一个特别的区块破例。破例一次很轻松，三次之后系统就名存实亡。这大概是写代码和写文章共同的难处。</p>
+    <p><img src="image/grid.svg" alt="网格系统示意图：12 列栅格与 24 像素间距的标注"></p>
+  </article>
+</div>
+<section class="block"><div class="wrap">
+  <h2>相关阅读</h2>
+  <ul class="cards" style="list-style:none" data-collection="posts">
+    <article class="card" data-component="post-card">
+      <h3><a href="post.html" data-slot="post.url"><span data-slot="post.title">关于可访问性的五个误解</span></a></h3>
+      <p data-slot="post.summary">它不是给少数人做的额外工作，而是让所有人都能读完你的页面。</p>
+      <p class="meta"><span data-slot="post.category">前端</span> · <time datetime="2026-06-19" data-slot="post.date">2026-06-19</time></p>
+    </article>
+    <article class="card" data-component="post-card">
+      <h3><a href="post.html" data-slot="post.url"><span data-slot="post.title">深夜调试日记：一个 overflow 引发的血案</span></a></h3>
+      <p data-slot="post.summary">父级的 min-width:0，救了我两个小时。</p>
+      <p class="meta"><span data-slot="post.category">随记</span> · <time datetime="2026-06-02" data-slot="post.date">2026-06-02</time></p>
+    </article>
+  </ul>
+</div></section>
+</main>
+<footer class="site-footer" data-component="site-footer">
+  <div class="wrap">
+    <span>砚田笔记 · 静态站点原型（演示用样例内容）</span>
+    <span>设计包 swiss-minimal · 可直接双击浏览</span>
+  </div>
+</footer>
+
+</body>
+</html>

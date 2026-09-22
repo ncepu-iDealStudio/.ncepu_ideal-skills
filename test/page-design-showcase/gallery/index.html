@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="Cv5tccwQyv71vet4lAzbWU" data-dm-ref="1"><head data-page-node-id="Bxh1y4RvHCbEI3odnZJSVB">
+<meta charset="UTF-8" data-page-node-id="OmEVyVMzptxBht79Qjmei6">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="DhSXkcwUM22jmt3ZTSXYz0">
+<title>设计包画廊 — Design Pack 与配色预览</title>
+<style>
+:root{--text:#1F2733;--muted:#5C6B7F;--border:#E3E8EF;--surface:#F5F7FA;--primary:#0F4C8C}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;background:#fff;color:var(--text);line-height:1.7}
+.wrap{max-width:1280px;margin:0 auto;padding:48px 24px}
+h1{font-size:26px;margin-bottom:8px}
+.intro{color:var(--muted);font-size:14px;max-width:70em;margin-bottom:32px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.card{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface)}
+.preview{position:relative;height:340px;overflow:hidden;background:#fff;border-bottom:1px solid var(--border)}
+.preview iframe{width:1280px;height:680px;border:none;transform:scale(0.5);transform-origin:top left;pointer-events:none}
+.preview .open{position:absolute;right:12px;bottom:12px;background:var(--primary);color:#fff;font-size:12px;padding:6px 14px;border-radius:6px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.info{padding:16px 20px 18px}
+.info h2{font-size:16px;margin-bottom:4px}
+.info h2 code{font-size:12px;color:var(--primary);background:#EAF1F9;padding:2px 8px;border-radius:4px;margin-left:8px;font-weight:400}
+.info .pos{font-size:13px;color:var(--muted)}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;border:1px solid var(--border);border-radius:4px;padding:1px 8px;color:var(--muted);background:#fff}
+.tag.warn{color:#B45309;border-color:#FCD34D;background:#FFFBEB}
+.note{margin-top:28px;padding:14px 18px;border-left:3px solid var(--primary);background:var(--surface);font-size:13px;color:var(--muted)}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.filters button{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:999px;padding:7px 16px;font:inherit;font-size:13px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--primary);color:#fff;border-color:var(--primary)}
+.card[hidden]{display:none}
+.preview::before{content:attr(data-num);position:absolute;left:0;top:0;z-index:2;background:var(--primary);color:#fff;font-size:13px;font-weight:600;padding:5px 14px;border-bottom-right-radius:9px;font-variant-numeric:tabular-nums}
+.howto{margin:-16px 0 20px;padding:12px 16px;border-left:3px solid var(--primary);background:var(--surface);font-size:13.5px;color:var(--text)}
+</style>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><noscript><style>.filters,.howto{display:none}</style></noscript><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<body data-page-node-id="Gwyaj12NpnpSxI2xfRS4DR" style="">
+<div class="wrap" data-page-node-id="7RYAPJAX8rhBj9V5NPY4oS">
+  <h1 data-page-node-id="vrWMv9MESrYlXE5BTHA2Xq">设计包画廊（Design Pack Gallery）</h1>
+  <p class="intro" data-page-node-id="py6onMFOW4RyFEKiXe8Og9">同一套内容（电池企业官网首页骨架：导航 / hero / 企业数据 / 产品矩阵 / 新闻动态 / 页脚），9 个设计包各自的视觉令牌表达。点击卡片右下角"打开完整页面"查看全尺寸效果。所有内容为演示用样例数据。</p>
+  <p class="howto">怎么用：先按底色筛一遍，看中哪个就把<strong>左上角编号</strong>直接告诉 agent（"要 03"），不必费力描述风格。每张卡的排版结构完全相同，差别只在视觉——这样才比得出包之间的差异。</p>
+  <div class="filters">
+    <button type="button" data-filter="all" aria-pressed="true">全部 13</button>
+    <button type="button" data-filter="light">白底 5</button>
+    <button type="button" data-filter="dark">深色底 4</button>
+    <button type="button" data-filter="strong">强风格 3</button>
+  </div>
+  <div class="grid" data-page-node-id="DyqmxpimQHVDt9o47EcjcS">
+
+    <article class="card" data-page-node-id="9mcVjsVulH9sRP8SN1TdRO" data-pack="corporate-clean" data-base="light">
+      <div class="preview" data-num="01" data-page-node-id="Udr2A9L8RVdMHp33Yzzoed">
+        <iframe src="corporate-clean.html" title="corporate-clean 预览" loading="lazy" data-page-node-id="E1LDj8XbEiRfezo4JaFrCw"></iframe>
+        <a class="open" href="corporate-clean.html" target="_blank" data-page-node-id="AmQDoJIPlja9wepwDzR54k">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="7qMr8TSe3drbg3bEQuhfmP">
+        <h2 data-page-node-id="fQxFPZhl04HYDQ8VYynRjq">企业净白 <code data-page-node-id="er27X08d3PWoGioEQQjNEG">corporate-clean</code></h2>
+        <div class="pos" data-page-node-id="gen6j9l6NwIRAJAnsgVU6P">传统企业/机构官网的稳重专业：白底、深蓝主色、清晰导航。<strong data-page-node-id="071D08b6RhY5OkkB4Pi18W">企业对外官网的首选候选。</strong></div>
+        <div class="tags" data-page-node-id="q5wcxtWitGhkJlEPwUGbtx"><span class="tag" data-page-node-id="LIRoGHVm5naqGMQaWX8EV8">白底</span><span class="tag" data-page-node-id="BEUaN311dSXfXB9UzGMMzB">深蓝</span><span class="tag" data-page-node-id="wIMgRyvPEWKQ2WCNapa3hu">小圆角</span><span class="tag" data-page-node-id="H0tdXvxpBY3DU2fEP0HvTY">稳重</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="6JohSBKYkLtMKuPfhSXtdE" data-pack="flat-material" data-base="light">
+      <div class="preview" data-num="02" data-page-node-id="Dfc9YckUhQCfCecgVy5Vkx">
+        <iframe src="flat-material.html" title="flat-material 预览" loading="lazy" data-page-node-id="pBcDyeQ40AWPFJmRXwab3u"></iframe>
+        <a class="open" href="flat-material.html" target="_blank" data-page-node-id="9MP8augs5C9CTpJGWHfUaf">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="KuMQq4lypcrCOWLjNAMTA6">
+        <h2 data-page-node-id="fCQHLfFoC3qyr79uOWzuAp">扁平质感 <code data-page-node-id="ccyZsFoDPeknwzgIZH2Em3">flat-material</code></h2>
+        <div class="pos" data-page-node-id="J145cxrQMI2HFEYUFGzKoJ">Material/Apple 式扁平：阴影分层而非边框，单强调色。SaaS/App/工具产品官网。<strong data-page-node-id="n5tfaxGfp3OPSdq54I4ayY">完整页内含 fade-up-reveal 动效演示（向下滚动查看）。</strong></div>
+        <div class="tags" data-page-node-id="WgUlKC2GyrBORKFFqFCZ4G"><span class="tag" data-page-node-id="Ehd8OpuX4ArUY7ohWxXk8B">白底</span><span class="tag" data-page-node-id="nHb9vywsBDaM02HdnRANKB">阴影分层</span><span class="tag" data-page-node-id="9ywEFxVUk60Wzp0vq6hMST">Material 蓝</span><span class="tag" data-page-node-id="rqwqzFVcNCLXVacLCpipmm">含动效演示</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="nJZniPrHKWdAo3fhrSdShi" data-pack="industrial-dark" data-base="dark" data-strength="strong">
+      <div class="preview" data-num="03" data-page-node-id="BLeKkwLHbQZLB95SpYDOtf">
+        <iframe src="industrial-dark.html" title="industrial-dark 预览" loading="lazy" data-page-node-id="j3P037qQ4HAWzqd0RTDDXP"></iframe>
+        <a class="open" href="industrial-dark.html" target="_blank" data-page-node-id="ZWCpncv1WlcPUU53b0mU1w">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="SGsAGwy3ITjWII4FGfY1rB">
+        <h2 data-page-node-id="zyxlTUX2Q4ydO3zzVcH6FW">工业暗色 <code data-page-node-id="2ZZhQ3TrTujCC05sX9cAGV">industrial-dark</code></h2>
+        <div class="pos" data-page-node-id="E838lkF8ogxdcW52KdExqo">黑底等宽字体单信号色的<strong data-page-node-id="jCvv9nFnAlXoOcITYgXlVe">控制台审美</strong>——只适合工程系统/开发者工具类页面。</div>
+        <div class="tags" data-page-node-id="I6mFExBHGvf2sYZ5lXL9Gx"><span class="tag" data-page-node-id="fKXWLoZoc54bCULqKlPX9k">黑底</span><span class="tag" data-page-node-id="hddcdE4wjaWU6M2yHbE9gh">等宽字体</span><span class="tag" data-page-node-id="ublEtFhYbThH7giriDml2a">直角</span><span class="tag warn" data-page-node-id="SdgaBN7RKF2WoFomP5Un1X">⚠ 不适合对外企业官网</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="xvpHuGmT5SDU6oVSrOar6H" data-pack="tech-aurora" data-base="dark">
+      <div class="preview" data-num="04" data-page-node-id="i5wv6zV8ioT6NRiJRjhQ90">
+        <iframe src="tech-aurora.html" title="tech-aurora 预览" loading="lazy" data-page-node-id="ppb1vmddfJlKHpu576MGue"></iframe>
+        <a class="open" href="tech-aurora.html" target="_blank" data-page-node-id="Pmv6WIFYVPN37GIRVEL3JZ">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="GlndKzRKNH718Gu71fVW4l">
+        <h2 data-page-node-id="pHtUP4Gc75rEBmJ3uMaih7">极光科技 <code data-page-node-id="tl9g1GGvSxczynumDerp8k">tech-aurora</code></h2>
+        <div class="pos" data-page-node-id="OBWWYQpIDNMGusLTKCVeD5">深色渐变大标题霓虹，当代 AI/SaaS 官网气质。<strong data-page-node-id="QCvDRvzdLeHtbsdSpCU2Y1">学生说"科技感/炫酷"时的候选。</strong></div>
+        <div class="tags" data-page-node-id="7CFZkQeHjI81k3JvNEqrXD"><span class="tag" data-page-node-id="Tix2kopl9yojchbIO9lSGZ">深色渐变</span><span class="tag" data-page-node-id="SQQBTHxuHBkWbXFuv5AlpR">大标题</span><span class="tag" data-page-node-id="Ey3rfWZjFg35BkbQJf4R4V">玻璃卡</span><span class="tag" data-page-node-id="lvkAzmL25rbhYGF12crEoa">霓虹</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="5MzQQ5SJIwM7GzxywULOG8" data-pack="commerce-rich" data-base="light">
+      <div class="preview" data-num="05" data-page-node-id="u9yQlyFlZEWVhoJ6MJDTNV">
+        <iframe src="commerce-rich.html" title="commerce-rich 预览" loading="lazy" data-page-node-id="H6uy6yOL5HJBedu3wLzviB"></iframe>
+        <a class="open" href="commerce-rich.html" target="_blank" data-page-node-id="bQibkhOrAEu3NeSGFJC67L">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="cQYxp3iSCkEoBD5276in4v">
+        <h2 data-page-node-id="wT7zALgvhztVpFORoVdjUk">电商丰富 <code data-page-node-id="lFc2EwIGZQSmw9SfDd4iIR">commerce-rich</code></h2>
+        <div class="pos" data-page-node-id="XSIRFV0R6JGNbsKtBO7PrU">促销红 + 大图商品网格 + 角标 + 价格突出。商城/旗舰店/促销专题；商品形态与其他官网包差异最大。</div>
+        <div class="tags" data-page-node-id="GVs8qDKCbK820OezxfWUIa"><span class="tag" data-page-node-id="RNHUN6jFnGigLAvvnRDEHe">促销红</span><span class="tag" data-page-node-id="81sZMqk7ArF7y4xk9QUzI0">大图网格</span><span class="tag" data-page-node-id="oGB8xBCcAwWWK73plgO9Vl">价格突出</span><span class="tag" data-page-node-id="wV77CAXd4puWj3NJSggsQE">高密度</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="g82on27gfK2tObbyDgGze2" data-pack="glassmorphism" data-base="dark" data-strength="strong">
+      <div class="preview" data-num="06" data-page-node-id="DBVbaaqgpeSI4CqpmnA21X">
+        <iframe src="glassmorphism.html" title="glassmorphism 预览" loading="lazy" data-page-node-id="o3EoINsftwHZ6ckkfR8fyj"></iframe>
+        <a class="open" href="glassmorphism.html" target="_blank" data-page-node-id="nbiePjeowrELZw1mqnqva1">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="lchEIShDmBu3OCdvepoopP">
+        <h2 data-page-node-id="rWY7Sm9QICnfGKdTUPWeBQ">毛玻璃 <code data-page-node-id="0GBHzkMtUEwGuDTpIUyPfc">glassmorphism</code></h2>
+        <div class="pos" data-page-node-id="678Ro6hFFzxSKolY0eHhy1">彩色底上半透明磨砂浮层。个人作品集/创意页；极易用滥变廉价，一页毛玻璃元素 ≤ 3 处。</div>
+        <div class="tags" data-page-node-id="1ORKeXonYebHv3B7NL6JjH"><span class="tag" data-page-node-id="AvaZlrzTRfNTDi7aJivDbb">blur 浮层</span><span class="tag" data-page-node-id="xfja4e7TMHn4zpIGYC0JoM">彩色底</span><span class="tag" data-page-node-id="OPzPFw9sjiJL4Eb8BRpmoy">轻盈</span><span class="tag warn" data-page-node-id="1awKrHODGDUZCfC0Mb8J5k">⚠ 强风格·易滥用</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="AEsOLFzY8mfNLm0ImYgx7F" data-pack="retro-futuristic" data-base="dark" data-strength="strong">
+      <div class="preview" data-num="07" data-page-node-id="ypGQhgrvqbO4WcYebkYXKw">
+        <iframe src="retro-futuristic.html" title="retro-futuristic 预览" loading="lazy" data-page-node-id="B7T1GTPo0nf5TKOHIMcmJe"></iframe>
+        <a class="open" href="retro-futuristic.html" target="_blank" data-page-node-id="KOerF5dzil54V84kv9W0WR">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="HWBTEnOV8JBCrKGn1qRZSr">
+        <h2 data-page-node-id="RygEVBT5F9AdWy9r8a3HXs">复古未来 <code data-page-node-id="J6pxidDS0FXz4OZwbblrO5">retro-futuristic</code></h2>
+        <div class="pos" data-page-node-id="6xZLbOXs6YqoCmPJYfzEb4">黑底霓虹 CRT 扫描线，机器人实验室/前沿科技/娱乐化站点。气质强烈，需谨慎使用。</div>
+        <div class="tags" data-page-node-id="AWqdDaUgfVfRRMD8e5a7aT"><span class="tag" data-page-node-id="NPNvELhK6bl7vQ4eEfp2si">霓虹品红+青</span><span class="tag" data-page-node-id="FNQzmW1a5GdzEYnmCaeXDj">CRT 扫描线</span><span class="tag" data-page-node-id="wCHu2DmEmR6EX00BqVPKvd">等宽字体</span><span class="tag warn" data-page-node-id="zQiIxRJSjxdfLnRuRwqDKT">⚠ 强风格</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="vVBqVGH7LVR8YqoBCxs0vx" data-pack="editorial" data-base="light">
+      <div class="preview" data-num="08" data-page-node-id="5xnWbVFkEfsWeBQduCFtfr">
+        <iframe src="editorial.html" title="editorial 预览" loading="lazy" data-page-node-id="eR0459quX26W5cayZzxfO3"></iframe>
+        <a class="open" href="editorial.html" target="_blank" data-page-node-id="VCB0ny5I4ASv7psKZ1OFkQ">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="ocRZrrs7jIlpClKrSvShdD">
+        <h2 data-page-node-id="ylnWiy82saFhyvZFRWs4Up">报纸编辑 <code data-page-node-id="qT96XjiQgTmWVeYji0v5pk">editorial</code></h2>
+        <div class="pos" data-page-node-id="64uyTWryVi5JW4iD5Sey8F">衬线大标题、报刊排印，阅读优先。新闻资讯/科技媒体/学术内容的首选。</div>
+        <div class="tags" data-page-node-id="NHjTmLuv8dedyQWKIGHMHE"><span class="tag" data-page-node-id="yC6MN3SRF59m3wzyiEL2zS">衬线标题</span><span class="tag" data-page-node-id="EusGn8uUB2Z9VpFKWmBZUV">报刊红</span><span class="tag" data-page-node-id="rhTZksTuhVSBen0Jtk1nfz">双细线</span><span class="tag" data-page-node-id="9g9wlukSJCNN3YATVckCOi">阅读优先</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="NL307ufQeIGiNADf85hYx8" data-pack="swiss-minimal" data-base="light">
+      <div class="preview" data-num="09" data-page-node-id="uwZWKGpGD3PwkGiMDRUQc4">
+        <iframe src="swiss-minimal.html" title="swiss-minimal 预览" loading="lazy" data-page-node-id="yUa2ZnFtkues3yP3073gRR"></iframe>
+        <a class="open" href="swiss-minimal.html" target="_blank" data-page-node-id="L5alDJIIpwnd8QLIvPVxsK">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="TkEKjxLO2Cav4OsBZf5uer">
+        <h2 data-page-node-id="wYNI1myybZLiUIinobu96X">瑞士极简 <code data-page-node-id="Z9WzNWgTuXVRQ7Dgqwejvh">swiss-minimal</code></h2>
+        <div class="pos" data-page-node-id="b1V98aV3Hi7DXhMKAOCH5F">纯白网格单强调色、hairline 分隔，构成主义。作品集/实验室/文档站，也可做极克制的企业站。</div>
+        <div class="tags" data-page-node-id="PByakxRToeKflrGD3oQvGC"><span class="tag" data-page-node-id="fARiNxjefBp77DtU4umYHf">纯白</span><span class="tag" data-page-node-id="r1iY9F10rMInZUV9AhniXn">网格线</span><span class="tag" data-page-node-id="7leYBXhXoI2UqepBXespEq">瑞士红</span><span class="tag" data-page-node-id="2VfjiDo8XdSwoBhMgFwYjE">不对称</span></div>
+      </div>
+    </article>
+
+
+    <article class="card" data-page-node-id="JoA9ozdqLvCvPkPjGKwUt9">
+      <div class="preview" data-page-node-id="DvrhKShKA00YA2Pi7r0rPn">
+        <iframe src="palette-compare.html" title="配色对比预览" loading="lazy" data-page-node-id="EEdAlmQudbc8Ml7AB9QFC5"></iframe>
+        <a class="open" href="palette-compare.html" target="_blank" data-page-node-id="ZI8eXAkADDl9b0qOXdT9lo">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="aJGmg7kPSDAC6koXsMogkE">
+        <h2 data-page-node-id="4OCOtAIBdejg7NgMvlafZD">配色对比与角色分工 <code data-page-node-id="2gvOriGPyUDnJxE6naZ1qW">palette-compare</code></h2>
+        <div class="pos" data-page-node-id="Z9Nt82mrX9A2eomAYp29mN">三套配色的色卡、60/30/10 角色分工与适配包分析。</div>
+        <div class="tags" data-page-node-id="TiC4CdmZC6IVoEpMflRfLy"><span class="tag" data-page-node-id="ODrsC6xUDp4qJeAUc51uzW">色卡</span><span class="tag" data-page-node-id="Ms2usBDcqAsDzVwQQX4s2b">角色分工</span><span class="tag" data-page-node-id="m66VavxFI4KnzfOffEWsKM">适配包</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="ixDEAvwVTuVhzTMeOCSJpd">
+      <div class="preview" data-page-node-id="PGHdOE4vSl3WpKmGfuKa5x">
+        <iframe src="pressure-heat.html" title="热异常配色预览" loading="lazy" data-page-node-id="JAcPB4ICUNV0yUN1im6wpv"></iframe>
+        <a class="open" href="pressure-heat.html" target="_blank" data-page-node-id="76O9vqsaShZRKTLD4IiLtA">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="j3ptnOY20ihcOGvO8ebu4e">
+        <h2 data-page-node-id="QifT2EbnaxkVKRPNRsihFG">热异常 <code data-page-node-id="82LPcte8Z4jJaiY5Agbge6">#FF5D13 · #1F1E23 · #A9A9A9</code></h2>
+        <div class="pos" data-page-node-id="7YDml6AlCRm61rmDuktt8b" style="cursor: text;">波形在 02:34 越过阈值被削平。母题：正弦波合成与削波。<strong data-page-node-id="3KjIWH0Kx999rQa52JsBgK">配 industrial-dark。</strong></div>
+        <div class="tags" data-page-node-id="V4fAa2dPqrGfltwIisaEoe"><span class="tag" data-page-node-id="RdaFiYcS1b9O6NsUsKqXNZ">深色底</span><span class="tag warn" data-page-node-id="ENYz53vcG4wNGAIAj5D5x8">禁用于对外企业官网</span><span class="tag" data-page-node-id="Z4GDjxSuopLwuZx0unuofy">accent ≤3 处</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="Mj8HXC4lR0ekL3kpEj6Hzt">
+      <div class="preview" data-page-node-id="UCUUOjJ7z05DKbtkvfiz6A">
+        <iframe src="pressure-twilight.html" title="暮色森林配色预览" loading="lazy" data-page-node-id="mqgsj9HgGZlGMAIq7VWZs9"></iframe>
+        <a class="open" href="pressure-twilight.html" target="_blank" data-page-node-id="RQ4qRnzABjGTXL1NhgHh4Y">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="UBNowGxAt8zQmwB4cmldEm">
+        <h2 data-page-node-id="TWDck7LdjpqsPAOvpGvkEu">暮色森林 <code data-page-node-id="XHfDcNKDxCVgczCGPBeBrf">#443959 · #DCD6E2 · #1D7B80</code></h2>
+        <div class="pos" data-page-node-id="XAm3iawx0O24I28tgnwGAG">永恒黄昏、巨树剪影，青色只给萤火虫和开传送门的那颗钻石。母题：暮色森林群系志。<strong data-page-node-id="ct8a5EeD6hE2NkGSTkNY2c">配 editorial。</strong></div>
+        <div class="tags" data-page-node-id="CVReAAHi97DdIemNpLp34x"><span class="tag" data-page-node-id="ycUAJWaK0rj9IiRqqCFmvB">浅色底</span><span class="tag" data-page-node-id="G5LU65i5jIyrL8myR4Irf2">低对比铺底</span><span class="tag" data-page-node-id="YZ3SvqwKjahPttdoWlV3vi">青色点睛</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-page-node-id="Vuc1XzTRlUjqYlOGJDuDoO">
+      <div class="preview" data-page-node-id="e6af6OuKupxJu3EiXv7WFU">
+        <iframe src="pressure-garden.html" title="界园配色预览" loading="lazy" data-page-node-id="6PwKTl7yY7er5wW3dAMZIQ"></iframe>
+        <a class="open" href="pressure-garden.html" target="_blank" data-page-node-id="aEY2Y9Hn6JQ7AdKc1sSfZd">打开完整页面 ↗</a>
+      </div>
+      <div class="info" data-page-node-id="kEe6UneD4k5vtYguwM25By">
+        <h2 data-page-node-id="A1dL9oPFtIurvjkhOrfbAW">界园 <code data-page-node-id="tJDj9edpnoH4LcIPTgk8pO">#E5026B 主 · #D3CCB9 底 · #017A80 结构</code></h2>
+        <div class="pos" data-page-node-id="ny7Y9hPumUI8b3HFGnvcaW">粉绿主调的报纸版面：品红做报头与大标题，骨白做纸面渐变，青色做栏线与建筑装饰。<strong data-page-node-id="rHsuVqRBBLyrRKr1JlNhXv">配 editorial。</strong></div>
+        <div class="tags" data-page-node-id="LXuYuCCb8hD371KhH4J3ps"><span class="tag" data-page-node-id="c7nOB3WIE73RQk1VBNgnwO">浅色底</span><span class="tag" data-page-node-id="5ZZsvgUUnP103ZULOosSKc">报纸排版</span><span class="tag" data-page-node-id="zbxSPq2Rqb4BLg7h7elOiD">粉绿主调</span></div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="note" style="border-left-color:#0F6E56" data-page-node-id="dLfr8OoIDebV5BF1jOu3m9">
+    <strong data-page-node-id="XIN1a3n5NTKKCHR4XxBqFL">终验站点（完整流程产出，已归档至 <code data-page-node-id="sO1LrVC3APRHGmB96zSsBF">tmp/</code>）：</strong><a href="../../tmp/battery-html-corporate-clean/template/index.html" target="_blank" data-page-node-id="mYsGe2sZyZVbgCEznPoKM2">昊衡能源官网 · corporate-clean 版</a>
+    — 8 个页面（home / list×2 / detail×2 / about / contact / 404），<code data-page-node-id="Uzi7yGk8kimaxC0KphI0jN">validate.py</code> 零错误，含双语切换与完整 <code data-page-node-id="3JPoimUKDi9iejxVmZHmFZ">data-*</code> 注释。
+    设计陈述（design_statement）见 <code data-page-node-id="r1tRyE6Uioy2l4ZZ7mOY9Q">tmp/battery-html-corporate-clean/doc/README.md</code>。
+  </div>
+
+  <div class="note" data-page-node-id="QEHxNawszeCBUthUSXIJRX">
+    <strong data-page-node-id="vA1Myblfwt8GsFqdTTHXnw">对照说明：</strong>上次生成的电池企业官网被评"个人开发者感"，根因是选用了 industrial-dark（控制台审美）做对外营销官网。
+    企业对外官网的候选应为 corporate-clean（稳重）、flat-material（现代产品感）或 tech-aurora（科技感）；industrial-dark 仅当用户明确要"工程控制台/仪表盘"气质时使用。<br data-page-node-id="rHtbpb1KM1w3FWp53ean9Q"><br data-page-node-id="lyhgoXSlrTRVRGAPnOEUA8">
+    <strong data-page-node-id="qDyvmqWxnEqMVCrFPOsalY">动效已独立成库：</strong>动效不再随设计包绑定，`references/motion.md` 提供 6 种可复用模式（滚动淡入上移 fade-up-reveal、分组依次进入、悬浮上浮、PPT 翻页、折叠、视差），
+    生成时按需求挑 1–2 种组合并登记进 manifest。打开 flat-material 完整页向下滚动，即可看到企业站默认动效 fade-up-reveal（内容自下方 20px 淡入）的实际效果。
+  </div>
+</div>
+
+
+<script>
+document.querySelectorAll('.filters button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var f = b.getAttribute('data-filter');
+    document.querySelectorAll('.filters button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    document.querySelectorAll('.card').forEach(function (c) {
+      c.hidden = !(f === 'all' || c.getAttribute('data-base') === f || c.getAttribute('data-strength') === f);
+    });
+  });
+});
+</script>
+</body></html>

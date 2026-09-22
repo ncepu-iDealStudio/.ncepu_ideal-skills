@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>云枢边缘网关 EG-210 · 云枢智能</title>
+<meta name="description" content="云枢边缘网关 EG-210 的规格参数与常见问题。">
+<link rel="stylesheet" href="css/base.css">
+
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header class="site-header" data-component="site-header">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="text-decoration:none">云枢智能</a></div>
+    <nav class="nav" aria-label="主导航">
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">产品</a></li><li><a href="detail.html" aria-current="page">产品介绍</a></li><li><a href="about.html">关于我们</a></li><li><a href="contact.html">联系</a></li></ul>
+    </nav>
+    <details class="menu">
+      <summary>菜单</summary>
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">产品</a></li><li><a href="detail.html">产品介绍</a></li><li><a href="about.html">关于我们</a></li><li><a href="contact.html">联系</a></li></ul>
+    </details>
+  </div>
+</header>
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">首页</a> / <a href="list.html">产品</a> / 边缘网关</p>
+  <article>
+    <h1>云枢边缘网关 EG-210</h1>
+    <p class="lead">面向老旧设备改造的现场接入网关，四路串口，支持断网续传与本地缓存 30 天。</p>
+    <p><img src="image/product.svg" alt="EG-210 网关外观示意"></p>
+    <h2>规格参数</h2>
+    <table class="spec">
+      <caption class="meta" style="text-align:left;padding-bottom:8px">以下参数为样机实测值，批量版本以出厂报告为准。</caption>
+      <tbody>
+        <tr><th>型号</th><td>EG-210</td></tr>
+        <tr><th>串口</th><td>4 路 RS-485 / RS-232（可配置）</td></tr>
+        <tr><th>网口</th><td>2 路千兆以太网</td></tr>
+        <tr><th>本地缓存</th><td>64 GB，断网可存 30 天</td></tr>
+        <tr><th>工作温度</th><td>-20℃ ~ 70℃</td></tr>
+      </tbody>
+    </table>
+    <h2>常见问题</h2>
+    <details class="faq"><summary>设备断网后数据会不会丢？</summary><p>不会。断网期间数据写入本地缓存，网络恢复后按时间顺序自动补传，不需要人工介入。</p></details>
+    <details class="faq"><summary>是否支持第三方协议？</summary><p>内置 Modbus、OPC UA 等常用协议；其余协议可通过开放的插件接口自行扩展。</p></details>
+    <details class="faq"><summary>可以上云吗？</summary><p>可以直连云枢时序数据库，也可以通过 MQTT 转发到客户自建的消息中间件。</p></details>
+  </article>
+</div>
+<section class="block"><div class="wrap">
+  <h2>更多产品</h2>
+  <ul class="cards" style="list-style:none" data-collection="products">
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢设备孪生 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢设备孪生</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 DT-120</p>
+      <p data-slot="product.summary">把产线设备映射为可查询对象，支持历史状态回放。</p>
+    </article>
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢告警中心 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢告警中心</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 AL-500</p>
+      <p data-slot="product.summary">多渠道告警分发，支持值班轮换与升级策略。</p>
+    </article>
+  </ul>
+</div></section>
+</main>
+<footer class="site-footer" data-component="site-footer">
+  <div class="wrap">
+    <span>云枢智能 · 静态站点原型（演示用样例内容）</span>
+    <span>设计包 flat-material · 可直接双击浏览</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

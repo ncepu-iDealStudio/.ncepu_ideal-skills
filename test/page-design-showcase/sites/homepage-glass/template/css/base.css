@@ -1,0 +1,64 @@
+:root{--bg:linear-gradient(135deg,#4B2E83 0%,#1F6F8B 48%,#7A3B6B 100%);--surface:rgba(255,255,255,.14);--text:#F4F6FF;--muted:rgba(244,246,255,.74);
+  --primary:#8EF6E4;--accent:#FFD6E8;--border:rgba(255,255,255,.24);--radius:18px;
+  --shadow:none;--head:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;--body:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --duration:200ms;--easing:ease}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font:16px/1.75 var(--body);}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+a{color:var(--primary)}a:hover{color:var(--accent)}
+h1,h2,h3{font-family:var(--head);line-height:1.3;font-weight:700}
+h1{font-size:clamp(30px,4.6vw,46px)}h2{font-size:24px;margin-bottom:16px}h3{font-size:18px}
+p{margin-bottom:12px}
+img{max-width:100%;height:auto;display:block}
+.site-header{border-bottom:1px solid var(--border);background:var(--surface)}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:64px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+.brand{font-family:var(--head);font-size:19px;font-weight:700;letter-spacing:.04em}
+.nav ul{display:flex;gap:22px;list-style:none;flex-wrap:wrap}
+.nav a{font-size:14px;letter-spacing:.06em;text-decoration:none}
+.nav a[aria-current="page"]{color:var(--accent)}
+.menu{display:none}
+.hero{padding:64px 0 40px}
+.lead{font-size:18px;color:var(--muted);max-width:60ch;margin-bottom:20px}
+section.block{padding:44px 0;border-top:1px solid var(--border)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.card h3{margin-bottom:8px}
+.card p{font-size:14px;color:var(--muted);margin-bottom:8px}
+.meta{font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.btn{display:inline-block;background:var(--primary);color:#fff;padding:11px 22px;border-radius:var(--radius);text-decoration:none;font-size:14px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.stat b{display:block;font-family:var(--head);font-size:32px;color:var(--primary)}
+.spec{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+.spec th,.spec td{border-bottom:1px solid var(--border);padding:10px 8px;text-align:left}
+.spec th{width:38%;color:var(--muted);font-weight:400}
+.breadcrumb{font-size:13px;color:var(--muted);padding:16px 0}
+.breadcrumb a{text-decoration:none}
+.post-body{max-width:68ch;font-size:16.5px}
+.post-body p{text-indent:2em}
+details.faq{border-bottom:1px solid var(--border);padding:12px 0}
+details.faq summary{cursor:pointer;font-weight:600;padding:4px 0}
+form.contact{max-width:520px}
+form.contact label{display:block;margin:14px 0 6px;font-size:14px}
+form.contact input,form.contact textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:var(--surface);color:var(--text)}
+form.contact button{border:0;cursor:pointer;font:inherit}
+.site-footer{border-top:1px solid var(--border);margin-top:56px;padding:26px 0 40px;font-size:13px;color:var(--muted)}
+.site-footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+ul.timeline{list-style:none}
+ul.timeline li{border-left:2px solid var(--primary);padding:0 0 18px 18px;margin-left:6px}
+ul.timeline time{font-size:13px;color:var(--muted)}
+@media(max-width:720px){
+  .nav ul{display:none}
+  .menu{display:block}
+  .menu summary{cursor:pointer;padding:8px 0;font-size:14px}
+  .menu ul{list-style:none;padding:12px 0}
+  .menu li{padding:6px 0}
+}
+body{min-height:100vh}
+.site-header{background:rgba(255,255,255,.10);border-bottom:1px solid var(--border);backdrop-filter:blur(14px)}
+.card{backdrop-filter:blur(16px);background:var(--surface);border:1px solid var(--border);transition:transform var(--duration) var(--easing)}
+@media(prefers-reduced-motion:no-preference){.card:hover{transform:translateY(-3px)}}
+.hero{padding:72px 0 40px}
+.glass{padding:26px 28px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(18px)}
+.btn{background:var(--primary);color:#0B2230;font-weight:600}
+a{color:var(--primary)}

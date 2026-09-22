@@ -1,0 +1,84 @@
+{
+  "site": {
+    "name": "云枢智能",
+    "language": "zh-CN",
+    "designPack": "flat-material",
+    "generatedAt": "2026-09-22"
+  },
+  "outputRoot": "tmp/tests/corp-flat/",
+  "pages": [
+    {
+      "file": "index.html",
+      "type": "home",
+      "title": "云枢智能 · 工业物联网产品与方案"
+    },
+    {
+      "file": "list.html",
+      "type": "list",
+      "title": "产品中心 · 云枢智能"
+    },
+    {
+      "file": "detail.html",
+      "type": "detail",
+      "title": "云枢边缘网关 EG-210 · 云枢智能"
+    },
+    {
+      "file": "about.html",
+      "type": "about",
+      "title": "关于我们 · 云枢智能"
+    },
+    {
+      "file": "contact.html",
+      "type": "contact",
+      "title": "联系我们 · 云枢智能"
+    },
+    {
+      "file": "404.html",
+      "type": "error",
+      "title": "页面不存在 · 云枢智能"
+    }
+  ],
+  "components": [
+    "site-header",
+    "site-footer",
+    "product-card",
+    "value-card"
+  ],
+  "collections": {
+    "products": {
+      "fields": [
+        "name",
+        "model",
+        "summary",
+        "url",
+        "img"
+      ],
+      "sample": true
+    }
+  },
+  "contentSample": {
+    "generated": true,
+    "note": "所有内容为演示用样例数据，非真实机构信息"
+  },
+  "modules": [
+    {
+      "feature": "移动端菜单",
+      "implementation": "details/summary + CSS"
+    },
+    {
+      "feature": "产品 FAQ 折叠",
+      "implementation": "原生 details/summary"
+    },
+    {
+      "feature": "联系表单校验",
+      "implementation": "原生 form 校验（required / type=email）"
+    },
+    {
+      "feature": "滚动淡入",
+      "implementation": "IntersectionObserver + CSS transition（fade-up-reveal，js/main.js <20 行）"
+    }
+  ],
+  "external": {
+    "cdn": []
+  }
+}

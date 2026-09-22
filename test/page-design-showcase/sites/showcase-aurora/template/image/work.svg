@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Light-year Project / Key Visual">
+<rect width="640" height="360" fill="#0B1026"/>
+<rect x="40" y="120" width="560" height="120" fill="#7C4DFF" opacity=".5"/>
+<circle cx="520" cy="90" r="52" fill="#7C4DFF" opacity=".8"/>
+<text x="40" y="300" font-family="sans-serif" font-size="22" fill="#7C4DFF">Light-year Project / Key Visual</text>
+</svg>

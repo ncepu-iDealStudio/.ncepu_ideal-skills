@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>产品中心 · 云枢智能</title>
+<meta name="description" content="云枢智能六条自研产品线的列表页。">
+<link rel="stylesheet" href="css/base.css">
+
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header class="site-header" data-component="site-header">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="text-decoration:none">云枢智能</a></div>
+    <nav class="nav" aria-label="主导航">
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html" aria-current="page">产品</a></li><li><a href="detail.html">产品介绍</a></li><li><a href="about.html">关于我们</a></li><li><a href="contact.html">联系</a></li></ul>
+    </nav>
+    <details class="menu">
+      <summary>菜单</summary>
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">产品</a></li><li><a href="detail.html">产品介绍</a></li><li><a href="about.html">关于我们</a></li><li><a href="contact.html">联系</a></li></ul>
+    </details>
+  </div>
+</header>
+<main>
+<div class="wrap hero">
+  <h1>产品中心</h1>
+  <p class="lead">六条自研产品线，覆盖接入、存储、分析到展示的完整链路。</p>
+</div>
+<section class="block"><div class="wrap">
+  <h2>全部产品</h2>
+  <ul class="cards" style="list-style:none" data-collection="products">
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢边缘网关 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢边缘网关</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 EG-210</p>
+      <p data-slot="product.summary">工业现场数据接入网关，支持四路串口与断网续传。</p>
+    </article>
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢时序数据库 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢时序数据库</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 TS-800</p>
+      <p data-slot="product.summary">面向设备测点优化的时序存储，单机可承载百万级写入。</p>
+    </article>
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢可视化平台 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢可视化平台</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 VP-300</p>
+      <p data-slot="product.summary">零代码组态画布，内置二十余种工业图表与告警面板。</p>
+    </article>
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢设备孪生 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢设备孪生</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 DT-120</p>
+      <p data-slot="product.summary">把产线设备映射为可查询对象，支持历史状态回放。</p>
+    </article>
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢告警中心 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢告警中心</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 AL-500</p>
+      <p data-slot="product.summary">多渠道告警分发，支持值班轮换与升级策略。</p>
+    </article>
+    <article class="card" data-component="product-card">
+      <p><img src="image/product.svg" alt="云枢开放接口 产品示意图" data-slot="product.img"></p>
+      <h3><a href="detail.html" data-slot="product.url"><span data-slot="product.name">云枢开放接口</span></a></h3>
+      <p class="meta" data-slot="product.model">型号 API-10</p>
+      <p data-slot="product.summary">统一的 REST 与 MQTT 接入层，含沙箱环境与用量统计。</p>
+    </article>
+  </ul>
+</div></section>
+</main>
+<footer class="site-footer" data-component="site-footer">
+  <div class="wrap">
+    <span>云枢智能 · 静态站点原型（演示用样例内容）</span>
+    <span>设计包 flat-material · 可直接双击浏览</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

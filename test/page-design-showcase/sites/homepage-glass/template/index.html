@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>林述 · 个人主页</title>
+<meta name="description" content="林述的个人主页：设计专业学生，展示课程项目与个人介绍。">
+<link rel="stylesheet" href="css/base.css">
+
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header class="site-header" data-component="site-header">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="text-decoration:none">林述</a></div>
+    <nav class="nav" aria-label="主导航">
+      <ul><li><a href="index.html" aria-current="page">首页</a></li><li><a href="list.html">项目</a></li><li><a href="about.html">关于</a></li></ul>
+    </nav>
+    <details class="menu">
+      <summary>菜单</summary>
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">项目</a></li><li><a href="about.html">关于</a></li></ul>
+    </details>
+  </div>
+</header>
+<main>
+<div class="wrap hero">
+  <div class="glass">
+    <h1>林述</h1>
+    <p class="lead">设计专业大三学生。喜欢把复杂的信息排得让人一眼看懂，正在学前端。</p>
+    <p><a class="btn" href="list.html">看我的项目</a></p>
+  </div>
+</div>
+<section class="block" style="border-top:1px solid var(--border)"><div class="wrap">
+  <h2>正在做的事</h2>
+  <div class="grid-3">
+    <article class="card"><h3>课程与自学</h3><p>这学期主修信息设计，课余在补 HTML 与 CSS 的基础。</p></article>
+    <article class="card"><h3>校园项目</h3><p>和同学一起做一个校内二手书的原型，负责信息架构与界面。</p></article>
+    <article class="card"><h3>想做的事</h3><p>希望毕业前能完整做完一个真正有人用的小工具。</p></article>
+  </div>
+</div></section>
+<section class="block" style="border-top:1px solid var(--border)"><div class="wrap">
+  <h2>最近的项目</h2>
+  <ul class="cards" style="list-style:none" data-collection="projects">
+    <article class="card" data-component="project-card">
+      <h3><a href="#" data-slot="project.url"><span data-slot="project.title">课程表小程序</span></a></h3>
+      <p data-slot="project.summary">帮室友做的选课辅助工具，能按空余时间反查可选课程。</p>
+      <p class="meta" data-slot="project.year">2026</p>
+    </article>
+    <article class="card" data-component="project-card">
+      <h3><a href="#" data-slot="project.url"><span data-slot="project.title">校园二手书平台原型</span></a></h3>
+      <p data-slot="project.summary">课程设计作业，完成了从信息架构到高保真原型的全流程。</p>
+      <p class="meta" data-slot="project.year">2025</p>
+    </article>
+    <article class="card" data-component="project-card">
+      <h3><a href="#" data-slot="project.url"><span data-slot="project.title">天气数据可视化作业</span></a></h3>
+      <p data-slot="project.summary">把一年的本地天气数据做成可交互的时间轴。</p>
+      <p class="meta" data-slot="project.year">2025</p>
+    </article>
+  </ul>
+</div></section>
+</main>
+<footer class="site-footer" data-component="site-footer">
+  <div class="wrap">
+    <span>林述 · 静态站点原型（演示用样例内容）</span>
+    <span>设计包 glassmorphism · 可直接双击浏览</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>压迫感配色 · 角色分工分析</title>
+<style>
+:root{--text:#1F2733;--muted:#5C6B7F;--border:#E3E8EF;--surface:#F5F7FA;--primary:#0F4C8C}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;background:#fff;color:var(--text);line-height:1.7}
+.wrap{max-width:1080px;margin:0 auto;padding:48px 24px}
+h1{font-size:26px;margin-bottom:8px}
+.intro{color:var(--muted);font-size:14px;max-width:70em;margin-bottom:36px}
+.palette{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:36px}
+.p-head{display:flex;align-items:baseline;gap:14px;padding:18px 24px;background:var(--surface);border-bottom:1px solid var(--border)}
+.p-head h2{font-size:19px}
+.p-head .cat{font-size:12px;color:var(--muted)}
+.p-head .fit{margin-left:auto;font-size:12px;color:var(--primary);font-weight:600}
+.swatches{display:grid;grid-template-columns:1fr 1fr 1fr;height:150px}
+.sw{display:flex;flex-direction:column;justify-content:flex-end;padding:14px 16px}
+.sw b{font-size:14px;font-family:ui-monospace,monospace;letter-spacing:.05em}
+.sw span{font-size:12px;opacity:.85}
+.roles{padding:20px 24px}
+.roles table{width:100%;border-collapse:collapse;font-size:13px}
+.roles th{text-align:left;color:var(--muted);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--border)}
+.roles td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.roles td.hex{font-family:ui-monospace,monospace;white-space:nowrap}
+.chip{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:8px;border:1px solid rgba(0,0,0,.15)}
+.mood{padding:0 24px 20px;font-size:13px;color:var(--muted)}
+.mood b{color:var(--text)}
+.p-foot{padding:0 24px 20px}
+.open{display:inline-block;background:var(--primary);color:#fff;text-decoration:none;font-size:13px;padding:8px 18px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>压迫感配色 · 角色分工分析（自定配色）</h1>
+  <p class="intro">三套配色的共性：<strong>高对比 + 强情绪色 + 非常规底色</strong>——这正是"压迫感"的来源。设计角色时的总原则：情绪最强的颜色面积最小（≤10–15%），只负责"刺点"；底色负责"压住"；文字灰度保持可读。角色定了，压迫感就是设计感；角色错了，就是刺眼。<br><br>三套名字都有出处：<b>热异常</b>＝いよわ《熱異常》（足立レイ，正弦波合成）· <b>暮色森林</b>＝Minecraft 模组 The Twilight Forest · <b>界园</b>＝明日方舟《岁的界园志异》。出页时母题必须跟着走，只换色不换骨架等于没做。</p>
+
+  <!-- 热异常 -->
+  <section class="palette">
+    <div class="p-head"><h2>热异常</h2><span class="cat">深色警报系 · 高温/能量/告警</span><span class="fit">匹配风格：industrial-dark（控制台）</span></div>
+    <div class="swatches">
+      <div class="sw" style="background:#FF5D13;color:#fff"><b>#FF5D13</b><span>信号橙 · 刺点</span></div>
+      <div class="sw" style="background:#1F1E23;color:#fff"><b>#1F1E23</b><span>暖黑 · 底</span></div>
+      <div class="sw" style="background:#A9A9A9;color:#1F1E23"><b>#A9A9A9</b><span>中灰 · 文字</span></div>
+    </div>
+    <div class="roles">
+      <table>
+        <tr><th>角色</th><th>色值</th><th>负责方向</th></tr>
+        <tr><td>页面底色</td><td class="hex"><span class="chip" style="background:#1F1E23"></span>#1F1E23</td><td>全页背景与面板底；面板/边框由它微亮派生（#2A2930 / #3A3941）</td></tr>
+        <tr><td>信号主色</td><td class="hex"><span class="chip" style="background:#FF5D13"></span>#FF5D13</td><td>CTA、数据高亮、状态强调、hero 关键词。<b>面积 ≤15%</b>，全站唯一彩色，用面积换冲击</td></tr>
+        <tr><td>中性文字</td><td class="hex"><span class="chip" style="background:#A9A9A9"></span>#A9A9A9</td><td>正文与辅助信息（对比 ≈7:1）；标题用其加亮派生 #EDEDED</td></tr>
+      </table>
+    </div>
+    <p class="mood"><b>判断：</b>暖黑 + 单信号橙 = 工业告警控制台的标准语言。配等宽字体和 hairline 边框后，"热"是靠橙色的稀少使用点出来的，不是铺满。</p>
+    <div class="p-foot"><a class="open" href="pressure-heat.html" target="_blank">打开页面样式 →</a></div>
+  </section>
+
+  <!-- 暮色森林 -->
+  <section class="palette">
+    <div class="p-head"><h2>暮色森林</h2><span class="cat">灰调暮色系 · 文学/沉静/神秘</span><span class="fit">匹配风格：editorial（报纸编辑）</span></div>
+    <div class="swatches">
+      <div class="sw" style="background:#443959;color:#DCD6E2"><b>#443959</b><span>暮紫 · 结构</span></div>
+      <div class="sw" style="background:#DCD6E2;color:#443959"><b>#DCD6E2</b><span>浅暮紫 · 底</span></div>
+      <div class="sw" style="background:#1D7B80;color:#fff"><b>#1D7B80</b><span>青 · 点缀</span></div>
+    </div>
+    <div class="roles">
+      <table>
+        <tr><th>角色</th><th>色值</th><th>负责方向</th></tr>
+        <tr><td>结构主色</td><td class="hex"><span class="chip" style="background:#443959"></span>#443959</td><td>标题/报头/页脚/主按钮——全站的"骨架色"，衬线大标题用它最出气质</td></tr>
+        <tr><td>底色</td><td class="hex"><span class="chip" style="background:#DCD6E2"></span>#DCD6E2</td><td>面板与次级背景；页面主底用它再调浅（#F4F2F8），保持暮色的灰度</td></tr>
+        <tr><td>点缀</td><td class="hex"><span class="chip" style="background:#1D7B80"></span>#1D7B80</td><td>链接、栏目题花、日期标签、次按钮。<b>对比 ≈4.6:1，禁用作小号正文</b>，大号/加粗/图标可用</td></tr>
+      </table>
+    </div>
+    <p class="mood"><b>判断：</b>暮紫负责"沉"，青色负责"活"。配衬线报刊版式后像一本文学杂志的冬季刊——压迫感来自大面积的灰紫沉静，而不是某个炸点。</p>
+    <div class="p-foot"><a class="open" href="pressure-twilight.html" target="_blank">打开页面样式 →</a></div>
+  </section>
+
+  <!-- 界园 -->
+  <section class="palette">
+    <div class="p-head"><h2>界园</h2><span class="cat">海报撞色系 · 新锐/艺术/展览</span><span class="fit">匹配风格：swiss-minimal 变体（海报网格）</span></div>
+    <div class="swatches">
+      <div class="sw" style="background:#D3CCB9;color:#1F2A2A"><b>#D3CCB9</b><span>骨白 · 底</span></div>
+      <div class="sw" style="background:#E5026B;color:#fff"><b>#E5026B</b><span>品红 · 刺点</span></div>
+      <div class="sw" style="background:#017A80;color:#fff"><b>#017A80</b><span>深青 · 结构</span></div>
+    </div>
+    <div class="roles">
+      <table>
+        <tr><th>角色</th><th>色值</th><th>负责方向</th></tr>
+        <tr><td>页面底色</td><td class="hex"><span class="chip" style="background:#D3CCB9"></span>#D3CCB9</td><td>全页背景（骨白纸感）；面板由它调亮派生 #E4DFD0</td></tr>
+        <tr><td>结构色</td><td class="hex"><span class="chip" style="background:#017A80"></span>#017A80</td><td>导航、栏目标签、细线装饰、次按钮——负责"秩序的冷"</td></tr>
+        <tr><td>冲击点缀</td><td class="hex"><span class="chip" style="background:#E5026B"></span>#E5026B</td><td>CTA、大数字、关键词色块——负责"情绪的热"。<b>面积 ≤10%，禁作正文小字</b>（对比 ≈4.4:1，大号加粗或白字反白可用）</td></tr>
+      </table>
+    </div>
+    <p class="mood"><b>判断：</b>骨白压场、深青立骨、品红刺点——展览海报的经典三色结构。配构成主义网格和大号数字后，压迫感来自"冷静秩序里的一处失控红"。</p>
+    <div class="p-foot"><a class="open" href="pressure-garden.html" target="_blank">打开页面样式 →</a></div>
+  </section>
+</div>
+</body>
+</html>

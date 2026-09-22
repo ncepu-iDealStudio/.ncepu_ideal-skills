@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>昊衡能源 — swiss-minimal 瑞士极简预览</title>
+<style>
+:root{
+  --bg:#FFFFFF; --surface:#F7F7F8; --text:#111111; --muted:#777777;
+  --red:#E4002B; --line:#111111;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Helvetica Neue",Helvetica,"PingFang SC","Noto Sans SC","Microsoft YaHei",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+/* header：hairline 网格 */
+.site-header{border-bottom:1px solid var(--line)}
+.site-header .container{display:grid;grid-template-columns:1fr 2fr;height:64px}
+.logo{display:flex;align-items:center;font-size:15px;font-weight:700;letter-spacing:.06em;border-right:1px solid var(--line)}
+.logo b{color:var(--red);margin-right:8px;font-size:18px}
+.nav{display:flex;align-items:center;gap:36px;padding-left:36px}
+.nav a{color:var(--text);text-decoration:none;font-size:13px;letter-spacing:.04em}
+.nav a[aria-current]{font-weight:700}
+/* hero：不对称 + 大数字 */
+.hero{display:grid;grid-template-columns:2fr 1fr;border-bottom:1px solid var(--line)}
+.hero-main{padding:96px 48px 96px 0;border-right:1px solid var(--line)}
+.hero-main .no{font-size:14px;color:var(--red);font-weight:700;letter-spacing:.1em;margin-bottom:24px}
+.hero-main h1{font-size:72px;line-height:1.08;font-weight:700;letter-spacing:-.02em}
+.hero-main h1 span{color:var(--red)}
+.hero-main p{color:var(--muted);font-size:16px;margin:28px 0 40px;max-width:32em}
+.btn{display:inline-block;padding:13px 34px;text-decoration:none;font-size:13px;letter-spacing:.06em;border:1px solid var(--line);color:var(--text)}
+.btn-primary{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-ghost{margin-left:10px}
+.hero-side{display:grid;grid-template-rows:repeat(4,1fr)}
+.hero-side .stat{padding:20px 32px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.hero-side .stat:last-child{border-bottom:none}
+.hero-side .stat b{font-size:26px;font-variant-numeric:tabular-nums}
+.hero-side .stat span{font-size:12px;color:var(--muted);margin-top:2px}
+/* sections */
+.section{border-bottom:1px solid var(--line)}
+.section-head{display:grid;grid-template-columns:2fr 1fr;align-items:end;padding:40px 0 24px}
+.section-head h2{font-size:24px;font-weight:700}
+.section-head a{text-align:right;color:var(--red);text-decoration:none;font-size:13px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.card{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px;min-height:200px;display:flex;flex-direction:column}
+.card .no{font-size:13px;color:var(--red);font-weight:700;margin-bottom:auto}
+.card h3{font-size:17px;margin:28px 0 10px}
+.card p{font-size:13px;color:var(--muted)}
+/* news */
+.news-item{display:grid;grid-template-columns:160px 1fr 80px;border-bottom:1px solid var(--line);padding:20px 0;align-items:baseline}
+.news-item time{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.news-item h3{font-size:16px;font-weight:400}
+.news-item a{color:var(--text);text-decoration:none}
+.news-item a:hover{color:var(--red)}
+.news-item .idx{font-size:13px;color:var(--muted);text-align:right}
+/* footer */
+.site-footer{padding:32px 0}
+.site-footer .container{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.site-footer b{color:var(--text)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-main{border-right:none;padding-right:0}.hero-main h1{font-size:40px}.grid-3{grid-template-columns:1fr}.news-item{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><b>—</b>昊衡能源 HAOHENG</div>
+    <nav class="nav" aria-label="主导航">
+      <a href="#" aria-current="page">首页</a><a href="#">产品中心</a><a href="#">新闻动态</a><a href="#">关于我们</a><a href="#">联系我们</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero container">
+    <div class="hero-main">
+      <div class="no">01 / 智慧储能系统制造商</div>
+      <h1>为每一度电<br><span>负责到底。</span></h1>
+      <p>锂离子电池与工商业储能系统的研发制造。产品出口 27 国，覆盖家庭、工业与电网侧场景。</p>
+      <a class="btn btn-primary" href="#products">查看产品矩阵</a>
+      <a class="btn btn-ghost" href="#">联系我们</a>
+    </div>
+    <div class="hero-side">
+      <div class="stat"><b>305</b><span>Wh/kg 电芯能量密度</span></div>
+      <div class="stat"><b>4000+</b><span>次循环寿命</span></div>
+      <div class="stat"><b>03</b><span>大智造基地</span></div>
+      <div class="stat"><b>27</b><span>国出口覆盖</span></div>
+    </div>
+  </section>
+  <section class="section" id="products">
+    <div class="container">
+      <div class="section-head"><h2>产品矩阵</h2><a href="#">全部产品 →</a></div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="no">P.01</div>
+          <h3>昊能 S1 家用储能电池</h3>
+          <p>5–20 kWh 模块化堆叠，10 年质保，适配主流混合逆变器。</p>
+        </article>
+        <article class="card">
+          <div class="no">P.02</div>
+          <h3>昊动力 L 系列锂电池组</h3>
+          <p>高倍率放电，宽温域运行，面向电动工具与低速动力场景。</p>
+        </article>
+        <article class="card">
+          <div class="no">P.03</div>
+          <h3>昊衡工汇储能系统</h3>
+          <p>215 kWh 一体化机柜，峰谷套利与需量管理双模式切换。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2>新闻动态</h2><a href="#">更多新闻 →</a></div>
+      <article class="news-item"><time datetime="2026-09-02">2026-09-02</time><h3><a href="#">昊衡能源工商业储能项目落地苏州工业园</a></h3><div class="idx">01</div></article>
+      <article class="news-item"><time datetime="2026-08-18">2026-08-18</time><h3><a href="#">新一代 305 Wh/kg 电芯量产下线</a></h3><div class="idx">02</div></article>
+      <article class="news-item"><time datetime="2026-07-30">2026-07-30</time><h3><a href="#">昊衡能源亮相慕尼黑电池展</a></h3><div class="idx">03</div></article>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div><b>昊衡能源 HAOHENG ENERGY</b> · EST. 2009</div>
+    <div>设计包预览 swiss-minimal · 本页所有内容为演示用样例数据</div>
+  </div>
+</footer>
+</body>
+</html>

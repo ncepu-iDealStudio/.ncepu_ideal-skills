@@ -1,0 +1,78 @@
+{
+  "site": {
+    "name": "光年计划",
+    "language": "zh-CN",
+    "designPack": "tech-aurora",
+    "generatedAt": "2026-09-22"
+  },
+  "outputRoot": "tmp/tests/showcase-aurora/",
+  "pages": [
+    {
+      "file": "index.html",
+      "type": "landing",
+      "title": "光年计划 · 动态视觉作品集"
+    },
+    {
+      "file": "list.html",
+      "type": "list",
+      "title": "全部作品 · 光年计划"
+    },
+    {
+      "file": "detail.html",
+      "type": "detail",
+      "title": "光年计划 · 主视觉 · 光年计划"
+    },
+    {
+      "file": "about.html",
+      "type": "about",
+      "title": "关于 · 光年计划"
+    },
+    {
+      "file": "404.html",
+      "type": "error",
+      "title": "页面不存在 · 光年计划"
+    }
+  ],
+  "components": [
+    "site-header",
+    "site-footer",
+    "work-card"
+  ],
+  "collections": {
+    "works": {
+      "fields": [
+        "title",
+        "summary",
+        "cover",
+        "url",
+        "year"
+      ],
+      "sample": true
+    }
+  },
+  "contentSample": {
+    "generated": true,
+    "note": "所有内容为演示用样例数据，非真实机构信息"
+  },
+  "modules": [
+    {
+      "feature": "移动端菜单",
+      "implementation": "details/summary + CSS"
+    },
+    {
+      "feature": "滚动淡入",
+      "implementation": "IntersectionObserver + CSS transition（fade-up-reveal，js/main.js）"
+    },
+    {
+      "feature": "卡片分组错开进入",
+      "implementation": "CSS transition-delay calc(var(--i)*60ms)（stagger-reveal）"
+    },
+    {
+      "feature": "中段视差",
+      "implementation": "position:sticky 纯 CSS，无滚动监听（parallax，全站仅 1 处）"
+    }
+  ],
+  "external": {
+    "cdn": []
+  }
+}

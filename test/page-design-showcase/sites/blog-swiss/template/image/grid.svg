@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Grid System / 12 columns">
+<rect width="640" height="360" fill="#F6F6F4"/>
+<rect x="40" y="120" width="560" height="120" fill="#E30613" opacity=".5"/>
+<circle cx="520" cy="90" r="52" fill="#E30613" opacity=".8"/>
+<text x="40" y="300" font-family="sans-serif" font-size="22" fill="#E30613">Grid System / 12 columns</text>
+</svg>

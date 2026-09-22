@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>界园日报 · 自定配色 × 报纸编辑</title>
+<style>
+:root{
+  --bone:#D3CCB9; --bone-lit:#E7E1D3; --bone-deep:#C4BCA6;
+  --magenta:#E5026B; --magenta-ink:#A8004A;
+  --teal:#017A80; --teal-ink:#015F63;
+  --ink:#1F1D1A; --ink-soft:#4A463F;
+  --rule:rgba(1,122,128,.42);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Songti SC","SimSun","Noto Serif SC",Georgia,serif;
+  color:var(--ink);line-height:1.85;font-size:15px;
+  background:linear-gradient(168deg,var(--bone-lit) 0%,var(--bone) 46%,var(--bone-deep) 100%);
+  background-attachment:fixed;
+}
+.paper{max-width:1220px;margin:0 auto;padding:28px 26px 40px}
+a{color:var(--magenta-ink);text-decoration:none}
+a:hover{color:var(--magenta)}
+
+/* 报头 */
+.masthead{border-top:6px double var(--magenta);border-bottom:2px solid var(--magenta);padding:18px 0 12px;text-align:center}
+.masthead .kicker{font-size:11px;letter-spacing:.32em;color:var(--teal-ink);margin-bottom:10px}
+.masthead h1{font-size:clamp(44px,8vw,84px);letter-spacing:.16em;color:var(--magenta);font-weight:700;line-height:1.1}
+.masthead .en{font-family:"Courier New",monospace;font-size:10px;letter-spacing:.28em;color:var(--teal-ink);margin-top:8px}
+.colophon{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--teal-ink);
+  border-bottom:1px solid var(--rule);padding:7px 0;letter-spacing:.06em}
+
+/* 导航 */
+nav ul{display:flex;flex-wrap:wrap;gap:22px;list-style:none;border-bottom:3px double var(--teal);padding:9px 0;margin-bottom:22px}
+nav a{color:var(--ink);font-size:14px;letter-spacing:.14em}
+nav a:hover{color:var(--magenta)}
+nav li:first-child a{color:var(--magenta-ink);font-weight:700}
+
+/* 版面 */
+.board{display:grid;grid-template-columns:1fr 2.3fr 1.05fr;gap:26px;align-items:start}
+.col-label{font-size:11px;letter-spacing:.26em;color:var(--teal-ink);border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:12px}
+
+/* 头条 */
+.headline .kicker{font-size:12px;letter-spacing:.2em;color:var(--magenta-ink);margin-bottom:8px}
+.headline h2{font-size:clamp(26px,3.4vw,40px);line-height:1.28;color:var(--magenta);font-weight:700;letter-spacing:.02em}
+.headline .sub{font-size:15px;color:var(--ink-soft);margin-top:10px;line-height:1.7;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:9px 0}
+.byline{font-size:11px;color:var(--teal-ink);letter-spacing:.1em;margin:10px 0 14px}
+.article{columns:3;column-gap:22px;column-rule:1px solid var(--rule);text-align:justify;font-size:14px}
+.article p{margin-bottom:12px;text-indent:2em}
+.article p:first-of-type{text-indent:0}
+.article p:first-of-type::first-letter{float:left;font-size:3.4em;line-height:.9;color:var(--magenta);
+  font-weight:700;margin:4px 8px 0 0}
+.pull{border-top:2px solid var(--magenta);border-bottom:1px solid var(--rule);margin:16px 0;padding:12px 0;
+  font-size:17px;color:var(--magenta-ink);letter-spacing:.02em;text-align:center}
+
+/* 简报 */
+.briefs li{list-style:none;border-bottom:1px dotted var(--rule);padding:9px 0;font-size:13.5px}
+.briefs li b{display:block;color:var(--magenta-ink);font-size:13px;letter-spacing:.08em;margin-bottom:3px}
+.briefs li span{color:var(--ink-soft)}
+.briefs li b::before{content:"■";color:var(--teal);font-size:8px;vertical-align:2px;margin-right:7px}
+
+/* 行情 */
+.quote{width:100%;border-collapse:collapse;font-size:13px}
+.quote th{font-size:11px;letter-spacing:.14em;color:var(--teal-ink);border-bottom:1px solid var(--teal);padding:5px 0;text-align:right}
+.quote th:first-child{text-align:left}
+.quote td{padding:7px 0;border-bottom:1px dotted var(--rule);text-align:right;font-variant-numeric:tabular-nums}
+.quote td:first-child{text-align:left;color:var(--ink)}
+.up{color:var(--magenta)}
+.down{color:var(--teal-ink)}
+.notice{border:1px solid var(--teal);padding:13px 14px;margin-top:18px;font-size:13px;background:rgba(255,255,255,.28)}
+.notice b{display:block;color:var(--magenta-ink);letter-spacing:.14em;font-size:12px;margin-bottom:6px}
+
+/* 副刊 */
+.supplement{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:30px;border-top:3px double var(--teal);padding-top:20px}
+.supplement article{border-right:1px solid var(--rule);padding-right:22px}
+.supplement article:last-child{border-right:none;padding-right:0}
+.supplement h3{font-size:17px;color:var(--magenta);letter-spacing:.06em;margin-bottom:8px}
+.supplement p{font-size:13.5px;color:var(--ink-soft);text-align:justify}
+.supplement .meta{font-size:11px;color:var(--teal-ink);letter-spacing:.1em;margin-top:9px}
+
+/* 建筑装饰 */
+.ornament{height:16px;margin:18px 0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='16' viewBox='0 0 48 16'%3E%3Cg fill='none' stroke='%23017A80' stroke-width='1'%3E%3Cpath d='M0 8h13M35 8h13'/%3E%3Cpath d='M24 2l6 6-6 6-6-6z'/%3E%3Cpath d='M18 8h12'/%3E%3C/g%3E%3C/svg%3E");background-repeat:repeat-x;opacity:.75}
+.seal{float:right;width:74px;height:74px;border:3px solid var(--magenta);color:var(--magenta);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1.1;
+  font-size:26px;letter-spacing:.02em;transform:rotate(-4deg);margin:6px 0 12px 18px;font-weight:700}
+.seal small{font-size:9px;letter-spacing:.1em;font-weight:400}
+
+footer{border-top:2px solid var(--magenta);margin-top:34px;padding-top:14px;font-size:11px;color:var(--teal-ink);line-height:1.9}
+footer .swatches{display:flex;gap:16px;align-items:center;margin-top:6px}
+footer .swatches i{display:inline-block;width:9px;height:9px;margin-right:5px}
+
+@media(max-width:1000px){
+  .board{grid-template-columns:1fr}
+  .article{columns:2}
+  .supplement{grid-template-columns:1fr}
+  .supplement article{border-right:none;border-bottom:1px solid var(--rule);padding:0 0 16px}
+}
+@media(max-width:640px){
+  .paper{padding:18px 14px 28px}
+  .article{columns:1}
+  .seal{width:60px;height:60px;font-size:20px}
+}
+</style>
+</head>
+<body>
+<div class="paper">
+
+<header class="masthead">
+  <div class="kicker">大炎 · 百灶城外 · 界園</div>
+  <h1>界園日報</h1>
+  <div class="en">JIÉ YUÁN DAILY · 歲次丙午 · 第一百〇八期</div>
+</header>
+
+<div class="colophon">
+  <span>今日六版</span>
+  <span>大炎历 七月十六</span>
+  <span>岁时天象：雾锁西园</span>
+  <span>零售：通宝 二枚</span>
+  <span>社址：听运亭东侧</span>
+</div>
+
+<nav aria-label="栏目导航">
+  <ul>
+    <li><a href="#lead">要闻</a></li>
+    <li><a href="#brief">简报</a></li>
+    <li><a href="#quote">通宝行情</a></li>
+    <li><a href="#supp">见字图册</a></li>
+    <li><a href="#supp">岁时</a></li>
+    <li><a href="#supp">副刊</a></li>
+    <li><a href="#supp">听运亭</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="board">
+
+  <aside id="brief">
+    <div class="col-label">要聞簡報</div>
+    <ul class="briefs">
+      <li><b>依律镇抚</b><span>司岁台完成三区封存，园内游廊暂闭，秩序如常。</span></li>
+      <li><b>长卷留痕</b><span>见字图册新增四十七叶，其中三叶字迹漫漶，暂列待考。</span></li>
+      <li><b>黑白入玄</b><span>北园棋局未终，观者不得入内，落子声自夜半不绝。</span></li>
+      <li><b>无中生有</b><span>钱盒清点出无主通宝若干，已交镇抚司暂管。</span></li>
+    </ul>
+    <div class="ornament" aria-hidden="true"></div>
+    <div class="col-label">園中測繪</div>
+    <p style="font-size:13px;color:var(--ink-soft)">全园分东、西、南、北四区，中设听运亭。曲水面环亭而走，山石叠于西南隅，未开放区以斜线填注。</p>
+  </aside>
+
+  <section id="lead" class="headline">
+    <div class="kicker">本 报 讯 · 西 园</div>
+    <h2>岁兽残识现于西园　镇抚司依律封存三区</h2>
+    <p class="sub">通宝钱盒清点完毕，见字图册新增四十七叶；园内游廊自即日起暂闭，听运亭照常开放。</p>
+    <p class="byline">本报记者 沈砚 · 发自百灶城外 · 大炎历七月十六</p>
+
+    <div class="article">
+      <p>七月十五日夜，界园西园一带现岁兽残识，初时仅见雾中轮廓，至子时轮廓渐明，园内灯火尽数自灭。镇抚司依《园律》第三条，当夜封存西、南、北三区，仅留东园与听运亭通行，游廊一并关闭。</p>
+      <p>本报记者随镇抚司入西园时，见曲水面无风自皱，山石之侧有新痕一道，长可三丈，深浅不匀，非人力所及。同行司吏称，此痕往年亦曾出现，唯今岁较前清晰，且延及园墙之外。</p>
+      <p>司岁台于卯时出告：残识已封，园内秩序如常，游园券照旧发放，惟请游客缓行、勿近水、勿于子时后逗留。至本报付印时，未见残识再动。</p>
+      <p>另据钱盒清点所得，本岁通宝较往岁多出若干枚，其中数枚无主，已交镇抚司暂管。见字图册因此次事件新增四十七叶，含前人题记与园图残页，现藏于听运亭二层。</p>
+    </div>
+
+    <p class="pull">「园有园律，律在则园在；律弛，则草木皆可为兽。」<br><span style="font-size:12px;color:var(--teal-ink)">—— 见字图册 · 第四十七叶</span></p>
+
+    <div class="article" style="columns:2">
+      <p>本报另讯，听运亭本月运势分享已于初一、十五两日照常举行，实体门票发放完毕。司岁台提醒：运势之说属园中旧俗，与镇抚事宜无关，游客自便即可。</p>
+      <p>又讯，北园棋局至今未终。园方称，该局自开园之日起未尝中断，观者不得入内，惟闻落子声自夜半不绝。有老园丁言，棋局终了之日，即四区重开之时。</p>
+    </div>
+  </section>
+
+  <aside id="quote">
+    <div class="col-label">通寶行情</div>
+    <table class="quote">
+      <thead><tr><th>名目</th><th>昨</th><th>今</th></tr></thead>
+      <tbody>
+        <tr><td>通宝（枚）</td><td>118</td><td class="up">124 ▲</td></tr>
+        <tr><td>钱盒（只）</td><td>6</td><td class="down">5 ▼</td></tr>
+        <tr><td>灵韵（缕）</td><td>3</td><td>3</td></tr>
+        <tr><td>游园券（张）</td><td>40</td><td class="down">36 ▼</td></tr>
+        <tr><td>伺烛客（位）</td><td>2</td><td class="up">4 ▲</td></tr>
+      </tbody>
+    </table>
+    <div class="notice">
+      <b>听运亭启事</b>
+      本月运势分享已于初一、十五举行，实体门票发放完毕。园内游廊暂闭，亭前照常开放，请游客缓行。
+    </div>
+    <div class="ornament" aria-hidden="true"></div>
+    <div class="col-label">歲時天象</div>
+    <p style="font-size:13px;color:var(--ink-soft)">雾锁西园，宜缓行；子时后不宜近水。东南风二级，园墙外可见灯火。</p>
+  </aside>
+
+</div>
+
+<section id="supp" class="supplement">
+  <article>
+    <h3>见字图册 · 新叶</h3>
+    <p>此次新增四十七叶，含前人题记、园图残页与钱盒清单。其中三叶字迹漫漶，暂列待考；另有二叶为园图，所绘曲水面与今不符，疑为旧时形制。</p>
+    <p class="meta">藏于听运亭二层 · 需券入内</p>
+  </article>
+  <article>
+    <h3>四结局 · 园志所载</h3>
+    <p>依律镇抚、长卷留痕、黑白入玄、无中生有。四者并记于图册末叶，园方未作注解。老园丁言，四者非四路，乃一园之四面，游人各见其一。</p>
+    <p class="meta">据见字图册 · 末叶</p>
+  </article>
+  <article>
+    <h3>园中草木</h3>
+    <p>曲水面环亭而走，山石叠于西南隅，游廊自东园延至北园而止。未开放区以斜线填注，界桩皆漆青色，桩顶刻「園」字。园中巨木三株，皆在北区，不与游廊相通。</p>
+    <p class="meta">测绘：镇抚司 · 七月</p>
+  </article>
+</section>
+</main>
+
+<footer>
+  <div class="seal" aria-hidden="true">界園<small>JIE YUAN</small></div>
+  <div>配色 #E5026B 品红（主色）· #D3CCB9 骨白（纸面与渐变）· #017A80 青（栏线、表格与建筑装饰）</div>
+  <div>本页为原创虚构演示内容，非游戏内实际刊物或设定；母题灵感：明日方舟《岁的界园志异》· 非官方致敬页。</div>
+  <div class="swatches">
+    <span><i style="background:#E5026B"></i>E5026B</span>
+    <span><i style="background:#D3CCB9;border:1px solid #8a8a8a"></i>D3CCB9</span>
+    <span><i style="background:#017A80"></i>017A80</span>
+    <span style="margin-left:auto"><a href="index.html">返回画廊 ↗</a></span>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

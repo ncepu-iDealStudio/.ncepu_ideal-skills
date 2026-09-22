@@ -1,0 +1,64 @@
+{
+  "site": {
+    "name": "林述",
+    "language": "zh-CN",
+    "designPack": "glassmorphism",
+    "generatedAt": "2026-09-22"
+  },
+  "outputRoot": "tmp/tests/homepage-glass/",
+  "pages": [
+    {
+      "file": "index.html",
+      "type": "home",
+      "title": "林述 · 个人主页"
+    },
+    {
+      "file": "list.html",
+      "type": "list",
+      "title": "项目 · 林述"
+    },
+    {
+      "file": "about.html",
+      "type": "about",
+      "title": "关于 · 林述"
+    },
+    {
+      "file": "404.html",
+      "type": "error",
+      "title": "页面不存在 · 林述"
+    }
+  ],
+  "components": [
+    "site-header",
+    "site-footer",
+    "project-card"
+  ],
+  "collections": {
+    "projects": {
+      "fields": [
+        "title",
+        "summary",
+        "url",
+        "year"
+      ],
+      "sample": true
+    }
+  },
+  "contentSample": {
+    "generated": true,
+    "note": "所有内容为演示用样例数据，非真实机构信息"
+  },
+  "modules": [
+    {
+      "feature": "移动端菜单",
+      "implementation": "details/summary + CSS"
+    },
+    {
+      "feature": "悬浮上浮",
+      "implementation": "纯 CSS transform:translateY（hover-lift）"
+    }
+  ],
+  "external": {
+    "cdn": []
+  }
+}

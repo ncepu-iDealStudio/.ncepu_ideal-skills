@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>暮色森林 — 自定配色 × 编辑报刊</title>
+<style>
+:root{
+  --sky:#DCD6E2; --ink:#443959; --live:#1D7B80; --paper:#EFECF2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--sky)}
+body{
+  font-family:Georgia,"Songti SC","Noto Serif SC","Source Han Serif SC",serif;
+  color:var(--ink);background:var(--sky);line-height:1.85;overflow-x:hidden;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 36px}
+.live{color:var(--live)}
+
+/* 第一屏：林地 */
+.forest{position:relative;min-height:100vh;overflow:hidden;
+  background:linear-gradient(180deg,#DCD6E2 0%,#D6CFE0 34%,#8E82A2 68%,#443959 100%)}
+.forest svg.scene{position:absolute;inset:0;width:100%;height:100%}
+.fireflies{position:absolute;inset:0;pointer-events:none}
+.ff{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--live);
+  box-shadow:0 0 10px 2px rgba(29,123,128,.55)}
+.forest .wrap{position:relative;height:100vh;display:flex;align-items:flex-start;justify-content:space-between;padding-top:64px}
+.vtitle{writing-mode:vertical-rl;text-orientation:upright;font-size:clamp(38px,6vw,68px);
+  letter-spacing:.24em;line-height:1;color:var(--ink);text-shadow:0 2px 18px rgba(220,214,226,.9)}
+.vmeta{writing-mode:vertical-rl;font-family:ui-monospace,Consolas,monospace;font-size:11px;
+  letter-spacing:.34em;color:rgba(68,57,89,.62)}
+.entry{max-width:23em;align-self:flex-end;padding-bottom:96px}
+.entry .kicker{font-family:ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.32em;
+  color:rgba(68,57,89,.7);margin-bottom:16px}
+.entry h2{font-size:22px;font-weight:400;line-height:1.6;margin-bottom:14px}
+.entry p{font-size:14px;color:rgba(68,57,89,.86)}
+.portal{margin-top:26px;display:flex;align-items:flex-end;gap:18px}
+.pool{width:74px;height:74px;border:1px solid rgba(68,57,89,.55);position:relative}
+.pool::after{content:"";position:absolute;inset:9px;background:rgba(29,123,128,.22)}
+.pool i{position:absolute;bottom:-9px;width:5px;height:5px;border-radius:50%;background:rgba(68,57,89,.5)}
+.dia{width:15px;height:15px;background:var(--live);transform:rotate(45deg);margin-bottom:6px}
+.portal .note{font-size:12px;color:rgba(68,57,89,.72);font-family:ui-monospace,Consolas,monospace;letter-spacing:.06em}
+
+/* 群系 */
+.biomes{padding:110px 0 40px;background:var(--sky)}
+.bh{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(68,57,89,.35);padding-bottom:14px;margin-bottom:8px}
+.bh h3{font-size:15px;font-weight:400;letter-spacing:.28em}
+.bh span{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:rgba(68,57,89,.6);letter-spacing:.14em}
+.biome{display:grid;grid-template-columns:64px 1fr 240px;gap:24px;padding:22px 0;border-bottom:1px solid rgba(68,57,89,.16);align-items:baseline}
+.biome .no{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:rgba(68,57,89,.55);letter-spacing:.1em}
+.biome h4{font-size:19px;font-weight:400;letter-spacing:.04em}
+.biome p{font-size:13px;color:rgba(68,57,89,.8)}
+
+/* 魔法地图 */
+.map{padding:96px 0 110px;background:var(--paper);border-top:1px solid rgba(68,57,89,.2)}
+.mapgrid{display:grid;grid-template-columns:1fr 340px;gap:56px;align-items:start}
+.card{border:1px solid rgba(68,57,89,.45);padding:26px 26px 30px;background:transparent}
+.card h5{font-family:ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.28em;
+  color:rgba(68,57,89,.65);font-weight:400;margin-bottom:18px}
+.recipe{list-style:none;font-size:13px}
+.recipe li{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dotted rgba(68,57,89,.32)}
+.recipe li:last-child{border-bottom:none}
+.recipe em{font-style:normal;color:var(--live)}
+.steps{counter-reset:s;list-style:none}
+.steps li{counter-increment:s;position:relative;padding:0 0 20px 46px;font-size:14px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:2px;width:26px;height:26px;
+  border:1px solid rgba(68,57,89,.5);border-radius:50%;text-align:center;line-height:24px;
+  font-family:ui-monospace,Consolas,monospace;font-size:11px;color:rgba(68,57,89,.75)}
+.steps li b{font-weight:400;color:var(--live)}
+.prose{max-width:34em}
+.prose h3{font-size:26px;font-weight:400;line-height:1.5;margin-bottom:18px}
+.prose p{font-size:14px;color:rgba(68,57,89,.85);margin-bottom:14px}
+.prose .quote{border-left:2px solid var(--live);padding-left:18px;font-size:15px;color:var(--ink)}
+
+footer{background:var(--ink);color:rgba(220,214,226,.72);padding:30px 0;font-size:11px;
+  font-family:ui-monospace,Consolas,monospace;letter-spacing:.05em}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer b{color:var(--live);font-weight:400}
+
+@media(max-width:880px){
+  .forest .wrap{flex-direction:column;align-items:flex-start;height:auto;padding-bottom:60px}
+  .vtitle{writing-mode:horizontal-tb;letter-spacing:.16em}
+  .vmeta{writing-mode:horizontal-tb;margin-top:12px}
+  .entry{padding-bottom:40px}
+  .biome{grid-template-columns:40px 1fr}
+  .mapgrid{grid-template-columns:1fr}
+  .wrap{padding:0 22px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .ff{animation:drift 9s ease-in-out infinite,blink 4s ease-in-out infinite}
+  @keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-22px)}}
+  @keyframes blink{0%,100%{opacity:.35}50%{opacity:1}}
+}
+</style>
+</head>
+<body>
+
+<section class="forest">
+  <svg class="scene" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <g fill="#443959">
+      <ellipse cx="180" cy="150" rx="260" ry="120" opacity=".92"/>
+      <ellipse cx="640" cy="90" rx="330" ry="130" opacity=".95"/>
+      <ellipse cx="1180" cy="170" rx="300" ry="140" opacity=".9"/>
+      <ellipse cx="900" cy="250" rx="230" ry="90" opacity=".6"/>
+      <ellipse cx="330" cy="270" rx="190" ry="74" opacity=".5"/>
+      <rect x="0" y="700" width="1440" height="200" opacity=".9"/>
+    </g>
+    <g stroke="#443959" fill="none" stroke-linecap="round">
+      <path d="M210 760 C 200 520 214 330 196 150" stroke-width="30"/>
+      <path d="M470 780 C 486 560 462 360 470 210" stroke-width="18" opacity=".85"/>
+      <path d="M760 800 C 742 540 770 340 758 120" stroke-width="42"/>
+      <path d="M1090 770 C 1104 540 1080 380 1092 200" stroke-width="22" opacity=".9"/>
+      <path d="M1330 790 C 1316 570 1340 400 1330 250" stroke-width="16" opacity=".7"/>
+    </g>
+    <g stroke="#1D7B80" fill="none" opacity=".85">
+      <path d="M1042 300 l-16 40 l22 -6 l-30 52" stroke-width="2"/>
+    </g>
+  </svg>
+
+  <div class="fireflies" id="ffs" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <div>
+      <div class="vtitle">暮色森林</div>
+      <div class="vmeta">THE TWILIGHT FOREST · 无昼无夜 · 坐标 8:1</div>
+    </div>
+    <div class="entry">
+      <div class="kicker">进 入 方 式</div>
+      <h2>挖一个 2×2 的浅池，四周种满花，<br>投进一颗钻石。</h2>
+      <p>闪电劈下来的时候，水面会打开。跳进去，上面的天就永远停在黄昏。</p>
+      <div class="portal">
+        <div class="pool" aria-hidden="true">
+          <i style="left:-14px"></i><i style="left:12px"></i><i style="right:12px"></i><i style="right:-14px"></i>
+        </div>
+        <div>
+          <div class="dia" aria-hidden="true"></div>
+          <div class="note">DIAMOND → PORTAL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="biomes">
+  <div class="wrap">
+    <div class="bh">
+      <h3>群 系 志</h3>
+      <span>19 BIOMES · 摘录 6</span>
+    </div>
+
+    <article class="biome">
+      <div class="no">01</div>
+      <h4>萤火虫森林</h4>
+      <p>巨树冲破云霄，虫群在树冠间悬着不动，是这座森林里唯一不需要躲避的东西。</p>
+    </article>
+    <article class="biome">
+      <div class="no">02</div>
+      <h4>黑暗森林</h4>
+      <p>树冠密到不漏光，地面永远像傍晚。要塞藏在里面，秘宝也藏在里面。</p>
+    </article>
+    <article class="biome">
+      <div class="no">03</div>
+      <h4>火焰沼泽</h4>
+      <p>水面下是暗流涌动的岩浆。走得越慢，底下躁动的声音越清楚。</p>
+    </article>
+    <article class="biome">
+      <div class="no">04</div>
+      <h4>极光宫殿</h4>
+      <p>建在冰川之上，整座宫殿由极光本身照明。没有一条路是直的。</p>
+    </article>
+    <article class="biome">
+      <div class="no">05</div>
+      <h4>蘑菇林</h4>
+      <p>巨大的伞盖代替了树冠。踩上去是软的，声音也是闷的。</p>
+    </article>
+    <article class="biome">
+      <div class="no">06</div>
+      <h4>深渊迷宫</h4>
+      <p>向下而不是向前。这里的坐标不换算，走一步算一步。</p>
+    </article>
+  </div>
+</section>
+
+<section class="map">
+  <div class="wrap mapgrid">
+    <div class="prose">
+      <h3>没有白天，也没有夜晚，<br>所以没人知道自己在森林里走了多久。</h3>
+      <p>这里曾经有过很繁荣的文明，你没能赶上。如今永恒之夜笼罩着一切，只剩下参天的树、一些遗迹，和住在遗迹里的新主人。</p>
+      <p class="quote">想找路，就得先做一张魔法地图——它需要萤石粉、乌鸦的羽毛，和火炬浆果。</p>
+      <ol class="steps">
+        <li>挖一个 2×2 的浅池，倒满水</li>
+        <li>在池边种上一圈花——<b>什么花都行</b></li>
+        <li>把一颗钻石丢进去，然后等那道闪电</li>
+      </ol>
+    </div>
+    <div>
+      <div class="card">
+        <h5>魔 法 地 图 核 心</h5>
+        <ul class="recipe">
+          <li><span>萤石粉</span><em>GLOWSTONE</em></li>
+          <li><span>乌鸦羽毛</span><em>FEATHER</em></li>
+          <li><span>火炬浆果</span><em>BERRY</em></li>
+        </ul>
+      </div>
+      <div class="card" style="margin-top:22px">
+        <h5>坐 标 换 算</h5>
+        <ul class="recipe">
+          <li><span>主世界 : 暮色</span><em>1 : 8</em></li>
+          <li><span>维度编号</span><em>#7</em></li>
+          <li><span>首个 BOSS</span><em>娜迦</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>配色 #443959 · #DCD6E2 · #1D7B80 — 紫 60% / 浅紫 30% / 青 10%</span>
+    <span>母题灵感：The Twilight Forest（Minecraft 模组 / Benimatic）· 非官方致敬页</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var box=document.getElementById("ffs"),n=26,html="";
+  for(var i=0;i<n;i++){
+    var x=Math.round(Math.random()*100),y=30+Math.round(Math.random()*62);
+    var d=(Math.random()*9).toFixed(1),b=(Math.random()*4).toFixed(1);
+    var s=(3+Math.random()*3).toFixed(0);
+    html+='<span class="ff" style="left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;'+
+          'animation-delay:'+d+'s,'+b+'s;animation-duration:'+(8+Math.random()*5).toFixed(1)+'s,'+
+          (3+Math.random()*3).toFixed(1)+'s"></span>';
+  }
+  box.innerHTML=html;
+})();
+</script>
+</body>
+</html>

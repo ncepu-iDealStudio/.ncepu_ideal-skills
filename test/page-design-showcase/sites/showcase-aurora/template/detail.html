@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>光年计划 · 主视觉 · 光年计划</title>
+<meta name="description" content="光年计划主视觉作品的创作说明。">
+<link rel="stylesheet" href="css/base.css">
+
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header class="site-header" data-component="site-header">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="text-decoration:none">光年计划</a></div>
+    <nav class="nav" aria-label="主导航">
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">作品</a></li><li><a href="detail.html" aria-current="page">作品详情</a></li><li><a href="about.html">关于</a></li></ul>
+    </nav>
+    <details class="menu">
+      <summary>菜单</summary>
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">作品</a></li><li><a href="detail.html">作品详情</a></li><li><a href="about.html">关于</a></li></ul>
+    </details>
+  </div>
+</header>
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">首页</a> / <a href="list.html">作品</a> / 动态视觉</p>
+  <article>
+    <h1>光年计划 · 主视觉</h1>
+    <p class="meta">年份 2026 · 类型 动态海报 / 现场背景</p>
+    <p><img src="image/work.svg" alt="光年计划主视觉：紫青渐变的波形构图"></p>
+    <h2>创作说明</h2>
+    <p>巡演需要一套能同时用在海报、门票和现场大屏上的视觉。约束是：印刷时必须是静止的，现场时必须是运动的，两者还得是同一个东西。</p>
+    <p>最后的做法是把波形作为唯一母题。静止版本是波形的一个截面，现场版本让这个截面沿时间轴展开——同一张图，两种不同的读法。</p>
+    <p>现场反馈里最有用的一条是：副歌段的展开速度应该减半。这个改动让画面在情绪最高处反而慢下来，比一味加速耐看得多。</p>
+  </article>
+</div>
+<section class="block"><div class="wrap">
+  <h2>更多作品</h2>
+  <ul class="cards" style="list-style:none" data-collection="works">
+    <article class="card reveal" data-component="work-card">
+      <p><img src="image/work.svg" alt="回声档案 作品缩略图" data-slot="work.cover"></p>
+      <h3><a href="detail.html" data-slot="work.url"><span data-slot="work.title">回声档案</span></a></h3>
+      <p data-slot="work.summary">声音博物馆的导览界面，用波形替代时间轴。</p>
+      <p class="meta" data-slot="work.year">2024</p>
+    </article>
+    <article class="card reveal" data-component="work-card">
+      <p><img src="image/work.svg" alt="纸上的轨道 作品缩略图" data-slot="work.cover"></p>
+      <h3><a href="detail.html" data-slot="work.url"><span data-slot="work.title">纸上的轨道</span></a></h3>
+      <p data-slot="work.summary">地铁线路图的实验性重绘，只保留换乘关系。</p>
+      <p class="meta" data-slot="work.year">2024</p>
+    </article>
+  </ul>
+</div></section>
+</main>
+<footer class="site-footer" data-component="site-footer">
+  <div class="wrap">
+    <span>光年计划 · 静态站点原型（演示用样例内容）</span>
+    <span>设计包 tech-aurora · 可直接双击浏览</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>项目 · 林述</title>
+<meta name="description" content="林述做过的课程项目与个人练习。">
+<link rel="stylesheet" href="css/base.css">
+
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<header class="site-header" data-component="site-header">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="text-decoration:none">林述</a></div>
+    <nav class="nav" aria-label="主导航">
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html" aria-current="page">项目</a></li><li><a href="about.html">关于</a></li></ul>
+    </nav>
+    <details class="menu">
+      <summary>菜单</summary>
+      <ul><li><a href="index.html">首页</a></li><li><a href="list.html">项目</a></li><li><a href="about.html">关于</a></li></ul>
+    </details>
+  </div>
+</header>
+<main>
+<div class="wrap hero">
+  <h1>我的项目</h1>
+  <p class="lead">课程作业与课余练习，共 3 个。</p>
+</div>
+<section class="block" style="border-top:1px solid var(--border)"><div class="wrap">
+  <h2>项目列表</h2>
+  <ul class="cards" style="list-style:none" data-collection="projects">
+    <article class="card" data-component="project-card">
+      <h3><a href="#" data-slot="project.url"><span data-slot="project.title">课程表小程序</span></a></h3>
+      <p data-slot="project.summary">帮室友做的选课辅助工具，能按空余时间反查可选课程。</p>
+      <p class="meta" data-slot="project.year">2026</p>
+    </article>
+    <article class="card" data-component="project-card">
+      <h3><a href="#" data-slot="project.url"><span data-slot="project.title">校园二手书平台原型</span></a></h3>
+      <p data-slot="project.summary">课程设计作业，完成了从信息架构到高保真原型的全流程。</p>
+      <p class="meta" data-slot="project.year">2025</p>
+    </article>
+    <article class="card" data-component="project-card">
+      <h3><a href="#" data-slot="project.url"><span data-slot="project.title">天气数据可视化作业</span></a></h3>
+      <p data-slot="project.summary">把一年的本地天气数据做成可交互的时间轴。</p>
+      <p class="meta" data-slot="project.year">2025</p>
+    </article>
+  </ul>
+</div></section>
+</main>
+<footer class="site-footer" data-component="site-footer">
+  <div class="wrap">
+    <span>林述 · 静态站点原型（演示用样例内容）</span>
+    <span>设计包 glassmorphism · 可直接双击浏览</span>
+  </div>
+</footer>
+
+</body>
+</html>

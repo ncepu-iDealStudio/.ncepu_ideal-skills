@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>昊衡能源 — retro-futuristic 复古未来预览</title>
+<style>
+:root{
+  --bg:#0A0014; --surface:#12081F; --text:#EDE6FF; --muted:#8F82B8;
+  --pink:#FF006E; --cyan:#00FFFF; --border:#2E1F45;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Space Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;background:var(--bg);color:var(--text);line-height:1.7;font-size:14px}
+/* CRT 扫描线覆盖层 */
+body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.07;
+  background:repeating-linear-gradient(0deg,#000 0,#000 2px,transparent 2px,transparent 4px)}
+.container{max-width:1160px;margin:0 auto;padding:0 24px}
+/* header */
+.site-header{border-bottom:1px solid var(--border)}
+.site-header .container{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{font-size:17px;font-weight:700;letter-spacing:.2em;color:var(--cyan);text-shadow:0 0 10px rgba(0,255,255,.7)}
+.nav{display:flex;gap:26px}
+.nav a{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase}
+.nav a[aria-current]{color:var(--pink);text-shadow:0 0 8px rgba(255,0,110,.8)}
+/* hero */
+.hero{padding:96px 0;border-bottom:1px solid var(--border);text-align:center}
+.hero .kicker{font-size:12px;letter-spacing:.4em;color:var(--pink);margin-bottom:24px}
+.hero h1{font-size:58px;line-height:1.2;letter-spacing:.06em;color:var(--text);
+  text-shadow:2px 0 var(--pink),-2px 0 var(--cyan)}
+.hero p{color:var(--muted);margin:26px auto 40px;max-width:36em}
+.btn{display:inline-block;padding:12px 34px;text-decoration:none;font-size:13px;letter-spacing:.15em;border:1px solid}
+.btn-primary{color:var(--pink);border-color:var(--pink);box-shadow:0 0 16px rgba(255,0,110,.5),inset 0 0 10px rgba(255,0,110,.15)}
+.btn-primary:hover{background:rgba(255,0,110,.12)}
+.btn-ghost{color:var(--cyan);border-color:var(--cyan);margin-left:14px;box-shadow:0 0 16px rgba(0,255,255,.35)}
+.hero-panel{margin:64px auto 0;max-width:760px;border:1px solid var(--cyan);background:var(--surface);box-shadow:0 0 24px rgba(0,255,255,.2);text-align:left}
+.panel-head{display:flex;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--cyan);font-size:11px;letter-spacing:.15em;color:var(--cyan)}
+.panel-body{display:grid;grid-template-columns:repeat(4,1fr)}
+.metric{padding:22px 16px;border-right:1px solid var(--border)}
+.metric:last-child{border-right:none}
+.metric b{display:block;font-size:26px;color:var(--pink);text-shadow:0 0 8px rgba(255,0,110,.6);font-variant-numeric:tabular-nums}
+.metric span{font-size:11px;color:var(--muted)}
+/* sections */
+.section{padding:64px 0;border-bottom:1px solid var(--border)}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:28px}
+.section-head h2{font-size:22px;letter-spacing:.2em;color:var(--cyan);text-shadow:0 0 10px rgba(0,255,255,.5)}
+.section-head a{color:var(--muted);text-decoration:none;font-size:12px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{border:1px solid var(--border);background:var(--surface);padding:24px}
+.card:hover{border-color:var(--pink);box-shadow:0 0 18px rgba(255,0,110,.25)}
+.card .code{font-size:11px;letter-spacing:.2em;color:var(--pink);margin-bottom:14px}
+.card h3{font-size:16px;margin-bottom:10px}
+.card p{font-size:13px;color:var(--muted)}
+.card .spec{margin-top:18px;padding-top:12px;border-top:1px dashed var(--border);font-size:12px;color:var(--muted)}
+.card .spec b{color:var(--cyan)}
+/* news */
+.news-item{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:18px 0;border-bottom:1px dashed var(--border)}
+.news-item time{color:var(--muted);font-size:12px;padding-top:3px}
+.news-item h3{font-size:15px;margin-bottom:6px}
+.news-item a{color:var(--text);text-decoration:none}
+.news-item a:hover{color:var(--pink)}
+.news-item p{font-size:13px;color:var(--muted)}
+/* footer */
+.site-footer{padding:36px 0}
+.site-footer .container{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.site-footer b{color:var(--cyan)}
+@media(max-width:900px){.hero h1{font-size:34px}.grid-3,.panel-body{grid-template-columns:1fr}.metric{border-right:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="logo">▚ HAOHENG.CORP</div>
+    <nav class="nav" aria-label="主导航">
+      <a href="#" aria-current="page">首页</a><a href="#">产品中心</a><a href="#">新闻动态</a><a href="#">关于我们</a><a href="#">联系我们</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="kicker">POWER · CELL · FUTURE — EST. 2009</div>
+      <h1>为每一度电<br>负责到底</h1>
+      <p>锂离子电池与工商业储能系统的研发制造。产品出口 27 国，覆盖家庭、工业与电网侧场景。</p>
+      <a class="btn btn-primary" href="#products">查看产品矩阵</a>
+      <a class="btn btn-ghost" href="#">联系我们</a>
+      <div class="hero-panel">
+        <div class="panel-head"><span>SYS.METRICS // FY2026</span><span>SAMPLE DATA</span></div>
+        <div class="panel-body">
+          <div class="metric"><b>305</b><span>Wh/kg 电芯能量密度</span></div>
+          <div class="metric"><b>4000+</b><span>次循环寿命</span></div>
+          <div class="metric"><b>03</b><span>大智造基地</span></div>
+          <div class="metric"><b>27</b><span>国出口覆盖</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="products">
+    <div class="container">
+      <div class="section-head"><h2>产品矩阵</h2><a href="#">全部产品 →</a></div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="code">[ HH-S1 / HOME ]</div>
+          <h3>昊能 S1 家用储能电池</h3>
+          <p>模块化堆叠，适配主流混合逆变器。</p>
+          <div class="spec">容量 <b>5–20 kWh</b> · 质保 <b>10Y</b></div>
+        </article>
+        <article class="card">
+          <div class="code">[ HH-L / POWER ]</div>
+          <h3>昊动力 L 系列锂电池组</h3>
+          <p>高倍率放电，宽温域运行。</p>
+          <div class="spec">倍率 <b>10C</b> · 温域 <b>-20~60°C</b></div>
+        </article>
+        <article class="card">
+          <div class="code">[ HH-C215 / C&I ]</div>
+          <h3>昊衡工汇储能系统</h3>
+          <p>一体化机柜，峰谷套利与需量管理。</p>
+          <div class="spec">容量 <b>215 kWh</b> · 效率 <b>95.5%</b></div>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2>新闻动态</h2><a href="#">更多新闻 →</a></div>
+      <article class="news-item"><time datetime="2026-09-02">2026-09-02</time><div><h3><a href="#">昊衡能源工商业储能项目落地苏州工业园</a></h3><p>项目装机 4.3 MWh，预计年削峰电量 260 万度。</p></div></article>
+      <article class="news-item"><time datetime="2026-08-18">2026-08-18</time><div><h3><a href="#">新一代 305 Wh/kg 电芯量产下线</a></h3><p>第三代磷酸铁锂体系通过针刺与过充双重验证。</p></div></article>
+      <article class="news-item"><time datetime="2026-07-30">2026-07-30</time><div><h3><a href="#">昊衡能源亮相慕尼黑电池展</a></h3><p>现场签约欧洲区域经销商 5 家。</p></div></article>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div><b>HAOHENG.CORP</b> / 昊衡能源 · 智慧储能系统制造商</div>
+    <div>设计包预览 retro-futuristic · 本页所有内容为演示用样例数据</div>
+  </div>
+</footer>
+</body>
+</html>

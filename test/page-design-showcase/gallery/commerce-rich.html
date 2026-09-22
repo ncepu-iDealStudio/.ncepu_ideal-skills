@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>昊衡能源旗舰店 — commerce-rich 电商丰富预览</title>
+<style>
+:root{
+  --bg:#FFFFFF; --surface:#F6F6F6; --text:#222222; --muted:#888888;
+  --red:#E1251B; --orange:#FF7A00; --border:#EAEAEA;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:0 16px}
+.num{font-variant-numeric:tabular-nums}
+/* 顶部条 */
+.topbar{background:var(--red);color:#fff;font-size:12px;text-align:center;padding:6px 0;letter-spacing:.05em}
+/* header */
+.site-header{background:#fff;border-bottom:1px solid var(--border)}
+.site-header .container{display:flex;align-items:center;gap:28px;height:64px}
+.logo{font-size:20px;font-weight:800}
+.logo b{color:var(--red)}
+.search{flex:1;display:flex;border:2px solid var(--red);border-radius:4px;overflow:hidden;max-width:520px}
+.search input{flex:1;border:none;padding:9px 14px;font-size:14px;outline:none}
+.search button{border:none;background:var(--red);color:#fff;padding:0 24px;font-size:14px;cursor:pointer}
+.header-links{display:flex;gap:20px;margin-left:auto;font-size:13px}
+.header-links a{color:var(--muted);text-decoration:none}
+/* 频道导航 */
+.channel-nav{background:#fff;border-bottom:1px solid var(--border)}
+.channel-nav .container{display:flex;gap:26px;padding:10px 16px;font-size:14px;overflow-x:auto;white-space:nowrap}
+.channel-nav a{color:var(--text);text-decoration:none}
+.channel-nav a[aria-current]{color:var(--red);font-weight:700}
+/* 促销 banner */
+.promo{margin:16px 0;display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.promo-main{background:linear-gradient(120deg,var(--red),var(--orange));border-radius:8px;color:#fff;padding:36px 32px;position:relative;overflow:hidden}
+.promo-main h2{font-size:28px;font-weight:800;margin-bottom:8px}
+.promo-main p{opacity:.9;font-size:14px}
+.promo-main .cta{display:inline-block;margin-top:18px;background:#fff;color:var(--red);font-weight:700;padding:10px 26px;border-radius:999px;text-decoration:none;font-size:14px}
+.promo-side{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px}
+.promo-side h3{font-size:15px;margin-bottom:12px;color:var(--red)}
+.promo-side ul{list-style:none;font-size:13px;color:var(--muted)}
+.promo-side li{padding:7px 0;border-bottom:1px dashed var(--border)}
+/* 商品网格 */
+.section{padding:20px 0 32px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.section-head h2{font-size:20px;font-weight:800}
+.section-head h2::before{content:"";display:inline-block;width:4px;height:18px;background:var(--red);margin-right:8px;vertical-align:-2px;border-radius:2px}
+.section-head a{font-size:13px;color:var(--muted);text-decoration:none}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.goods{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:box-shadow .2s ease;position:relative}
+.goods:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.goods .pic{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:13px;color:#bbb;overflow:hidden}
+.p1{background:linear-gradient(135deg,#F0F6FF,#DDEBFF)}.p2{background:linear-gradient(135deg,#FFF6EF,#FFE9D6)}
+.p3{background:linear-gradient(135deg,#F1FBF4,#DCF4E3)}.p4{background:linear-gradient(135deg,#FBF3FF,#F1DFFF)}
+.goods .pic:hover{background-size:105% 105%}
+.badge{position:absolute;top:0;left:0;background:var(--red);color:#fff;font-size:11px;padding:3px 10px;border-radius:8px 0 8px 0;font-weight:700}
+.badge.new{background:var(--orange)}
+.goods .info{padding:12px 14px 14px}
+.goods h3{font-size:13px;font-weight:400;line-height:1.5;height:40px;overflow:hidden}
+.goods .price-row{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.price{color:var(--red);font-weight:800;font-size:20px}
+.price small{font-size:12px;font-weight:700}
+.price del{color:#bbb;font-size:12px;font-weight:400}
+.sold{font-size:11px;color:var(--muted);margin-left:auto}
+/* footer */
+.site-footer{background:var(--surface);border-top:1px solid var(--border);padding:28px 0;margin-top:24px;text-align:center;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}.promo{grid-template-columns:1fr}.search{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar">年中大促 · 户用储能限时直降 · 满 5000 减 300 · 样例数据演示页</div>
+<header class="site-header">
+  <div class="container">
+    <div class="logo">昊衡<b>旗舰店</b></div>
+    <form class="search" role="search">
+      <input type="search" placeholder="搜索：储能电池 / 电池组 / 配件" aria-label="搜索商品">
+      <button type="submit">搜索</button>
+    </form>
+    <div class="header-links"><a href="#">我的订单</a><a href="#">购物车</a><a href="#">客服</a></div>
+  </div>
+</header>
+<nav class="channel-nav" aria-label="分类导航">
+  <div class="container">
+    <a href="#" aria-current="page">首页</a><a href="#">家用储能</a><a href="#">动力电池</a><a href="#">工商业储能</a><a href="#">移动电源</a><a href="#">配件专区</a><a href="#">以旧换新</a><a href="#">企业采购</a>
+  </div>
+</nav>
+<main class="container">
+  <div class="promo">
+    <div class="promo-main">
+      <h2>昊能 S1 新品首发 · 下单立减 ¥800</h2>
+      <p>家用储能旗舰款 · 10 年质保 · 免费上门勘测</p>
+      <a class="cta" href="#hot">立即抢购</a>
+    </div>
+    <div class="promo-side">
+      <h3>今日直降榜</h3>
+      <ul>
+        <li>昊能 S1 10kWh · 直降 ¥800</li>
+        <li>昊动力 L2 电池组 · 直降 ¥450</li>
+        <li>便携电源 600W · 直降 ¥200</li>
+        <li>光伏充电板 400W · 直降 ¥150</li>
+      </ul>
+    </div>
+  </div>
+  <section class="section" id="hot">
+    <div class="section-head"><h2>热卖爆款</h2><a href="#">查看更多 →</a></div>
+    <div class="grid-4">
+      <article class="goods">
+        <span class="badge">直降</span>
+        <div class="pic p1">产品图 · 昊能 S1</div>
+        <div class="info">
+          <h3>昊能 S1 家用储能电池 10kWh 堆叠式 10年质保</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>5999</span><span class="price num"><del>6799</del></span><span class="sold">月销 320 件</span></div>
+        </div>
+      </article>
+      <article class="goods">
+        <span class="badge new">新品</span>
+        <div class="pic p2">产品图 · 昊动力 L2</div>
+        <div class="info">
+          <h3>昊动力 L2 锂电池组 48V 高倍率 电动工具专用</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>1249</span><span class="price num"><del>1699</del></span><span class="sold">月销 1.1k 件</span></div>
+        </div>
+      </article>
+      <article class="goods">
+        <div class="pic p3">产品图 · 便携电源</div>
+        <div class="info">
+          <h3>昊衡便携储能电源 600W 户外露营 快充</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>899</span><span class="sold">月销 560 件</span></div>
+        </div>
+      </article>
+      <article class="goods">
+        <div class="pic p4">产品图 · 工汇机柜</div>
+        <div class="info">
+          <h3>昊衡工汇 215kWh 工商业储能机柜 企业定制</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>面议</span><span class="sold">已售 46 台</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head"><h2>配件专区</h2><a href="#">查看更多 →</a></div>
+    <div class="grid-4">
+      <article class="goods">
+        <div class="pic p1">产品图 · 充电板</div>
+        <div class="info">
+          <h3>400W 单晶光伏充电板 折叠便携 配储能用</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>749</span><span class="sold">月销 230 件</span></div>
+        </div>
+      </article>
+      <article class="goods">
+        <div class="pic p2">产品图 · 逆变器</div>
+        <div class="info">
+          <h3>混合逆变器 5kW 适配昊能全系列储能电池</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>2199</span><span class="sold">月销 89 件</span></div>
+        </div>
+      </article>
+      <article class="goods">
+        <div class="pic p3">产品图 · 线材套装</div>
+        <div class="info">
+          <h3>原厂铜芯线材套装 安德森插头 储能干线专用</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>159</span><span class="sold">月销 2.3k 件</span></div>
+        </div>
+      </article>
+      <article class="goods">
+        <div class="pic p4">产品图 · 监控屏</div>
+        <div class="info">
+          <h3>储能状态监控屏 4 英寸 实时功率显示</h3>
+          <div class="price-row"><span class="price num"><small>¥</small>299</span><span class="sold">月销 410 件</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">昊衡旗舰店 · 设计包预览 commerce-rich · 本页所有商品与价格为演示用样例数据</div>
+</footer>
+</body>
+</html>
