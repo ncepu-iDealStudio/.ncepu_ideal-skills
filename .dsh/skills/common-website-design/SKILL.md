@@ -1,9 +1,9 @@
 ---
-name: page-design
+name: common-website-design
 description: 根据自然语言需求生成框架无关的语义化静态网站设计原型（多页面 HTML + 统一样式 + site-manifest.json）。当用户要求设计网站、博客、企业官网、落地页、资讯/门户/作品集页面原型，或需要一套可后续拆解为 Vue/Hugo/Hexo/EJS 模板的通用 HTML 页面时，使用本技能。不生成任何具体框架的项目代码。
 ---
 
-# Page Design（页面设计原型生成）
+# Common Website Design（通用网站设计原型生成）
 
 ## 目标与边界
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""page-design 输出验证器（Python 标准库，无第三方依赖）
+"""common-website-design 输出验证器（Python 标准库，无第三方依赖）
 
 用法:
     python validate.py <template目录或site目录>

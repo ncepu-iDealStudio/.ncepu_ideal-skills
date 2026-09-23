@@ -1,4 +1,4 @@
-# page-design
+# common-website-design
 
 把自然语言描述的网站需求，转成一套**框架无关的静态 HTML 设计原型**。
 
@@ -50,7 +50,7 @@
 ## 目录结构
 
 ```
-page-design/
+common-website-design/
 ├── SKILL.md            ← 工作流与路由（生成站点时以此为准）
 ├── PLAN.md             ← V1 设计规格书（开发依据，非操作指南）
 ├── README.md           ← 本文件
@@ -99,4 +99,4 @@ python scripts/validate.py <输出根目录>/template
 
 ## 成品示例
 
-`../page-design-showcase/` 是本 skill 的产出示例，含设计包画廊与四个端到端生成的站点。
+`../../../test/page-design-showcase/` 是本 skill 的产出示例，含设计包画廊与四个端到端生成的站点。

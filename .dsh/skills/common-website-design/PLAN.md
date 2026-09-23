@@ -1,6 +1,6 @@
-# 页面生成 Skill（page-design）V1 设计规格书
+# 页面生成 Skill（common-website-design）V1 设计规格书
 
-> **给正在执行站点生成任务的 Agent：本文档是开发规格书，不是操作指南。生成站点请直接遵循 `.workbuddy/skills/page-design/SKILL.md` 的工作流，无需阅读本文档。**
+> **给正在执行站点生成任务的 Agent：本文档是开发规格书，不是操作指南。生成站点请直接遵循 `.workbuddy/skills/common-website-design/SKILL.md` 的工作流，无需阅读本文档。**
 
 > 版本：V1.0 草案（2026-09-18）
 > 状态：架构冻结，七个关键问题已全部拍板，本文档为实现依据
@@ -23,7 +23,7 @@
 ```
 学生自然语言需求
       ↓
-  page-design Skill          ← 本项目
+  common-website-design Skill ← 本项目
       ↓
 框架无关 HTML 原型
       ↓
@@ -331,4 +331,4 @@ V1.1 预留：浏览器渲染级验证（桌面/移动截图、横向溢出、�
 
 ### 10.3 Skill 安装位置
 
-项目级：`.workbuddy/skills/page-design/`（随本项目分发，与老师 MIT 开源库合并时保持同等许可证纪律）。
+项目级：`.workbuddy/skills/common-website-design/`（随本项目分发，与老师 MIT 开源库合并时保持同等许可证纪律）。

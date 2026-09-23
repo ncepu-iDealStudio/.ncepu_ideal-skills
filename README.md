@@ -64,6 +64,41 @@ python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 
 ---
 
+### 5️⃣ common-website-design
+
+通用网站设计原型生成技能：把自然语言网站需求转成**框架无关的静态 HTML 设计原型**（多页面 HTML + 统一样式 + `site-manifest.json`），可后续拆解为 Vue / Hugo / Hexo / EJS 模板。本技能自身不生成任何框架项目代码。
+
+- 三个正交维度：8 种页面原型 × 内容模型 × 9 个内置设计包（候选确认制）
+- 内置验证器 `scripts/validate.py`（Python 标准库，零依赖）
+- 成品示例：[test/page-design-showcase](test/page-design-showcase/README.md)
+- 安装位置：`.workbuddy/skills/common-website-design/`、`.dsh/skills/common-website-design/`
+
+---
+
+### 6️⃣ it-requirement-analysis
+
+IT 需求分析专家技能：把业务诉求转化为可落地、可验收、可开发的 IT 系统标准，输出 PRD、用户故事、功能/非功能需求、风险依赖与验收标准。AI 应用优先、渐进式输出、选择题式交互。
+
+- 安装位置：`.cursor/skills/it-requirement-analysis/`、`.dsh/skills/it-requirement-analysis/`、`.workbuddy/skills/it-requirement-analysis/`
+
+---
+
+### 7️⃣ prd-html-skill
+
+PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HTML 交付，把 PRD / 需求文档 / 页面清单转成可交互的多页面原型，并支持打包成单文件离线 HTML。
+
+- 安装位置：`.cursor/skills/prd-html-skill/`、`.dsh/skills/prd-html-skill/`
+
+---
+
+### 8️⃣ md-prd-to-html-prototype
+
+读取本地 Markdown 格式 PRD，提取角色、页面、字段与交互逻辑，输出**完全独立的单文件 HTML 原型**（内联全部 CSS/JS，无外部资源，双击即可打开）。
+
+- 安装位置：`.workbuddy/skills/md-prd-to-html-prototype/`
+
+---
+
 ## 🏗️ 仓库结构
 
 ```
@@ -94,6 +129,11 @@ ncepu_ideal-skills/
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
+├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
+├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
+├── 📁 .workbuddy/skills/                           # 🧠 通用技能（WorkBuddy）
+├── 📁 .cursor/skills/                              # 🧠 通用技能（Cursor）
+├── 📁 .dsh/skills/                                 # 🧠 通用技能（DSH）
 └── 📁 test/                                        # 🧪 技能生成示例项目
     ├── sql-to-fastapi-example/
     ├── sql-to-flask-exmaple.com/
