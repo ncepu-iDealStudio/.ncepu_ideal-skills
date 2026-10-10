@@ -44,6 +44,7 @@ resources/
 │   │   ├── models/         # 模型基类
 │   │   ├── schemas/        # 响应模型
 │   │   ├── api/            # API路由
+│   │   ├── repository/     # 仓储层骨架
 │   │   ├── service/        # 服务层
 │   │   ├── utils/          # 工具模块（基线）
 │   │   ├── middleware/     # 安全中间件（基线）
@@ -564,31 +565,46 @@ tests/
 │   ├── events.py           # 生命周期管理器
 │   ├── exceptions.py       # 异常处理器
 │   ├── middleware.py       # 中间件注册
-│   └── router.py           # 路由注册
+│   ├── router.py           # 路由注册
+│   ├── routes.py
+│   └── config.py
 ├── config/
 │   ├── __init__.py
 │   ├── config_unified.py   # BaseConfig + 各环境
 │   ├── config_factory.py   # FASTAPI_ENV + settings 门面
-│   └── manage.py           # 可选 CLI
+│   ├── manage.py           # 可选 CLI
+│   └── settings.py
 ├── core/
 │   ├── __init__.py
 │   ├── database.py        # 数据库连接
-│   └── dependencies.py    # 依赖注入容器
+│   ├── dependencies.py    # 依赖注入容器
+│   ├── cache.py
+│   ├── security.py
+│   ├── permissions.py
+│   └── queue.py
 ├── models/
-│   └── __init__.py        # 导出Base
+│   ├── __init__.py        # 导出Base
+│   └── base.py
 ├── schemas/
 │   ├── __init__.py
 │   └── response.py        # 统一响应模型（含ErrorResponse）
 ├── middleware/            # BASELINE（已有则跳过）
+│   ├── __init__.py
 │   ├── security_headers.py
 │   ├── rate_limiter.py
 │   └── audit_middleware.py
 ├── utils/                 # BASELINE（已有则跳过）
 │   ├── __init__.py
 │   ├── logger.py
+│   ├── loguru.py
 │   ├── custom_exceptions.py
 │   ├── response_code.py
-│   └── ...（见 project_baseline.json）
+│   ├── validators.py
+│   ├── masking.py
+│   ├── ids.py
+│   ├── auth.py
+│   ├── security.py
+│   └── audit.py
 ├── docker/                # BASELINE（起步 compose）
 ├── deploy/                # BASELINE（进阶运维）
 ├── repository/            # 数据访问层（仅 create/delete/update/get，增删改查，可覆盖）

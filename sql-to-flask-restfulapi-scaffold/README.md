@@ -78,6 +78,9 @@ sql-to-flask-restfulapi-scaffold/
     │   └── bundle_preview/
     └── static/
         └── utils/
+            ├── business/
+            ├── core/
+            └── security/
 ```
 
 目录职责：
@@ -105,11 +108,16 @@ sql-to-flask-restfulapi-scaffold/
 
 ### 1. 生成的目标项目结构
 
-目标项目是 Flask 分层接口工程，典型结构如下（参考 `test/sql-to-flask-example`）：
+目标项目是 Flask 分层接口工程。技能模板 `resources/templates/project_structure/` 提供可启动骨架；下面是示例工程 `test/sql-to-flask-example` 的实际目录：
 
 ```text
-target-project/
+sql-to-flask-example/
 ├── manage.py
+├── requirements.txt
+├── __init__.py
+├── gunicorn.py
+├── dockerfile
+├── docker-compose.yml
 ├── app/
 ├── api_1_0/
 ├── models/
@@ -117,9 +125,14 @@ target-project/
 ├── service/
 ├── config/
 ├── utils/
-├── test/
-└── requirements.txt
+├── common/
+├── deploy/
+└── test/
+    ├── unitest/
+    └── performance_test/
 ```
+
+其中 `common/`、`deploy/`、`gunicorn.py`、`dockerfile`、`docker-compose.yml` 属于示例工程自带目录，不在技能骨架模板里。
 
 分层职责：
 
@@ -169,11 +182,11 @@ target-project/
 
 ### 1. 在 AI 开发工具中使用的指南或文档
 
-优先阅读 `docs/` 下文档：
+优先阅读仓库根目录 `docs/` 下文档：
 
-1. `docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`
-2. `docs/claude中使用skill配置.md`
-3. `docs/Trea中使用skill配置.md`
+1. [`docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`](../docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md)
+2. [`docs/claude中使用skill配置.md`](../docs/claude中使用skill配置.md)
+3. [`docs/Trea中使用skill配置.md`](../docs/Trea中使用skill配置.md)
 
 说明：
 

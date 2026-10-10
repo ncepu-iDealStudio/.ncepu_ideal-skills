@@ -64,41 +64,102 @@ python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 
 ---
 
+### 5️⃣ common-website-design
+
+Turn a natural-language website brief into a framework-agnostic static HTML design prototype (multi-page HTML, shared styles, and `site-manifest.json`). It does not generate Vue, Hugo, Hexo, or EJS project code.
+
+- Installed at `.workbuddy/skills/common-website-design/` and `.dsh/skills/common-website-design/`
+- Sample output: [test/page-design-showcase](test/page-design-showcase/README.md)
+
+---
+
+### 6️⃣ it-requirement-analysis
+
+Turn a business request into an implementable IT specification: PRD, user stories, functional and non-functional requirements, risks, and acceptance criteria.
+
+- Installed at `.cursor/skills/it-requirement-analysis/`, `.dsh/skills/it-requirement-analysis/`, and `.workbuddy/skills/it-requirement-analysis/`
+
+---
+
+### 7️⃣ prd-html-skill
+
+Turn a PRD, requirement note, or page list into a clickable multi-page HTML prototype, including a single-file offline HTML bundle.
+
+- Installed at `.cursor/skills/prd-html-skill/` and `.dsh/skills/prd-html-skill/`
+
+---
+
+### 8️⃣ md-prd-to-html-prototype
+
+Read a local Markdown PRD and emit a self-contained single-file HTML prototype (inlined CSS and JS, no external assets).
+
+- Installed at `.workbuddy/skills/md-prd-to-html-prototype/`
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
 ncepu_ideal-skills/
 ├── 📄 README.md                                    # Project documentation
 ├── 📄 README.en.md                                 # English documentation
+├── 📄 CODEBUDDY.md                                 # CodeBuddy skill notes
 ├── 📄 .gitignore
-├── 📁 docs/                                        # Configuration guides
+├── 📁 docs/                                        # Guides and design notes
 │   ├── Trea中使用skill配置.md
 │   ├── claude中使用skill配置.md
-│   └── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
-├── 📁 sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI skill
+│   ├── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
+│   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
+│   └── images/                                     # Setup screenshots
+├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI skill
+│   ├── README.md
+│   ├── SKILL.md
+│   ├── docs/
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       └── templates/
+├── 📁 sql-to-flask-restfulapi-scaffold/            # 🐍 Flask skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       ├── static/
+│       └── demo_output/
+├── 📁 sql-to-springboot-restfulapi-scaffold/       # ☕ Spring Boot skill
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
 │       ├── config/
 │       ├── specifications/
 │       └── templates/
-├── 📁 sql-to-flask-restfulapi-scaffold/           # 🐍 Flask skill
+├── 📁 sql-to-gin-restfulapi-scaffold/              # 🌀 Gin skill
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
-├── 📁 sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-├── 📁 sql-to-gin-restfulapi-scaffold/             # 🌀 Gin skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-└── 📁 test/                                        # 🧪 Generated example projects
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       ├── static/
+│       └── demo_output/
+├── 📁 .codebuddy/skills/                           # 20 superpowers-zh skills
+├── 📁 .agents/skills/                              # 20 superpowers-zh skills
+├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype
+├── 📁 .cursor/skills/                              # it-requirement-analysis, prd-html-skill
+├── 📁 .dsh/skills/                                 # common-website-design, it-requirement-analysis, prd-html-skill
+└── 📁 test/                                        # Generated samples and fixture SQL
+    ├── api_security_demo-20260717.sql
     ├── sql-to-fastapi-example/
-    ├── sql-to-flask-exmaple.com/
+    ├── sql-to-flask-example/
     ├── sql-to-gin-example/
-    └── sql-to-springboot-example/
+    ├── sql-to-springboot-example/
+    └── page-design-showcase/
+        ├── gallery/
+        └── sites/
 ```
 
 ---

@@ -36,6 +36,10 @@ API(Resource) → Service(单条委托 + 列表等业务) → Repository(仅 cre
 
 ```text
 sql-to-fastapi-restfulapi-scaffold/
+├── docs/
+│   ├── Trea中使用skill配置.md
+│   ├── claude中使用skill配置.md
+│   └── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
 ├── resources/
 │   ├── config/
 │   │   ├── naming_rules.json
@@ -60,14 +64,20 @@ sql-to-fastapi-restfulapi-scaffold/
 │           ├── .python-version
 │           ├── requirements.txt    # pip 兼容
 │           ├── start.py
+│           ├── .env.example
+│           ├── .env.docker
+│           ├── app/
+│           ├── api/
+│           ├── config/
+│           ├── core/
+│           ├── models/
+│           ├── schemas/
+│           ├── repository/
+│           ├── service/
 │           ├── utils/              # 基线工具包（与 project_baseline 对齐）
 │           ├── middleware/         # 基线中间件：安全头 / 限流 / 审计
 │           ├── docker/             # 起步 Docker：app + MySQL（Redis 可选）
-│           ├── deploy/             # 进阶运维配置（Nginx/监控/日志等）
-│           ├── repository/
-│           ├── service/
-│           ├── .env.docker
-│           └── ...
+│           └── deploy/             # 进阶运维配置（Nginx/监控/日志等）
 ├── README.md
 └── SKILL.md
 ```
@@ -150,52 +160,69 @@ fastapi_project/
 │   ├── events.py
 │   ├── exceptions.py
 │   ├── middleware.py
-│   └── router.py
+│   ├── router.py
+│   ├── routes.py
+│   └── config.py
 ├── config/
 │   ├── __init__.py
 │   ├── config_unified.py
 │   ├── config_factory.py
-│   └── manage.py
+│   ├── manage.py
+│   └── settings.py
 ├── core/
 │   ├── __init__.py
 │   ├── database.py
-│   └── dependencies.py
+│   ├── dependencies.py
+│   ├── cache.py
+│   ├── security.py
+│   ├── permissions.py
+│   └── queue.py
 ├── models/
 │   ├── __init__.py
-│   └── student.py
+│   ├── base.py
+│   └── student.py                 # 按表生成
 ├── schemas/
 │   ├── __init__.py
 │   ├── response.py
-│   └── student.py
-├── repository/                 # 可覆盖：仅 create/delete/update/get（增删改查，单条）
+│   └── student.py                 # 按表生成
+├── repository/                    # 可覆盖：仅 create/delete/update/get（增删改查，单条）
 │   ├── __init__.py
-│   └── student_repository.py
-├── service/                    # 人手维护：单条委托 + 列表等业务
+│   └── student_repository.py      # 按表生成
+├── service/                       # 人手维护：单条委托 + 列表等业务
 │   ├── __init__.py
-│   └── student_service.py
+│   ├── dependencies.py
+│   └── student_service.py         # 按表生成
 ├── api/
 │   ├── __init__.py
 │   └── v1/
 │       ├── __init__.py
-│       └── student/            # 单数资源名
+│       └── student/               # 单数资源名，按表生成
 │           └── studentResource.py
-├── middleware/                 # BASELINE：安全头 / 限流 / 审计（配置开关默认关）
+├── middleware/                    # BASELINE：安全头 / 限流 / 审计（配置开关默认关）
 │   ├── __init__.py
 │   ├── security_headers.py
 │   ├── rate_limiter.py
 │   └── audit_middleware.py
-├── utils/                      # BASELINE：已存在则跳过（project_baseline.json）
+├── utils/                         # BASELINE：已存在则跳过（project_baseline.json）
 │   ├── __init__.py
 │   ├── logger.py
+│   ├── loguru.py
 │   ├── custom_exceptions.py
 │   ├── response_code.py
-│   ├── validators.py / masking.py / ids.py
-│   ├── auth.py / security.py / audit.py
+│   ├── validators.py
+│   ├── masking.py
+│   ├── ids.py
+│   ├── auth.py
+│   ├── security.py
+│   └── audit.py
+├── docker/                        # BASELINE：Dockerfile + docker-compose.yml
+├── deploy/                        # BASELINE：进阶运维，不进入默认 compose 必跑栈
 ├── start.py
-├── pyproject.toml          # uv / PEP 621 主依赖清单
-├── .python-version         # uv Python 版本钉选
-├── requirements.txt        # 兼容 pip（与 pyproject 同步）
-└── .env.example
+├── pyproject.toml                 # uv / PEP 621 主依赖清单
+├── .python-version                # uv Python 版本钉选
+├── requirements.txt               # 兼容 pip（与 pyproject 同步）
+├── .env.example
+└── .env.docker
 ```
 
 后续添加新表时，生成：

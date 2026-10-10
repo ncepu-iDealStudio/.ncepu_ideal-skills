@@ -15,82 +15,86 @@
 ## 项目结构
 
 ```
-src/main/java/com/security/apisecurity/
-├── ApiSecurityApplication.java          # 应用入口
-├── config/                               # 配置类
-├── controller/                           # REST 控制器
-│   ├── AdminController.java
-│   ├── CourseController.java
-│   ├── CourseArrangementController.java
-│   ├── SsoUserController.java
-│   ├── StudentController.java
-│   ├── StudentSelectedCourseController.java
-│   ├── SysClassInfoController.java
-│   ├── SysCollegeInfoController.java
-│   ├── SysDepartmentInfoController.java
-│   └── TeacherController.java
-├── dto/
-│   ├── request/                          # 请求 DTO
-│   │   ├── AdminRequest.java
-│   │   ├── CourseRequest.java
-│   │   ├── CourseArrangementRequest.java
-│   │   ├── SsoUserRequest.java
-│   │   ├── StudentRequest.java
-│   │   ├── StudentSelectedCourseRequest.java
-│   │   ├── SysClassInfoRequest.java
-│   │   ├── SysCollegeInfoRequest.java
-│   │   ├── SysDepartmentInfoRequest.java
-│   │   └── TeacherRequest.java
-│   └── response/                         # 响应 DTO
-│       ├── AdminResponse.java
-│       ├── ApiResponse.java
-│       ├── CourseResponse.java
-│       ├── CourseArrangementResponse.java
-│       ├── SsoUserResponse.java
-│       ├── StudentResponse.java
-│       ├── StudentSelectedCourseResponse.java
-│       ├── SysClassInfoResponse.java
-│       ├── SysCollegeInfoResponse.java
-│       ├── SysDepartmentInfoResponse.java
-│       └── TeacherResponse.java
-├── entity/                               # JPA 实体
-│   ├── Admin.java
-│   ├── Course.java
-│   ├── CourseArrangement.java
-│   ├── SsoUser.java
-│   ├── Student.java
-│   ├── StudentSelectedCourse.java
-│   ├── SysClassInfo.java
-│   ├── SysCollegeInfo.java
-│   ├── SysDepartmentInfo.java
-│   └── Teacher.java
-├── exception/                            # 异常处理
-│   ├── AccessDeniedException.java
-│   ├── BadRequestException.java
-│   ├── GlobalExceptionHandler.java
-│   └── ResourceNotFoundException.java
-├── repository/                           # 数据访问层
-│   ├── AdminRepository.java
-│   ├── CourseRepository.java
-│   ├── CourseArrangementRepository.java
-│   ├── SsoUserRepository.java
-│   ├── StudentRepository.java
-│   ├── StudentSelectedCourseRepository.java
-│   ├── SysClassInfoRepository.java
-│   ├── SysCollegeInfoRepository.java
-│   ├── SysDepartmentInfoRepository.java
-│   └── TeacherRepository.java
-└── service/                              # 业务逻辑层
-    ├── AdminService.java
-    ├── CourseService.java
-    ├── CourseArrangementService.java
-    ├── SsoUserService.java
-    ├── StudentService.java
-    ├── StudentSelectedCourseService.java
-    ├── SysClassInfoService.java
-    ├── SysCollegeInfoService.java
-    ├── SysDepartmentInfoService.java
-    └── TeacherService.java
+.
+├── pom.xml
+├── README.md
+├── .trae/skills/sql-to-springboot-restfulapi-scaffold/
+├── src/main/resources/application.properties
+└── src/main/java/com/security/apisecurity/
+    ├── ApiSecurityApplication.java
+    ├── controller/
+    │   ├── AdminController.java
+    │   ├── CourseController.java
+    │   ├── CourseArrangementController.java
+    │   ├── SsoUserController.java
+    │   ├── StudentController.java
+    │   ├── StudentSelectedCourseController.java
+    │   ├── SysClassInfoController.java
+    │   ├── SysCollegeInfoController.java
+    │   ├── SysDepartmentInfoController.java
+    │   └── TeacherController.java
+    ├── dto/
+    │   ├── request/
+    │   │   ├── AdminRequest.java
+    │   │   ├── CourseRequest.java
+    │   │   ├── CourseArrangementRequest.java
+    │   │   ├── SsoUserRequest.java
+    │   │   ├── StudentRequest.java
+    │   │   ├── StudentSelectedCourseRequest.java
+    │   │   ├── SysClassInfoRequest.java
+    │   │   ├── SysCollegeInfoRequest.java
+    │   │   ├── SysDepartmentInfoRequest.java
+    │   │   └── TeacherRequest.java
+    │   └── response/
+    │       ├── AdminResponse.java
+    │       ├── ApiResponse.java
+    │       ├── CourseResponse.java
+    │       ├── CourseArrangementResponse.java
+    │       ├── SsoUserResponse.java
+    │       ├── StudentResponse.java
+    │       ├── StudentSelectedCourseResponse.java
+    │       ├── SysClassInfoResponse.java
+    │       ├── SysCollegeInfoResponse.java
+    │       ├── SysDepartmentInfoResponse.java
+    │       └── TeacherResponse.java
+    ├── entity/
+    │   ├── Admin.java
+    │   ├── Course.java
+    │   ├── CourseArrangement.java
+    │   ├── SsoUser.java
+    │   ├── Student.java
+    │   ├── StudentSelectedCourse.java
+    │   ├── SysClassInfo.java
+    │   ├── SysCollegeInfo.java
+    │   ├── SysDepartmentInfo.java
+    │   └── Teacher.java
+    ├── exception/
+    │   ├── AccessDeniedException.java
+    │   ├── BadRequestException.java
+    │   ├── GlobalExceptionHandler.java
+    │   └── ResourceNotFoundException.java
+    ├── repository/
+    │   ├── AdminRepository.java
+    │   ├── CourseRepository.java
+    │   ├── CourseArrangementRepository.java
+    │   ├── SsoUserRepository.java
+    │   ├── StudentRepository.java
+    │   ├── StudentSelectedCourseRepository.java
+    │   ├── SysClassInfoRepository.java
+    │   ├── SysCollegeInfoRepository.java
+    │   ├── SysDepartmentInfoRepository.java
+    │   └── TeacherRepository.java
+    └── service/
+        ├── AdminService.java
+        ├── CourseService.java
+        ├── CourseArrangementService.java
+        ├── SsoUserService.java
+        ├── StudentService.java
+        ├── StudentSelectedCourseService.java
+        ├── SysClassInfoService.java
+        ├── SysCollegeInfoService.java
+        ├── SysDepartmentInfoService.java
+        └── TeacherService.java
 ```
 
 ## API 接口列表

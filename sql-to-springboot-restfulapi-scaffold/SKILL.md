@@ -26,25 +26,25 @@ description: "从SQL CREATE TABLE语句生成完整的Spring Boot RESTful API项
 ```
 resources/
 ├── templates/              # 代码模板
-│   ├── project_structure/   # 完整项目结构模板
+│   ├── project_structure/   # 首次生成的项目骨架（不含按表代码）
 │   │   ├── pom.xml
-│   │   ├── src/main/java/com/security/apisecurity/
-│   │   │   ├── config/
-│   │   │   ├── controller/
-│   │   │   ├── dto/
-│   │   │   ├── entity/
-│   │   │   ├── exception/
-│   │   │   ├── repository/
-│   │   │   ├── security/
-│   │   │   └── service/
-│   │   └── src/main/resources/
-│   │       └── application.properties
-│   └── layers/             # 各层代码模板
+│   │   └── src/main/
+│   │       ├── resources/application.properties
+│   │       └── java/com/security/apisecurity/
+│   │           ├── ApiSecurityApplication.java
+│   │           ├── config/          # SecurityConfig、CorsConfig
+│   │           ├── dto/response/    # ApiResponse
+│   │           ├── exception/
+│   │           ├── security/        # JWT 相关类
+│   │           └── service/         # UserDetailsServiceImpl
+│   └── layers/             # 按表生成的分层模板
 │       ├── entity/
 │       ├── repository/
 │       ├── service/
 │       ├── controller/
 │       └── dto/
+│           ├── request/
+│           └── response/
 ├── config/                 # 配置文件
 │   ├── type_mappings.json  # SQL类型到Java类型映射配置
 │   └── naming_rules.json   # 命名规则配置
@@ -64,6 +64,8 @@ resources/
 - `src/main/java/com/security/apisecurity/dto/response/ApiResponse.java` - 统一响应模型
 - `src/main/java/com/security/apisecurity/security/` - JWT安全相关类（代码生成但暂不启用）
 - `src/main/java/com/security/apisecurity/config/SecurityConfig.java` - 安全配置（代码生成但暂不启用）
+- `src/main/java/com/security/apisecurity/config/CorsConfig.java` - 跨域配置
+- `src/main/java/com/security/apisecurity/service/UserDetailsServiceImpl.java` - 用户详情服务
 
 **每个表生成的文件**：
 1. Entity 层 - JPA实体类 (`entity/{TableName}.java`)
@@ -321,14 +323,13 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 ├── src/main/resources/application.properties
 └── src/main/java/com/security/apisecurity/
     ├── ApiSecurityApplication.java
-    ├── config/ (SecurityConfig.java - 暂不启用)
+    ├── config/          # SecurityConfig.java、CorsConfig.java（安全配置暂不启用）
     ├── exception/
-    ├── dto/
-    ├── entity/
-    ├── repository/
-    ├── security/ (JWT相关类 - 暂不启用)
-    ├── service/
-    └── controller/
+    ├── dto/response/    # ApiResponse.java
+    ├── security/        # JWT 相关类（暂不启用）
+    └── service/         # UserDetailsServiceImpl.java
+
+按表生成后才会追加 entity/、repository/、controller/ 以及对应的 DTO、Service。
 
 📝 重要说明：
 - 安全配置已生成但暂不启用（pom.xml中依赖已注释）

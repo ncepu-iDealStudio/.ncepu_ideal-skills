@@ -53,13 +53,13 @@ description 是最重要的触发因素，应该清晰描述技能的适用场�
 
 ## 使用示例
 
-### sql-to-fastapi-scaffold 技能配置
+### sql-to-fastapi-restfulapi-scaffold 技能配置
 
 将此技能复制到 Claude Code 的 skills 目录：
 
 ```bash
 # 复制技能到全局目录
-cp -r sql-to-fastapi-scaffold ~/.claude/skills/
+cp -r sql-to-fastapi-restfulapi-scaffold ~/.claude/skills/
 ```
 
 技能会自动被 Claude 发现并根据需要激活。当你在对话中提供 SQL CREATE TABLE 语句时，Claude 会自动调用该技能生成 FastAPI 脚手架代码。
@@ -70,12 +70,12 @@ cp -r sql-to-fastapi-scaffold ~/.claude/skills/
 
 #### 以下是 配置项目skill的示例图文教程 ：
 ```bash
-mkdir -p .claude/skills && cp -r ../../sql-to-fastapi-scaffold .claude/skills/
+mkdir -p .claude/skills && cp -r ../../sql-to-fastapi-restfulapi-scaffold .claude/skills/
 ```
 ![alt text](images/claude-0.png)
 
 #### 打开 Claude Code，输入 `/skills` 查看已安装的技能列表。
 ![alt text](images/claude-1.png)
 
-#### 使用 技能 sql-to-fastapi-scaffold 生成 FastAPI 项目脚手架代码。
+#### 使用技能 sql-to-fastapi-restfulapi-scaffold 生成 FastAPI 项目脚手架代码。
 ![alt text](images/claude-2.png)

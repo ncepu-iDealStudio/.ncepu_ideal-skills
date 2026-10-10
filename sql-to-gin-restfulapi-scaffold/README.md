@@ -69,6 +69,7 @@ sql-to-gin-restfulapi-scaffold/
     │   ├── preview_generation_plan.py
     │   ├── render_demo_single_entity.py
     │   ├── render_preview_bundle.py
+    │   ├── render_utils.py
     │   ├── merge_router_registry.py
     │   ├── check_snapshots.py
     │   └── run_regression_pipeline.py
@@ -76,15 +77,18 @@ sql-to-gin-restfulapi-scaffold/
     │   ├── generated_context_study_flask_api.json
     │   ├── pipeline_report.json
     │   ├── regression_report_study_gin_api.md
+    │   ├── urls_merge_preview.go
+    │   ├── bundle_preview/
+    │   ├── single_entity/
     │   └── snapshots/
     └── static/
-      └── utils/
-        ├── README.md
-        └── core/
-          ├── path.go
-          ├── errors.go
-          ├── case.go
-          └── struct_map.go
+        └── utils/
+            ├── README.md
+            └── core/
+                ├── path.go
+                ├── errors.go
+                ├── case.go
+                └── struct_map.go
 ```
 
 目录职责说明：
@@ -113,26 +117,36 @@ sql-to-gin-restfulapi-scaffold/
 
 ### 1. 生成的目标项目结构
 
-目标项目为 Gin 分层结构，典型目录如下（参考 `test/sql-to-gin-example`）：
+目标项目为 Gin 分层结构。技能模板 `resources/templates/project_structure/` 提供 `main.go`、`cmd/`、`apis/`、`internal/`、`configs/`、`utils/`、`go.mod`。下面是示例工程 `test/sql-to-gin-example` 的实际目录：
 
 ```text
-target-project/
+sql-to-gin-example/
 ├── main.go
+├── go.mod
+├── go.sum
 ├── cmd/
+├── init/
 ├── apis/
-│   ├── start.go
 │   ├── routers/
+│   ├── middlewares/
 │   └── api_1_0/
 ├── internal/
 │   ├── models/
 │   ├── dao/
 │   ├── services/
 │   ├── globals/
-│   └── settings/
+│   ├── settings/
+│   ├── remote/
+│   └── rpcServer/
 ├── configs/
 ├── utils/
-└── go.mod
+├── pkg/
+├── assets/
+├── scripts/
+└── deploy/
 ```
+
+其中 `init/`、`pkg/`、`assets/`、`scripts/`、`deploy/`、`apis/middlewares/`、`internal/remote/`、`internal/rpcServer/` 属于示例工程自带目录，不在技能骨架模板里。
 
 各层职责：
 
@@ -178,15 +192,15 @@ target-project/
 
 ### 1. 在 AI 开发工具中使用的指南
 
-可先阅读 `docs/` 下通用使用文档，再结合本 README 操作本 Skill：
+可先阅读仓库根目录 `docs/` 下通用使用文档，再结合本 README 操作本 Skill：
 
-1. `docs/claude中使用skill配置.md`
-2. `docs/Trea中使用skill配置.md`
-3. `docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`
+1. [`docs/claude中使用skill配置.md`](../docs/claude中使用skill配置.md)
+2. [`docs/Trea中使用skill配置.md`](../docs/Trea中使用skill配置.md)
+3. [`docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`](../docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md)
 
 说明：
 
-- 当前 `docs/` 中暂无 Gin 专项使用文档，上述文档可作为 AI 工具接入流程参考。
+- 仓库根目录 `docs/` 中暂无 Gin 专项使用文档，上述文档可作为 AI 工具接入流程参考。
 - Gin Skill 的具体执行步骤与命令，请以本 README 和 `SKILL.md` 为准。
 
 常用命令（仓库根目录执行）：

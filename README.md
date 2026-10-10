@@ -105,40 +105,63 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 ncepu_ideal-skills/
 ├── 📄 README.md                                    # 项目说明
 ├── 📄 README.en.md                                 # 英文说明
+├── 📄 CODEBUDDY.md                                 # CodeBuddy 技能说明
 ├── 📄 .gitignore
-├── 📁 docs/                                        # 配置指南
+├── 📁 docs/                                        # 配置指南与设计方法
 │   ├── Trea中使用skill配置.md
 │   ├── claude中使用skill配置.md
-│   └── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
-├── 📁 sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI项目生成 技能
+│   ├── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
+│   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
+│   └── images/                                     # 配置截图
+├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI 项目生成技能
+│   ├── README.md
+│   ├── SKILL.md
+│   ├── docs/                                       # 本技能的 IDE 配置说明
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       └── templates/
+├── 📁 sql-to-flask-restfulapi-scaffold/            # 🐍 Flask 接口项目生成技能
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       ├── static/
+│       └── demo_output/
+├── 📁 sql-to-springboot-restfulapi-scaffold/       # ☕ Spring Boot 项目生成技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
 │       ├── config/
 │       ├── specifications/
 │       └── templates/
-├── 📁 sql-to-flask-restfulapi-scaffold/           # 🐍 Flask接口项目生成 技能
+├── 📁 sql-to-gin-restfulapi-scaffold/              # 🌀 Gin 接口项目生成技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
-├── 📁 sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot 项目生成  技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-├── 📁 sql-to-gin-restfulapi-scaffold/             # 🌀 Gin接口项目生成 技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       ├── static/
+│       └── demo_output/
 ├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
 ├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
-├── 📁 .workbuddy/skills/                           # 🧠 通用技能（WorkBuddy）
-├── 📁 .cursor/skills/                              # 🧠 通用技能（Cursor）
-├── 📁 .dsh/skills/                                 # 🧠 通用技能（DSH）
-└── 📁 test/                                        # 🧪 技能生成示例项目
+├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype
+├── 📁 .cursor/skills/                              # it-requirement-analysis、prd-html-skill
+├── 📁 .dsh/skills/                                 # common-website-design、it-requirement-analysis、prd-html-skill
+└── 📁 test/                                        # 🧪 技能生成示例与样例数据
+    ├── api_security_demo-20260717.sql
     ├── sql-to-fastapi-example/
-    ├── sql-to-flask-exmaple.com/
+    ├── sql-to-flask-example/
     ├── sql-to-gin-example/
-    └── sql-to-springboot-example/
+    ├── sql-to-springboot-example/
+    └── page-design-showcase/
+        ├── gallery/
+        └── sites/
 ```
 
 ---
