@@ -32,7 +32,7 @@ from schemas.response import (
 from utils.custom_exceptions import handle_service_exceptions
 
 
-router = APIRouter(prefix="/{{resource_singular}}", tags=["{{table_comment}}管理"])
+router = APIRouter(prefix="/{{route_prefix}}", tags=["{{table_comment}}管理"])
 
 
 @router.get(

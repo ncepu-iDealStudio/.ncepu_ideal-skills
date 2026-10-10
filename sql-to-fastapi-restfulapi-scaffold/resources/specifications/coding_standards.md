@@ -209,8 +209,9 @@ class ModelName(BaseModel):
 
 ### 7.1 路由前缀
 
-- 使用 `APIRouter(prefix="/{resource_singular}")`（路由前缀使用**单数**）
-- 文件夹命名使用单数：`api/v1/{resource_singular}/{resource_singular}Resource.py`
+- 文件夹与 Python 标识符使用 `resource_singular`（表名原样，蛇形单数）：`api/v1/{resource_singular}/{resource_singular}Resource.py`
+- HTTP 前缀使用另一个变量 `route_prefix`：`APIRouter(prefix="/{route_prefix}")`。它等于 `resource_singular` 把 `_` 换成 `-`，仍然单数。例如 `company_file` → 文件夹 `company_file`、前缀 `/company-file`
+- 不要把 `resource_singular` 直接写进 `prefix`，否则 `company_file` 会变成 `/company_file`
 - tags 使用中文说明
 
 ### 7.2 端点方法

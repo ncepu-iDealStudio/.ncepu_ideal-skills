@@ -7,7 +7,7 @@ description: "从SQL CREATE TABLE生成FastAPI脚手架：Model/Schema/Repositor
 
 ## 概述
 
-`sql-to-fastapi-scaffold` 是一个基于资源驱动的技能，用于从SQL表结构语句自动生成完整的 FastAPI 项目脚手架代码。该技能不依赖脚本，而是通过资源文件（模板、配置等）驱动大模型生成代码。
+`sql-to-fastapi-restfulapi-scaffold` 是一个基于资源驱动的技能，用于从 SQL 表结构语句自动生成完整的 FastAPI 项目脚手架代码。生成由资源文件（模板、配置、规范）驱动大模型完成。
 
 **分层架构**：
 
@@ -98,8 +98,7 @@ resources/
 - `models/__init__.py` - 模型包（导出 Base / BaseModel）
 - `schemas/__init__.py` - Schema包
 - `schemas/response.py` - 统一响应模型（success/code/data/meta）
-- `utils/` - **基线工具包**（见 `project_baseline.json`；含 `logger` / `custom_exceptions` / `validators` / `masking` / `ids` / `auth` / `security` / `response_code` / `audit` 等）
-- `middleware/` - **基线中间件**（`security_headers` / `rate_limiter` / `audit_middleware`；由 `app/middleware.py` 配置开关控制，默认关闭）
+- `utils/` - **基线工具包**（见 `project_baseline.json`；含 `logger` / `custom_exceptions` / `validators` / `masking` / `ids` / `auth` / `security` / `response_code` / `audit` 等；不要 `loguru.py`）
 - `docker/` - **基线 Docker**（`Dockerfile` + `docker-compose.yml`：app + MySQL，Redis 为 `--profile redis` 可选项）
 - `deploy/` - **基线进阶运维**（Nginx / MySQL·Redis 调优 / Prometheus·Grafana / Logstash / Supervisor / 部署脚本）
 - `api/__init__.py` - API包（导出 api_router + register_routers）
@@ -136,13 +135,17 @@ resources/
 > - 表 `student` → 文件夹 `api/v1/student/`、路由前缀 `/student`
 > - 表 `sys_class` → 文件夹 `api/v1/sys_class/`、路由前缀 `/sys-class`
 >
-> 只有以下位置使用表名/单数形式，其余（文件名、类名、前缀）均不得加 `s` 或变复数。
-> 复数（`company_files`、`students`）只会出现在 `tags=["xxx管理"]` 的中文展示文案里，绝不进入任何路径或文件名。
+> 文件夹、文件名、Python 标识符使用表名原样（`resource_singular`）。HTTP 前缀另用 `route_prefix`（下划线改连字符）。这两处都禁止加 `s` 或变成复数。
+> 复数只会出现在 `tags=["xxx管理"]` 的中文展示文案里。
 
-**不生成的文件**（根据用户要求）：
-- 部署相关配置（Docker、Nginx等）
-- 数据库初始化脚本
-- 监控和日志系统
+**不要生成的内容**：
+- 数据库初始化脚本（由用户放入 `database/`）
+- 按表拆分的 Docker / Nginx / 监控文件
+- 已淘汰的旧骨架：`app/events.py`、`app/router.py`、`config/settings.py`、`utils/loguru.py`、`core/dependencies.py`
+
+**首次空项目仍须从 `project_structure/` 原样复制的基线**（目录已存在则整包跳过，见 `project_baseline.json`）：
+- `docker/`：起步栈（app + MySQL，Redis 为可选 profile）
+- `deploy/`：进阶运维素材。复制进项目，不加入默认 compose 必跑栈
 
 ## 使用流程
 
@@ -299,47 +302,50 @@ resources/
 | ----- | ------- | ------ |
 | 表名（snake_case） | 类名（PascalCase） | `student` → `Student` |
 | 表名 | 文件名（snake_case） | `sys_class` → `sys_class.py` |
-| 表名（**原样，强制单数**） | 资源名（**单数**，用于文件夹与路由前缀，**禁止任何形式的复数化**） | `company_file` → `company_file`；文件夹 `api/v1/company_file/`（❌`company_files`）、路由前缀 `/company-file`（❌`/company-files`） |
-| 表名（**原样，强制单数**） | 资源名（**单数**） | `student` → `student`；文件夹 `api/v1/student/`、路由前缀 `/student` |
+| 表名（原样，单数） | 文件夹与 Python 标识符 `resource_singular` | `company_file` → 文件夹 `api/v1/company_file/`、函数 `get_company_file_list` |
+| 表名（原样，单数） | HTTP 前缀 `route_prefix`（`_` 换成 `-`） | `company_file` → `/company-file`；`sys_class` → `/sys-class`；`student` → `/student` |
 
-> 🔴 **再次强调**：`resource_name` = 表名单数形式，**绝不要**对资源名做复数转换。
-> 即使表名是 `company_file`，文件夹也必须是 `company_file`（不是 `company_files`），路由前缀必须是 `/company-file`（不是 `/company-files`）。
-> 复数只用于中文 tag 文案（如 `tags=["企业管理"]`），绝不进入路径/文件名/前缀。
+> `route_prefix` 与 `resource_singular` 是两个变量。资源模板的 `APIRouter(prefix=...)` 只填 `route_prefix`。
+> 禁止复数，也禁止把蛇形名字直接当作前缀（`/company_file` 是错误的）。
 
 ### 文件结构
 
-**首次生成 - 完整项目骨架**：
+**首次生成 - 完整项目骨架**（与 `resources/templates/project_structure/` 一致，不要再补旧文件）：
 ```
 fastapi_project/
-├── app/                    # 应用初始化层
-│   ├── __init__.py        # 导出create_app
-│   ├── factory.py          # 应用工厂函数
-│   ├── events.py           # 生命周期管理器
-│   ├── exceptions.py       # 异常处理器
-│   ├── middleware.py       # 中间件注册
-│   └── router.py           # 路由注册
-├── config/
+├── app/
+│   ├── __init__.py         # 导出 create_app
+│   ├── factory.py          # 应用工厂；lifespan 在这里
+│   ├── config.py           # AppConfig
+│   ├── exceptions.py
+│   ├── middleware.py       # CORS 始终注册；安全中间件按开关
+│   └── routes.py           # /health 等基础路由
+├── config/                 # 只有这一套配置，入口是 from config import settings
 │   ├── __init__.py
-│   ├── config_unified.py   # BaseConfig + 各环境
-│   ├── config_factory.py   # FASTAPI_ENV + settings 门面
-│   └── manage.py           # 可选 CLI
-├── core/
+│   ├── config_unified.py
+│   ├── config_factory.py
+│   └── manage.py
+├── core/                   # 不要放依赖注入工厂
 │   ├── __init__.py
-│   ├── database.py        # 数据库连接
-│   └── dependencies.py    # 依赖注入容器
+│   ├── database.py
+│   ├── cache.py
+│   ├── queue.py
+│   ├── security.py
+│   └── permissions.py
 ├── models/
-│   └── __init__.py        # 导出Base
+│   ├── __init__.py
+│   └── base.py
 ├── schemas/
 │   ├── __init__.py
-│   └── response.py        # 统一响应模型（含ErrorResponse）
-├── middleware/            # BASELINE：安全头 / 限流 / 审计（配置开关，默认关）
+│   └── response.py
+├── middleware/
 │   ├── __init__.py
 │   ├── security_headers.py
 │   ├── rate_limiter.py
 │   └── audit_middleware.py
-├── utils/                 # BASELINE：已存在则跳过（project_baseline.json）
+├── utils/                  # 日志只用 logger.py
 │   ├── __init__.py
-│   ├── logger.py          # 标准 logging（非 loguru）
+│   ├── logger.py
 │   ├── custom_exceptions.py
 │   ├── response_code.py
 │   ├── validators.py
@@ -348,30 +354,26 @@ fastapi_project/
 │   ├── auth.py
 │   ├── security.py
 │   └── audit.py
-├── docker/                # BASELINE：起步 Docker（app+MySQL，Redis 可选）
+├── docker/
 │   ├── Dockerfile
 │   ├── docker-compose.yml
 │   └── README.md
-├── deploy/                # BASELINE：进阶运维（Nginx/监控/日志等，非默认必跑）
-│   ├── nginx.conf / nginx-prod.conf
-│   ├── mysql.cnf / redis.conf / ...
-│   └── README.md
-├── repository/            # 数据访问层（仅 create/delete/update/get，增删改查，可覆盖）
-│   └── {table_name}_repository.py
-├── service/               # 业务服务（单条委托 + 列表等业务；已存在则跳过）
-│   └── {table_name}_service.py
-├── api/                   # API路由层
-│   ├── __init__.py        # 导出api_router（prefix="/api"）
+├── deploy/                 # 进阶运维，不进默认 compose
+├── repository/
+│   └── __init__.py
+├── service/
+│   ├── __init__.py
+│   └── dependencies.py     # 按表追加 get_*_service
+├── api/
+│   ├── __init__.py
 │   └── v1/
-│       ├── __init__.py    # 注册v1子路由，导出v1_router（prefix="/v1"）
-│       └── {resource_name}/
-│           └── {resource_name}Resource.py
-├── start.py               # 应用启动脚本（uvicorn；含 main()）
-├── pyproject.toml         # uv / PEP 621 主依赖清单
-├── .python-version        # uv Python 版本钉选
-├── requirements.txt       # 兼容 pip 的依赖导出（与 pyproject 同步）
-├── .env.example          # 环境变量模板
-└── .env.docker           # Docker Compose 环境覆盖
+│       └── __init__.py
+├── start.py
+├── pyproject.toml
+├── .python-version
+├── requirements.txt
+├── .env.example
+└── .env.docker
 ```
 
 **后续生成 - 按表增量（遵守覆盖策略）**：
@@ -560,43 +562,38 @@ tests/
 
 📁 生成的项目结构：
 ├── app/
-│   ├── __init__.py        # 导出create_app
-│   ├── factory.py          # 应用工厂函数
-│   ├── events.py           # 生命周期管理器
-│   ├── exceptions.py       # 异常处理器
-│   ├── middleware.py       # 中间件注册
-│   ├── router.py           # 路由注册
-│   ├── routes.py
-│   └── config.py
-├── config/
 │   ├── __init__.py
-│   ├── config_unified.py   # BaseConfig + 各环境
-│   ├── config_factory.py   # FASTAPI_ENV + settings 门面
-│   ├── manage.py           # 可选 CLI
-│   └── settings.py
+│   ├── factory.py          # lifespan 在工厂内
+│   ├── config.py
+│   ├── exceptions.py
+│   ├── middleware.py
+│   └── routes.py
+├── config/                 # 唯一配置源，不要另写 settings.py
+│   ├── __init__.py
+│   ├── config_unified.py
+│   ├── config_factory.py
+│   └── manage.py
 ├── core/
 │   ├── __init__.py
-│   ├── database.py        # 数据库连接
-│   ├── dependencies.py    # 依赖注入容器
+│   ├── database.py
 │   ├── cache.py
+│   ├── queue.py
 │   ├── security.py
-│   ├── permissions.py
-│   └── queue.py
+│   └── permissions.py
 ├── models/
-│   ├── __init__.py        # 导出Base
+│   ├── __init__.py
 │   └── base.py
 ├── schemas/
 │   ├── __init__.py
-│   └── response.py        # 统一响应模型（含ErrorResponse）
-├── middleware/            # BASELINE（已有则跳过）
+│   └── response.py
+├── middleware/
 │   ├── __init__.py
 │   ├── security_headers.py
 │   ├── rate_limiter.py
 │   └── audit_middleware.py
-├── utils/                 # BASELINE（已有则跳过）
+├── utils/
 │   ├── __init__.py
-│   ├── logger.py
-│   ├── loguru.py
+│   ├── logger.py           # 标准 logging
 │   ├── custom_exceptions.py
 │   ├── response_code.py
 │   ├── validators.py
@@ -610,6 +607,7 @@ tests/
 ├── repository/            # 数据访问层（仅 create/delete/update/get，增删改查，可覆盖）
 │   └── {table_name}_repository.py
 ├── service/               # 业务服务（单条委托 + 列表等业务）
+│   ├── dependencies.py    # 追加 get_*_service
 │   └── {table_name}_service.py
 ├── api/                   # API路由层
 │   ├── __init__.py
@@ -672,7 +670,7 @@ tests/
 
 ## 资源文件结构说明
 
-所有模板和配置都存储在 `resources/` 目录下，不使用任何脚本代码，完全由大模型根据这些资源生成输出。
+模板和配置在 `resources/` 下，由大模型按这些资源生成目标项目。`resources/tools/check_skill_consistency.py` 只检查本技能目录是否自洽，不负责渲染项目。
 
 ## 重要提示
 
@@ -688,8 +686,7 @@ tests/
 10. **安全性**：端点含异常处理；认证按业务可选；状态字段不走通用 PUT；骨架含安全头/限流/审计中间件（默认关，配置开启）
 11. **包管理默认 uv**：首次骨架必须生成 `pyproject.toml` + `.python-version`；README 与收尾步骤优先 `uv sync` / `uv run`；`requirements.txt` 仅兼容
 12. **基线包**：遵守 `project_baseline.json`；含 utils、middleware、**docker（起步栈）**、**deploy（进阶运维）**、`.env.docker`
-13. **🔴 资源名必须单数（最高优先级）**：生成 `api/v1/{resource_name}/` 文件夹与路由前缀时，
-   `resource_name` 必须严格等于**表名单数形式**，**绝对禁止**复数化。
+13. **🔴 资源名必须单数（最高优先级）**：文件夹 `api/v1/{resource_singular}/` 中的 `resource_singular` 等于表名原样。路由前缀使用 `route_prefix`（下划线改连字符）。两者都禁止复数。
    以下为错误 ↔ 正确对照（务必避免左侧）：
 
    | 表名 | ❌ 错误（复数） | ✅ 正确（单数） |
