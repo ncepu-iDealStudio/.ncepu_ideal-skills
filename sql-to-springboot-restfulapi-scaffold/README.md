@@ -23,32 +23,33 @@
 sql-to-springboot-restfulapi-scaffold/
 ├── resources/                          # 技能资源目录
 │   ├── config/                         # 配置文件
-│   │   ├── naming_rules.json          # 命名规则配置
-│   │   └── type_mappings.json         # SQL类型映射配置
+│   │   ├── naming_rules.json           # 命名规则配置
+│   │   └── type_mappings.json          # SQL类型映射配置
 │   ├── specifications/                 # 规范文档
-│   │   └── coding_standards.md        # 代码规范标准
+│   │   └── coding_standards.md         # 代码规范标准
 │   └── templates/                      # 代码模板
-│       ├── layers/                    # 分层模板
-│       │   ├── entity/                 # 数据模型模板
-│       │   ├── repository/            # 数据访问模板
-│       │   ├── service/                # 服务层模板
-│       │   ├── controller/             # 控制器模板
-│       │   └── dto/                    # DTO模板
-│       └── project_structure/         # 项目结构模板
+│       ├── layers/                     # 按表生成的分层模板
+│       │   ├── entity/
+│       │   ├── repository/
+│       │   ├── service/
+│       │   ├── controller/
+│       │   └── dto/
+│       │       ├── request/
+│       │       └── response/
+│       └── project_structure/          # 首次生成的项目骨架
 │           ├── pom.xml
-│           ├── src/main/java/com/security/apisecurity/
-│           │   ├── config/
-│           │   ├── controller/
-│           │   ├── dto/
-│           │   ├── entity/
-│           │   ├── exception/
-│           │   ├── repository/
-│           │   ├── security/
-│           │   └── service/
-│           └── src/main/resources/
-│               └── application.properties
-├── README.md                          # 技能说明文档
-└── SKILL.md                          # 技能元数据配置
+│           └── src/main/
+│               ├── resources/
+│               │   └── application.properties
+│               └── java/com/security/apisecurity/
+│                   ├── ApiSecurityApplication.java
+│                   ├── config/         # SecurityConfig、CorsConfig
+│                   ├── dto/response/   # ApiResponse
+│                   ├── exception/
+│                   ├── security/       # JWT 相关类
+│                   └── service/        # UserDetailsServiceImpl
+├── README.md                           # 技能说明文档
+└── SKILL.md                            # 技能元数据配置
 ```
 
 ## 使用方法
@@ -103,7 +104,7 @@ CREATE TABLE student (
 
 ## 生成的目标项目代码结构
 
-首次运行时，技能将生成完整的项目结构：
+骨架来自 `resources/templates/project_structure/`。`entity/`、`repository/`、`controller/` 以及按表命名的 DTO / Service 在生成具体表时才出现。以 `student` 表为例，完整目录如下：
 
 ```
 springboot_project/
@@ -114,34 +115,31 @@ springboot_project/
     ├── ApiSecurityApplication.java
     ├── config/
     │   ├── SecurityConfig.java
-    │   └── WebConfig.java
+    │   └── CorsConfig.java
     ├── exception/
     │   ├── GlobalExceptionHandler.java
     │   ├── ResourceNotFoundException.java
     │   ├── BadRequestException.java
     │   └── AccessDeniedException.java
-    ├── dto/
-    │   └── response/
-    │       └── ApiResponse.java
     ├── security/
     │   ├── AuthEntryPointJwt.java
     │   ├── AuthTokenFilter.java
     │   └── JwtUtils.java
-    ├── service/
-    │   └── UserDetailsServiceImpl.java
-    ├── entity/
-    │   └── Student.java
-    ├── repository/
-    │   └── StudentRepository.java
     ├── dto/
     │   ├── request/
-    │   │   └── StudentRequest.java
+    │   │   └── StudentRequest.java          # 按表生成
     │   └── response/
-    │       └── StudentResponse.java
+    │       ├── ApiResponse.java
+    │       └── StudentResponse.java         # 按表生成
+    ├── entity/
+    │   └── Student.java                     # 按表生成
+    ├── repository/
+    │   └── StudentRepository.java           # 按表生成
     ├── service/
-    │   └── StudentService.java
+    │   ├── UserDetailsServiceImpl.java
+    │   └── StudentService.java              # 按表生成
     └── controller/
-        └── StudentController.java
+        └── StudentController.java           # 按表生成
 ```
 
 后续添加新表时，仅生成新增表的 6 个文件：

@@ -27,17 +27,24 @@ API(Resource) → Service（单条委托 + 列表/状态等业务） → Reposit
 .
 ├── app/                 # 应用工厂、中间件、异常、路由注册
 ├── api/v1/              # 各资源 Resource（单数路径）
-├── config/              # 配置
-├── core/                # 数据库与依赖注入
+├── config/              # settings.py
+├── core/                # database.py、dependencies.py
+├── middleware/          # 中间件包（当前仅 __init__.py）
 ├── models/              # SQLAlchemy 模型
 ├── schemas/             # Pydantic DTO + 统一响应
 ├── repository/          # 数据访问层（可覆盖）
 ├── service/             # 业务服务（已存在不覆盖）
-├── utils/               # 异常、日志
-├── tests/               # 单元占位 + 集成 CRUD
-├── database/            # 原始 SQL 脚本
-├── .skill/              # 生成技能定义
+├── utils/               # custom_exceptions.py、loguru.py
+├── tests/               # unit/、integration/、conftest.py、pytest.ini
+├── database/            # api_security_demo-20260717.sql
+├── .skills/             # 技能副本
+├── .codebuddy/skills/   # 技能副本
+├── .trae/skills/        # 技能副本
+├── .github/             # Copilot 说明与 prompt
 ├── start.py
+├── pyproject.toml
+├── .python-version
+├── uv.lock
 ├── requirements.txt
 └── .env.example
 ```

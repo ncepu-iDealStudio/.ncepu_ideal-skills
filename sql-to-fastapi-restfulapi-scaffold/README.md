@@ -2,14 +2,14 @@
 
 ## 概述
 
-`sql-to-fastapi-scaffold` 是一个技能，用于数据库的从SQL脚本语句自动生成完整的 FastAPI 项目脚手架代码。
+`sql-to-fastapi-restfulapi-scaffold` 从 SQL 脚本生成完整的 FastAPI 项目脚手架。
 
 ## 功能特性
 
 - ✅ 解析 SQL CREATE TABLE 语句
 - ✅ 生成 SQLAlchemy Model
 - ✅ 生成 Pydantic Schema（Base / Create / Update / Response；有状态字段时含 StatusUpdate）
-- ✅ 生成 Repository（**仅单条** `create` / `get` / `update` / `delete`，可覆盖）
+- ✅ 生成 Repository（**仅单条** `create` / `delete` / `update` / `get`，可覆盖）
 - ✅ 生成 Service（**已存在则跳过**；单条委托 Repository；`get_list` 等业务写在本层）
 - ✅ 生成 FastAPI Resource（**统一只依赖 Service**；校验靠 Schema）
 - ✅ 生成单元测试占位（`tests/unit/test_{table}_service.py`，已存在则跳过）
@@ -36,6 +36,10 @@ API(Resource) → Service(单条委托 + 列表等业务) → Repository(仅 cre
 
 ```text
 sql-to-fastapi-restfulapi-scaffold/
+├── docs/
+│   ├── Trea中使用skill配置.md
+│   ├── claude中使用skill配置.md
+│   └── GitHub Copilot中使用sql-to-fastapi-restfulapi-scaffold技能.md
 ├── resources/
 │   ├── config/
 │   │   ├── naming_rules.json
@@ -60,14 +64,20 @@ sql-to-fastapi-restfulapi-scaffold/
 │           ├── .python-version
 │           ├── requirements.txt    # pip 兼容
 │           ├── start.py
+│           ├── .env.example
+│           ├── .env.docker
+│           ├── app/
+│           ├── api/
+│           ├── config/
+│           ├── core/
+│           ├── models/
+│           ├── schemas/
+│           ├── repository/
+│           ├── service/
 │           ├── utils/              # 基线工具包（与 project_baseline 对齐）
 │           ├── middleware/         # 基线中间件：安全头 / 限流 / 审计
 │           ├── docker/             # 起步 Docker：app + MySQL（Redis 可选）
-│           ├── deploy/             # 进阶运维配置（Nginx/监控/日志等）
-│           ├── repository/
-│           ├── service/
-│           ├── .env.docker
-│           └── ...
+│           └── deploy/             # 进阶运维配置（Nginx/监控/日志等）
 ├── README.md
 └── SKILL.md
 ```
@@ -146,12 +156,12 @@ CREATE TABLE student (
 fastapi_project/
 ├── app/
 │   ├── __init__.py
-│   ├── factory.py
-│   ├── events.py
+│   ├── factory.py                 # lifespan 在工厂内
+│   ├── config.py
 │   ├── exceptions.py
 │   ├── middleware.py
-│   └── router.py
-├── config/
+│   └── routes.py
+├── config/                        # 唯一配置源：from config import settings
 │   ├── __init__.py
 │   ├── config_unified.py
 │   ├── config_factory.py
@@ -159,43 +169,55 @@ fastapi_project/
 ├── core/
 │   ├── __init__.py
 │   ├── database.py
-│   └── dependencies.py
+│   ├── cache.py
+│   ├── queue.py
+│   ├── security.py
+│   └── permissions.py
 ├── models/
 │   ├── __init__.py
-│   └── student.py
+│   ├── base.py
+│   └── student.py                 # 按表生成
 ├── schemas/
 │   ├── __init__.py
 │   ├── response.py
-│   └── student.py
-├── repository/                 # 可覆盖：仅 create/delete/update/get（增删改查，单条）
+│   └── student.py                 # 按表生成
+├── repository/                    # 可覆盖：仅 create/delete/update/get（增删改查，单条）
 │   ├── __init__.py
-│   └── student_repository.py
-├── service/                    # 人手维护：单条委托 + 列表等业务
+│   └── student_repository.py      # 按表生成
+├── service/                       # 人手维护：单条委托 + 列表等业务
 │   ├── __init__.py
-│   └── student_service.py
+│   ├── dependencies.py            # 追加 get_*_service
+│   └── student_service.py         # 按表生成
 ├── api/
 │   ├── __init__.py
 │   └── v1/
 │       ├── __init__.py
-│       └── student/            # 单数资源名
-│           └── studentResource.py
-├── middleware/                 # BASELINE：安全头 / 限流 / 审计（配置开关默认关）
+│       └── student/               # 文件夹用表名原样
+│           └── studentResource.py # prefix 使用 route_prefix
+├── middleware/
 │   ├── __init__.py
 │   ├── security_headers.py
 │   ├── rate_limiter.py
 │   └── audit_middleware.py
-├── utils/                      # BASELINE：已存在则跳过（project_baseline.json）
+├── utils/                         # 日志只用 logger.py
 │   ├── __init__.py
 │   ├── logger.py
 │   ├── custom_exceptions.py
 │   ├── response_code.py
-│   ├── validators.py / masking.py / ids.py
-│   ├── auth.py / security.py / audit.py
+│   ├── validators.py
+│   ├── masking.py
+│   ├── ids.py
+│   ├── auth.py
+│   ├── security.py
+│   └── audit.py
+├── docker/                        # 起步 compose：app + MySQL
+├── deploy/                        # 进阶运维素材，不进入默认 compose
 ├── start.py
-├── pyproject.toml          # uv / PEP 621 主依赖清单
-├── .python-version         # uv Python 版本钉选
-├── requirements.txt        # 兼容 pip（与 pyproject 同步）
-└── .env.example
+├── pyproject.toml
+├── .python-version
+├── requirements.txt
+├── .env.example
+└── .env.docker
 ```
 
 后续添加新表时，生成：
@@ -204,12 +226,12 @@ fastapi_project/
 2. **schemas/{table_name}.py** - Pydantic 验证模型（Base、Create、Update、Response；有状态字段时含 StatusUpdate）
 3. **repository/{table_name}_repository.py** - 仅 `create` / `delete` / `update` / `get`（增删改查顺序，可覆盖）
 4. **service/{table_name}_service.py** - 单条委托 + `get_list` 等业务（仅不存在时新建；有状态字段时含 `update_status`）
-5. **api/v1/{resource_singular}/{resource_singular}Resource.py** - 统一只调 Service（有状态字段时含 `PATCH /{pk}/status`）
+5. **api/v1/{resource_singular}/{resource_singular}Resource.py** - 文件夹用表名原样；`APIRouter` 前缀用 `route_prefix`（`_` 换成 `-`）。统一只调 Service（有状态字段时含 `PATCH /{pk}/status`）
 6. **tests/unit/test_{table_name}_service.py** - Service 单元测试占位（仅不存在时新建）
 7. **tests/integration/api/v1/test_{table_name}.py** - 接口 CRUD 集成测试 + 商业逻辑占位（仅不存在时新建）
 8. **service/dependencies.py** - 注册 `get_*_service`（及可选 `get_*_repository`）
 
-> 增量生成时 **不**覆盖 `utils/**`、`middleware/**`；import 使用 `project_baseline.json` 的 `canonical_imports`。
+> 增量生成时 **不**覆盖 `utils/**`、`middleware/**`、`docker/**`、`deploy/**`。import 使用 `project_baseline.json` 的 `canonical_imports`。
 
 **路由结构**：
 
@@ -222,11 +244,13 @@ fastapi_project/
 - `middleware/`：基线三件套（`security_headers` / `rate_limiter` / `audit_middleware`）
 - `app/middleware.py`：统一注册；CORS 始终开启；安全中间件按 `middleware_*_enabled` 开关（默认关闭）
 
-**不强制首次生成的进阶内容**（可选基线，见 `project_baseline.json`）：
+首次空项目会复制 `docker/` 和 `deploy/`。`deploy/` 是进阶运维素材，不要求随默认 compose 启动。
 
-- `deploy/` 进阶运维（Nginx / 监控等）；起步用 `docker/` 即可
-- 完整业务表 SQL（由用户 `database/` 提供）
+不生成这些内容：
+
+- 数据库初始化脚本（由用户放入 `database/`）
 - 按表的业务规则实现（Service 占位，人手补齐）
+- 已淘汰骨架：`app/events.py`、`app/router.py`、`config/settings.py`、`utils/loguru.py`、`core/dependencies.py`
 
 ## 特性说明
 
@@ -277,7 +301,7 @@ uv run pytest tests/integration/api/v1/test_admin.py -c tests/pytest.ini -v
 | Service | `update_status`（业务入口；内部 `repo.update(字段字典)`） |
 | Resource | `PATCH /{pk}/status` |
 
-> Repository **仅** `create` / `get` / `update` / `delete`，不生成 `update_status` / `get_list`。
+> Repository **仅** `create` / `delete` / `update` / `get`，不生成 `update_status` / `get_list`。
 
 示例（`sso_user.status`）：
 
