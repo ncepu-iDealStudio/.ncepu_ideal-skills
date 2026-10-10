@@ -21,52 +21,55 @@
   },
   "resource_name": {
     "conversion": "singular_snake_case",
-    "description": "API路由资源名（单数）：同时用于【文件夹命名】与【路由前缀】，禁止使用复数。例如表 student -> 文件夹 api/v1/student/、路由前缀 /student",
-    "forbidden": "严禁对 resource_name 做任何复数化处理。resource_name 直接等于表名单数形式，不得加 s、不得加 es、不得使用不规则复数。复数（students / company_files）只出现在 tags 的中文展示文案中，绝不进入文件夹名、文件名或路由前缀。",
+    "description": "资源名等于表名原样（蛇形单数）。用于文件夹、文件名和 Python 标识符，不直接作为 HTTP 前缀。例如表 company_file -> 文件夹 api/v1/company_file/、函数名 get_company_file_list。",
+    "template_variable": "resource_singular",
+    "forbidden": "严禁复数化。不得加 s、不得加 es、不得使用不规则复数。复数只允许出现在 tags 的中文文案中。",
     "anti_patterns": {
       "company_file": {
         "wrong_folder": "api/v1/company_files/",
-        "wrong_prefix": "/company-files",
-        "right_folder": "api/v1/company_file/",
-        "right_prefix": "/company-file"
+        "right_folder": "api/v1/company_file/"
       },
       "student": {
         "wrong_folder": "api/v1/students/",
-        "wrong_prefix": "/students",
-        "right_folder": "api/v1/student/",
-        "right_prefix": "/student"
-      }
-    },
-    "plural_rules": {
-      "default": "add_s",
-      "exceptions": {
-        "class": "classes",
-        "category": "categories",
-        "child": "children",
-        "man": "men",
-        "woman": "women"
+        "right_folder": "api/v1/student/"
+      },
+      "sys_class": {
+        "wrong_folder": "api/v1/sys_classes/",
+        "right_folder": "api/v1/sys_class/"
       }
     },
     "examples": {
-      "student": {
-        "singular": "student",
-        "plural": "students"
+      "student": "student",
+      "sys_class": "sys_class",
+      "company_file": "company_file"
+    }
+  },
+  "route_prefix": {
+    "conversion": "singular_kebab_case",
+    "description": "HTTP 路由前缀。由 resource_name 把下划线换成连字符，保持单数。模板变量是 route_prefix，不要把 resource_singular 写进 APIRouter prefix。",
+    "template_variable": "route_prefix",
+    "rule": "route_prefix = resource_name.replace('_', '-')",
+    "forbidden": "禁止复数，禁止保留下划线。company_file 的前缀是 /company-file，不是 /company_file，也不是 /company-files。",
+    "anti_patterns": {
+      "company_file": {
+        "wrong_prefix": ["/company_file", "/company-files"],
+        "right_prefix": "/company-file"
       },
       "sys_class": {
-        "singular": "sys_class",
-        "plural": "sys_classes"
-      },
-      "company_file": {
-        "singular": "company_file",
-        "plural": "company_files"
+        "wrong_prefix": ["/sys_class", "/sys-classes"],
+        "right_prefix": "/sys-class"
       }
     },
-    "note": "生成代码时，文件夹名与路由前缀一律使用 singular（单数）形式；plural 仅作参考与反例展示，绝不用于路径。"
+    "examples": {
+      "student": "/student",
+      "sys_class": "/sys-class",
+      "company_file": "/company-file"
+    }
   },
   "service_name": {
     "conversion": "snake_case_with_suffix",
     "suffix": "_service",
-    "description": "业务服务：单条委托 Repository.create/get/update/delete；列表/状态等业务写在本层；skill 仅在不存在时生成。DI 名为 get_{table}_service；Resource 统一注入 Service",
+    "description": "业务服务：单条委托 Repository.create/delete/update/get；列表/状态等业务写在本层；skill 仅在不存在时生成。DI 名为 get_{table}_service；Resource 统一注入 Service",
     "di_factory": "get_{table}_service",
     "examples": {
       "student": "student_service.py",
