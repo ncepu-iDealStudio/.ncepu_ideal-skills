@@ -177,6 +177,7 @@ ncepu_ideal-skills/
 | 🚀 **Trae IDE** | [配置指南](docs/Trea中使用skill配置.md) |
 | 💻 **Claude Code** | [配置指南](docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [配置指南](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
+| 🧩 **CodeBuddy** | [配置指南](docs/CodeBuddy中使用skill配置.md) |
 
 > 📝 **提示**：详细配置说明请参考 `docs/` 目录
 
