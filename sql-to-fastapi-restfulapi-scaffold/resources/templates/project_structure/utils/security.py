@@ -37,7 +37,7 @@ class SecurityUtil:
 
     @staticmethod
     def hash_password(password: str) -> str:
-        """对密码进行 bcrypt 哈希（与 SsoUser.set_password 一致）。"""
+        """对密码进行 bcrypt 哈希（与业务侧密码哈希方式一致）。"""
         return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
     @staticmethod

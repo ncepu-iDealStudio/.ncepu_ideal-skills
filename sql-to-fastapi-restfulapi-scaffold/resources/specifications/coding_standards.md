@@ -231,7 +231,7 @@ class ModelName(BaseModel):
 - 请求体/字段格式校验由 Pydantic Schema 在进入端点前完成
 
 **可选**：
-- `current_user: dict = Depends(get_current_user)` — 需要认证时添加
+- `current_user = Depends(get_current_active_user)` — 仅在启用鉴权时添加（脚手架默认不启用鉴权，接口开箱即用）
 
 ### 7.4 OpenAPI 文档
 
@@ -409,14 +409,12 @@ REDIS_HOST=redis docker compose -f docker/docker-compose.yml --profile redis up 
 
 ### 9.4 认证与授权
 
-**根据业务场景选择是否需要认证**：
-- 管理后台类接口：需要认证，添加 `Depends(get_current_user)`
-- 公开接口（登录、注册、公共查询等）：不需要认证
+**默认不启用鉴权**：本脚手架生成的 CRUD 接口默认开箱即用、无需登录。
 
-**需要认证时的规范**：
-- 通过 `get_current_user` 获取当前用户
-- 执行操作时记录 `current_user_id`
-- 在 Service 的业务方法中传入 current_user_id（CRUD 委托方法可按需扩展）
+**需要鉴权时（由业务自决，不强制）**：
+- `core/permissions` 已提供 `get_current_active_user` / `require_admin` / `require_teacher` / `require_student` 等依赖
+- 统一在 router 挂载（推荐）：`APIRouter(..., dependencies=[Depends(get_current_active_user)])`；或单个路由参数 `current_user = Depends(get_current_active_user)`
+- 执行操作时记录 `current_user.user_id`（可选）
 
 ### 9.5 SQL 注入防护
 

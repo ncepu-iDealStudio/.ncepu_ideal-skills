@@ -31,7 +31,9 @@ class {{class_name}}Repository:
 
     async def create(self, data: {{class_name}}Create) -> {{class_name}}:
         """增：插入一条记录并提交"""
-        obj = {{class_name}}(**data.model_dump())
+        # exclude_unset：未显式传入的字段交由数据库/模型默认值处理，
+        # 避免把 is_deleted / create_time / update_time 等默认列写成 NULL。
+        obj = {{class_name}}(**data.model_dump(exclude_unset=True))
         self.db.add(obj)
         await self.db.commit()
         await self.db.refresh(obj)

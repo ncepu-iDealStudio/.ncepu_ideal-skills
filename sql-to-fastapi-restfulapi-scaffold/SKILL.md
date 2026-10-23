@@ -293,6 +293,7 @@ resources/
 - 快速开始步骤（**优先** `uv sync` / `uv run ...`；可选附 pip 兼容步骤）
 - Schema 设计说明
 - 软删除机制说明
+- 鉴权说明：明确告知「生成的 CRUD 接口默认不启用登录鉴权、开箱即用、无需 Token」；并说明启用方式（在 `api/v1/<resource>/<resource>Resource.py` 的 `router` 上挂载 `Depends(get_current_active_user)`，详见 `core.permissions`）
 
 ## 代码生成规范
 
@@ -683,7 +684,7 @@ tests/
 7. **覆盖策略**：Repository 可覆盖；Service / 测试文件已存在则跳过；**utils / middleware / docker / deploy 为 BASELINE，已存在绝不覆盖**
 8. **异步**：使用 `AsyncSession` + `select()`
 9. **中文文档**：文档字符串、注释、API 文档使用中文
-10. **安全性**：端点含异常处理；认证按业务可选；状态字段不走通用 PUT；骨架含安全头/限流/审计中间件（默认关，配置开启）
+10. **安全性**：端点含异常处理；**默认不启用接口鉴权（开箱即用、无需 Token）**，如需鉴权可接入 `core.permissions`；状态字段不走通用 PUT；骨架含安全头/限流/审计中间件（默认关，配置开启）
 11. **包管理默认 uv**：首次骨架必须生成 `pyproject.toml` + `.python-version`；README 与收尾步骤优先 `uv sync` / `uv run`；`requirements.txt` 仅兼容
 12. **基线包**：遵守 `project_baseline.json`；含 utils、middleware、**docker（起步栈）**、**deploy（进阶运维）**、`.env.docker`
 13. **🔴 资源名必须单数（最高优先级）**：文件夹 `api/v1/{resource_singular}/` 中的 `resource_singular` 等于表名原样。路由前缀使用 `route_prefix`（下划线改连字符）。两者都禁止复数。

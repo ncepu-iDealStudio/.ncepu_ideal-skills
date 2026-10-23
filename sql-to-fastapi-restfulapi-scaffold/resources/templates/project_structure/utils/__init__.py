@@ -1,7 +1,7 @@
 """通用工具包
 
 约定：本包内模块应可脱离本项目业务模型独立复用。
-业务权限（SsoUser 等）请使用 core.permissions。
+业务权限请使用 core.permissions（无状态 JWT 主体）。
 """
 
 from utils.auth import JWTAuthenticator, create_jwt_authenticator_from_settings, jwt_authenticator

@@ -1,6 +1,6 @@
 """Models 包
 
-导出 ORM 基类；具体表模型由脚手架按 DDL 生成后在此追加 import。
+导出 ORM 基类；具体业务表模型由脚手架按 DDL 生成后在此追加 import。
 """
 
 from .base import BaseModel, TimestampMixin, SoftDeleteMixin

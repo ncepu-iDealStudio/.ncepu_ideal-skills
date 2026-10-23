@@ -7,7 +7,7 @@
 from typing import Optional
 from datetime import datetime, date, time
 from decimal import Decimal
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
 class {{class_name}}Base(BaseModel):
@@ -50,14 +50,15 @@ class {{class_name}}Create({{class_name}}Base):
     """
     {{table_comment}}创建模型
     """
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 {% for field in non_primary_fields %}
                 "{{field.name}}": {{field.example}},
                 {% endfor %}
             }
         }
+    )
 
 
 class {{class_name}}Update(BaseModel):
@@ -78,9 +79,9 @@ class {{class_name}}Update(BaseModel):
     {% endif %}
     {% endfor %}
 
-    class Config:
-        extra = "forbid"
-        json_schema_extra = {
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
             "example": {
                 {% for field in non_primary_fields %}
                 {% if not field.is_status_flag %}
@@ -88,7 +89,8 @@ class {{class_name}}Update(BaseModel):
                 {% endif %}
                 {% endfor %}
             }
-        }
+        },
+    )
 
 
 {% if status_flag_fields %}
@@ -106,15 +108,16 @@ class {{class_name}}StatusUpdate(BaseModel):
     )
     {% endfor %}
 
-    class Config:
-        extra = "forbid"
-        json_schema_extra = {
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
             "example": {
                 {% for field in status_flag_fields %}
                 "{{field.name}}": {{field.example}},
                 {% endfor %}
             }
-        }
+        },
+    )
 {% endif %}
 
 
@@ -126,12 +129,13 @@ class {{class_name}}Response(BaseModel):
     {{field.name}}: {{field.pydantic_type}}{% if not field.not_null %} | None{% endif %}
     {% endfor %}
 
-    class Config:
-        from_attributes = True
-        json_schema_extra = {
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
             "example": {
                 {% for field in all_fields %}
                 "{{field.name}}": {{field.example}},
                 {% endfor %}
             }
-        }
+        },
+    )

@@ -52,7 +52,7 @@
           "module": "core.permissions",
           "file": "core/permissions.py",
           "exports": ["get_current_active_user", "require_admin"],
-          "used_by": ["resource"]
+          "used_by": []
         }
       ],
       "forbidden": [
@@ -286,7 +286,7 @@
   },
   "layer_import_rules": {
     "repository": ["not_found"],
-    "resource": ["handle_exceptions", "get_current_active_user", "success_response", "paginated_response"],
+    "resource": ["handle_exceptions", "success_response", "paginated_response"],
     "service": ["not_found", "validation", "business", "logger"],
     "schema": ["mask_phone", "mask_email"],
     "app": ["setup_logging", "base_exception", "security_headers_mw", "rate_limit_mw", "audit_mw"]

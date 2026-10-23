@@ -3,7 +3,7 @@
 分层约定：
 - database / cache / queue：运行时基础设施（lifespan 初始化）
 - security：密码 / JWT 薄封装（实现在 utils）
-- permissions：业务认证与授权 Depends（SsoUser）
+- permissions：业务认证与授权 Depends（无状态 JWT 主体，不依赖业务表）
 - 服务工厂：``service.dependencies``（勿再放 core）
 
 推荐显式导入，例如::
