@@ -28,6 +28,7 @@ resources/
 ├── templates/              # 代码模板
 │   ├── project_structure/   # 首次生成的项目骨架（不含按表代码）
 │   │   ├── pom.xml
+│   │   ├── README.md        # 项目说明骨架（含环境准备、镜像源、Swagger 地址，按实际结果补全）
 │   │   └── src/main/
 │   │       ├── resources/application.properties
 │   │       └── java/com/security/apisecurity/
@@ -343,15 +344,28 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 3. 运行 Application 主类
 ```
 
-**生成 README.md**：在生成完所有文件后，AI 应读取生成的项目结构，动态生成一份详细的 README.md 文档，包含：
-- 项目简介和技术栈
-- 完整的项目结构说明
-- 所有生成的 API 接口说明（包含请求/响应示例）
-- 配置说明（从 application.properties 读取）
-- 快速开始步骤
-- DTO 设计说明
-- 软删除机制说明
-- 安全配置说明（暂未启用）
+**生成 README.md**：在生成完所有文件后，AI 必须以 `resources/templates/project_structure/README.md` 为骨架，读取实际生成结果后动态补全，生成一份**让初学者可以照着一步步跑起来**的 README.md。
+
+要求：
+- 占位符（`{{projectName}}`、`{{port}}`、`{{contextPath}}`、`{{tableName}}`、`{{resourcePath}}`、`{{databaseName}}` 等）必须替换为真实值，禁止保留或照抄；
+- 所有接口地址必须写成完整 URL：`http://localhost:{port}{contextPath}/{resourcePath}`，不能只写 `/students`；
+- 环境相关命令必须区分 Windows（PowerShell）与 macOS/Linux，并给出验证命令。
+
+README 必须包含以下 11 个章节（缺一不可）：
+
+| 顺序 | 章节 | 必须写清楚的内容 |
+| --- | --- | --- |
+| 1 | 项目简介与技术栈 | Spring Boot 3.2.0、JDK 17、Maven、JPA、springdoc 版本、包名 |
+| 2 | **环境准备（首次运行必读）** | JDK 17 安装步骤（Windows/macOS/Linux）、Maven 3.8+ 安装步骤、`JAVA_HOME`/`M2_HOME`/`Path` 配置、`java -version` 与 `mvn -v` 验证 |
+| 3 | **Maven 镜像源配置** | settings.xml 路径（`%USERPROFILE%\.m2\settings.xml` 或 `${MAVEN_HOME}/conf/settings.xml`）、阿里云 mirror 完整 XML、`mvn help:effective-settings` 验证、内网私服提示 |
+| 4 | 环境自检清单 | `java -version`、`mvn -v`、`mysql --version` 三条可复制命令及期望输出 |
+| 5 | 项目结构 | 按实际生成目录输出（含 `security-placeholder/` 等实际存在的目录） |
+| 6 | 接口说明 | 每个端点的 方法 / 完整路径 / 说明 / 成功状态码，并给出请求体与响应示例 |
+| 7 | **接口文档（Swagger）访问地址** | Swagger UI、`swagger-ui/index.html`、OpenAPI JSON、OpenAPI YAML 的**完整可点击 URL**；注明必须带 context-path、改端口/前缀要同步替换、404 排查项 |
+| 8 | 配置说明 | 数据源、`ddl-auto`、Swagger 路径、CORS，从 `application.properties` 读取；提醒环境变量 `DB_USERNAME`/`DB_PASSWORD` |
+| 9 | 快速开始 | 建库建表 → 编译 → 启动 → 打开 Swagger，命令可直接复制执行；附无 MySQL 时的 H2 方案 |
+| 10 | DTO 设计说明 + 软删除机制 | Request 排除字段及原因、Response 排除敏感字段、软删除字段识别与查询过滤 |
+| 11 | 安全配置说明 | 已生成但未启用、文件为何不在 `src/main/java`、启用步骤 |
 
 **后续添加新表时：**
 ```
@@ -389,3 +403,6 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 7. **外键检查**：创建/更新时检查外键关联是否存在
 8. **中文文档**：所有文档字符串、注释使用中文
 9. **安全配置**：代码照常生成，但暂不启用（依赖注释状态）
+10. **README 环境准备**：必须写出 JDK 17、Maven 3.8+ 的安装与环境变量配置步骤，以及 Maven 镜像源（阿里云）配置，否则初学者无法跑起来
+11. **README 接口文档地址**：必须给出完整可点击的 Swagger UI 与 OpenAPI 地址（含 `http://localhost:{port}{contextPath}` 前缀），并说明 context-path 与端口变化时的同步要求
+12. **README 可执行性**：所有命令（编译、启动、建表）必须可直接复制执行，不能出现 `xxx`、`<你的路径>` 之外的模糊占位
