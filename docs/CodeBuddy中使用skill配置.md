@@ -8,8 +8,8 @@
 
 你给它一段建表 SQL，它还你一整套后端代码：
 
-| 你提供                             | 技能产出                                                         |
-| ------------------------------- | ------------------------------------------------------------ |
+| 你提供 | 技能产出 |
+| --- | --- |
 | `CREATE TABLE` 语句，或一个 `.sql` 文件 | Model / Schema / Repository / Service / Resource / 测试 / 项目骨架 |
 
 生成的项目大致长这样：
@@ -227,15 +227,15 @@ test/api_security_demo-20260717.sql
 
 首次生成会产出完整骨架；就 `student` 这一张表而言，会多出 7 个文件：
 
-| 序号 | 文件                                         | 说明                                               |
-| -- | ------------------------------------------ | ------------------------------------------------ |
-| 1  | `models/student.py`                        | SQLAlchemy 模型                                    |
-| 2  | `schemas/student.py`                       | Base / Create / Update / StatusUpdate / Response |
-| 3  | `repository/student_repository.py`         | 仅单条 CRUD                                         |
-| 4  | `service/student_service.py`               | 单条委托 + 列表等业务                                     |
-| 5  | `api/v1/student/studentResource.py`        | 路由，只调 Service                                    |
-| 6  | `tests/unit/test_student_service.py`       | 单元测试占位（默认 skip）                                  |
-| 7  | `tests/integration/api/v1/test_student.py` | 集成测试（CRUD 可跑）                                    |
+| 序号 | 文件 | 说明 |
+| --- | --- | --- |
+| 1 | `models/student.py` | SQLAlchemy 模型 |
+| 2 | `schemas/student.py` | Base / Create / Update / StatusUpdate / Response |
+| 3 | `repository/student_repository.py` | 仅单条 CRUD |
+| 4 | `service/student_service.py` | 单条委托 + 列表等业务 |
+| 5 | `api/v1/student/studentResource.py` | 路由，只调 Service |
+| 6 | `tests/unit/test_student_service.py` | 单元测试占位（默认 skip） |
+| 7 | `tests/integration/api/v1/test_student.py` | 集成测试（CRUD 可跑） |
 
 另外还会更新两处注册：
 
@@ -416,14 +416,14 @@ uv run pytest tests/integration/api/v1/test_student.py -c tests/pytest.ini -v
 
 ### 覆盖策略（很重要）
 
-| 路径                                                               | 生成时的行为             |
-| ---------------------------------------------------------------- | ------------------ |
-| `utils/**`、`middleware/**`、`docker/**`、`deploy/**`、`.env.docker` | 已存在就**整包跳过**，绝不覆盖  |
-| `repository/{表}_repository.py`                                   | **始终覆盖**（自动生成，别手改） |
-| `service/{表}_service.py`                                         | **仅不存在时创建**，已存在则跳过 |
-| `models/{表}.py`、`schemas/{表}.py`                                 | 默认可覆盖              |
-| `api/v1/...Resource.py`                                          | 可覆盖基础 CRUD         |
-| `tests/unit/...`、`tests/integration/...`                         | 仅不存在时创建            |
+| 路径 | 生成时的行为 |
+| --- | --- |
+| `utils/**`、`middleware/**`、`docker/**`、`deploy/**`、`.env.docker` | 已存在就**整包跳过**，绝不覆盖 |
+| `repository/{表}_repository.py` | **始终覆盖**（自动生成，别手改） |
+| `service/{表}_service.py` | **仅不存在时创建**，已存在则跳过 |
+| `models/{表}.py`、`schemas/{表}.py` | 默认可覆盖 |
+| `api/v1/...Resource.py` | 可覆盖基础 CRUD |
+| `tests/unit/...`、`tests/integration/...` | 仅不存在时创建 |
 
 因为 `repository` 会被覆盖、`service` 不会被覆盖，所以：
 
@@ -450,11 +450,11 @@ uv run pytest tests/integration/api/v1/test_student.py -c tests/pytest.ini -v
 
 这是这个技能最容易被模型“顺手改错”的地方。规则是**表名原样、不加 s**：
 
-| 表名             | ❌ 错误                                     | ✅ 正确                                   |
-| -------------- | ---------------------------------------- | -------------------------------------- |
-| `student`      | `api/v1/students/`、`/students`           | `api/v1/student/`、`/student`           |
+| 表名 | ❌ 错误 | ✅ 正确 |
+| --- | --- | --- |
+| `student` | `api/v1/students/`、`/students` | `api/v1/student/`、`/student` |
 | `company_file` | `api/v1/company_files/`、`/company-files` | `api/v1/company_file/`、`/company-file` |
-| `sys_class`    | `api/v1/sys_classes/`、`/sys-classes`     | `api/v1/sys_class/`、`/sys-class`       |
+| `sys_class` | `api/v1/sys_classes/`、`/sys-classes` | `api/v1/sys_class/`、`/sys-class` |
 
 在提示词里显式写上“单数”，生成后按 6.2 核对。
 

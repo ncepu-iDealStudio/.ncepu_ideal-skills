@@ -50,7 +50,7 @@
 ## 4. 与传统模板方案对比
 
 | 维度 | 传统模板生成 | 混合 SKILL 方案 |
-|---|---|---|
+| --- | --- | --- |
 | 生成方式 | 固定模板替换 | 规则 + 规范 + 模板 + 工具编排 |
 | 灵活性 | 中低 | 高 |
 | 增量生成 | 弱，易冲突 | 强，支持合并策略 |
@@ -70,18 +70,23 @@
 ### 5.1 分层模型
 
 1. 配置层（config）
+
 - 命名规则、类型映射、生成档位、上下文样例。
 
-2. 规范层（specifications）
+1. 规范层（specifications）
+
 - 代码规范、SQL 解析契约、字段渲染规则、路由合并策略。
 
-3. 模板层（templates）
+1. 模板层（templates）
+
 - 项目骨架模板 + 分层代码模板（model/dao/service/resource）。
 
-4. 工具层（tools）
+1. 工具层（tools）
+
 - 上下文生成、校验、预览、渲染、路由合并、快照比较、流水线执行。
 
-5. 产物层（demo_output）
+1. 产物层（demo_output）
+
 - context、渲染结果、manifest、回归报告、快照基线。
 
 ### 5.2 数据流
@@ -167,18 +172,23 @@
 ## 9. 能力成熟度模型（建议）
 
 ### L1 模板可用
+
 - 仅支持固定模板替换。
 
 ### L2 规则化生成
+
 - 引入命名和类型映射规则。
 
 ### L3 可验证生成
+
 - 有校验、预览、可重复产物。
 
 ### L4 可演进生成
+
 - 增量合并、幂等、快照防回归。
 
 ### L5 平台化生成
+
 - 多栈复用、策略中心化、治理可视化、组织级推广。
 
 当前建议评估：
@@ -190,12 +200,15 @@
 ## 10. 风险与应对
 
 1. 风险：解析精度不足（尤其 view 字段类型推断）
+
 - 应对：引入更强类型推断与诊断输出。
 
-2. 风险：规则和模板漂移
+1. 风险：规则和模板漂移
+
 - 应对：规范先行、快照校验、流水线门禁。
 
-3. 风险：资产增多导致维护复杂
+1. 风险：资产增多导致维护复杂
+
 - 应对：分层目录、版本策略、变更清单模板化。
 
 ---
@@ -240,18 +253,22 @@
 “可治理生成”通常包含以下能力：
 
 1. 合规（Compliance）
+
 - 是否遵循组织编码规范、安全规范、命名规范。
 - 示例：统一响应结构、敏感字段处理、鉴权中间件基线。
 
-2. 审计（Auditability）
+1. 审计（Auditability）
+
 - 生成过程是否可追踪：输入是什么、规则版本是什么、输出了什么。
 - 示例：输出生成清单、冲突告警、跳过原因和统计报告。
 
-3. 回归（Regression Safety）
+1. 回归（Regression Safety）
+
 - 同样输入是否稳定输出；改动后是否造成非预期差异。
 - 示例：一键流水线 + 快照校验（context、manifest）+ 覆盖率统计。
 
-4. 变更可控（Change Control）
+1. 变更可控（Change Control）
+
 - 增量更新是否安全，是否避免覆盖人工改动。
 - 示例：marker 区域增量合并、幂等执行、冲突保护策略。
 
@@ -270,23 +287,29 @@
 “组织级工程资产平台”的核心要素：
 
 1. 资产标准化
+
 - 统一规则模型（命名、类型、分页、软删除等）。
 - 统一规范模型（解析契约、合并契约、质量门禁）。
 
-2. 多栈复用能力
+1. 多栈复用能力
+
 - 同一语义层支持多技术栈渲染（Gin/FastAPI/SpringBoot 等）。
 
-3. 版本与发布机制
+1. 版本与发布机制
+
 - 规则、模板、工具独立版本化。
 - 发布前统一回归，发布后可回滚。
 
-4. 平台级质量门禁
+1. 平台级质量门禁
+
 - CI 中内置校验、快照、覆盖率、报告上传。
 
-5. 可观测与可审计
+1. 可观测与可审计
+
 - 每次生成有记录：输入版本、输出摘要、差异报告、失败原因。
 
-6. 组织协同机制
+1. 组织协同机制
+
 - 架构组维护标准资产，业务组在标准范围内扩展。
 - 通过规范评审和变更流程保证一致性。
 
@@ -299,7 +322,7 @@
 #### 术语与仓库落点映射（便于学习）
 
 | 术语 | 含义 | 在当前仓库中的落点（示例） | 建议阅读顺序 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 语义上下文（context / IR） | 将 SQL 与规则解析后的统一中间语义输入 | `sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json`、`resources/config/template_context_example.json` | 先看 context 字段结构，再看模板如何消费 |
 | 规则层（config） | 命名、类型、生成档位等策略配置 | `resources/config/naming_rules.json`、`resources/config/type_mappings.json`、`resources/config/generation_profiles.json` | 先看命名规则，再看类型映射 |
 | 规范层（specifications） | 解析契约、合并策略、质量约束 | `resources/specifications/sql_parser_contract.md`、`resources/specifications/router_registry_merge_strategy.md` | 先看 parser contract，再看 merge strategy |
@@ -312,45 +335,60 @@
 #### 推荐学习路径（30-60 分钟）
 
 1. 先运行一键流水线，建立全局认知：
-	- `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
-2. 再看 context 产物，理解“语义中心”输入长什么样：
-	- `resources/demo_output/generated_context_study_flask_api.json`
-3. 对照模板层，理解“同一语义如何渲染代码”：
-	- `resources/templates/project_structure/` + `resources/templates/layers/`
-4. 查看回归与快照报告，理解“可治理生成”如何落地：
-	- `resources/demo_output/pipeline_report.json`
-	- `resources/demo_output/regression_report_study_gin_api.md`
-5. 最后回到规范层，理解“为什么这样设计”：
-	- `resources/specifications/*.md`
+
+- `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
+
+1. 再看 context 产物，理解“语义中心”输入长什么样：
+
+- `resources/demo_output/generated_context_study_flask_api.json`
+
+1. 对照模板层，理解“同一语义如何渲染代码”：
+
+- `resources/templates/project_structure/` + `resources/templates/layers/`
+
+1. 查看回归与快照报告，理解“可治理生成”如何落地：
+
+- `resources/demo_output/pipeline_report.json`
+- `resources/demo_output/regression_report_study_gin_api.md`
+
+1. 最后回到规范层，理解“为什么这样设计”：
+
+- `resources/specifications/*.md`
 
 #### 常见误区与纠偏建议
 
 1. 误区：把“模板”当成语义层
+
 - 现象：在模板里堆大量业务判断（主键、软删除、分页、视图只读等）。
 - 问题：模板可读性急剧下降，跨栈复用困难，改一条规则要改多处模板。
 - 建议：把判断前移到 context 生成与规则层，模板只负责渲染。
 
-2. 误区：只关注“生成成功”，忽略“生成可验证”
+1. 误区：只关注“生成成功”，忽略“生成可验证”
+
 - 现象：能出代码就算完成，没有固定验证链路。
 - 问题：后续改动引入回归时不易发现，质量波动大。
 - 建议：将 `run_regression_pipeline.py` 作为默认入口，并把失败视为阻断信号。
 
-3. 误区：增量生成直接覆盖文件
+1. 误区：增量生成直接覆盖文件
+
 - 现象：二次生成时覆盖已有注册文件或人工改动。
 - 问题：高冲突风险，团队信任成本高。
 - 建议：坚持 marker 区域合并策略，非 marker 区域只读；保留冲突诊断输出。
 
-4. 误区：快照机制被“无脑 update”
+1. 误区：快照机制被“无脑 update”
+
 - 现象：每次差异都直接 `--update`，不做变化审查。
 - 问题：把真实回归问题掩盖成“正常更新”。
 - 建议：默认 compare，只有“预期变更 + 评审通过”才允许 update。
 
-5. 误区：规范文档长期不更新
+1. 误区：规范文档长期不更新
+
 - 现象：实现已变，specifications 未同步，文档与行为脱节。
 - 问题：新人难以理解系统边界，维护出现隐性分叉。
 - 建议：实行“先改规范，再改实现”的变更顺序，并在回归报告中记录版本差异。
 
-6. 误区：把单 Skill 成功等同于平台化完成
+1. 误区：把单 Skill 成功等同于平台化完成
+
 - 现象：一个 Skill 跑通后就尝试快速复制到所有栈，缺少共性抽象。
 - 问题：重复建设，资产碎片化，维护成本攀升。
 - 建议：先抽象跨 Skill 共用能力（context schema、merge 策略、快照策略），再规模化推广。
@@ -369,59 +407,73 @@
 ### 12.1 FAQ（面向首次接触者）
 
 1. 问：这个 Skill 是不是只能处理 `study_flask_api.sql`？
+
 - 答：不是。该 SQL 只是回归基线样例。只要输入 SQL 满足当前 parser contract 的支持范围，都可以生成 context 并进入渲染链路。
 
-2. 问：为什么强调先看 context，而不是先看模板？
+1. 问：为什么强调先看 context，而不是先看模板？
+
 - 答：因为当前方法是“语义上下文中心”。模板是渲染层，真正的生成决策在 context 和规则层完成。
 
-3. 问：我只想快速看效果，最短命令是什么？
+1. 问：我只想快速看效果，最短命令是什么？
+
 - 答：优先执行 `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`，可一次性得到完整链路验证和报告。
 
-4. 问：快照 compare 失败就一定是 bug 吗？
+1. 问：快照 compare 失败就一定是 bug 吗？
+
 - 答：不一定。可能是预期变更，也可能是非预期回归。建议先查看差异来源，再决定是否执行 `--update`。
 
-5. 问：为什么不建议直接改模板解决所有问题？
+1. 问：为什么不建议直接改模板解决所有问题？
+
 - 答：因为规则和语义应该沉淀在 config/spec/context 侧。把语义判断长期堆在模板里会导致维护成本急剧上升。
 
 ### 12.2 排错路径（建议按顺序执行）
 
 1. 第一步：先跑一键流水线
+
 - 命令：`python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
 - 目标：快速定位是 context、模板渲染、路由合并还是快照环节失败。
 
-2. 第二步：看 pipeline 报告中的失败步骤
+1. 第二步：看 pipeline 报告中的失败步骤
+
 - 文件：`sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json`
 - 目标：确认失败阶段和错误摘要。
 
-3. 第三步：按失败类型分治
+1. 第三步：按失败类型分治
+
 - context 相关失败：检查 `generate_context_from_sql.py` 输出与 `validate_template_context.py` 报错。
 - 渲染相关失败：检查 `render_preview_bundle.py` 与模板变量是否匹配。
 - 路由合并失败：检查 `router_registry_merge_strategy.md` 与 marker 区域是否完整。
 - 快照失败：先 compare 审查差异，再在“预期变更”前提下 update。
 
-4. 第四步：回看规范是否同步
+1. 第四步：回看规范是否同步
+
 - 重点文件：`resources/specifications/*.md`
 - 目标：避免出现“实现变了，但规范没变”的隐性分叉。
 
-5. 第五步：必要时缩小输入复现
+1. 第五步：必要时缩小输入复现
+
 - 建议做法：只保留一个 table 或一个 view 的最小 SQL 片段，先打通链路后再恢复全量输入。
 
 ### 12.3 贡献者最小流程（面向开源协作）
 
 1. 先阅读顺序
+
 - `README.md` -> 本文档 -> `resources/specifications/` -> `resources/tools/`。
 
-2. 提交变更前必做
+1. 提交变更前必做
+
 - 运行一键流水线并确认通过。
 - 若产物有预期变化，提供差异说明并更新快照。
 - 在 PR 描述中写清“改动点、影响面、回归结果”。
 
-3. 建议的 PR 类型
+1. 建议的 PR 类型
+
 - 规则改进：仅改 config/spec，并附示例。
 - 模板改进：说明输入 context 及预期渲染差异。
 - 工具改进：给出失败场景、修复思路、回归证据。
 
-4. 不建议的提交方式
+1. 不建议的提交方式
+
 - 未跑回归直接提交。
 - 快照失败后直接 update 但无差异解释。
 - 只改实现不改规范，导致行为无法审计。
@@ -435,33 +487,42 @@
 快速动作（按顺序）：
 
 1. 看入口文档
+
 - `README.md`
 
-2. 跑一次完整验证
+1. 跑一次完整验证
+
 - `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
 
-3. 看结果文件
+1. 看结果文件
+
 - `sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json`
 
-4. 理解输入语义
+1. 理解输入语义
+
 - `sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json`
 
-5. 理解输出来源
+1. 理解输出来源
+
 - `sql-to-gin-restfulapi-scaffold/resources/templates/project_structure/`
 - `sql-to-gin-restfulapi-scaffold/resources/templates/layers/`
 
 常见问题速答：
 
 1. 看到快照差异怎么办？
+
 - 先 compare 诊断差异来源；确认是预期变更后再 update。
 
-2. 改规则还是改模板？
+1. 改规则还是改模板？
+
 - 先看是否属于“语义决策”。语义决策优先改 config/spec/context；模板只做渲染。
 
-3. 回归通过但代码看起来不理想怎么办？
+1. 回归通过但代码看起来不理想怎么办？
+
 - 先补规范或规则，再调整模板；避免直接在生成产物上人工修补作为长期方案。
 
-4. 如何判断变更是否可合并？
+1. 如何判断变更是否可合并？
+
 - 满足质量门禁：流水线通过、快照可解释、变更说明完整。
 
 ### 12.5 贡献者 PR 模板示例（四段式）
@@ -481,11 +542,11 @@
 
 ## 3) 验证
 - 执行命令：
-	- python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+ - python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 - 结果摘要：
-	- pipeline_report: PASS/FAIL
-	- snapshot compare: PASS/FAIL
-	- 覆盖率：xx%
+ - pipeline_report: PASS/FAIL
+ - snapshot compare: PASS/FAIL
+ - 覆盖率：xx%
 
 ## 4) 影响面
 - 对已有 Skill 的影响：

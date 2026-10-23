@@ -24,7 +24,7 @@ Claude Code Skills 是一种扩展 Claude 功能的新方式，通过 SKILL.md �
 
 ## 技能目录结构
 
-```
+```text
 ~/.claude/skills/{skill-name}/
 ├── SKILL.md           # 技能主定义文件（必需）
 ├── reference.md       # 可选的参考文档
@@ -46,7 +46,7 @@ description 是最重要的触发因素，应该清晰描述技能的适用场�
 ## 与其他配置机制的区别
 
 | 机制 | 作用域 | 调用方式 | 适用场景 |
-|------|--------|----------|----------|
+| ------ | -------- | ---------- | ---------- |
 | **Skills** | 全局或项目 | 自动激活 | 扩展 Claude 能力的工具 |
 | **Slash Commands** | 全局或项目 | 显式调用（/command） | 常用提示词模板 |
 | **CLAUDE.md** | 项目 | 始终加载 | 项目上下文和约定 |
@@ -68,14 +68,18 @@ cp -r sql-to-fastapi-restfulapi-scaffold ~/.claude/skills/
 
 在 Claude Code 中输入 `/skills` 可查看已安装的技能列表。
 
-#### 以下是 配置项目skill的示例图文教程 ：
+#### 以下是 配置项目skill的示例图文教程
+
 ```bash
 mkdir -p .claude/skills && cp -r ../../sql-to-fastapi-restfulapi-scaffold .claude/skills/
 ```
+
 ![alt text](images/claude-0.png)
 
-#### 打开 Claude Code，输入 `/skills` 查看已安装的技能列表。
+#### 打开 Claude Code，输入 `/skills` 查看已安装的技能列表
+
 ![alt text](images/claude-1.png)
 
-#### 使用技能 sql-to-fastapi-restfulapi-scaffold 生成 FastAPI 项目脚手架代码。
+#### 使用技能 sql-to-fastapi-restfulapi-scaffold 生成 FastAPI 项目脚手架代码
+
 ![alt text](images/claude-2.png)
