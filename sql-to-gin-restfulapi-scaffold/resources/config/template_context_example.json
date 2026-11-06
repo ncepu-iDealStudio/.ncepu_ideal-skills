@@ -6,7 +6,7 @@
     "api_group": "api",
     "api_version_package": "api_1_0",
     "sql_source_type": "file",
-    "sql_source_path": "test/study_flask_api.sql"
+    "sql_source_path": "test/api_security_demo-20260717.sql"
   },
   "options": {
     "first_scaffold": true,

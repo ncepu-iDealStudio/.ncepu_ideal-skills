@@ -1,23 +1,88 @@
-# Build and Release Folders
+# ---------------------------------------------------------------------------
+# ncepu_ideal-skills
+# 本仓库是 AI Skill 资产库（Python 工具链 + Go/Java/Python 模板）。
+# 忽略规则按实际技术栈配置；示例产物（test/*-example/）是刻意提交的快照，
+# 请勿把它们整体加入忽略。
+# ---------------------------------------------------------------------------
+
+# Python（工具链 / FastAPI / Flask 模板）
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+.python-version   # 注意：模板里的 .python-version 是刻意提交的资源，见下方取反
+
+# 虚拟环境 / 包管理器
+.uv/
+uv.lock           # 目标项目自行管理；示例工程里的 uv.lock 已提交，勿全局忽略
+
+# Go（Gin 模板）
+/bin/
+/pkg/
+*.test
+*.out
+go.work
+go.work.sum
+
+# Java / Maven（SpringBoot 模板）
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# 环境变量与本地密钥
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# 日志与运行时产物
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# 编辑器 / IDE / 操作系统
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+.settings/
+
+# 构建与发布目录（沿用旧规则）
 bin-debug/
 bin-release/
 [Oo]bj/
 [Bb]in/
 
-# Other files and folders
-.settings/
-logs/
-__pycache__/
-target/
-# Executables
+# 旧模板遗留的可执行文件类型（保留以兼容历史）
 *.swf
 *.air
 *.ipa
 *.apk
 
-
-.env
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# ---------------------------------------------------------------------------
+# 取反：以下文件虽命中上面的通用规则，但属于技能模板 / 示例资产，必须提交
+# ---------------------------------------------------------------------------
+!sql-to-fastapi-restfulapi-scaffold/resources/templates/project_structure/.python-version
+!test/sql-to-fastapi-example/.python-version
+!test/sql-to-fastapi-example/uv.lock
+!.env.example
+!.env.docker
+!**/.env.example
+!**/.env.docker

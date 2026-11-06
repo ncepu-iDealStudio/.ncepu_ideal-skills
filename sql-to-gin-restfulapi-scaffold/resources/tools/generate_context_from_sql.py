@@ -117,8 +117,10 @@ def parse_table_fields(table_body: str, pk: str, mapping: dict, soft_delete_cand
 
 
 def parse_tables(sql: str, mapping: dict, soft_delete_candidates: list[str]) -> list[dict]:
+    # 兼容 Navicat 导出的 ") ENGINE =" 写法（ENGINE 与等号之间可有空格），
+    # 以及旧版 ")ENGINE=" 写法。
     table_pattern = re.compile(
-        r"CREATE\s+TABLE\s+`(?P<name>[^`]+)`\s*\((?P<body>.*?)\)\s*ENGINE=",
+        r"CREATE\s+TABLE\s+`(?P<name>[^`]+)`\s*\((?P<body>.*?)\)\s*ENGINE\s*=",
         flags=re.I | re.S,
     )
     entities: list[dict] = []
@@ -251,6 +253,15 @@ def main() -> int:
     views = parse_views(sql)
     entities = tables + views
 
+    # 把 SQL 来源记录成相对仓库根的路径，保证产物/快照可移植，
+    # 不把开发者本机的绝对路径写进 context。
+    repo_root = Path(__file__).resolve().parents[3]
+    try:
+        sql_source_rel = sql_path.resolve().relative_to(repo_root).as_posix()
+    except ValueError:
+        # SQL 在仓库之外时退化为去除盘符的相对化绝对路径，避免出现盘符
+        sql_source_rel = sql_path.as_posix().lstrip("/")
+
     context = {
         "project": {
             "project_name": project_name,
@@ -259,7 +270,7 @@ def main() -> int:
             "api_group": "api",
             "api_version_package": "api_1_0",
             "sql_source_type": "file",
-            "sql_source_path": str(sql_path).replace("\\", "/"),
+            "sql_source_path": sql_source_rel,
         },
         "options": {
             "first_scaffold": True,

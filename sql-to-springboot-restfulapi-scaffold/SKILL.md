@@ -1,5 +1,5 @@
 ---
-name: "sql-to-springboot-scaffold"
+name: "sql-to-springboot-restfulapi-scaffold"
 description: "从SQL CREATE TABLE语句生成完整的Spring Boot RESTful API项目脚手架，包含Entity、Repository、Service、Controller层。调用时用户提供SQL表结构，或要求搭建API/生成代码。"
 ---
 
@@ -7,7 +7,7 @@ description: "从SQL CREATE TABLE语句生成完整的Spring Boot RESTful API项
 
 ## 概述
 
-`sql-to-springboot-scaffold` 是一个基于资源驱动的技能，用于从SQL表结构语句自动生成完整的 Spring Boot 项目脚手架代码。该技能不依赖脚本，而是通过资源文件（模板、配置等）驱动大模型生成代码。
+`sql-to-springboot-restfulapi-scaffold` 是一个基于资源驱动的技能，用于从SQL表结构语句自动生成完整的 Spring Boot 项目脚手架代码。该技能不依赖脚本，而是通过资源文件（模板、配置等）驱动大模型生成代码。
 
 ## 什么时候使用此技能
 

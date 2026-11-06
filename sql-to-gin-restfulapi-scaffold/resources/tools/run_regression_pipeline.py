@@ -37,9 +37,15 @@ def main() -> int:
     demo = skill_root / "resources" / "demo_output"
     tmpl_urls = skill_root / "resources" / "templates" / "project_structure" / "apis" / "api_1_0" / "urls.go"
 
-    sql_path = repo_root / "test" / "study_flask_api.sql"
+    sql_path = repo_root / "test" / "api_security_demo-20260717.sql"
     context_path = demo / "generated_context_study_flask_api.json"
     merge_preview_path = demo / "urls_merge_preview.go"
+
+    # 所有传给子脚本的路径统一用「相对仓库根」形式：产物/报告里不会出现
+    # 开发者本机的绝对路径，保证 demo_output 可移植、快照可复现。
+    sql_arg = sql_path.relative_to(repo_root).as_posix()
+    context_arg = context_path.relative_to(repo_root).as_posix()
+    merge_preview_arg = merge_preview_path.relative_to(repo_root).as_posix()
 
     steps = [
         (
@@ -47,23 +53,23 @@ def main() -> int:
             [
                 sys.executable,
                 str(tools / "generate_context_from_sql.py"),
-                str(sql_path),
-                str(context_path),
+                sql_arg,
+                context_arg,
                 "study_flask_api",
                 "study_flask_api",
             ],
         ),
         (
             "validate_context",
-            [sys.executable, str(tools / "validate_template_context.py"), str(context_path)],
+            [sys.executable, str(tools / "validate_template_context.py"), context_arg],
         ),
         (
             "preview_plan",
-            [sys.executable, str(tools / "preview_generation_plan.py"), str(context_path)],
+            [sys.executable, str(tools / "preview_generation_plan.py"), context_arg],
         ),
         (
             "render_bundle",
-            [sys.executable, str(tools / "render_preview_bundle.py"), str(context_path)],
+            [sys.executable, str(tools / "render_preview_bundle.py"), context_arg],
         ),
     ]
 
@@ -93,8 +99,8 @@ def main() -> int:
     merge_cmd = [
         sys.executable,
         str(tools / "merge_router_registry.py"),
-        str(context_path),
-        str(merge_preview_path),
+        context_arg,
+        merge_preview_arg,
     ]
     code, output = run_cmd(merge_cmd, repo_root)
     report["steps"].append(

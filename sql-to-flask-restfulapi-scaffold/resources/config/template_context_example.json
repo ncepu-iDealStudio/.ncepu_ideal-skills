@@ -5,7 +5,7 @@
     "run_mode_default": "develop",
     "module_style": "snake_case",
     "sql_source_type": "file",
-    "sql_source_path": "test/study_flask_api.sql",
+    "sql_source_path": "test/api_security_demo-20260717.sql",
     "generator_name": "sql-to-flask-restfulapi-scaffold"
   },
   "options": {

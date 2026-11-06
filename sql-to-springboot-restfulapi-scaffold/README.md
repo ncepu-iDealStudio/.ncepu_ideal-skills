@@ -2,7 +2,7 @@
 
 ## 概述
 
-`sql-to-springboot-scaffold` 是一个基于资源驱动的技能，用于从 SQL 表结构语句自动生成完整的 Spring Boot RESTful API 项目脚手架代码。
+`sql-to-springboot-restfulapi-scaffold` 是一个基于资源驱动的技能，用于从 SQL 表结构语句自动生成完整的 Spring Boot RESTful API 项目脚手架代码。
 
 ## 功能特性
 

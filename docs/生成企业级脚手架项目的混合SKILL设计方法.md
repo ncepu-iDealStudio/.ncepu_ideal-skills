@@ -406,9 +406,9 @@
 
 ### 12.1 FAQ（面向首次接触者）
 
-1. 问：这个 Skill 是不是只能处理 `study_flask_api.sql`？
+1. 问：这个 Skill 是不是只能处理 `test/api_security_demo-20260717.sql`？
 
-- 答：不是。该 SQL 只是回归基线样例。只要输入 SQL 满足当前 parser contract 的支持范围，都可以生成 context 并进入渲染链路。
+- 答：不是。该 SQL 只是仓库内的回归基线样例（旧版基线 `test/study_flask_api.sql` 已移除）。只要输入 SQL 满足当前 parser contract 的支持范围，都可以生成 context 并进入渲染链路。
 
 1. 问：为什么强调先看 context，而不是先看模板？
 

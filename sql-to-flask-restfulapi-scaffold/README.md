@@ -13,7 +13,7 @@
 3. 支持增量生成与注册合并，减少覆盖人工代码的风险。
 
 参考目标工程：`test/sql-to-flask-example`。  
-基线 SQL：`test/study_flask_api.sql`。
+基线 SQL：`test/api_security_demo-20260717.sql`。
 
 ### 2. 技术栈和依赖版本
 
@@ -199,7 +199,7 @@ sql-to-flask-example/
 
 ```bash
 python sql-to-flask-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to-flask-restfulapi-scaffold/resources/config/template_context_example.json
-python sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/study_flask_api.sql
+python sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/api_security_demo-20260717.sql
 python sql-to-flask-restfulapi-scaffold/resources/tools/render_preview_bundle.py
 ```
 

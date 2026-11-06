@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type SysClassInfoModel struct {
+type SysClassinfoModel struct {
 	AutoID int `gorm:"column:autoID;type:int;primaryKey;not null;" json:"autoID" form:"autoID"`
 	ClassID string `gorm:"column:classID;type:varchar(10);default:NULL;" json:"classID" form:"classID"`
 	CollegeID string `gorm:"column:collegeID;type:varchar(20);default:NULL;" json:"collegeID" form:"collegeID"`
@@ -11,6 +11,6 @@ type SysClassInfoModel struct {
 	AddTime time.Time `gorm:"column:addTime;type:timestamp;default:CURRENT_TIMESTAMP;" json:"addTime" form:"addTime"`
 }
 
-func (m *SysClassInfoModel) TableName() string {
-	return "sys_classInfo"
+func (m *SysClassinfoModel) TableName() string {
+	return "sys_classinfo"
 }

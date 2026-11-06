@@ -49,6 +49,8 @@ sql-to-fastapi-restfulapi-scaffold/
 │   │   └── project_baseline.json   # utils 等基线包清单与复用策略
 │   ├── specifications/
 │   │   └── coding_standards.md
+│   ├── tools/
+│   │   └── check_skill_consistency.py   # 技能资产自洽校验（不渲染项目）
 │   └── templates/
 │       ├── layers/
 │       │   ├── model/

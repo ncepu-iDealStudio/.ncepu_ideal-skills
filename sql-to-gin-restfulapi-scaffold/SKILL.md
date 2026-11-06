@@ -8,10 +8,11 @@ description: "从 MySQL DDL（CREATE TABLE/CREATE VIEW）生成 Gin + GORM 风�
 ## 里程碑状态
 
 - 当前阶段：V1 可用
-- 全量覆盖：11/11（基于 `test/study_flask_api.sql`）
+- 全量覆盖：12/12（11 表 + 1 视图，基于 `test/api_security_demo-20260717.sql`）
 - 回归入口：
 	- `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
 - 防回归机制：快照校验（context + manifest）已接入流水线
+- 基线 SQL：`test/api_security_demo-20260717.sql`（真实存在的仓库内文件；旧版 `test/study_flask_api.sql` 已移除，文档与产物均已对齐）
 
 ## 概述
 

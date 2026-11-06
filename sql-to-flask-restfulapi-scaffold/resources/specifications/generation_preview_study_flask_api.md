@@ -1,13 +1,16 @@
-# Generation Preview (study_flask_api.sql)
+# Generation Preview (test/api_security_demo-20260717.sql)
 
 ## Input
 
-- SQL file: `test/study_flask_api.sql`
+- SQL file: `test/api_security_demo-20260717.sql`
 - Target style: Flask + Flask-RESTful layered scaffold
+
+> 旧版基线 `test/study_flask_api.sql`（10 表、驼峰表名）已移除，
+> 本预览以仓库内真实存在的 `test/api_security_demo-20260717.sql` 为准。
 
 ## Parsed Entities
 
-### Tables (10)
+### Tables (11)
 
 1. admin
 2. course
@@ -15,10 +18,11 @@
 4. sso_user
 5. student
 6. student_selected_course
-7. sys_classInfo
-8. sys_collegeInfo
-9. sys_departmentInfo
-10. teacher
+7. sys_class
+8. sys_classinfo
+9. sys_college
+10. sys_department
+11. teacher
 
 ### Views (1)
 

@@ -12,7 +12,7 @@
 2. 通过上下文校验、计划预览、快照比对保证可验证。
 3. 通过路由增量合并机制支持后续演进，避免覆盖人工代码。
 
-当前参考生成对象为 `test/sql-to-gin-example`，基线 SQL 为 `test/study_flask_api.sql`。
+当前参考生成对象为 `test/sql-to-gin-example`，基线 SQL 为 `test/api_security_demo-20260717.sql`。
 
 ### 2. 技术栈和依赖版本
 

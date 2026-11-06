@@ -1,6 +1,6 @@
 # {{projectName}}
 
-由技能 `sql-to-springboot-scaffold` 根据 `sql/{{tableName}}.sql` 生成的 Spring Boot 3 项目脚手架。
+由技能 `sql-to-springboot-restfulapi-scaffold` 根据 `sql/{{tableName}}.sql` 生成的 Spring Boot 3 项目脚手架。
 
 统一使用 **Controller → Service → Repository → Entity** 四层分层，Controller 只依赖 Service，Repository 只做单表数据访问，业务规则集中在 Service。
 
@@ -305,7 +305,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
 ## 增量新增其它表
 
 ```text
-请使用 sql-to-springboot-scaffold 技能，为 sql/{{nextTableName}}.sql 做增量生成。
+请使用 sql-to-springboot-restfulapi-scaffold 技能，为 sql/{{nextTableName}}.sql 做增量生成。
 要求：只生成该表相关文件；路由用复数；已存在的 Service 不要覆盖。
 ```
 

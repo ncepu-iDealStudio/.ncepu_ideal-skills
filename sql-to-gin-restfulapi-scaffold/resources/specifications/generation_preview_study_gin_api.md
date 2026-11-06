@@ -1,13 +1,13 @@
-# Generation Preview for test/study_flask_api.sql (V1)
+# Generation Preview for test/api_security_demo-20260717.sql (V1)
 
 ## Input
 
-- SQL source: test/study_flask_api.sql
+- SQL source: test/api_security_demo-20260717.sql
 - Target style: Gin + GORM layered scaffold
 
 ## Expected Entities
 
-Tables (10 expected):
+Tables (11 expected):
 
 - admin
 - course
@@ -15,14 +15,19 @@ Tables (10 expected):
 - sso_user
 - student
 - student_selected_course
-- sys_classInfo
-- sys_collegeInfo
-- sys_departmentInfo
+- sys_class
+- sys_classinfo
+- sys_college
+- sys_department
 - teacher
 
 Views (1 expected):
 
 - v_student_course_score
+
+> 说明：实体清单以 `test/api_security_demo-20260717.sql` 为准。旧版基线
+> `test/study_flask_api.sql` 使用驼峰表名（`sys_classInfo` 等）且已移除；
+> 当前基线为全小写 snake_case 表名，并多出 `sys_class` 一张表。
 
 ## Expected Generated Outputs (First Scaffold)
 

@@ -1,15 +1,16 @@
 {
   "files": [
-    "demo_output\\bundle_preview\\models\\Admin.go",
-    "demo_output\\bundle_preview\\models\\Course.go",
-    "demo_output\\bundle_preview\\models\\CourseArrangement.go",
-    "demo_output\\bundle_preview\\models\\SsoUser.go",
-    "demo_output\\bundle_preview\\models\\Student.go",
-    "demo_output\\bundle_preview\\models\\StudentSelectedCourse.go",
-    "demo_output\\bundle_preview\\models\\SysClassInfo.go",
-    "demo_output\\bundle_preview\\models\\SysCollegeInfo.go",
-    "demo_output\\bundle_preview\\models\\SysDepartmentInfo.go",
-    "demo_output\\bundle_preview\\models\\Teacher.go",
-    "demo_output\\bundle_preview\\models\\VStudentCourseScore.go"
+    "demo_output/bundle_preview/models/Admin.go",
+    "demo_output/bundle_preview/models/Course.go",
+    "demo_output/bundle_preview/models/CourseArrangement.go",
+    "demo_output/bundle_preview/models/SsoUser.go",
+    "demo_output/bundle_preview/models/Student.go",
+    "demo_output/bundle_preview/models/StudentSelectedCourse.go",
+    "demo_output/bundle_preview/models/SysClass.go",
+    "demo_output/bundle_preview/models/SysClassinfo.go",
+    "demo_output/bundle_preview/models/SysCollege.go",
+    "demo_output/bundle_preview/models/SysDepartment.go",
+    "demo_output/bundle_preview/models/Teacher.go",
+    "demo_output/bundle_preview/models/VStudentCourseScore.go"
   ]
 }

@@ -72,8 +72,10 @@ resources/
 │   ├── status_flag_fields.json # 状态/标识位敏感字段识别
 │   ├── package_manager.json    # 包管理与启动（默认 uv）
 │   └── project_baseline.json   # 基线包（utils 等）清单与覆盖策略
-└── specifications/         # 规范文档
-    └── coding_standards.md # 代码规范
+├── specifications/         # 规范文档
+│   └── coding_standards.md # 代码规范
+└── tools/                  # 技能资产自洽校验（不渲染目标项目）
+    └── check_skill_consistency.py
 ```
 
 ### 生成范围

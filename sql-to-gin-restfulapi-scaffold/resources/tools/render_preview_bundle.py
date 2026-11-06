@@ -56,8 +56,15 @@ def main() -> int:
     ensure_parent(manifest_file)
     manifest_file.write_text(json.dumps({"files": manifest}, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    # 打印相对仓库根的路径，避免把开发者本机绝对路径写进回归报告
+    repo_root = Path(__file__).resolve().parents[3]
+    try:
+        manifest_display = manifest_file.relative_to(repo_root).as_posix()
+    except ValueError:
+        manifest_display = manifest_file.as_posix()
+
     print(f"bundle files: {len(manifest)}")
-    print(f"manifest: {manifest_file}")
+    print(f"manifest: {manifest_display}")
     return 0
 
 

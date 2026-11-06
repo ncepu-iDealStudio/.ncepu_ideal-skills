@@ -110,6 +110,7 @@ ncepu_ideal-skills/
 ├── 📁 docs/                                        # 配置指南与设计方法
 │   ├── Trea中使用skill配置.md
 │   ├── claude中使用skill配置.md
+│   ├── CodeBuddy中使用skill配置.md
 │   ├── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
 │   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
 │   └── images/                                     # 配置截图
@@ -120,7 +121,8 @@ ncepu_ideal-skills/
 │   └── resources/
 │       ├── config/
 │       ├── specifications/
-│       └── templates/
+│       ├── templates/
+│       └── tools/                                  # check_skill_consistency.py（自洽校验）
 ├── 📁 sql-to-flask-restfulapi-scaffold/            # 🐍 Flask 接口项目生成技能
 │   ├── README.md
 │   ├── SKILL.md

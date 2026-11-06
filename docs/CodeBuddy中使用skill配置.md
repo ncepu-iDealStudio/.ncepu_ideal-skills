@@ -84,7 +84,9 @@ Copy-Item -Recurse -Force "<本仓库路径>\sql-to-fastapi-restfulapi-scaffold"
 例如：
 
 ```powershell
-Copy-Item -Recurse -Force "E:\Open_source_project\ncepu_ideal-skills\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
+Copy-Item -Recurse -Force "<本仓库路径>\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
+# 例如（把路径换成你本机克隆仓库的实际位置）：
+# Copy-Item -Recurse -Force "D:\work\ncepu_ideal-skills\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
 ```
 
 #### Bash（macOS / Linux）
