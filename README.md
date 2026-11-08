@@ -99,6 +99,32 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ---
 
+### 9️⃣ prototype-to-app-uniappx
+
+从**原型**（HTML/CSS 代码、设计图截图、PRD 页面清单）生成**可运行的 uni-app x 工程**：用 mock 数据还原页面布局、视觉与交互，产出可直接在 HBuilder 运行的多端工程。
+
+- 默认输出**蒸汽模式（TS）**，同时说明 uts 写法的切换
+- 强制规避 uni-app x 与 uni-app 的差异坑（`.uvue`、flex 默认竖向、文字须在 `<text>` 内、`manifest.json` 需 `"uni-app-x": {}`）
+- 分层：页面 / 组件 / `services/api`（唯一数据接缝）/ `services/mock`
+- 校验脚本 10 项，示例产物 `resources/demo_output/skill-swap-demo/`
+
+📖 **详细说明**：[查看文档](prototype-to-app-uniappx/README.md)
+
+---
+
+### 🔟 prototype-to-flutter-app
+
+从**原型**生成符合 Flutter 官方架构指南与最佳实践的**开箱即用工程**：分层目录、路由、主题、mock 数据驱动的页面还原，`flutter pub get && flutter run` 即可看到效果。
+
+- 按功能切分目录（`features/`），UI 层 / 数据层分离，Repository 模式
+- 状态管理用官方推荐的 `ChangeNotifier` + `ListenableBuilder`，**零重型依赖**（仅 `http`）
+- 强制规避硬编码颜色、`features` 层直连 HTTP 等反模式
+- 校验脚本 11 项，示例产物 `resources/demo_output/skill_swap_app/`
+
+📖 **详细说明**：[查看文档](prototype-to-flutter-app/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```
@@ -150,11 +176,29 @@ ncepu_ideal-skills/
 │       ├── tools/
 │       ├── static/
 │       └── demo_output/
+├── 📁 prototype-to-app-uniappx/                    # 📱 原型转 uni-app x 工程技能
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
+├── 📁 prototype-to-flutter-app/                    # 🐦 原型转 Flutter 工程技能
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
 ├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
 ├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
-├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype
+├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype、diagnosing-superpowers
 ├── 📁 .cursor/skills/                              # it-requirement-analysis、prd-html-skill
-├── 📁 .dsh/skills/                                 # common-website-design、it-requirement-analysis、prd-html-skill
+├── 📁 .dsh/skills/                                 # common-website-design、it-requirement-analysis、prd-html-skill、diagnosing-superpowers
 └── 📁 test/                                        # 🧪 技能生成示例与样例数据
     ├── api_security_demo-20260717.sql
     ├── sql-to-fastapi-example/

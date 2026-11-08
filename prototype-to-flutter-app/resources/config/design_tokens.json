@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0",
+  "description": "设计 token。生成时写入 lib/core/theme/，页面统一引用，禁止魔法数字。",
+  "color": {
+    "primary": "#2B6DE5",
+    "primaryLight": "#E8F0FE",
+    "success": "#18A058",
+    "warning": "#F0A020",
+    "error": "#D03050",
+    "textPrimary": "#1F2225",
+    "textSecondary": "#5C6570",
+    "textTertiary": "#9099A3",
+    "border": "#E5E7EB",
+    "divider": "#F0F1F3",
+    "background": "#F5F6F8",
+    "surface": "#FFFFFF",
+    "mask": "#73000000"
+  },
+  "dark_color": {
+    "enabled": false,
+    "background": "#121417",
+    "surface": "#1C1F24",
+    "textPrimary": "#F5F6F8",
+    "textSecondary": "#A8B0BA",
+    "border": "#2C3036"
+  },
+  "font_size": {
+    "xs": 11.0,
+    "sm": 12.0,
+    "base": 14.0,
+    "md": 15.0,
+    "lg": 17.0,
+    "xl": 20.0,
+    "xxl": 24.0
+  },
+  "font_weight": {
+    "normal": "FontWeight.w400",
+    "medium": "FontWeight.w500",
+    "bold": "FontWeight.w600"
+  },
+  "spacing": {
+    "xs": 4.0,
+    "sm": 8.0,
+    "md": 12.0,
+    "lg": 16.0,
+    "xl": 24.0,
+    "pagePadding": 16.0,
+    "sectionGap": 12.0
+  },
+  "radius": {
+    "sm": 6.0,
+    "md": 10.0,
+    "lg": 16.0,
+    "pill": 999.0,
+    "circle": "circular"
+  },
+  "elevation": {
+    "card": 1.0,
+    "float": 4.0
+  },
+  "sizing": {
+    "appBarHeight": 56.0,
+    "bottomNavHeight": 56.0,
+    "avatarSm": 32.0,
+    "avatarMd": 44.0,
+    "avatarLg": 64.0,
+    "iconSm": 16.0,
+    "iconMd": 24.0,
+    "buttonHeight": 44.0,
+    "touchTargetMin": 44.0
+  },
+  "animation": {
+    "durationFast": 150,
+    "durationBase": 250,
+    "curve": "Curves.easeInOut"
+  }
+}

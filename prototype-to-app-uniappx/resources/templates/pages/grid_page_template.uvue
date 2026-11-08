@@ -1,0 +1,84 @@
+<template>
+  <view class="page">
+    <scroll-view class="page__body" scroll-y>
+      <view class="grid">
+        <view
+          v-for="item in gridItems"
+          :key="item.key"
+          class="grid__item"
+          :hover-class="'grid__item--active'"
+          :hover-stay-time="100"
+          @tap="onTap(item)"
+        >
+          <image
+            v-if="item.icon"
+            class="grid__icon"
+            :src="item.icon"
+            mode="aspectFit"
+          />
+          <text class="grid__label">{{ item.label }}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</template>
+
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  interface GridItem {
+    key: string
+    label: string
+    icon?: string
+    route?: string
+  }
+
+  /** 宫格入口配置：由生成器按原型填充 */
+  const gridItems = ref<GridItem[]>([
+    { key: 'publish', label: '发布技能', icon: '/static/placeholder.png', route: '/pages/publish/publish' },
+    { key: 'mine', label: '我的互换', icon: '/static/placeholder.png', route: '/pages/mine/mine' },
+    { key: 'favorite', label: '我的收藏', icon: '/static/placeholder.png' },
+    { key: 'help', label: '帮助中心', icon: '/static/placeholder.png' }
+  ])
+
+  function onTap(item: GridItem) {
+    if (!item.route) {
+      uni.showToast({ title: '功能开发中', icon: 'none' })
+      return
+    }
+    uni.navigateTo({ url: item.route })
+  }
+</script>
+
+<style lang="scss">
+  .page { flex: 1; flex-direction: column; background-color: $color-background; }
+  .page__body { flex: 1; }
+
+  .grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: $page-padding;
+  }
+
+  .grid__item {
+    width: 25%;
+    flex-direction: column;
+    align-items: center;
+    padding-top: $space-md;
+    padding-bottom: $space-md;
+  }
+
+  .grid__item--active { opacity: 0.7; }
+
+  .grid__icon {
+    width: 56rpx;
+    height: 56rpx;
+  }
+
+  .grid__label {
+    margin-top: $space-xs;
+    font-size: $font-xs;
+    color: $text-secondary;
+    text-align: center;
+  }
+</style>

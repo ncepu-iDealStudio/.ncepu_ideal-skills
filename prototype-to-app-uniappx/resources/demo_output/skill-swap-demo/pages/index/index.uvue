@@ -1,0 +1,125 @@
+<template>
+  <view class="page">
+    <view v-if="loading" class="page__loading">
+      <text class="page__loading-text">加载中…</text>
+    </view>
+
+    <EmptyState v-else-if="list.length === 0" text="还没有技能，去发布一个吧" />
+
+    <scroll-view v-else class="page__body" scroll-y>
+      <view class="page__list">
+        <view
+          v-for="item in list"
+          :key="item.id"
+          class="list-card"
+          :hover-class="'list-card--active'"
+          :hover-stay-time="100"
+          @tap="goDetail(item.id)"
+        >
+          <image
+            v-if="item.avatar"
+            class="list-card__avatar"
+            :src="item.avatar"
+            mode="aspectFill"
+          />
+          <view v-else class="list-card__avatar list-card__avatar--empty" />
+
+          <view class="list-card__body">
+            <text class="list-card__title">{{ item.title }}</text>
+            <text class="list-card__subtitle">{{ item.userName }}</text>
+            <view class="list-card__tags">
+              <text v-for="tag in item.tags" :key="tag" class="tag">{{ tag }}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</template>
+
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import { onLoad, onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app'
+  import EmptyState from '@/components/empty-state.uvue'
+  import { getSkillList } from '@/services/api/skill'
+  import type { Skill } from '@/types/skill'
+
+  const list = ref<Skill[]>([])
+  const loading = ref(true)
+  const noMore = ref(false)
+  const page = ref(1)
+  const PAGE_SIZE = 10
+
+  async function loadPage(reset: boolean = false) {
+    if (reset) {
+      page.value = 1
+      noMore.value = false
+      loading.value = true
+    }
+    try {
+      const rows = await getSkillList(page.value, PAGE_SIZE)
+      list.value = reset ? rows : list.value.concat(rows)
+      if (rows.length < PAGE_SIZE) noMore.value = true
+      page.value += 1
+    } catch (e) {
+      uni.showToast({ title: (e as Error).message || '加载失败', icon: 'none' })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  onLoad(() => { loadPage(true) })
+
+  onPullDownRefresh(async () => {
+    await loadPage(true)
+    uni.stopPullDownRefresh()
+  })
+
+  onReachBottom(() => {
+    if (!noMore.value) loadPage(false)
+  })
+
+  function goDetail(id: number) {
+    uni.navigateTo({ url: `/pages/detail/detail?id=${id}` })
+  }
+</script>
+
+<style lang="scss">
+  .page { flex: 1; flex-direction: column; background-color: $color-background; }
+  .page__body { flex: 1; }
+  .page__loading { flex: 1; flex-direction: row; justify-content: center; align-items: center; }
+  .page__loading-text { font-size: $font-base; color: $text-tertiary; }
+  .page__list { padding: $page-padding; }
+
+  .list-card {
+    flex-direction: row;
+    padding: $space-md;
+    margin-bottom: $space-md;
+    background-color: $color-surface;
+    border-radius: $radius-md;
+    box-shadow: $shadow-card;
+  }
+  .list-card--active { background-color: #F7F8FA; }
+  .list-card__avatar { width: $avatar-md; height: $avatar-md; border-radius: $radius-md; }
+  .list-card__avatar--empty { background-color: $color-divider; }
+  .list-card__body { flex: 1; flex-direction: column; margin-left: $space-md; }
+  .list-card__title {
+    font-size: $font-md;
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+    line-height: $line-height-normal;
+    lines: 2;
+    text-overflow: ellipsis;
+  }
+  .list-card__subtitle { font-size: $font-sm; color: $text-tertiary; margin-top: $space-xs; }
+  .list-card__tags { flex-direction: row; flex-wrap: wrap; margin-top: $space-sm; }
+  .tag {
+    padding: $space-xs $space-sm;
+    margin-right: $space-xs;
+    margin-bottom: $space-xs;
+    font-size: $font-xs;
+    color: $color-primary;
+    background-color: $color-primary-light;
+    border-radius: $radius-sm;
+  }
+</style>

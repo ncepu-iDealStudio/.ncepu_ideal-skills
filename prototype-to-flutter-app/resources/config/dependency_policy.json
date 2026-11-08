@@ -1,0 +1,71 @@
+{
+  "version": "1.0.0",
+  "description": "依赖策略。目标：最大化开箱即用成功率（pub get 不出错）与最小认知负担。",
+  "principle": "默认零重型依赖。能用手写实现的不引包；必须引包时只选官方或极稳定的库。",
+  "default_dependencies": {
+    "http": {
+      "version": "^1.2.0",
+      "reason": "官方推荐的最简 HTTP 客户端，API 稳定，无传递依赖负担",
+      "usage": "core/network/api_client.dart"
+    }
+  },
+  "default_dev_dependencies": {
+    "flutter_test": {
+      "source": "sdk",
+      "reason": "Flutter 自带测试框架"
+    },
+    "flutter_lints": {
+      "version": "^4.0.0",
+      "reason": "官方 lint 规则集，配合 analysis_options.yaml"
+    }
+  },
+  "rejected_by_default": {
+    "provider": {
+      "reason": "内置 ChangeNotifier + ListenableBuilder 已足够，官方教程即此方案",
+      "when_to_add": "团队明确要求或状态跨多个深层子树共享"
+    },
+    "riverpod": {
+      "reason": "功能强大但学习/配置成本高，原型转骨架阶段属于过度设计",
+      "when_to_add": "中大型项目、需要编译期安全与自动释放"
+    },
+    "bloc": {
+      "reason": "模板代码量大，与快速还原原型的目标不符",
+      "when_to_add": "团队既有 Bloc 规范"
+    },
+    "go_router": {
+      "reason": "命名路由 + Navigator 已满足原型阶段需求",
+      "when_to_add": "需要深度链接、Web URL 同步、嵌套导航"
+    },
+    "json_serializable": {
+      "reason": "引入 build_runner 与代码生成步骤，增加失败点",
+      "when_to_add": "模型字段极多、手写 fromJson 成本过高"
+    },
+    "freezed": {
+      "reason": "同上，且依赖较多",
+      "when_to_add": "需要不可变模型与 union 类型"
+    },
+    "dio": {
+      "reason": "功能强于 http，但原型阶段用不到拦截器/取消/表单等能力",
+      "when_to_add": "需要统一拦截器、上传进度、请求取消"
+    },
+    "getx": {
+      "reason": "自成体系，与官方架构指南不一致",
+      "when_to_add": "不建议引入"
+    }
+  },
+  "required_files": [
+    "pubspec.yaml",
+    "analysis_options.yaml",
+    "lib/main.dart",
+    "lib/app.dart",
+    "test/widget_test.dart",
+    ".gitignore",
+    "README.md"
+  ],
+  "pubspec_rules": {
+    "environment_sdk": ">=3.0.0 <4.0.0",
+    "indent": 2,
+    "must_declare_assets_if_used": true,
+    "note": "pubspec.yaml 对缩进敏感，YAML 缩进错误会直接导致 pub get 失败"
+  }
+}

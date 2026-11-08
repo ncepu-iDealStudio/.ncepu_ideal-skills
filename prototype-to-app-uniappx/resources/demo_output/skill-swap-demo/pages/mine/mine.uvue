@@ -1,0 +1,132 @@
+<template>
+  <view class="page">
+    <scroll-view class="page__body" scroll-y>
+      <!-- 用户信息头 -->
+      <view class="profile-header">
+        <image
+          class="profile-header__avatar"
+          :src="user.avatar || '/static/placeholder.png'"
+          mode="aspectFill"
+        />
+        <view class="profile-header__info">
+          <text class="profile-header__name">{{ user.name }}</text>
+          <text class="profile-header__desc">{{ user.desc }}</text>
+        </view>
+      </view>
+
+      <!-- 数据统计 -->
+      <view class="stats">
+        <view v-for="s in user.stats" :key="s.label" class="stats__item">
+          <text class="stats__value">{{ s.value }}</text>
+          <text class="stats__label">{{ s.label }}</text>
+        </view>
+      </view>
+
+      <!-- 设置项列表 -->
+      <view class="menu">
+        <view
+          v-for="item in menuItems"
+          :key="item.key"
+          class="menu__item"
+          :hover-class="'menu__item--active'"
+          :hover-stay-time="100"
+          @tap="onTap(item)"
+        >
+          <text class="menu__label">{{ item.label }}</text>
+          <text class="menu__arrow">›</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</template>
+
+<script setup lang="ts">
+  import { reactive, ref } from 'vue'
+  import { onShow } from '@dcloudio/uni-app'
+
+  interface MenuItem {
+    key: string
+    label: string
+    route?: string
+  }
+
+  const user = reactive({
+    avatar: '',
+    name: '同学',
+    desc: '点击编辑个人资料',
+    stats: [
+      { label: '已互换', value: '6' },
+      { label: '收到评价', value: '12' },
+      { label: '信用分', value: '98' }
+    ]
+  })
+
+  const menuItems = ref<MenuItem[]>([
+    { key: 'profile', label: '个人资料' },
+    { key: 'my-swap', label: '我的互换' },
+    { key: 'review', label: '我的评价' },
+    { key: 'setting', label: '设置' }
+  ])
+
+  function onTap(item: MenuItem) {
+    if (!item.route) {
+      uni.showToast({ title: `${item.label}（开发中）`, icon: 'none' })
+      return
+    }
+    uni.navigateTo({ url: item.route })
+  }
+
+  onShow(() => {
+    // 刷新用户信息时可在此调用 services/api
+  })
+</script>
+
+<style lang="scss">
+  .page { flex: 1; flex-direction: column; background-color: $color-background; }
+  .page__body { flex: 1; }
+
+  .profile-header {
+    flex-direction: row;
+    align-items: center;
+    padding: $page-padding;
+    background-color: $color-surface;
+  }
+  .profile-header__avatar {
+    width: $avatar-lg;
+    height: $avatar-lg;
+    border-radius: 50%;
+    background-color: $color-divider;
+  }
+  .profile-header__info { flex: 1; flex-direction: column; margin-left: $space-md; }
+  .profile-header__name { font-size: $font-xl; font-weight: $font-weight-bold; color: $text-primary; }
+  .profile-header__desc { margin-top: $space-xs; font-size: $font-sm; color: $text-tertiary; }
+
+  .stats {
+    flex-direction: row;
+    margin-top: $space-md;
+    padding-top: $space-md;
+    padding-bottom: $space-md;
+    background-color: $color-surface;
+  }
+  .stats__item { flex: 1; flex-direction: column; align-items: center; }
+  .stats__value { font-size: $font-lg; font-weight: $font-weight-bold; color: $text-primary; }
+  .stats__label { margin-top: $space-xs; font-size: $font-xs; color: $text-tertiary; }
+
+  .menu {
+    flex-direction: column;
+    margin-top: $space-md;
+    background-color: $color-surface;
+  }
+  .menu__item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: $space-md $page-padding;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: $color-divider;
+  }
+  .menu__item--active { background-color: #F7F8FA; }
+  .menu__label { font-size: $font-base; color: $text-primary; }
+  .menu__arrow { font-size: $font-lg; color: $text-tertiary; }
+</style>

@@ -1,0 +1,69 @@
+{
+  "version": "1.0.0",
+  "description": "Flutter 工程命名规则。Dart 与 pubspec 对命名有硬性约束，必须遵守。",
+  "package_name": {
+    "convention": "snake_case",
+    "constraint": "必须是小写字母、数字、下划线；不能以数字开头",
+    "example": "skill_swap_app",
+    "forbidden": ["SkillSwapApp", "skill-swap-app", "skillSwap"]
+  },
+  "file": {
+    "convention": "snake_case",
+    "suffix": ".dart",
+    "example": "skill_card.dart"
+  },
+  "class": {
+    "convention": "PascalCase",
+    "example": "SkillCard"
+  },
+  "widget": {
+    "page_suffix": "Page",
+    "component_suffix": "Card / View / Tile / Item / Sheet",
+    "example": {
+      "page": "HomePage",
+      "card": "SkillCard",
+      "empty": "EmptyView"
+    }
+  },
+  "controller": {
+    "suffix": "Controller",
+    "base": "ChangeNotifier",
+    "example": "HomeController"
+  },
+  "repository": {
+    "interface_suffix": "Repository",
+    "impl_prefix": "",
+    "impl_suffix": "Impl",
+    "example": {
+      "interface": "SkillRepository",
+      "implementation": "SkillRepositoryImpl"
+    }
+  },
+  "model": {
+    "convention": "PascalCase",
+    "example": "Skill"
+  },
+  "method": {
+    "convention": "camelCase",
+    "example": "fetchSkills"
+  },
+  "constant": {
+    "convention": "lowerCamelCase",
+    "location": "core/theme 或 core/router 中的静态常量类",
+    "example": "AppColors.primary"
+  },
+  "private_member": {
+    "convention": "leading underscore",
+    "example": "_controller"
+  },
+  "feature_dir": {
+    "convention": "snake_case",
+    "matches": "页面路由名",
+    "example": "features/skill_detail/"
+  },
+  "route_constant": {
+    "convention": "lowerCamelCase static const",
+    "class": "AppRoutes",
+    "example": "AppRoutes.skillDetail"
+  }
+}

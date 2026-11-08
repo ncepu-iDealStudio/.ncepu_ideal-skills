@@ -1,0 +1,163 @@
+<template>
+  <view class="page">
+    <scroll-view class="page__body" scroll-y>
+      <view class="form">
+        <view v-for="field in fields" :key="field.key" class="form-item">
+          <text class="form-item__label">
+            {{ field.label }}
+            <text v-if="field.required" class="form-item__required">*</text>
+          </text>
+
+          <!-- 单行输入 -->
+          <input
+            v-if="field.type === 'text'"
+            class="form-item__input"
+            :value="form[field.key]"
+            :placeholder="field.placeholder"
+            :maxlength="field.maxlength ?? 100"
+            @input="onInput(field.key, $event)"
+          />
+
+          <!-- 多行输入 -->
+          <textarea
+            v-else-if="field.type === 'textarea'"
+            class="form-item__textarea"
+            :value="form[field.key]"
+            :placeholder="field.placeholder"
+            :maxlength="field.maxlength ?? 500"
+            @input="onInput(field.key, $event)"
+          />
+
+          <!-- 错误提示 -->
+          <text v-if="errors[field.key]" class="form-item__error">{{ errors[field.key] }}</text>
+        </view>
+
+        <view class="form__actions">
+          <view
+            class="btn btn--primary"
+            :hover-class="'btn--active'"
+            @tap="onSubmit"
+          >
+            <text class="btn__text">提交</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</template>
+
+<script setup lang="ts">
+  import { ref, reactive } from 'vue'
+  import { onLoad } from '@dcloudio/uni-app'
+
+  interface FormField {
+    key: string
+    label: string
+    type: 'text' | 'textarea'
+    placeholder?: string
+    required?: boolean
+    maxlength?: number
+  }
+
+  /** 字段配置：由生成器按原型表单结构填充 */
+  const fields: FormField[] = [
+    { key: 'title', label: '标题', type: 'text', placeholder: '请输入标题', required: true, maxlength: 50 },
+    { key: 'description', label: '描述', type: 'textarea', placeholder: '请补充说明', maxlength: 500 }
+  ]
+
+  const form = reactive<Record<string, string>>({})
+  const errors = reactive<Record<string, string>>({})
+
+  function onInput(key: string, e: any) {
+    form[key] = e.detail.value
+    errors[key] = ''
+  }
+
+  function validate(): boolean {
+    let ok = true
+    for (const field of fields) {
+      const value = (form[field.key] ?? '').trim()
+      if (field.required && value.length === 0) {
+        errors[field.key] = `请填写${field.label}`
+        ok = false
+      }
+    }
+    return ok
+  }
+
+  async function onSubmit() {
+    if (!validate()) {
+      uni.showToast({ title: '请检查必填项', icon: 'none' })
+      return
+    }
+    try {
+      uni.showLoading({ title: '提交中' })
+      // TODO: 对接真实接口后替换为实际调用
+      await new Promise((resolve) => setTimeout(resolve, 600))
+      uni.hideLoading()
+      uni.showToast({ title: '提交成功', icon: 'success' })
+      setTimeout(() => uni.navigateBack(), 800)
+    } catch (e) {
+      uni.hideLoading()
+      uni.showToast({ title: (e as Error).message || '提交失败', icon: 'none' })
+    }
+  }
+
+  onLoad(() => {
+    fields.forEach((f) => { form[f.key] = '' })
+  })
+</script>
+
+<style lang="scss">
+  .page { flex: 1; flex-direction: column; background-color: $color-background; }
+  .page__body { flex: 1; }
+  .form { flex-direction: column; padding: $page-padding; }
+
+  .form-item {
+    flex-direction: column;
+    padding: $space-md;
+    margin-bottom: $space-md;
+    background-color: $color-surface;
+    border-radius: $radius-md;
+  }
+  .form-item__label {
+    font-size: $font-base;
+    color: $text-primary;
+    margin-bottom: $space-sm;
+  }
+  .form-item__required { color: $color-error; }
+  .form-item__input {
+    height: 80rpx;
+    font-size: $font-base;
+    color: $text-primary;
+    background-color: $color-background;
+    border-radius: $radius-sm;
+    padding-left: $space-sm;
+    padding-right: $space-sm;
+  }
+  .form-item__textarea {
+    height: 200rpx;
+    font-size: $font-base;
+    color: $text-primary;
+    background-color: $color-background;
+    border-radius: $radius-sm;
+    padding: $space-sm;
+  }
+  .form-item__error {
+    margin-top: $space-xs;
+    font-size: $font-xs;
+    color: $color-error;
+  }
+
+  .form__actions { margin-top: $space-lg; }
+  .btn {
+    height: $button-height;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: $radius-md;
+  }
+  .btn--primary { background-color: $color-primary; }
+  .btn--active { opacity: 0.85; }
+  .btn__text { font-size: $font-md; font-weight: $font-weight-medium; color: #FFFFFF; }
+</style>
