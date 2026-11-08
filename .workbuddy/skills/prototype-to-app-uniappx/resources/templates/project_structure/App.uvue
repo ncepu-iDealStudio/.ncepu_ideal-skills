@@ -1,0 +1,28 @@
+<script setup lang="ts">
+  import { onLaunch, onShow, onHide, onError } from '@dcloudio/uni-app'
+
+  onLaunch(() => {
+    console.log('[App] onLaunch')
+    // 应用启动：可在此恢复登录态、初始化配置
+  })
+
+  onShow(() => {
+    console.log('[App] onShow')
+  })
+
+  onHide(() => {
+    console.log('[App] onHide')
+  })
+
+  onError((err) => {
+    console.error('[App] onError', err)
+  })
+</script>
+
+<style>
+  /* 全局样式：仅放真正全局的规则，页面样式写在各自页面内 */
+  page {
+    flex: 1;
+    background-color: #F5F6F8;
+  }
+</style>

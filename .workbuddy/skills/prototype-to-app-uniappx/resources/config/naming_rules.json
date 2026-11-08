@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "description": "uni-app x 工程的命名规则。用于原型转脚手架时的文件、目录、类型、CSS 类名生成。",
+  "page": {
+    "directory": "kebab-case",
+    "file": "kebab-case",
+    "suffix": ".uvue",
+    "example": {
+      "route": "skill-detail",
+      "path": "pages/skill-detail/skill-detail.uvue"
+    },
+    "forbidden": [".vue"],
+    "description": "页面必须是 .uvue；uni-app x 不支持 .vue 页面"
+  },
+  "component": {
+    "file": "kebab-case",
+    "reference": "PascalCase",
+    "suffix": ".uvue",
+    "example": {
+      "file": "skill-card.uvue",
+      "usage": "<SkillCard />"
+    }
+  },
+  "type": {
+    "convention": "PascalCase",
+    "suffix": ".ts",
+    "directory": "types",
+    "example": "SkillDetail"
+  },
+  "service": {
+    "convention": "camelCase",
+    "suffix": ".ts",
+    "directory": "services/api",
+    "example": "getSkillList"
+  },
+  "mock": {
+    "suffix": ".mock.ts",
+    "directory": "services/mock",
+    "example": "skill.mock.ts"
+  },
+  "variable": {
+    "convention": "camelCase",
+    "example": "skillList"
+  },
+  "constant": {
+    "convention": "UPPER_SNAKE_CASE",
+    "example": "USE_MOCK"
+  },
+  "css_class": {
+    "convention": "BEM",
+    "block": "kebab-case",
+    "element_separator": "__",
+    "modifier_separator": "--",
+    "example": ".skill-card__title--highlighted"
+  },
+  "routes": {
+    "root": "pages",
+    "tab_prefix": "/pages/",
+    "description": "路由与文件路径一致，全部需在 pages.json 的 pages 数组注册"
+  }
+}

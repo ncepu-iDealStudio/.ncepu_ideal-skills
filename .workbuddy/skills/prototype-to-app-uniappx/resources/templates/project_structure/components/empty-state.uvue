@@ -1,0 +1,80 @@
+<template>
+  <view class="empty">
+    <image class="empty__icon" src="/static/placeholder.png" mode="aspectFit" />
+    <text class="empty__text">{{ text }}</text>
+    <view
+      v-if="actionText"
+      class="empty__action"
+      hover-class="empty__action--active"
+      @tap="onAction"
+    >
+      <text class="empty__action-text">{{ actionText }}</text>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+  /**
+   * 空态组件
+   * 只接收 props、抛事件，不感知数据来源。
+   */
+  const props = withDefaults(
+    defineProps<{
+      /** 空态提示文案 */
+      text?: string
+      /** 操作按钮文案，为空则不显示按钮 */
+      actionText?: string
+    }>(),
+    {
+      text: '暂无数据',
+      actionText: ''
+    }
+  )
+
+  const emit = defineEmits<{
+    (e: 'action'): void
+  }>()
+
+  function onAction() {
+    emit('action')
+  }
+</script>
+
+<style lang="scss">
+  .empty {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: $space-xl;
+  }
+
+  .empty__icon {
+    width: 200rpx;
+    height: 200rpx;
+    opacity: 0.5;
+  }
+
+  .empty__text {
+    margin-top: $space-md;
+    font-size: $font-base;
+    color: $text-tertiary;
+    text-align: center;
+  }
+
+  .empty__action {
+    margin-top: $space-lg;
+    padding: $space-sm $space-xl;
+    background-color: $color-primary;
+    border-radius: $radius-pill;
+  }
+
+  .empty__action--active {
+    opacity: 0.8;
+  }
+
+  .empty__action-text {
+    font-size: $font-base;
+    color: #FFFFFF;
+  }
+</style>

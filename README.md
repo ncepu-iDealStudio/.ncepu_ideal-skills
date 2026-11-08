@@ -1,12 +1,14 @@
 # 🎯 ncepu_ideal-skills
 
-> 企业级服务端接口项目技能（Skills）集合仓库 | 基于资源驱动设计，快速生成符合团队标准的项目脚手架
+> 企业级项目技能（Skills）集合仓库 | 基于资源驱动设计，从 SQL 生成后端脚手架、从原型生成前端应用
 
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-v0.100%2B-orange)
 ![Flask](https://img.shields.io/badge/Flask-v2.0%2B-purple)
 ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-2.7%2B-green)
+![uni-app x](https://img.shields.io/badge/uni--app%20x-vapor-2B6DE5)
+![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B)
 
 [English](./README.en.md) | 📝 中文
 
@@ -15,10 +17,11 @@
 ## ✨ 特性亮点
 
 - 🔄 **资源驱动架构** - 模板 + 配置 + 规范，完全由资源文件驱动代码生成
-- 🚀 **一键生成脚手架** - 从 SQL 表结构自动生成完整项目代码
-- 🎨 **多框架支持** - FastAPI / Flask / Gin / Spring Boot 四大主流框架
+- 🚀 **一键生成脚手架** - 后端从 SQL 表结构、前端从原型设计自动生成完整项目代码
+- 🎨 **多技术栈支持** - FastAPI / Flask / Gin / Spring Boot / uni-app x / Flutter
 - 📦 **增量生成** - 支持首次全量生成和后续增量更新
 - 🔒 **安全内置** - 自动软删除/硬删除、敏感数据脱敏、输入验证
+- 🧩 **开箱即用** - 生成的前端工程内置 mock 数据，无需后端即可运行预览
 
 ---
 
@@ -139,6 +142,8 @@ ncepu_ideal-skills/
 │   ├── CodeBuddy中使用skill配置.md
 │   ├── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
 │   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
+│   ├── dsh中使用superpowers技能.md
+│   ├── workbuddy中使用原型转应用技能.md
 │   └── images/                                     # 配置截图
 ├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI 项目生成技能
 │   ├── README.md
@@ -218,12 +223,14 @@ ncepu_ideal-skills/
 
 > 根据你使用的 AI 编程助手，选择对应的配置指南：
 
-| 🤖 AI 工具 | 📚 配置文档 
+| 🤖 AI 工具 | 📚 配置文档 |
 |-----------|-----------|
 | 🚀 **Trae IDE** | [配置指南](docs/Trea中使用skill配置.md) |
 | 💻 **Claude Code** | [配置指南](docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [配置指南](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
 | 🧩 **CodeBuddy** | [配置指南](docs/CodeBuddy中使用skill配置.md) |
+| 🛠️ **WorkBuddy** | [原型转应用技能指南](docs/workbuddy中使用原型转应用技能.md) |
+| 🐋 **DSH（DeepSeek Harness）** | [superpowers 技能指南](docs/dsh中使用superpowers技能.md) |
 
 > 📝 **提示**：详细配置说明请参考 `docs/` 目录
 
@@ -231,7 +238,11 @@ ncepu_ideal-skills/
 
 ### 2️⃣ 使用技能
 
-在配置好技能后，将包含 `CREATE TABLE` 的 SQL 输入给 AI，要求生成对应的项目脚手架。
+本仓库技能分两大类，输入方式不同。
+
+#### A. 后端：从 SQL 生成接口脚手架
+
+将包含 `CREATE TABLE` 的 SQL 输入给 AI，要求生成对应的项目脚手架。
 
 **📥 示例输入**：
 
@@ -244,7 +255,7 @@ CREATE TABLE student (
 );
 ```
 
-**📤 技能生成器对照表**：
+**📤 生成内容对照表**：
 
 | ⚡ 技能 | 📥 输入 | 📤 生成内容 |
 |--------|--------|-----------|
@@ -253,11 +264,33 @@ CREATE TABLE student (
 | **Gin** | MySQL DDL | Model / DAO / Service / Resource + 项目骨架 |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + 项目骨架 |
 
+#### B. 前端：从原型生成应用工程
+
+将**原型 HTML 代码**、**设计图截图**或 **PRD 页面清单**交给 AI，生成可运行的移动端工程。
+
+**📥 示例输入**：
+
+```text
+这是我们的原型页面（附 HTML 代码 / 设计图 / 页面清单）。
+请用 prototype-to-flutter-app 技能，生成可运行的 Flutter 工程，
+用 mock 数据还原页面布局与交互，后续我再对接后端接口。
+```
+
+**📤 生成内容对照表**：
+
+| ⚡ 技能 | 📥 输入 | 📤 生成内容 |
+|--------|--------|-----------|
+| **uni-app x** | 原型代码 / 图片 / PRD | `.uvue` 页面 + 组件 + services 分层 + mock 数据，可在 HBuilder 直接运行的多端工程 |
+| **Flutter** | 原型代码 / 图片 / PRD | features 分层 + Repository + mock 数据，`flutter pub get && flutter run` 即可运行的工程 |
+
+> 💡 两个前端技能都会生成**数据访问层接缝**：切换到真实后端只需改一个 `useMock` 开关，页面代码无需改动。
+
 ## 🗺️ 未来规划
 
-- [ ] 🔮 新增更多面向企业后端的技能（脚手架、治理、工程化等）
+- [ ] 🔮 新增更多面向企业前后端的技能（脚手架、治理、工程化等）
 - [ ] 🧪 完善技能验证样例与回归测试
 - [ ] 📋 建立统一技能命名、版本与文档规范
+- [ ] 🎯 补充 Flutter / uni-app x 技能在真实 SDK 环境下的编译回归验证
 
 ---
 

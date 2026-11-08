@@ -1,0 +1,31 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^(?!uni-)(.*)": "@/components/$1.uvue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "{{app_title}}",
+        "enablePullDownRefresh": true
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "{{app_title}}",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F5F6F8",
+    "backgroundColorContent": "#F5F6F8"
+  },
+  "tabBar": {
+    "color": "#9099A3",
+    "selectedColor": "{{primary_color}}",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": []
+  }
+}

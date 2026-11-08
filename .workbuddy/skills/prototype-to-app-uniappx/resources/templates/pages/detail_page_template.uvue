@@ -1,0 +1,220 @@
+<template>
+  <view class="page">
+    <view v-if="loading" class="page__loading">
+      <text class="page__loading-text">加载中…</text>
+    </view>
+
+    <EmptyState v-else-if="!detail" text="内容不存在或已下架" />
+
+    <scroll-view v-else class="page__body" scroll-y>
+      <!-- 主图 -->
+      <image
+        v-if="detail.avatar"
+        class="hero"
+        :src="detail.avatar"
+        mode="aspectFill"
+      />
+
+      <view class="content">
+        <!-- 标题区 -->
+        <text class="content__title">{{ detail.title }}</text>
+        <view class="content__meta">
+          <text class="content__meta-text">{{ detail.userName }}</text>
+          <text class="content__meta-text">评分 {{ formatRating(detail.rating) }}</text>
+          <text class="content__meta-text">已换 {{ formatNumber(detail.swapCount) }} 次</text>
+        </view>
+
+        <!-- 标签 -->
+        <view class="content__tags">
+          <text v-for="tag in detail.tags" :key="tag" class="tag">{{ tag }}</text>
+        </view>
+
+        <!-- 正文 -->
+        <view class="content__section">
+          <text class="content__section-title">详细介绍</text>
+          <text class="content__text">{{ detail.description }}</text>
+        </view>
+
+        <!-- 想学 -->
+        <view v-if="detail.wantTags.length > 0" class="content__section">
+          <text class="content__section-title">我想学</text>
+          <view class="content__tags">
+            <text v-for="tag in detail.wantTags" :key="tag" class="tag tag--plain">{{ tag }}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 底部操作栏 -->
+    <view v-if="detail" class="bottom-bar">
+      <view class="bottom-bar__btn" hover-class="bottom-bar__btn--active" @tap="onSwap">
+        <text class="bottom-bar__btn-text">发起互换</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import { onLoad } from '@dcloudio/uni-app'
+  import EmptyState from '@/components/empty-state.uvue'
+  import { getSkillDetail } from '@/services/api/skill'
+  import { formatRating, formatNumber } from '@/utils/format'
+  import type { Skill } from '@/types/skill'
+
+  const detail = ref<Skill | null>(null)
+  const loading = ref(true)
+  const skillId = ref(0)
+
+  async function loadDetail() {
+    try {
+      loading.value = true
+      detail.value = await getSkillDetail(skillId.value)
+    } catch (e) {
+      uni.showToast({ title: (e as Error).message || '加载失败', icon: 'none' })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  function onSwap() {
+    uni.showModal({
+      title: '发起互换',
+      content: '将向对方发送互换请求，确认吗？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.showToast({ title: '已发送请求', icon: 'none' })
+        }
+      }
+    })
+  }
+
+  onLoad((options) => {
+    skillId.value = Number(options?.id ?? 0)
+    loadDetail()
+  })
+</script>
+
+<style lang="scss">
+  .page {
+    flex: 1;
+    flex-direction: column;
+    background-color: $color-background;
+  }
+
+  .page__loading {
+    flex: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .page__loading-text {
+    font-size: $font-base;
+    color: $text-tertiary;
+  }
+
+  .page__body {
+    flex: 1;
+  }
+
+  .hero {
+    width: 750rpx;
+    height: 400rpx;
+    background-color: $color-divider;
+  }
+
+  .content {
+    flex-direction: column;
+    padding: $page-padding;
+    background-color: $color-surface;
+  }
+
+  .content__title {
+    font-size: $font-xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    line-height: $line-height-tight;
+  }
+
+  .content__meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: $space-sm;
+  }
+
+  .content__meta-text {
+    font-size: $font-sm;
+    color: $text-tertiary;
+    margin-right: $space-md;
+  }
+
+  .content__tags {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: $space-md;
+  }
+
+  .tag {
+    padding: $space-xs $space-sm;
+    margin-right: $space-xs;
+    margin-bottom: $space-xs;
+    font-size: $font-xs;
+    color: $color-primary;
+    background-color: $color-primary-light;
+    border-radius: $radius-sm;
+  }
+
+  .tag--plain {
+    color: $text-secondary;
+    background-color: $color-divider;
+  }
+
+  .content__section {
+    flex-direction: column;
+    margin-top: $space-lg;
+  }
+
+  .content__section-title {
+    font-size: $font-md;
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+    margin-bottom: $space-sm;
+  }
+
+  .content__text {
+    font-size: $font-base;
+    color: $text-secondary;
+    line-height: $line-height-loose;
+  }
+
+  .bottom-bar {
+    flex-direction: row;
+    padding: $space-sm $page-padding;
+    padding-bottom: calc(#{$space-sm} + env(safe-area-inset-bottom));
+    background-color: $color-surface;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: $color-border;
+  }
+
+  .bottom-bar__btn {
+    flex: 1;
+    height: $button-height;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: $color-primary;
+    border-radius: $radius-md;
+  }
+
+  .bottom-bar__btn--active {
+    opacity: 0.85;
+  }
+
+  .bottom-bar__btn-text {
+    font-size: $font-md;
+    font-weight: $font-weight-medium;
+    color: #FFFFFF;
+  }
+</style>

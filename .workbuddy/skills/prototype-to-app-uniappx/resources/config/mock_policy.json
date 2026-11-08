@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "description": "mock 数据生成策略。目标：让界面在没有后端的情况下呈现真实观感，并能暴露布局边界问题。",
+  "principles": [
+    "形状优先：mock 字段必须与未来真实接口一致，避免对接时改页面",
+    "数量充足：列表类页面至少 10 条，确保滚动与首屏布局可验证",
+    "含边界：必须包含超长文本、缺图、零数据三类记录",
+    "有延迟：通过 mockDelay 模拟 200-800ms，让加载态真实可见"
+  ],
+  "list_defaults": {
+    "min_items": 10,
+    "max_items": 20,
+    "page_size": 10
+  },
+  "boundary_cases": {
+    "long_text": {
+      "enabled": true,
+      "description": "标题 30 字以上、描述 100 字以上，验证换行与截断",
+      "target_field_suffix": ["title", "name", "desc", "content"]
+    },
+    "missing_image": {
+      "enabled": true,
+      "description": "至少 1 条无图记录，验证占位图与布局塌陷",
+      "probability": 0.1
+    },
+    "empty_list": {
+      "enabled": true,
+      "description": "提供空数组示例，验证空态组件",
+      "provide_separate_export": true
+    },
+    "zero_and_extremes": {
+      "enabled": true,
+      "description": "数值字段包含 0 与极大值，验证宽度与格式化"
+    }
+  },
+  "delay": {
+    "min_ms": 200,
+    "max_ms": 800,
+    "description": "在 services/mock/delay.ts 中实现 mockDelay()"
+  },
+  "image_placeholder": {
+    "strategy": "local_static",
+    "path": "static/placeholder.png",
+    "fallback_color": "#E5E7EB",
+    "description": "原型图片链接不可直接引用，统一落本地占位图"
+  },
+  "user_facing_text": {
+    "language": "zh-CN",
+    "description": "mock 文案使用中文，与实际业务语种一致"
+  },
+  "forbidden": [
+    "在页面文件内直接定义数组常量（必须放 services/mock）",
+    "使用 lorem ipsum 等无意义占位文字",
+    "所有条目内容完全相同（无法验证列表差异化渲染）"
+  ]
+}

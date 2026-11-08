@@ -1,12 +1,14 @@
 # 🎯 ncepu_ideal-skills
 
-> Enterprise Backend Engineering Skills Collection | Resource-driven design for rapid scaffolding of standardized project code
+> Enterprise Project Skills Collection | Resource-driven design: backend scaffolds from SQL, frontend apps from prototypes
 
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-v0.100%2B-orange)
 ![Flask](https://img.shields.io/badge/Flask-v2.0%2B-purple)
 ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-2.7%2B-green)
+![uni-app x](https://img.shields.io/badge/uni--app%20x-vapor-2B6DE5)
+![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B)
 
 [中文](./README.md) | 📝 English
 
@@ -15,10 +17,11 @@
 ## ✨ Key Features
 
 - 🔄 **Resource-driven Architecture** - Templates + Configurations + Standards, completely driven by resource files
-- 🚀 **One-click Scaffolding** - Auto-generate complete project code from SQL table definitions
-- 🎨 **Multi-framework Support** - FastAPI / Flask / Gin / Spring Boot four major frameworks
+- 🚀 **One-click Scaffolding** - Complete project code from SQL schemas (backend) or prototypes (frontend)
+- 🎨 **Multi-stack Support** - FastAPI / Flask / Gin / Spring Boot / uni-app x / Flutter
 - 📦 **Incremental Generation** - Full initial generation + incremental updates
 - 🔒 **Built-in Security** - Auto soft-delete/hard-delete, sensitive data masking, input validation
+- 🧩 **Runs Out of the Box** - Generated frontend projects ship with mock data, no backend needed to preview
 
 ---
 
@@ -97,6 +100,32 @@ Read a local Markdown PRD and emit a self-contained single-file HTML prototype (
 
 ---
 
+### 9️⃣ prototype-to-app-uniappx
+
+Turn **prototypes** (HTML/CSS code, design screenshots, or a PRD page list) into a **runnable uni-app x project**: mock data drives layout, visuals and interactions, and the output opens directly in HBuilder.
+
+- Defaults to **Vapor mode (TS)**; UTS migration notes included
+- Encodes uni-app x vs uni-app pitfalls (`.uvue` pages, column-default flex, text must live inside `<text>`, `"uni-app-x": {}` in manifest)
+- Layers: pages / components / `services/api` (the only data seam) / `services/mock`
+- 10 validation checks; sample output at `resources/demo_output/skill-swap-demo/`
+
+📖 **Details**: [Documentation](prototype-to-app-uniappx/README.md)
+
+---
+
+### 🔟 prototype-to-flutter-app
+
+Turn **prototypes** into an **out-of-the-box Flutter project** following Flutter's official app architecture guidance: layered directories, routing, theming, mock-driven page restoration. `flutter pub get && flutter run` just works.
+
+- Feature-first layout (`features/`), UI and data layers separated, Repository pattern
+- State via the official `ChangeNotifier` + `ListenableBuilder`, **zero heavy dependencies** (only `http`)
+- Guards against anti-patterns: hardcoded colors, direct HTTP calls from `features`
+- 11 validation checks; sample output at `resources/demo_output/skill_swap_app/`
+
+📖 **Details**: [Documentation](prototype-to-flutter-app/README.md)
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -111,6 +140,8 @@ ncepu_ideal-skills/
 │   ├── CodeBuddy中使用skill配置.md
 │   ├── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
 │   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
+│   ├── dsh中使用superpowers技能.md
+│   ├── workbuddy中使用原型转应用技能.md
 │   └── images/                                     # Setup screenshots
 ├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI skill
 │   ├── README.md
@@ -148,11 +179,29 @@ ncepu_ideal-skills/
 │       ├── tools/
 │       ├── static/
 │       └── demo_output/
+├── 📁 prototype-to-app-uniappx/                    # 📱 prototype -> uni-app x skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
+├── 📁 prototype-to-flutter-app/                    # 🐦 prototype -> Flutter skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
 ├── 📁 .codebuddy/skills/                           # 20 superpowers-zh skills
 ├── 📁 .agents/skills/                              # 20 superpowers-zh skills
-├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype
+├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype, diagnosing-superpowers, prototype-to-*
 ├── 📁 .cursor/skills/                              # it-requirement-analysis, prd-html-skill
-├── 📁 .dsh/skills/                                 # common-website-design, it-requirement-analysis, prd-html-skill
+├── 📁 .dsh/skills/                                 # common-website-design, it-requirement-analysis, prd-html-skill, diagnosing-superpowers
 └── 📁 test/                                        # Generated samples and fixture SQL
     ├── api_security_demo-20260717.sql
     ├── sql-to-fastapi-example/
@@ -172,11 +221,14 @@ ncepu_ideal-skills/
 
 > Choose the configuration guide based on your AI coding assistant:
 
-| 🤖 AI Tool | 📚 Documentation | ✨ Features |
-|-----------|-----------|--------|
+| 🤖 AI Tool | 📚 Documentation |
+|-----------|-----------|
 | 🚀 **Trae IDE** | [Configuration Guide](docs/Trea中使用skill配置.md) |
 | 💻 **Claude Code** | [Configuration Guide](docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [Configuration Guide](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
+| 🧩 **CodeBuddy** | [Configuration Guide](docs/CodeBuddy中使用skill配置.md) |
+| 🛠️ **WorkBuddy** | [Prototype-to-App Guide](docs/workbuddy中使用原型转应用技能.md) |
+| 🐋 **DSH (DeepSeek Harness)** | [superpowers Guide](docs/dsh中使用superpowers技能.md) |
 
 > 📝 **Note**: Please refer to the `docs/` directory for detailed configuration guides
 
@@ -184,7 +236,11 @@ ncepu_ideal-skills/
 
 ### 2️⃣ Use the Skill
 
-After configuring the skill, provide SQL containing `CREATE TABLE` statements and request generation of the corresponding project scaffolding.
+Skills fall into two categories with different inputs.
+
+#### A. Backend: generate API scaffolding from SQL
+
+Provide SQL containing `CREATE TABLE` statements and request the corresponding project scaffolding.
 
 **📥 Example Input**：
 
@@ -200,18 +256,40 @@ CREATE TABLE student (
 **📤 Skill Generators Reference**：
 
 | ⚡ Skill | 📥 Input | 📤 Output |
-|--------|-----------|-----------|
+|--------|--------|-----------|
 | **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + Project Skeleton |
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + Project Skeleton |
 | **Gin** | MySQL DDL | Model / DAO / Service / Resource + Project Skeleton |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + Project Skeleton |
 
+#### B. Frontend: generate an app project from a prototype
+
+Hand the AI a **prototype HTML code**, **design screenshot**, or **PRD page list** to produce a runnable mobile project.
+
+**📥 Example Input**：
+
+```text
+Here is our prototype (attached HTML code / design screenshot / page list).
+Use the prototype-to-flutter-app skill to generate a runnable Flutter project,
+restoring layout and interactions with mock data. I'll wire up the backend later.
+```
+
+**📤 Skill Generators Reference**：
+
+| ⚡ Skill | 📥 Input | 📤 Output |
+|--------|--------|-----------|
+| **uni-app x** | prototype code / image / PRD | `.uvue` pages + components + `services` layers + mock data; multi-platform project runnable in HBuilder |
+| **Flutter** | prototype code / image / PRD | `features` layers + Repository + mock data; runs via `flutter pub get && flutter run` |
+
+> 💡 Both frontend skills generate a **data-access seam**: switching to the real backend only requires flipping a `useMock` flag — page code stays unchanged.
+
 
 ## 🗺️ Roadmap
 
-- [ ] 🔮 Add more enterprise backend skills (scaffolding, governance, engineering, etc.)
+- [ ] 🔮 Add more enterprise full-stack skills (scaffolding, governance, engineering, etc.)
 - [ ] 🧪 Improve validation samples and regression tests
 - [ ] 📋 Standardize naming/versioning/documentation conventions for all skills
+- [ ] 🎯 Add compile-time regression for the Flutter / uni-app x skills against real SDKs
 
 ---
 
