@@ -1,0 +1,116 @@
+{
+  "version": "1.0.0",
+  "description": "后台管理需求 → 模块/页面 的语义映射词典。用于从中文需求描述自动推断模块分组、页面类型与字段。",
+
+  "module_keywords": {
+    "系统管理": ["系统管理", "系统设置", "权限中心", "基础配置", "后台管理", "system"],
+    "业务管理": ["业务管理", "业务中心", "运营管理", "交易管理", "business"],
+    "数据统计": ["数据统计", "统计分析", "数据中心", "报表中心", "数据分析", "statistics", "report"],
+    "内容管理": ["内容管理", "文章管理", "资讯管理", "cms", "content"],
+    "用户中心": ["用户中心", "会员管理", "客户管理", "member", "customer"],
+    "财务管理": ["财务管理", "财务中心", "结算管理", "finance"],
+    "运营管理": ["运营管理", "营销管理", "活动管理", "operation", "marketing"]
+  },
+
+  "module_icons": {
+    "系统管理": "lucide:settings",
+    "业务管理": "lucide:briefcase",
+    "数据统计": "lucide:chart-column",
+    "内容管理": "lucide:file-text",
+    "用户中心": "lucide:users",
+    "财务管理": "lucide:wallet",
+    "运营管理": "lucide:megaphone",
+    "默认": "lucide:folder"
+  },
+
+  "page_type_keywords": {
+    "dashboard": ["分析", "统计", "报表", "看板", "概览", "趋势", "走势", "analytics", "dashboard", "report"],
+    "tree": ["权限", "菜单", "组织", "部门", "分类", "树", "层级", "permission", "menu", "dept", "category"],
+    "form": ["设置", "配置", "参数", "setting", "config"],
+    "crud": ["管理", "列表", "记录", "清单", "维护", "审核", "订单", "商品", "库存", "用户", "角色", "会员"]
+  },
+
+  "page_icons": {
+    "用户管理": "lucide:users",
+    "角色管理": "lucide:shield-check",
+    "权限管理": "lucide:key-round",
+    "订单管理": "lucide:shopping-cart",
+    "商品管理": "lucide:package",
+    "库存管理": "lucide:warehouse",
+    "销售数据分析": "lucide:trending-up",
+    "用户行为分析": "lucide:activity",
+    "内容管理": "lucide:file-text",
+    "类别管理": "lucide:tags",
+    "部门管理": "lucide:network",
+    "菜单管理": "lucide:list-tree",
+    "默认": "lucide:circle"
+  },
+
+  "field_templates": {
+    "crud_common": [
+      { "field": "id", "label": "ID", "type": "string", "column": true, "form": false, "width": 200 },
+      { "field": "name", "label": "名称", "type": "string", "column": true, "form": true, "required": true, "width": 200 },
+      { "field": "status", "label": "状态", "type": "switch", "column": true, "form": true, "width": 100,
+        "options": [{ "label": "启用", "value": 1 }, { "label": "禁用", "value": 0 }] },
+      { "field": "remark", "label": "备注", "type": "textarea", "column": false, "form": true },
+      { "field": "createTime", "label": "创建时间", "type": "datetime", "column": true, "form": false, "width": 200 }
+    ],
+
+    "domain_specific": {
+      "用户管理": [
+        { "field": "account", "label": "账号", "type": "string", "column": true, "form": true, "required": true, "width": 160 },
+        { "field": "nickname", "label": "昵称", "type": "string", "column": true, "form": true, "width": 160 },
+        { "field": "email", "label": "邮箱", "type": "string", "column": true, "form": true, "width": 200 },
+        { "field": "phone", "label": "手机号", "type": "string", "column": true, "form": false, "width": 150 },
+        { "field": "roleId", "label": "角色", "type": "select", "column": true, "form": true, "width": 140 }
+      ],
+      "角色管理": [
+        { "field": "code", "label": "角色编码", "type": "string", "column": true, "form": true, "required": true, "width": 160 },
+        { "field": "description", "label": "描述", "type": "textarea", "column": true, "form": true }
+      ],
+      "订单管理": [
+        { "field": "orderNo", "label": "订单号", "type": "string", "column": true, "form": false, "width": 200 },
+        { "field": "customerName", "label": "客户", "type": "string", "column": true, "form": true, "width": 160 },
+        { "field": "amount", "label": "金额", "type": "number", "column": true, "form": true, "width": 140 },
+        { "field": "payStatus", "label": "支付状态", "type": "tag", "column": true, "form": false, "width": 120 },
+        { "field": "orderTime", "label": "下单时间", "type": "datetime", "column": true, "form": false, "width": 200 }
+      ],
+      "商品管理": [
+        { "field": "sku", "label": "SKU", "type": "string", "column": true, "form": true, "width": 160 },
+        { "field": "category", "label": "分类", "type": "string", "column": true, "form": true, "width": 140 },
+        { "field": "price", "label": "价格", "type": "number", "column": true, "form": true, "width": 120 },
+        { "field": "stock", "label": "库存", "type": "number", "column": true, "form": false, "width": 100 }
+      ],
+      "库存管理": [
+        { "field": "productName", "label": "商品", "type": "string", "column": true, "form": true, "width": 200 },
+        { "field": "warehouse", "label": "仓库", "type": "string", "column": true, "form": true, "width": 160 },
+        { "field": "quantity", "label": "库存数量", "type": "number", "column": true, "form": true, "width": 120 },
+        { "field": "warningLine", "label": "预警线", "type": "number", "column": true, "form": true, "width": 120 }
+      ]
+    },
+
+    "dashboard": [
+      { "field": "overview", "label": "概览指标", "type": "statCards" },
+      { "field": "trend", "label": "趋势图", "type": "lineChart" },
+      { "field": "category", "label": "分类占比", "type": "pieChart" },
+      { "field": "ranking", "label": "排行榜", "type": "barChart" }
+    ],
+
+    "tree": [
+      { "field": "id", "label": "ID", "type": "string", "column": true, "width": 200 },
+      { "field": "name", "label": "名称", "type": "string", "column": true, "form": true, "required": true },
+      { "field": "code", "label": "编码", "type": "string", "column": true, "form": true, "width": 200 },
+      { "field": "type", "label": "类型", "type": "tag", "column": true, "form": true, "width": 120 }
+    ]
+  },
+
+  "crud_actions": {
+    "create": { "label": "新增", "icon": "lucide:plus", "position": "toolbar" },
+    "edit": { "label": "编辑", "icon": "lucide:edit", "position": "row" },
+    "detail": { "label": "详情", "icon": "lucide:eye", "position": "row" },
+    "delete": { "label": "删除", "icon": "lucide:trash-2", "position": "row-dropdown", "danger": true }
+  },
+
+  "menu_order_base": 10,
+  "description_note": "menu_order_base 为一级菜单起始 order 值，每增加一个模块 +10，保证顺序稳定。"
+}

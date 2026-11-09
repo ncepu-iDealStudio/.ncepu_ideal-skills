@@ -1,0 +1,130 @@
+{
+  "version": "1.0.0",
+  "description": "vue-vben-admin v5.x 的版本与 API 基线。生成代码必须匹配这些事实，否则编译或运行会失败。",
+  "vben": {
+    "version": "5.x",
+    "current_reference": "5.7.0",
+    "repo": "https://github.com/vbenjs/vue-vben-admin",
+    "structure": "monorepo",
+    "package_manager": "pnpm",
+    "pnpm_version": ">=11.0.0",
+    "node_version": "^22.18.0 || ^24.12.0",
+    "warning": "v2/v3 是单体结构（src/views + src/router/routes/index.ts），v5 是 monorepo，写法完全不同"
+  },
+  "apps": {
+    "web-antd": {
+      "package": "@vben/web-antd",
+      "ui": "Ant Design Vue",
+      "recommended": true
+    },
+    "web-ele": {
+      "package": "@vben/web-ele",
+      "ui": "Element Plus"
+    },
+    "web-naive": {
+      "package": "@vben/web-naive",
+      "ui": "Naive UI"
+    },
+    "web-tdesign": {
+      "package": "@vben/web-tdesign",
+      "ui": "TDesign"
+    },
+    "backend-mock": {
+      "package": "@vben/backend-mock",
+      "note": "nitro + faker，内置 mock 后端"
+    }
+  },
+  "paths": {
+    "app_root": "apps/web-antd",
+    "src": "apps/web-antd/src",
+    "alias": "#/ → apps/web-antd/src/",
+    "route_modules": "apps/web-antd/src/router/routes/modules",
+    "views": "apps/web-antd/src/views",
+    "api": "apps/web-antd/src/api",
+    "locales": "apps/web-antd/src/locales/langs"
+  },
+  "entry_points": {
+    "router_index": "src/router/routes/index.ts",
+    "router_index_note": "用 import.meta.glob('./modules/**/*.ts') 自动收集，新增模块只需在 modules/ 下加文件，不要改本文件",
+    "request_client": "#/api/request",
+    "table_adapter": "#/adapter/vxe-table",
+    "form_adapter": "#/adapter/form"
+  },
+  "apis": {
+    "Page": {
+      "from": "@vben/common-ui",
+      "usage": "页面容器，auto-content-height 撑满高度"
+    },
+    "useVbenDrawer": {
+      "from": "@vben/common-ui",
+      "usage": "抽屉，配合 connectedComponent 挂载表单/详情"
+    },
+    "useVbenVxeGrid": {
+      "from": "#/adapter/vxe-table",
+      "usage": "表格，含搜索表单与分页"
+    },
+    "VbenTableAction": {
+      "from": "@vben/common-ui",
+      "usage": "行操作按钮组",
+      "warning": "必须从 @vben/common-ui 导入；playground 应用在 #/adapter/vxe-table 里做了再导出，web-antd 没有"
+    },
+    "useVbenForm": {
+      "from": "#/adapter/form",
+      "usage": "表单"
+    },
+    "requestClient": {
+      "from": "#/api/request",
+      "usage": "HTTP 客户端，禁止直接使用 axios"
+    },
+    "EchartsUI": {
+      "from": "@vben/plugins/echarts",
+      "usage": "图表容器"
+    },
+    "useEcharts": {
+      "from": "@vben/plugins/echarts",
+      "usage": "图表实例管理"
+    },
+    "Plus": {
+      "from": "@vben/icons",
+      "usage": "图标组件"
+    }
+  },
+  "ui_import_note": {
+    "web-antd": "从 'ant-design-vue' 导入（注意：playground 应用用的是 'antdv-next'，两者不同，不要混淆）",
+    "web-ele": "从 'element-plus' 导入",
+    "web-naive": "从 'naive-ui' 导入",
+    "web-tdesign": "从 'tdesign-vue-next' 导入"
+  },
+  "cell_renderers": {
+    "CellSwitch": "开关列，props: { beforeChange }",
+    "CellTag": "标签列",
+    "CellDict": "字典列，props: { code }",
+    "CellImage": "图片列",
+    "CellLink": "链接列"
+  },
+  "dev_commands": {
+    "install": "pnpm install",
+    "dev_antd": "pnpm dev:antd",
+    "dev_mock_only": "pnpm dev:antd（backend-mock 会自动启动）",
+    "build_antd": "pnpm build:antd",
+    "default_port": 5555
+  },
+  "forbidden": [
+    "使用 v2/v3 的 src/views/system/user/index.vue 单体写法",
+    "手写 <table> 或使用 el-table 替代 useVbenVxeGrid",
+    "直接 import axios 发请求",
+    "修改 src/router/routes/index.ts 手动注册路由",
+    "用相对路径跨层引用（应使用 #/ 别名）",
+    "在 web-antd 中从 'antdv-next' 导入组件（那是 playground 用的，web-antd 应为 'ant-design-vue'）",
+    "从 '#/adapter/vxe-table' 导入 VbenTableAction（web-antd 中应从 '@vben/common-ui' 导入）"
+  ],
+  "playground_vs_web_antd": {
+    "note": "仓库中 playground/ 是演示应用，写法与 apps/web-antd 有差异，不能直接照搬",
+    "differences": [
+      "UI 库：playground 用 'antdv-next'，web-antd 用 'ant-design-vue'",
+      "VbenTableAction：playground 从 '#/adapter/vxe-table' 导入，web-antd 需从 '@vben/common-ui' 导入",
+      "playground 的 api 目录在 playground/src/api，web-antd 在 apps/web-antd/src/api"
+    ],
+    "recommendation": "以 apps/web-antd 为基准；参考 CRUD 范式时注意替换上述两处"
+  }
+}

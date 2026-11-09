@@ -128,6 +128,20 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ---
 
+### 1️⃣1️⃣ requirements-to-vue_vben_admin
+
+把**后台管理需求描述**转换成基于 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin)（vben5）的**可运行后台管理脚手架**：自动划分功能模块、生成路由菜单、CRUD 页面、API 层与图表看板，内置 mock 数据可直接运行。
+
+- 输入一段中文需求（如"系统管理模块包括：用户管理、角色管理、权限管理"）即可
+- 自动判定页面类型：`crud` / `dashboard`（图表看板）/ `tree`（权限菜单）/ `form`
+- 覆盖 vben5 的三个易错点：`ant-design-vue` 与 `antdv-next` 之别、`VbenTableAction` 导入来源、路由 glob 自动收集
+- 校验脚本 14 项，示例产物 `resources/demo_output/demo-admin/`（3 模块 8 页面）
+- 已在**真实 vben 仓库**中生成并验证：0 错误 0 警告
+
+📖 **详细说明**：[查看文档](requirements-to-vue_vben_admin/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```
@@ -191,6 +205,15 @@ ncepu_ideal-skills/
 │       ├── tools/
 │       └── demo_output/
 ├── 📁 prototype-to-flutter-app/                    # 🐦 原型转 Flutter 工程技能
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
+├── 📁 requirements-to-vue_vben_admin/              # 🧩 需求转 vben 后台管理技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/

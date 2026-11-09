@@ -126,6 +126,20 @@ Turn **prototypes** into an **out-of-the-box Flutter project** following Flutter
 
 ---
 
+### 1️⃣1️⃣ requirements-to-vue_vben_admin
+
+Turn a **backend admin requirements description** into a **runnable admin scaffold** based on [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin) (vben5): auto module splitting, route/menu generation, CRUD pages, API layer and chart dashboards, with mock data ready to run.
+
+- Input a paragraph of Chinese requirements (e.g. "系统管理模块包括：用户管理、角色管理、权限管理")
+- Auto-classifies page type: `crud` / `dashboard` / `tree` / `form`
+- Encodes three vben5 pitfalls: `ant-design-vue` vs `antdv-next`, `VbenTableAction` import source, route glob auto-collection
+- 14 validation checks; sample output at `resources/demo_output/demo-admin/` (3 modules, 8 pages)
+- Verified inside the **real vben repository**: 0 errors, 0 warnings
+
+📖 **Details**: [Documentation](requirements-to-vue_vben_admin/README.md)
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -189,6 +203,15 @@ ncepu_ideal-skills/
 │       ├── tools/
 │       └── demo_output/
 ├── 📁 prototype-to-flutter-app/                    # 🐦 prototype -> Flutter skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
+├── 📁 requirements-to-vue_vben_admin/              # 🧩 requirements -> vben admin skill
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
