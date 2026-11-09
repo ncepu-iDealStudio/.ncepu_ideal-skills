@@ -192,7 +192,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ## 🏗️ 仓库结构
 
-```
+```text
 ncepu_ideal-skills/
 ├── 📄 README.md                                    # 项目说明
 ├── 📄 README.en.md                                 # 英文说明
@@ -317,14 +317,14 @@ ncepu_ideal-skills/
 
 ---
 
-##  快速开始
+## 快速开始
 
 ### 1️⃣ 配置技能到你的 AI 工具
 
 > 根据你使用的 AI 编程助手，选择对应的配置指南：
 
 | 🤖 AI 工具 | 📚 配置文档 |
-|-----------|-----------|
+| ----------- | ----------- |
 | 🚀 **Trae IDE** | [配置指南](docs/Trea中使用skill配置.md) |
 | 💻 **Claude Code** | [配置指南](docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [配置指南](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
@@ -358,7 +358,7 @@ CREATE TABLE student (
 **📤 生成内容对照表**：
 
 | ⚡ 技能 | 📥 输入 | 📤 生成内容 |
-|--------|--------|-----------|
+| -------- | -------- | ----------- |
 | **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + 项目骨架 |
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + 项目骨架 |
 | **Gin** | MySQL DDL | Model / DAO / Service / Resource + 项目骨架 |
@@ -379,7 +379,7 @@ CREATE TABLE student (
 **📤 生成内容对照表**：
 
 | ⚡ 技能 | 📥 输入 | 📤 生成内容 |
-|--------|--------|-----------|
+| -------- | -------- | ----------- |
 | **uni-app x** | 原型代码 / 图片 / PRD | `.uvue` 页面 + 组件 + services 分层 + mock 数据，可在 HBuilder 直接运行的多端工程 |
 | **Flutter** | 原型代码 / 图片 / PRD | features 分层 + Repository + mock 数据，`flutter pub get && flutter run` 即可运行的工程 |
 | **iOS 原生** | 原型代码 / 图片 / PRD | SwiftUI 四页范本 + MVVM & Combine + SwiftData + mock 数据，`xcodegen generate` 后 Xcode 直接 Run |
