@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "description": "设计 token。生成时写入 src/styles/ 或 app.scss 的 CSS 变量，页面统一引用。",
+  "note": "Taro 小程序端使用 rpx（750 设计稿基准），H5 端 Taro 会自动转换。",
+  "color": {
+    "primary": "#2B6DE5",
+    "primaryLight": "#E8F0FE",
+    "success": "#18A058",
+    "warning": "#F0A020",
+    "error": "#D03050",
+    "textPrimary": "#1F2225",
+    "textSecondary": "#5C6570",
+    "textTertiary": "#9099A3",
+    "border": "#E5E7EB",
+    "divider": "#F0F1F3",
+    "background": "#F5F6F8",
+    "surface": "#FFFFFF",
+    "mask": "rgba(0, 0, 0, 0.45)"
+  },
+  "dark": {
+    "enabled": false,
+    "background": "#121417",
+    "surface": "#1C1F24",
+    "textPrimary": "#F5F6F8",
+    "textSecondary": "#A8B0BA",
+    "border": "#2C3036"
+  },
+  "font_size": {
+    "xs": "22rpx",
+    "sm": "24rpx",
+    "base": "28rpx",
+    "md": "30rpx",
+    "lg": "34rpx",
+    "xl": "40rpx",
+    "xxl": "48rpx"
+  },
+  "spacing": {
+    "xs": "8rpx",
+    "sm": "16rpx",
+    "md": "24rpx",
+    "lg": "32rpx",
+    "xl": "48rpx",
+    "pagePadding": "32rpx"
+  },
+  "radius": {
+    "sm": "8rpx",
+    "md": "16rpx",
+    "lg": "24rpx",
+    "circle": "50%"
+  },
+  "sizing": {
+    "avatarSm": "64rpx",
+    "avatarMd": "88rpx",
+    "avatarLg": "128rpx",
+    "buttonHeight": "88rpx",
+    "tabBarHeight": "100rpx",
+    "touchTargetMin": "88rpx"
+  }
+}

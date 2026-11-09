@@ -1,0 +1,14 @@
+@import '../styles/variables.scss';
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx $space-xl;
+}
+
+.empty__text {
+  font-size: $font-base;
+  color: $text-tertiary;
+  text-align: center;
+}

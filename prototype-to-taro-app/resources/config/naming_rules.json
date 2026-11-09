@@ -1,0 +1,81 @@
+{
+  "version": "1.0.0",
+  "description": "Taro 工程模板的命名规则。两个框架分支共用，差异部分单独标注。",
+
+  "project_name": {
+    "convention": "kebab-case",
+    "example": "campus-skill-swap",
+    "forbidden": ["CampusSkillSwap", "campus_skill_swap"]
+  },
+
+  "page": {
+    "directory": "kebab-case",
+    "entry_file": {
+      "vue3": "index.vue",
+      "react": "index.tsx"
+    },
+    "config_file": "index.config.ts",
+    "example": {
+      "dir": "pages/order-list/",
+      "files": ["index.vue", "index.config.ts"]
+    },
+    "register_path": "pages/order-list/index",
+    "note": "app.config.ts 的 pages 数组注册的是不带扩展名的路径"
+  },
+
+  "component": {
+    "file": "PascalCase",
+    "suffix": { "vue3": ".vue", "react": ".tsx" },
+    "example": "OrderCard.vue"
+  },
+
+  "store": {
+    "vue3": {
+      "dir": "src/store/modules",
+      "convention": "use<Name>Store",
+      "example": "useUserStore",
+      "file": "user.ts"
+    },
+    "react": {
+      "dir": "src/models",
+      "convention": "<name> 小写",
+      "example": "user",
+      "file": "user.ts",
+      "structure": ["namespace", "state", "effects", "reducers"]
+    }
+  },
+
+  "service": {
+    "dir": "src/services/modules",
+    "convention": "camelCase",
+    "example": "getOrderList",
+    "file": "order.ts"
+  },
+
+  "type": {
+    "dir": "src/types",
+    "convention": "PascalCase",
+    "example": "OrderItem"
+  },
+
+  "mock": {
+    "dir": "src/mock",
+    "convention": "<domain>.mock.ts"
+  },
+
+  "style": {
+    "convention": "BEM",
+    "block": "kebab-case",
+    "element_separator": "__",
+    "modifier_separator": "--",
+    "example": ".order-card__title--highlighted",
+    "preprocessor": "scss（分支可选 less）"
+  },
+
+  "tab_bar": {
+    "max_items": 5,
+    "min_items": 2,
+    "icon_required": true,
+    "note": "小程序 tabBar 必须有图标；生成时用占位图并在 README 说明替换"
+  }
+}

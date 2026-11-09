@@ -140,6 +140,25 @@ Turn a **backend admin requirements description** into a **runnable admin scaffo
 
 ---
 
+### 1️⃣2️⃣ prototype-to-taro-app
+
+Turn **prototypes** into a **multi-platform Taro project** (WeChat/Alipay mini program, H5, RN) from a single codebase.
+
+- **Two tech stacks, chosen by the user**:
+  - Vue3: Taro 4 + Vue 3 + TS + Vant + Pinia
+  - React: Taro 4 + React 18 + TS + Dva + Immer
+- Built in: login, 401 redirect, multi-env request wrapper, paged lists, pull-to-refresh, empty/loading states
+- The parser enforces a `--framework` flag; there is no default framework
+- 12 validation checks; sample outputs at `resources/demo_output/skill-swap-{vue3,react}/`
+
+> Note: the referenced `RealCoolSnow/taro-vue3-ts` repo is now 404, so the Vue3 branch is built
+> from official Taro conventions; `elf-taro` targets Taro3.0-rc + React16, whose architecture is
+> adapted here to Taro 4 + React 18.
+
+📖 **Details**: [Documentation](prototype-to-taro-app/README.md)
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -212,6 +231,15 @@ ncepu_ideal-skills/
 │       ├── tools/
 │       └── demo_output/
 ├── 📁 requirements-to-vue_vben_admin/              # 🧩 requirements -> vben admin skill
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
+├── 📁 prototype-to-taro-app/                       # 📦 prototype -> Taro skill
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/

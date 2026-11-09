@@ -1,0 +1,111 @@
+{
+  "version": "1.0.0",
+  "description": "双框架依赖基线。版本号基于真实可运行工程核对，避免生成无法安装的 package.json。",
+
+  "taro_core": {
+    "version": "4.x",
+    "note": "Taro 4 是当前主线版本，支持 Vue3 与 React 18"
+  },
+
+  "vue3": {
+    "framework": "vue3",
+    "dependencies": {
+      "@tarojs/components": "4.0.9",
+      "@tarojs/helper": "4.0.9",
+      "@tarojs/plugin-framework-vue3": "4.0.9",
+      "@tarojs/plugin-platform-weapp": "4.0.9",
+      "@tarojs/plugin-platform-h5": "4.0.9",
+      "@tarojs/runtime": "4.0.9",
+      "@tarojs/shared": "4.0.9",
+      "@tarojs/taro": "4.0.9",
+      "vue": "^3.4.0",
+      "pinia": "^2.1.7"
+    },
+    "ui": {
+      "h5": { "package": "vant", "version": "^4.9.0" },
+      "weapp": { "package": "@vant/weapp", "version": "^1.11.0" }
+    },
+    "devDependencies": {
+      "@tarojs/cli": "4.0.9",
+      "@tarojs/webpack5-runner": "4.0.9",
+      "@vue/babel-plugin-jsx": "^1.2.2",
+      "typescript": "^5.4.0",
+      "sass": "^1.77.0"
+    },
+    "note": "Vant 在 H5 与小程序用法不同：H5 用 vant 组件，小程序需 usingComponents 引入 Vant Weapp"
+  },
+
+  "react": {
+    "framework": "react",
+    "dependencies": {
+      "@tarojs/components": "4.0.9",
+      "@tarojs/helper": "4.0.9",
+      "@tarojs/plugin-framework-react": "4.0.9",
+      "@tarojs/plugin-platform-weapp": "4.0.9",
+      "@tarojs/plugin-platform-h5": "4.0.9",
+      "@tarojs/react": "4.0.9",
+      "@tarojs/runtime": "4.0.9",
+      "@tarojs/shared": "4.0.9",
+      "@tarojs/taro": "4.0.9",
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0",
+      "dva-core": "^2.0.4",
+      "dva-immer": "^0.4.19",
+      "react-redux": "^9.1.0",
+      "redux": "^5.0.1"
+    },
+    "ui": {
+      "package": "taro-ui",
+      "version": "^3.1.0",
+      "note": "taro-ui 官方维护较慢，若目标平台仅微信小程序，也可用 @antmjs/vantui 替代"
+    },
+    "devDependencies": {
+      "@tarojs/cli": "4.0.9",
+      "@tarojs/webpack5-runner": "4.0.9",
+      "@types/react": "^18.2.0",
+      "typescript": "^5.4.0"
+    },
+    "reference_note": "参考 didilinkin/elf-taro 的架构（Dva + Immer + 拦截器 + 异常捕获），但适配到 Taro4 + React18"
+  },
+
+  "shared_dev": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0",
+    "stylelint": "^16.2.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0"
+  },
+
+  "scripts": {
+    "dev:weapp": "taro build --type weapp --watch",
+    "dev:h5": "taro build --type h5 --watch",
+    "dev:alipay": "taro build --type alipay --watch",
+    "dev:rn": "taro build --type rn --watch",
+    "build:weapp": "taro build --type weapp",
+    "build:h5": "taro build --type h5",
+    "lint": "eslint src --ext .ts,.tsx,.vue"
+  },
+
+  "rejected_by_default": {
+    "redux-toolkit": {
+      "reason": "React 分支沿用 Dva 风格（参考 elf-taro），RTK 写法差异大",
+      "when_to_add": "团队明确要求 RTK"
+    },
+    "zustand": {
+      "reason": "与 Dva 并存会造成两套状态管理",
+      "when_to_add": "新项目且不需要 Dva 的 effects 能力"
+    },
+    "mobx": {
+      "reason": "同上",
+      "when_to_add": "团队既有 MobX 规范"
+    }
+  },
+
+  "forbidden": [
+    "Vue3 工程中出现 .tsx 页面",
+    "React 工程中出现 .vue 页面",
+    "页面未在 app.config.ts 的 pages 中注册",
+    "直接调用 Taro.request 而不走 services/request.ts",
+    "在 app.config.ts 的 pages 中写扩展名"
+  ]
+}

@@ -1,0 +1,80 @@
+@import '../../styles/variables.scss';
+
+.page__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.page__loading-text {
+  font-size: $font-base;
+  color: $text-tertiary;
+}
+
+.page__body {
+  min-height: 100vh;
+}
+
+.page__list {
+  padding: $page-padding;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  padding: $space-md;
+  margin-bottom: $space-md;
+  background-color: $color-surface;
+  border-radius: $radius-md;
+}
+
+.card--active {
+  background-color: #F7F8FA;
+}
+
+.card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card__title {
+  font-size: $font-md;
+  font-weight: 500;
+  color: $text-primary;
+  line-height: 1.5;
+}
+
+.card__subtitle {
+  margin-top: $space-xs;
+  font-size: $font-sm;
+  color: $text-tertiary;
+}
+
+.card__tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: $space-sm;
+}
+
+.tag {
+  padding: 4rpx $space-sm;
+  margin-right: $space-xs;
+  margin-bottom: $space-xs;
+  font-size: $font-xs;
+  color: $color-primary;
+  background-color: $color-primary-light;
+  border-radius: $radius-sm;
+}
+
+.page__footer {
+  padding: $space-md;
+  text-align: center;
+}
+
+.page__footer-text {
+  font-size: $font-xs;
+  color: $text-tertiary;
+}

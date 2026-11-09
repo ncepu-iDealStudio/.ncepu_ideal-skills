@@ -1,0 +1,109 @@
+@import '../../styles/variables.scss';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $color-background;
+}
+
+.page__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.page__loading-text {
+  font-size: $font-base;
+  color: $text-tertiary;
+}
+
+.page__body {
+  flex: 1;
+}
+
+.content {
+  padding: $page-padding;
+  background-color: $color-surface;
+}
+
+.content__title {
+  font-size: $font-xl;
+  font-weight: 600;
+  color: $text-primary;
+  line-height: 1.4;
+}
+
+.content__meta {
+  display: flex;
+  flex-direction: row;
+  margin-top: $space-sm;
+}
+
+.content__meta-text {
+  margin-right: $space-md;
+  font-size: $font-sm;
+  color: $text-tertiary;
+}
+
+.content__tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: $space-md;
+}
+
+.tag {
+  padding: 4rpx $space-sm;
+  margin-right: $space-xs;
+  margin-bottom: $space-xs;
+  font-size: $font-xs;
+  color: $color-primary;
+  background-color: $color-primary-light;
+  border-radius: $radius-sm;
+}
+
+.content__section {
+  margin-top: $space-lg;
+}
+
+.content__section-title {
+  font-size: $font-md;
+  font-weight: 500;
+  color: $text-primary;
+}
+
+.content__text {
+  display: block;
+  margin-top: $space-sm;
+  font-size: $font-base;
+  color: $text-secondary;
+  line-height: 1.8;
+}
+
+.bottom-bar {
+  padding: $space-sm $page-padding;
+  padding-bottom: calc(#{$space-sm} + env(safe-area-inset-bottom));
+  background-color: $color-surface;
+  border-top: 1rpx solid $color-border;
+}
+
+.bottom-bar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $button-height;
+  background-color: $color-primary;
+  border-radius: $radius-md;
+}
+
+.bottom-bar__btn--active {
+  opacity: 0.85;
+}
+
+.bottom-bar__btn-text {
+  font-size: $font-md;
+  font-weight: 500;
+  color: #FFFFFF;
+}

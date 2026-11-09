@@ -142,6 +142,24 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ---
 
+### 1️⃣2️⃣ prototype-to-taro-app
+
+从**原型**生成符合 Taro 规范的**多端工程**（微信/支付宝小程序、H5、RN），一套代码多端运行。
+
+- **支持两种技术栈，由用户确认后选用**：
+  - Vue3 分支：Taro 4 + Vue 3 + TS + Vant + Pinia
+  - React 分支：Taro 4 + React 18 + TS + Dva + Immer
+- 内置登录、401 跳登录、多环境请求封装、分页列表、下拉刷新、空态/加载态
+- 解析工具强制要求 `--framework` 参数，不设默认框架
+- 校验脚本 12 项；两个分支各有示例产物 `resources/demo_output/skill-swap-{vue3,react}/`
+
+> 说明：参考仓库 `RealCoolSnow/taro-vue3-ts` 已 404，Vue3 分支按 Taro 官方规范自建；
+> `elf-taro` 为 Taro3.0-rc + React16，本技能把其架构思路适配到 Taro 4 + React 18。
+
+📖 **详细说明**：[查看文档](prototype-to-taro-app/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```
@@ -214,6 +232,15 @@ ncepu_ideal-skills/
 │       ├── tools/
 │       └── demo_output/
 ├── 📁 requirements-to-vue_vben_admin/              # 🧩 需求转 vben 后台管理技能
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/
+│       ├── specifications/
+│       ├── templates/
+│       ├── tools/
+│       └── demo_output/
+├── 📁 prototype-to-taro-app/                       # 📦 原型转 Taro 多端工程技能
 │   ├── README.md
 │   ├── SKILL.md
 │   └── resources/
