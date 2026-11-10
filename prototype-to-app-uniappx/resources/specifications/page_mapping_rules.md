@@ -9,7 +9,7 @@
 先判断页面属于哪种布局原型，再选对应模板。选错会导致结构别扭、后续难改。
 
 | 布局原型 | 判断依据 | 模板 | 典型页面 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `list` | 主体是可滚动的重复单元 | `list_page_template.uvue` | 信息流、商品列表、消息 |
 | `detail` | 单体内容 + 图文混排 + 底部操作 | `detail_page_template.uvue` | 文章详情、商品详情 |
 | `form` | 多个输入项 + 提交按钮 | `form_page_template.uvue` | 编辑资料、新建、反馈 |
@@ -24,7 +24,7 @@
 ## 2. HTML 元素 → uni-app x 组件
 
 | HTML | uni-app x | 注意事项 |
-|---|---|---|
+| --- | --- | --- |
 | `<div>` | `<view>` | 默认 block，flex 容器 |
 | `<span>` / 文本节点 | `<text>` | **文字必须包在 text 内** |
 | `<p>` / `<h1>`-`<h6>` | `<text>` + class 控制字号 | 无默认层级样式 |
@@ -97,7 +97,7 @@
 ## 4. 数据字段 → 类型推断
 
 | 字段名特征 | 推断类型 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | `id` / `*_id` / `*Id` | `number` 或 `string` | `id: number` |
 | `count` / `num` / `total` | `number` | `count: number` |
 | `is_*` / `has_*` / `*ed` | `boolean` | `isDeleted: boolean` |
@@ -114,7 +114,7 @@
 ## 5. 交互 → 事件绑定
 
 | 原型行为 | uni-app x 实现 |
-|---|---|
+| --- | --- |
 | 点击进入详情 | `@tap="uni.navigateTo({ url: '/pages/detail/detail?id=' + item.id })"` |
 | 切换 tab | `uni.switchTab({ url })` |
 | 返回 | `uni.navigateBack()` |
@@ -152,7 +152,7 @@
 ```
 
 | 状态 | 触发 | 表现 |
-|---|---|---|
+| --- | --- | --- |
 | `loading` | 首次进入 / 刷新 | 骨架屏或文字提示 |
 | `empty` | 请求成功但数组为空 | 空态组件 + 引导文案 |
 | `error` | 请求失败 | 错误提示 + 重试按钮 |
@@ -173,7 +173,7 @@
 组件命名与职责：
 
 | 组件 | 职责 |
-|---|---|
+| --- | --- |
 | `nav-bar.uvue` | 自定义顶部导航（需要时） |
 | `empty-state.uvue` | 空态展示，接收文案与图标 props |
 | `loading-skeleton.uvue` | 骨架屏 |

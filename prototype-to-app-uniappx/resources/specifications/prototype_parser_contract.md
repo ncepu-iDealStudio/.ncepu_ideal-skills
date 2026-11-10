@@ -71,7 +71,7 @@
 ### 3.1 `project`
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `project_name` | string | 是 | kebab-case，用于工程目录名 |
 | `app_title` | string | 是 | 应用显示名 |
 | `appid` | string | 是 | `__UNI__` 开头；未知时用 `__UNI__PROTOTYPE` |
@@ -82,7 +82,7 @@
 ### 3.2 `pages[]`
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `page_name` | string | 是 | kebab-case 页面标识 |
 | `page_path` | string | 是 | 必须 `pages/<name>/<name>.uvue` |
 | `route` | string | 是 | 必须与 `page_path` 去掉 `.uvue` 后一致 |
@@ -98,7 +98,7 @@
 ### 3.3 `interactions[]`
 
 | 字段 | 类型 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `event` | string | `tap` / `pull-down` / `reach-bottom` / `submit` / `long-press` |
 | `target` | string | 触发元素（组件名或 class） |
 | `action` | string | `navigate` / `switch-tab` / `back` / `refresh` / `load-more` / `toast` / `modal` |
@@ -111,7 +111,7 @@
 `validate_project.py` 会对 context 与生成产物检查以下项：
 
 | 编号 | 规则 | 级别 |
-|---|---|---|
+| --- | --- | --- |
 | P01 | `page_path` 后缀必须是 `.uvue` | error |
 | P02 | `route` 必须与 `page_path` 去掉后缀一致 | error |
 | P03 | 每个 `page_path` 必须在 `pages.json` 的 `pages` 中注册 | error |
@@ -144,7 +144,7 @@
 ### 6.1 HTML / CSS 原型
 
 | HTML 特征 | 映射为 |
-|---|---|
+| --- | --- |
 | 顶层多个同级区块 | 按纵向堆叠，对应页面 `view` 子块 |
 | `display: flex; flex-direction: row` | 保持横向，**显式**写出 |
 | `display: grid` | 拆为嵌套 flex（App 端不支持 grid） |

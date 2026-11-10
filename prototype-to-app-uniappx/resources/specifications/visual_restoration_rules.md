@@ -56,7 +56,7 @@
 ### 2.1 只用 flex，不用 grid
 
 | Web | uni-app x |
-|---|---|
+| --- | --- |
 | `display: grid; grid-template-columns: repeat(3, 1fr)` | 外层 `flex-direction: row; flex-wrap: wrap`，子项 `width: 33.33%` |
 | `display: inline-block` | 不支持，用 flex |
 | 浮动 `float` | 不支持，用 flex |
@@ -116,7 +116,7 @@
 ## 3. 尺寸单位
 
 | 场景 | 单位 | 理由 |
-|---|---|---|
+| --- | --- | --- |
 | 绝大多数尺寸 | `rpx` | 按 750 设计稿等比缩放 |
 | 1px 细线 | `px` | `rpx` 在部分机型会被渲染成 0 |
 | 导航栏高度 | `px`（44px） | 与原生一致 |
@@ -187,7 +187,7 @@ $line-height-normal: 1.5;
 ### 5.2 mode 选择
 
 | mode | 效果 | 适用 |
-|---|---|---|
+| --- | --- | --- |
 | `aspectFill` | 等比填充，裁剪 | 头像、封面（最常用） |
 | `aspectFit` | 等比完整显示，留白 | 商品图、需要完整展示 |
 | `scaleToFill` | 拉伸变形 | 几乎不用 |
@@ -250,7 +250,7 @@ uni-app x 中 `view` 可用 `hover-class`：
 生成页面后逐项核对：
 
 | # | 检查项 | 判定 |
-|---|---|---|
+| --- | --- | --- |
 | 1 | 每个文字都在 `<text>` 内 | 搜索模板中裸中文 |
 | 2 | 每个横向容器都有 `flex-direction: row` | 检查所有 flex 容器 |
 | 3 | 每个 `<text>` 自带 font-size 与 color | 检查样式表 |
@@ -269,7 +269,7 @@ uni-app x 中 `view` 可用 `hover-class`：
 当**完全还原**与**框架可行性**冲突时：
 
 | 冲突 | 处理 |
-|---|---|
+| --- | --- |
 | 原型用了 CSS Grid | 用 flex 嵌套近似，接受微小差异 |
 | 原型用了 Web 专有动画 | 降级为简单 transition，并在输出中说明 |
 | 原型有复杂遮罩与混合模式 | 简化为半透明纯色遮罩 |

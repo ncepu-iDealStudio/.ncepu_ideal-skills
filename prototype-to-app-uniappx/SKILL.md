@@ -54,7 +54,7 @@ utils/                → 纯函数工具（格式化、校验）
 技能支持三类输入，**可混合使用**：
 
 | 输入 | 提取方式 | 可靠性 |
-|---|---|---|
+| --- | --- | --- |
 | **HTML/CSS 原型代码** | 解析 DOM 结构与样式，机械映射组件 | 最高，结构明确 |
 | **设计图 / 截图** | 视觉理解：识别区域、层级、控件类型 | 中，需人工确认细节 |
 | **PRD / 页面清单** | 从文字描述抽取页面、字段、跳转 | 低，需补充视觉决策 |
@@ -91,7 +91,7 @@ pages/index/index.vue      ❌（uni-app x 不认 .vue 页面）
 ### 2. App 端 CSS 是 Web CSS 的**子集**
 
 | 限制 | 说明 | 正确做法 |
-|---|---|---|
+| --- | --- | --- |
 | **flex 默认方向是竖向** | `flex-direction` 默认 `column`，不是 `row` | 横向布局必须显式写 `flex-direction: row` |
 | **样式不继承** | 父级 `color`/`font-size` 不会传给子级 | 每个 `<text>` 自己写样式 |
 | **文字必须在 `<text>` 内** | 裸文字不会渲染 | `<text>内容</text>` |
@@ -119,7 +119,7 @@ pages/index/index.vue      ❌（uni-app x 不认 .vue 页面）
 ### 5. 两种编译模式
 
 | 模式 | 语言 | 脚本文件 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **蒸汽模式**（默认） | js / ts | `main.ts` / `main.js` | 2026 年推出，性能反超原生，**推荐新项目使用** |
 | VDOM 模式（旧） | uts 强类型 | `main.uts` | 编译为 kotlin/swift/ets，存量项目用 |
 
@@ -140,7 +140,7 @@ pages/index/index.vue      ❌（uni-app x 不认 .vue 页面）
 读取用户提供的材料，产出一份**页面清单（Page Inventory）**：
 
 | 字段 | 含义 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | `page_name` | 页面标识 | `index` |
 | `page_path` | 文件路径 | `pages/index/index.uvue` |
 | `route` | 路由 | `/pages/index/index` |
@@ -176,6 +176,9 @@ pages/index/index.vue      ❌（uni-app x 不认 .vue 页面）
 
 生成的文件：
 
+- `README.md`（**必备说明文档**，从 `resources/templates/project_structure/README.md` 模板生成，见步骤 7）
+- `jsconfig.json`（声明 `@/*` 别名，保证 VS Code 里 `@/services/api/*` 导入可跳转）
+- `.vscode/settings.json`（把 `*.uvue` 关联为 Vue 语法，Volar 才生效）
 - `manifest.json`（**必须含 `"uni-app-x": {}`**）
 - `pages.json`（注册全部页面 + tabBar + globalStyle）
 - `App.uvue`（全局样式与生命周期）
@@ -192,7 +195,7 @@ pages/index/index.vue      ❌（uni-app x 不认 .vue 页面）
 按 `resources/templates/pages/` 下的布局原型模板生成：
 
 | 布局原型 | 模板 | 适用 |
-|---|---|---|
+| --- | --- | --- |
 | 列表页 | `list_page_template.uvue` | 信息流、商品列表、动态 |
 | 详情页 | `detail_page_template.uvue` | 内容详情、商品详情 |
 | 表单页 | `form_page_template.uvue` | 编辑、新建、提交 |
@@ -234,15 +237,35 @@ export const mockSkillList: Skill[] = [
 - 轻提示（`uni.showToast`）、确认弹窗（`uni.showModal`）
 - 表单校验与提交反馈
 
-### 步骤 7：自检与输出
+### 步骤 7：生成配套说明文档（README.md）
+
+生成的工程**必须**自带一份 `README.md` 说明文档，放在工程根目录，不得遗漏。
+
+- 以 `resources/templates/project_structure/README.md` 为模板，替换占位符后写入工程根目录
+- 必须包含以下小节（缺一不可）：
+  1. **一句话项目简介**：来源原型、应用定位、主要功能
+  2. **技术栈**：uni-app x（蒸汽模式/TS）+ 运行端（App/小程序/H5）
+  3. **如何运行**：HBuilder 5.25+ 打开 → 运行到浏览器/手机；提示检查 `manifest.json` 的 `uni-app-x` 标记
+  4. **在 VS Code 中开发**：说明 VS Code 只负责编辑、运行仍需 HBuilderX；推荐扩展；`jsconfig.json` 与 `.vscode/settings.json` 的作用；明确本工程非 CLI 工程，禁止 `npm run dev`
+  5. **目录结构**：用代码块呈现真实生成的目录树
+  6. **页面清单**：表格列出每个页面的路由与用途
+  7. **对接后端 API**：`USE_MOCK` 开关 + `BASE_URL` + 函数签名对齐，强调页面代码零改动
+  8. **注意事项**：`.uvue` 后缀、flex 默认竖向、文字须在 `<text>` 内、新页面须注册 `pages.json`
+- 文档内容必须与工程实际一致（页面数量、目录树、组件名等以真实生成为准），不要照抄模板占位符
+- Markdown 排版约定：表格分隔行统一写成 `| --- | --- |`（竖线两侧各一个空格），**不要**写成 `|---|---|`，否则 markdownlint 的 MD060 会报表格风格不一致
+
+### 步骤 8：自检与输出
 
 运行 `resources/tools/validate_project.py` 做静态检查：
 
+- 工程根目录是否含 `README.md` 说明文档
 - `pages.json` 中注册的页面文件是否都存在
 - 是否存在 `.vue` 页面（应为 `.uvue`）
 - `manifest.json` 是否含 `"uni-app-x"`
 - 页面是否直接写死业务数据（应走 services）
 - 是否存在 App 端不支持的 CSS 用法
+
+> Windows 下 GBK 控制台直接运行该脚本可能因输出 emoji 报 `UnicodeEncodeError`，可先设置 `$env:PYTHONIOENCODING='utf-8'`（PowerShell）或 `set PYTHONIOENCODING=utf-8`（cmd）再运行。
 
 生成完成后输出文件清单与**"如何对接真实接口"**的说明。
 
@@ -252,6 +275,7 @@ export const mockSkillList: Skill[] = [
 
 ```text
 {{project_name}}/
+├── README.md                   # 工程说明文档（必备：运行方式/结构/对接后端/注意事项）
 ├── App.uvue                    # 全局样式、应用生命周期
 ├── main.ts                     # Vue 应用入口（蒸汽模式）
 ├── pages.json                  # 页面注册 + tabBar + globalStyle
@@ -329,7 +353,7 @@ export async function getSkillList(page: number): Promise<Skill[]> {
 ### 命名
 
 | 对象 | 规则 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | 页面目录 | kebab-case | `pages/skill-detail/` |
 | 页面文件 | kebab-case | `skill-detail.uvue` |
 | 组件文件 | kebab-case | `skill-card.uvue` |
@@ -394,7 +418,7 @@ export async function getSkillList(page: number): Promise<Skill[]> {
 用户要求 uts 写法时，改动点有限：
 
 | 项 | 蒸汽模式（默认） | UTS 模式 |
-|---|---|---|
+| --- | --- | --- |
 | 入口文件 | `main.ts` | `main.uts` |
 | 脚本块 | `<script setup lang="ts">` | `<script setup>`（不上 lang，或 `lang="uts"`） |
 | 类型定义 | `types/*.ts` | `types/*.uts` |
@@ -476,3 +500,4 @@ prototype-to-app-uniappx/
 8. **默认输出蒸汽模式（ts）** —— 旧项目要 uts 时按第 9 节切换，不要混用
 9. **不要臆造交互** —— 原型没体现的，列进待确认清单
 10. **中文注释与文案** —— 与团队习惯保持一致
+11. **工程必须带 README.md** —— 生成后根目录必须含说明文档（运行/结构/页面清单/对接后端/注意事项），内容与实际工程一致

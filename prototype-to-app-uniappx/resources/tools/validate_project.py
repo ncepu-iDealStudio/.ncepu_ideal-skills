@@ -29,6 +29,7 @@ CHECK_FLEX_ROW_EXPLICIT = "横向容器显式声明 flex-direction: row"
 CHECK_HAS_STATES = "页面含 loading/empty 状态分支"
 CHECK_IMAGE_HAS_SIZE = "image 有明确宽高"
 CHECK_VFOR_HAS_KEY = "v-for 带 :key"
+CHECK_README_EXISTS = "工程根目录含 README.md 说明文档"
 
 
 def load_json(path: Path):
@@ -255,6 +256,29 @@ def check_vfor_key(root: Path, results: list) -> None:
         results.append((CHECK_VFOR_HAS_KEY, "ok", ""))
 
 
+def check_readme(root: Path, results: list) -> None:
+    """工程根目录必须含 README.md 说明文档。"""
+    readme = root / "README.md"
+    if not readme.exists():
+        results.append((CHECK_README_EXISTS, "error", "工程根目录缺少 README.md 说明文档"))
+        return
+
+    text = readme.read_text(encoding="utf-8", errors="ignore")
+    if not text.strip():
+        results.append((CHECK_README_EXISTS, "warn", "README.md 为空，请补充工程说明"))
+        return
+
+    # 关键小节检查：缺失时给出提示（不阻断，仅警告）
+    required = ["如何运行", "目录结构", "对接后端"]
+    missing = [k for k in required if k not in text]
+    if missing:
+        results.append(
+            (CHECK_README_EXISTS, "warn", "README.md 缺少建议小节: " + ", ".join(missing))
+        )
+    else:
+        results.append((CHECK_README_EXISTS, "ok", ""))
+
+
 # ---- 辅助 ----------------------------------------------------------------
 
 
@@ -274,6 +298,13 @@ def extract_style(text: str) -> str:
 
 
 def main() -> int:
+    # 兼容 Windows GBK 控制台：避免输出 emoji/中文时 UnicodeEncodeError
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
     if len(sys.argv) < 2:
         print("用法: python validate_project.py <项目目录> [--json]")
         return 1
@@ -286,6 +317,7 @@ def main() -> int:
         return 2
 
     results: list[tuple[str, str, str]] = []
+    check_readme(root, results)
     check_pages(root, results)
     check_no_vue_pages(root, results)
     check_manifest(root, results)
