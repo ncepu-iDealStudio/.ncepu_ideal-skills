@@ -190,6 +190,21 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ---
 
+### 1️⃣5️⃣ dsh-plugin-starter
+
+从**一句话需求或插件原型**生成**可直接用 VSCode 打开开发**的 **DSH（DeepSeek Harness）插件起步项目**，并在工程里内置一份面向初学者的《开发者指南》。
+
+- 支持四类插件：`tool-only`（工具型，无界面）/ `route-only`（路由型，无界面）/ `dual-face`（双面型，设置页界面）/ `interceptor`（工具拦截器）
+- 生成即对齐 DSH 插件规范：`dsh.bundle.patch` 装配声明、`dsh.client` 双面声明、tsdown 双目标构建（`lib/index.mjs` + `lib/client.js`）、包名四处一致
+- 内置 `DEVELOPMENT.md`：改代码 → 构建 → 装进 DSH → 调试 → 打包发布的完整闭环，含按类型的扩展代码与「症状 → 根因」调试表
+- 零依赖工具链：`scaffold_plugin.py`（spec → 工程）、`validate_plugin.py`（18 项静态自检）
+- 示例产物：`resources/demo_output/dsh-plugin-notebook/`（双面型：路由 + 设置页 + 笔记增删查）
+- 📘 使用指南：[docs/使用dsh-plugin-starter技能开发DSH插件.md](docs/使用dsh-plugin-starter技能开发DSH插件.md)
+
+📖 **详细说明**：[查看文档](dsh-plugin-starter/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```text
@@ -299,6 +314,15 @@ ncepu_ideal-skills/
 │       ├── tools/
 │       ├── demo_input/
 │       └── demo_output/
+├── 📁 dsh-plugin-starter/                          # 🧩 DSH 插件起步项目生成技能
+│   ├── README.md
+│   ├── SKILL.md
+│   └── resources/
+│       ├── config/                                 # 四类型判定表 + 命名规则
+│       ├── specifications/                         # 清单/Host/Client/构建发布 契约
+│       ├── templates/                              # common + 四类型 + 指南分章
+│       ├── tools/                                  # scaffold_plugin.py / validate_plugin.py
+│       └── demo_output/                            # 示例产物 dsh-plugin-notebook
 ├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
 ├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
 ├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype、diagnosing-superpowers
@@ -331,6 +355,7 @@ ncepu_ideal-skills/
 | 🧩 **CodeBuddy** | [配置指南](docs/CodeBuddy中使用skill配置.md) |
 | 🛠️ **WorkBuddy** | [原型转应用技能指南](docs/workbuddy中使用原型转应用技能.md) |
 | 🐋 **DSH（DeepSeek Harness）** | [superpowers 技能指南](docs/dsh中使用superpowers技能.md) |
+| 🧩 **DSH 插件开发** | [dsh-plugin-starter 使用指南](docs/使用dsh-plugin-starter技能开发DSH插件.md) |
 
 > 📝 **提示**：详细配置说明请参考 `docs/` 目录
 

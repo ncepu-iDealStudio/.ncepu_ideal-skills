@@ -1,0 +1,80 @@
+{
+  "$comment": "四种 DSH 插件类型的判定表。模型在需求澄清阶段用它把『用户想要什么』映射成一种类型，再决定模板组合。",
+  "version": "1.0.0",
+  "runtime": {
+    "dsh": "0.1.0-rc.7+（开发者预览版，API 破坏性变更频繁）",
+    "cordis": "^4.0.1",
+    "node": ">=20.19，推荐 22+",
+    "packageManager": "pnpm"
+  },
+  "types": {
+    "tool-only": {
+      "label": "工具型（无界面）",
+      "capabilityOutlet": "ctx.tools.register(defineTool(...))",
+      "consumer": "模型（LLM 直接调用）",
+      "ability": "给 Agent 增加一个可调用的能力，如抓网页、查数据库、写文件",
+      "signals": ["让 AI 能…", "增加一个工具", "模型可以调用", "帮我查/抓/算", "自动化某个步骤"],
+      "templates": ["tool-only"],
+      "hasClient": false,
+      "requiredPackageFields": ["dsh.bundle.patch"],
+      "peerDeps": ["@deepseek-ai/cordis", "@deepseek-ai/dsh-tools"],
+      "verify": "让 Agent 调用工具名，观察入参与返回值",
+      "antiPatterns": ["没有 output.schema", "描述写成人话而不是『何时使用』", "execute 里裸 throw"]
+    },
+    "route-only": {
+      "label": "路由型（无界面）",
+      "capabilityOutlet": "ctx.webServer.register({kind, path, handler})",
+      "consumer": "浏览器 / 外部脚本 / 其他系统",
+      "ability": "暴露一组 HTTP 接口，供外部读写数据或触发动作",
+      "signals": ["提供 HTTP 接口", "给外部脚本调用", "暴露 API", "和别的系统对接"],
+      "templates": ["route-only"],
+      "hasClient": false,
+      "requiredPackageFields": ["dsh.bundle.patch"],
+      "peerDeps": ["@deepseek-ai/cordis", "@deepseek-ai/dsh-host-webserver"],
+      "verify": "curl POST 到 /<prefix>/ping 与 /<prefix>/run",
+      "antiPatterns": ["register 没包 ctx.effect", "(kind, path) 重复", "缺 res.end()"]
+    },
+    "dual-face": {
+      "label": "双面型（带界面）",
+      "capabilityOutlet": "Host: ctx.webServer.register + Client: ctx.slots.inject('settings.section')",
+      "consumer": "用户（GUI 设置页）+ 浏览器",
+      "ability": "在 DSH 设置页里提供可视化配置/管理界面，数据经 HTTP 路由下发",
+      "signals": ["设置页", "界面", "可视化配置", "面板", "开关/表单", "让用户自己配"],
+      "templates": ["route-only", "dual-face"],
+      "hasClient": true,
+      "requiredPackageFields": ["dsh.bundle.patch", "dsh.client", "exports['./client']"],
+      "peerDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-host-webserver",
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-locale",
+        "react"
+      ],
+      "verify": "设置页出现新区块 → 操作 → 看到 { ok: true } 信封",
+      "antiPatterns": ["hand-written __ModuleLoader__", "客户端硬编码颜色", "文案没走 locale"]
+    },
+    "interceptor": {
+      "label": "拦截器型（无界面）",
+      "capabilityOutlet": "ctx.on('tools/pre-execute', ...)",
+      "consumer": "系统内部（其他工具调用链）",
+      "ability": "在工具执行前做策略判定：白名单、参数校验、审计、限流、审批",
+      "signals": ["拦截", "白名单", "禁止某些命令", "审计日志", "权限控制", "审批"],
+      "templates": ["interceptor"],
+      "hasClient": false,
+      "requiredPackageFields": ["dsh.bundle.patch"],
+      "peerDeps": ["@deepseek-ai/cordis", "@deepseek-ai/dsh-tools"],
+      "verify": "调用非白名单工具 → 收到拒绝原因；设置环境变量放行 → 通过",
+      "antiPatterns": ["用 payload.deny()", "判定里做耗时 IO", "拒绝不给 reason"]
+    }
+  },
+  "decisionRules": [
+    "用户要『AI 能做某事』→ tool-only",
+    "用户要『别的系统能调用我』→ route-only",
+    "用户要『自己能看到/配置』→ dual-face（必定同时包含 route 半边）",
+    "用户要『限制/审计已有工具』→ interceptor",
+    "同时要工具 + 界面：先用 dual-face 建骨架，再把 tool 注册块追加进 src/index.ts（inject 补 'tools'）",
+    "拿不准且有『配置/查看』诉求时，选 dual-face —— 界面比命令更不容易被用户认为『没做好』"
+  ]
+}

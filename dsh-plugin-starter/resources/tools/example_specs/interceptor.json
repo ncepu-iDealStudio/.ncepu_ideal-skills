@@ -1,0 +1,17 @@
+{
+  "plugin": {
+    "packageName": "@demo/dsh-tool-guard",
+    "slug": "dsh-tool-guard",
+    "type": "interceptor",
+    "version": "0.1.0",
+    "license": "MIT",
+    "displayNameZh": "工具守卫",
+    "displayNameEn": "Tool Guard",
+    "descriptionZh": "在工具执行前按白名单拦截，非白名单工具直接拒绝并给出原因。",
+    "descriptionEn": "Deny non-allowlisted tools before execution."
+  },
+  "capability": {
+    "summary": "工具白名单拦截",
+    "parameters": []
+  }
+}

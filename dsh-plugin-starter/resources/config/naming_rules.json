@@ -1,0 +1,53 @@
+{
+  "$comment": "命名与一致性规则。包名是 DSH 的唯一注册键，任何不一致都会导致『装了但不生效』。scaffold/validate 两个工具都按此文件实现。",
+  "version": "1.0.0",
+  "packageName": {
+    "pattern": "^@[a-z0-9][a-z0-9._-]*/dsh-[a-z0-9][a-z0-9-]*$",
+    "example": "@your-scope/dsh-notebook",
+    "rule": "必须带自己的 npm/GitHub scope；最后一段必须等于插件 id 且以 dsh- 开头",
+    "forbidden": ["@deepseek-ai/*（官方命名空间）", "无 scope 的裸包名", "大写字母", "下划线"]
+  },
+  "pluginSlug": {
+    "pattern": "^dsh-[a-z0-9][a-z0-9-]*$",
+    "example": "dsh-notebook",
+    "derivedFrom": "packageName 的最后一段",
+    "usedIn": [
+      "cordis.patch.yml 的 id",
+      "locale 命名空间",
+      "settings.section 的 id",
+      "日志标签",
+      "CSS 类名前缀（下划线化：dsh_notebook）"
+    ]
+  },
+  "toolName": {
+    "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*$",
+    "example": "notebook_search",
+    "rule": "snake_case，模型可见，应带插件前缀避免与其他插件撞名",
+    "reserved": ["run_code"],
+    "descriptionRule": "从模型视角写『什么时候用、参数怎么填』，不写实现细节"
+  },
+  "routePath": {
+    "pattern": "^/[a-z0-9][a-z0-9-]*$",
+    "example": "/notebook",
+    "rule": "绝对路径、无尾斜杠、仅小写与短横线；(kind, path) 必须全局唯一",
+    "kinds": ["exact（完全匹配）", "prefix（该路径及其子路径）"]
+  },
+  "envPrefix": {
+    "pattern": "^[A-Z0-9_]+$",
+    "derivedFrom": "插件 id 大写并把 - 换成 _",
+    "example": "DSH_NOTEBOOK_ALLOW"
+  },
+  "consistencyChecklist": [
+    "package.json → name",
+    "tsdown.config.ts → PLUGIN_ID",
+    "cordis.patch.yml → name（并建议 id 用插件 id）",
+    "tsconfig.json → paths 的键 = <包名>/client（仅带界面插件）",
+    "Client bundle 运行期 → window.__ModuleLoader__.load({ id }) = 包名"
+  ],
+  "sourceNaming": {
+    "hostEntry": "src/index.ts",
+    "businessLogic": "src/capability.ts（纯函数，不 import DSH API）",
+    "clientEntry": "src/client/index.ts（纯 Host 插件不建此文件）",
+    "buildOutput": "lib/index.mjs + lib/client.js（构建产物，不提交）"
+  }
+}

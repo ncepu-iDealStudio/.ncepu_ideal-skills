@@ -1,0 +1,20 @@
+{
+  "plugin": {
+    "packageName": "@demo/dsh-notebook",
+    "slug": "dsh-notebook",
+    "type": "dual-face",
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": "demo",
+    "repoUrl": "https://github.com/demo/dsh-notebook",
+    "displayNameZh": "笔记本",
+    "displayNameEn": "Notebook",
+    "descriptionZh": "在 DSH 设置页里记录与管理笔记，Host 侧提供笔记读写路由。",
+    "descriptionEn": "Manage notes from a DSH settings section backed by host routes."
+  },
+  "capability": {
+    "summary": "笔记的增删查",
+    "routePrefix": "/notebook",
+    "parameters": []
+  }
+}

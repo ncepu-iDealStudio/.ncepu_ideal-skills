@@ -1,0 +1,18 @@
+{
+  "plugin": {
+    "packageName": "@demo/dsh-notes-api",
+    "slug": "dsh-notes-api",
+    "type": "route-only",
+    "version": "0.1.0",
+    "license": "MIT",
+    "displayNameZh": "笔记接口",
+    "displayNameEn": "Notes API",
+    "descriptionZh": "暴露一组 HTTP 接口，供外部脚本写入/读取笔记。",
+    "descriptionEn": "HTTP endpoints for external scripts to read and write notes."
+  },
+  "capability": {
+    "summary": "笔记读写接口",
+    "routePrefix": "/notes-api",
+    "parameters": []
+  }
+}

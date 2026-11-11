@@ -1,0 +1,5 @@
+# dsh-notebook 的 bundle patch：把插件行插入 profile 的插件清单。
+# 安装：dsh plugin --profile web add @demo/dsh-notebook
+- insert:
+    - id: dsh-notebook
+      name: '@demo/dsh-notebook'

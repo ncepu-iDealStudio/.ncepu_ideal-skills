@@ -1,0 +1,34 @@
+{
+  "plugin": {
+    "packageName": "@demo/dsh-echo-tool",
+    "slug": "dsh-echo-tool",
+    "type": "tool-only",
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": "demo",
+    "repoUrl": "https://github.com/demo/dsh-echo-tool",
+    "displayNameZh": "回声工具",
+    "displayNameEn": "Echo Tool",
+    "descriptionZh": "把模型传入的文本按指定次数回显，用于验证工具链路。",
+    "descriptionEn": "Echo text back N times; used to verify the tool pipeline."
+  },
+  "capability": {
+    "summary": "回显文本",
+    "toolName": "echo_run",
+    "toolDescription": "把用户给出的文本回显指定次数。当需要验证 DSH 工具链是否通畅，或需要原样复述一段文本时使用。",
+    "parameters": [
+      {
+        "name": "text",
+        "type": "string",
+        "required": true,
+        "description": "要回显的文本"
+      },
+      {
+        "name": "count",
+        "type": "number",
+        "required": false,
+        "description": "回显次数，默认 1，范围 1-10"
+      }
+    ]
+  }
+}
