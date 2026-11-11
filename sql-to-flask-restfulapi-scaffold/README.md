@@ -111,6 +111,57 @@ sql-to-flask-restfulapi-scaffold/
 
 ---
 
+## 已有项目的增量更新能力
+
+当目标项目**已经生成过骨架**时，技能支持三类增量场景（按表逐表判定）：
+
+| 场景 | 触发条件 | 技能行为 |
+|---|---|---|
+| **新增表** | 该表 7 类文件全部不存在 | 按表生成文件 + 幂等追加 `api_1_0/__init__.py` 注册 |
+| **表结构变更** | 该表任一文件已存在 | 先做**字段级差异分析**，输出差异清单与风险等级，确认后分层更新 |
+| **表下线** | 用户明确要求 | 只输出待删清单，**不自动删文件、不执行 DDL** |
+
+### 核心设计：按文件归属分级覆盖
+
+| 文件 | 标记 | 策略 |
+|---|---|---|
+| `models/` | `【AUTO-GENERATED】` | 覆盖 |
+| `controller/` | `【AUTO-GENERATED】` | 重生成标准 CRUD，保留手写方法 |
+| `Resource/*.py`、`urls.py` | `【AUTO-GENERATED】` | 重生成 CRUD，保留自定义路由 |
+| `service/*Service.py` | `【HAND-WRITTEN】` | **绝不覆盖**，只输出待办 |
+| `*OtherResource.py` | `【HAND-WRITTEN 占位】` | **绝不覆盖** |
+| `api_1_0/__init__.py` | marker 区块 | 幂等追加 |
+| `app/` `config/` `utils/` | 无标记 | 完全不碰 |
+
+> **判定补充**：文件存在但没有生成标记 → 视为用户已手改，禁止覆盖。
+
+### 覆盖的变更类型（19 种）
+
+`add_table`、`add_view`、`add_column`、`drop_column`、`rename_column`、
+`modify_column_type`、`modify_nullable`、`modify_default`、`modify_unique`、
+`add_status_flag`、`drop_status_flag`、`change_soft_delete_field`、
+`change_primary_key`、`add_foreign_key`、`drop_foreign_key`、
+`comment_only`、`change_view_definition`、`rename_table`、`drop_table`
+
+其中 `rename_table` 与 `drop_table` 标记为 **`blocked_from_auto`**，必须人工确认。
+
+### 相关资源
+
+| 文件 | 作用 |
+|---|---|
+| `resources/config/incremental_change_policy.json` | 增量策略：模式判定、变更类型、影响面、覆盖保护、注册幂等 |
+| `resources/specifications/incremental_update.md` | 增量操作规范：差异识别流程、影响面矩阵、报告模板 |
+| `resources/tools/check_skill_consistency.py` | 技能自洽校验（含增量资源完整性） |
+
+### 自检命令
+
+```bash
+python resources/tools/check_skill_consistency.py
+# 输出：sql-to-flask-restfulapi-scaffold consistency ok
+```
+
+---
+
 ## 生成的目标项目说明
 
 ### 1. 生成的目标项目结构

@@ -121,6 +121,60 @@ sql-to-gin-restfulapi-scaffold/
 
 ---
 
+## 已有项目的增量更新能力
+
+当目标项目**已经生成过骨架**时，技能支持三类增量场景（按实体逐表判定）：
+
+| 场景 | 触发条件 | 技能行为 |
+|---|---|---|
+| **新增表** | 该实体 5 类文件全部不存在 | 按实体生成文件 + 幂等追加 `apis/api_1_0/urls.go` 注册 |
+| **表结构变更** | 该实体任一文件已存在 | 先做**字段级差异分析**，输出差异清单与风险等级，确认后分层更新 |
+| **表下线** | 用户明确要求 | 只输出待删清单，**不自动删文件、不执行 DDL** |
+
+### 核心设计：按文件归属分级覆盖
+
+| 文件 | 标记 | 策略 |
+|---|---|---|
+| `internal/models/{Entity}.go` | 生成标记 | 覆盖 |
+| `internal/dao/{Entity}.go` | 生成标记 | 覆盖（仅基础 CRUD） |
+| `apis/api_1_0/{slug}/*Resource.go`、`urls.go` | 生成标记 | 重生成 CRUD，保留自定义 handler |
+| `internal/services/{Entity}.go` | `【HAND-WRITTEN】` | **绝不覆盖**，只输出待办 |
+| `apis/api_1_0/urls.go` | marker 区块 | 幂等追加（**复用 `merge_router_registry.py`**） |
+| `internal/settings/` `internal/globals/` `configs/` `utils/` | 无标记 | 完全不碰 |
+
+### 覆盖的变更类型（20 种）
+
+在 Flask 版 19 种的基础上，Gin 版额外支持 `modify_index`（索引变化，对应 gorm tag）。
+
+其中 `rename_table` 与 `drop_table` 标记为 **`blocked_from_auto`**，必须人工确认。
+
+### Go 特有的三条注意事项
+
+1. **`int64` 与 `int` 不视为等价** —— 影响 json 大数精度，差异分析必须显式报告
+2. **`urls.go` 的 `:param` 与 `Resource` 里 `c.Param(...)` 必须字面一致** —— 改一处漏一处会运行期取不到值
+3. **`go build ./...` 是最有力的验证** —— 字段改名或方法签名不一致会直接编译失败，不通过不得宣称完成
+
+### 相关资源
+
+| 文件 | 作用 |
+|---|---|
+| `resources/config/incremental_change_policy.json` | 增量策略：模式判定、变更类型、影响面、覆盖保护、注册幂等 |
+| `resources/specifications/incremental_update.md` | 增量操作规范：差异识别流程、影响面矩阵、报告模板 |
+| `resources/tools/merge_router_registry.py` | 已有的路由注册幂等合并工具（`add_table` 场景优先复用） |
+| `resources/tools/check_skill_consistency.py` | 技能自洽校验（含增量资源完整性） |
+
+### 自检命令
+
+```bash
+# 技能自洽校验
+python resources/tools/check_skill_consistency.py
+
+# 增量后的完整回归
+python resources/tools/run_regression_pipeline.py
+```
+
+---
+
 ## 生成的目标项目说明
 
 ### 1. 生成的目标项目结构

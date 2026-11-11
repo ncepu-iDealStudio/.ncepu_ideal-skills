@@ -1,0 +1,469 @@
+{
+  "version": "1.0.0",
+  "description": "已有目标项目的增量更新策略（Flask 版）：新增表 / 表结构变更 / 表下线。技能据此判定运行模式、做字段级差异分析、确定每层文件的更新动作、保护手写代码、幂等追加注册、给出 DDL 建议与回归清单。greenfield 仍按既有生成流程处理。",
+  "scope": "仅当目标项目已存在骨架时启用。本文件是策略配置，不渲染代码；渲染仍由 resources/templates/ 驱动。",
+  "framework_notes": "本技能的层次为 Model / Controller / Service / Resource 四层（Controller 继承 Model，Service 继承 Controller），与 FastAPI 版（Model/Schema/Repository/Service/Resource）不同，故覆盖策略与影响面需按本文件为准。",
+
+  "modes": {
+    "greenfield": "目标项目骨架不存在：生成完整骨架 + 本次 SQL 中所有表/视图",
+    "add_table": "骨架已存在、该表相关文件均不存在：按表生成 7 类文件并追加注册",
+    "alter_table": "骨架已存在、该表至少一个文件已存在：先做旧/新结构字段级差异，再按 change_types 分层更新",
+    "drop_table": "用户明确要求移除/下线某表：只输出待删清单与顺序，默认不自动删除任何文件"
+  },
+
+  "mode_detection": {
+    "project_exists_if_any": [
+      "manage.py",
+      "app/__init__.py",
+      "models/__init__.py",
+      "api_1_0/__init__.py"
+    ],
+    "table_files": {
+      "table": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py",
+        "service/{class_name}Service.py",
+        "api_1_0/{resource_slug}Resource/__init__.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}Resource.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py",
+        "api_1_0/{resource_slug}Resource/urls.py"
+      ],
+      "view": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py",
+        "service/{class_name}Service.py",
+        "api_1_0/{resource_slug}Resource/__init__.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py",
+        "api_1_0/{resource_slug}Resource/urls.py"
+      ]
+    },
+    "rules": [
+      "骨架不存在 → greenfield",
+      "骨架存在且该表全部文件不存在 → add_table",
+      "骨架存在且该表任一文件存在 → alter_table（即使只有一个）",
+      "用户明确说「删掉/下线某表」→ drop_table",
+      "「用户又给了一遍建表 SQL」不等于重新建表：已有文件必须走 alter_table",
+      "视图(entity_kind=view)只读，不参与 alter 的写操作分支；视图定义变化走 change_view_definition",
+      "残留文件不成套（如只剩 models/ 与 controller/）→ 先询问用户补齐还是重生成，禁止默认覆盖"
+    ]
+  },
+
+  "baseline_snapshot": {
+    "purpose": "alter_table 场景下，取旧结构作为差异比对基线",
+    "source_priority": [
+      "用户提供的旧版 CREATE TABLE / CREATE VIEW",
+      "database/*.sql 中的建表语句",
+      "models/{module_name}.py 的 Column 定义（解析 sqlalchemy type/nullable/default/comment）",
+      "controller/{class_name}Controller.py 的字段使用（交叉校验，仅辅助）",
+      "（仅用户同意时）information_schema 查询"
+    ],
+    "compare_dimensions": [
+      "字段集合（新增 / 删除）",
+      "字段类型",
+      "可空性 nullable",
+      "默认值 default / server_default",
+      "唯一约束 unique",
+      "主键 primary_key",
+      "外键 ForeignKey",
+      "注释 comment",
+      "软删除字段 soft_delete_field",
+      "状态/标识位字段 status_flag_set"
+    ],
+    "normalization": [
+      "忽略大小写与反引号差异",
+      "忽略列顺序差异",
+      "驼峰与下划线视为等价（userName == user_name），但以 SQL 原字段名为准输出",
+      "类型别名归一：INT/INTEGER 等同，VARCHAR(n) 保留 n，TINYINT(1) 与 BOOLEAN 视为等价",
+      "软删与状态位集合必须按最新 SQL 用 status_flag_fields 规则重新计算，不沿用旧结论"
+    ],
+    "output": "structure_diff.json（added / removed / type_changed / constraint_changed / flag / comment_only + 风险等级）"
+  },
+
+  "file_roles": {
+    "models/{module_name}.py": {
+      "ownership": "generated",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "overwrite"
+    },
+    "controller/{class_name}Controller.py": {
+      "ownership": "generated_with_hand_written_business",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "regenerate_crud_methods__preserve_manual_methods",
+      "note": "Controller 承载主要 CRUD 与业务逻辑。若检测到非模板方法（自定义业务方法），只覆盖模板生成的 add/get/update/delete 等标准方法，手写方法原样保留；无法安全拆分时输出待办而非覆盖"
+    },
+    "service/{class_name}Service.py": {
+      "ownership": "hand_written",
+      "marker": "【HAND-WRITTEN】",
+      "on_alter": "never_overwrite__emit_todo__append_only_with_confirmation",
+      "note": "Service 继承 Controller，默认只有 pass。用户通常会在此层写跨表业务、事务编排。严禁整文件覆盖"
+    },
+    "api_1_0/{resource_slug}Resource/{resource_slug}Resource.py": {
+      "ownership": "generated_with_manual_routes",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "regenerate_crud__preserve_manual_routes"
+    },
+    "api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py": {
+      "ownership": "hand_written",
+      "marker": "【HAND-WRITTEN 占位】",
+      "on_alter": "never_overwrite__emit_todo",
+      "note": "敏感字段更新等定制接口的占位文件，初始为空实现，用户会填充。禁止覆盖"
+    },
+    "api_1_0/{resource_slug}Resource/urls.py": {
+      "ownership": "generated",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "overwrite",
+      "note": "路由与 endpoint 名强绑定，可以整体重生成"
+    },
+    "api_1_0/{resource_slug}Resource/__init__.py": {
+      "ownership": "generated",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "overwrite",
+      "note": "定义 blueprint，重生成即可"
+    },
+    "api_1_0/__init__.py": {
+      "ownership": "append_only",
+      "marker": "# ==AUTO_IMPORTS_START== / # ==AUTO_REGISTRY_START==",
+      "on_alter": "idempotent_append"
+    },
+    "README.md": {
+      "ownership": "hand_written",
+      "marker": "无",
+      "on_alter": "update_generated_api_section_only"
+    },
+    "app/**:models/__init__.py:config/**:utils/**:static/utils/**": {
+      "ownership": "baseline",
+      "marker": "无",
+      "on_alter": "never_touch"
+    }
+  },
+
+  "change_types": {
+    "add_table": {
+      "risk": "low",
+      "ddl_hint": "按用户提供的 CREATE TABLE 建表（技能不执行 DDL）",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py",
+        "service/{class_name}Service.py（仅不存在时）",
+        "api_1_0/{resource_slug}Resource/__init__.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}Resource.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py",
+        "api_1_0/{resource_slug}Resource/urls.py"
+      ],
+      "append_only": [
+        "api_1_0/__init__.py：在 AUTO_IMPORTS / AUTO_REGISTRY 区块内追加 blueprint 导入与注册项"
+      ],
+      "manual_todo": [],
+      "verify": [
+        "blueprint 已注册：init_router 后路由出现在 flask routes 输出",
+        "集成 CRUD 流程可跑通"
+      ]
+    },
+
+    "add_view": {
+      "risk": "low",
+      "ddl_hint": "按用户提供的 CREATE VIEW 建视图（技能不执行 DDL）",
+      "regenerate": [
+        "models/{module_name}.py（只读模型）",
+        "controller/{class_name}Controller.py（仅查询方法）",
+        "service/{class_name}Service.py（仅不存在时）",
+        "api_1_0/{resource_slug}Resource/__init__.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py",
+        "api_1_0/{resource_slug}Resource/urls.py（仅集合查询路由）"
+      ],
+      "append_only": ["api_1_0/__init__.py"],
+      "manual_todo": [],
+      "verify": ["集合查询路由可用", "不暴露写接口"]
+    },
+
+    "add_column": {
+      "risk": "low",
+      "ddl_hint": "ALTER TABLE {table_name_raw} ADD COLUMN {column_def};",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py（标准 CRUD 方法内的字段处理）"
+      ],
+      "manual_todo": [
+        "service/{class_name}Service.py：跨表业务、字段校验、计算逻辑按需补新列（手写文件，禁止覆盖）",
+        "api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py：若新列属敏感字段，在 sensitive_update 中补处理（手写文件）",
+        "README.md：字段与接口示例同步"
+      ],
+      "verify": [
+        "新列出现在 model 定义与 to_dict 输出",
+        "POST 写入新列后 GET 详情可读回"
+      ]
+    },
+
+    "drop_column": {
+      "risk": "high",
+      "ddl_hint": "ALTER TABLE {table_name_raw} DROP COLUMN {column};（需先确认无代码引用与数据备份）",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py"
+      ],
+      "manual_todo": [
+        "全局检索该列名（含驼峰与下划线两种写法）：Service 业务逻辑、OtherResource 敏感字段处理、README 示例",
+        "先移除代码引用再执行 DDL，避免运行期 AttributeError / Unknown column"
+      ],
+      "verify": ["grep 无残留引用", "既有集成测试通过"]
+    },
+
+    "rename_column": {
+      "risk": "high",
+      "ddl_hint": "ALTER TABLE {table_name_raw} RENAME COLUMN {old} TO {new};（MySQL 8.0 可用 CHANGE COLUMN 并保持类型）",
+      "detection": "差异算法会报 removed + added；必须先询问用户是「重命名」还是「删旧列+加新列」，两者数据语义不同",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py"
+      ],
+      "manual_todo": [
+        "同 drop_column：全局检索旧列名并迁移引用",
+        "确认是否需要数据回填"
+      ],
+      "verify": ["旧列名无残留", "新列名读写正常"]
+    },
+
+    "modify_column_type": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table_name_raw} MODIFY COLUMN {column} {new_type};",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py"
+      ],
+      "manual_todo": [
+        "service/{class_name}Service.py 中对该字段的比较/运算/格式化逻辑",
+        "接口文档与测试 payload 的示例值类型"
+      ],
+      "verify": ["SQLAlchemy 类型与 DDL 一致", "既有集成测试通过"]
+    },
+
+    "modify_nullable": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table_name_raw} MODIFY COLUMN {column} {type} [NOT] NULL;",
+      "regenerate": ["models/{module_name}.py", "controller/{class_name}Controller.py"],
+      "manual_todo": ["收紧为 NOT NULL 时检查历史数据与创建接口的必填校验"],
+      "verify": ["创建接口必填行为与 DDL 一致", "POST 缺省字段行为符合预期"]
+    },
+
+    "modify_default": {
+      "risk": "low",
+      "ddl_hint": "ALTER TABLE {table_name_raw} ALTER COLUMN {column} SET DEFAULT {default};",
+      "regenerate": ["models/{module_name}.py", "controller/{class_name}Controller.py"],
+      "manual_todo": [],
+      "verify": ["POST 不传该字段时落库值符合预期"]
+    },
+
+    "modify_unique": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table_name_raw} ADD UNIQUE KEY ... / DROP INDEX ...;",
+      "regenerate": ["models/{module_name}.py"],
+      "manual_todo": [
+        "controller/{class_name}Controller.py 的 add/update 中唯一键冲突异常映射（如返回 DUPLICATE 错误码）",
+        "service 层业务唯一性校验按需调整"
+      ],
+      "verify": ["重复值写入返回可预期的错误码", "既有集成测试唯一值辅助逻辑仍有效"]
+    },
+
+    "add_status_flag": {
+      "risk": "high",
+      "ddl_hint": "按 add_column 处理",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}Resource.py（新增状态更新入口）"
+      ],
+      "append_only_with_confirmation": [
+        "service/{class_name}Service.py：若状态变更需业务校验（如停用前检查关联数据），必须追加到「业务逻辑区」；因该文件为手写保护，需先征得用户同意再追加，禁止整文件覆盖"
+      ],
+      "manual_todo": [
+        "api_1_0/{resource_slug}Resource/{resource_slug}OtherResource.py：状态更新若走定制接口，在占位文件中实现（手写文件）",
+        "README.md：补状态更新接口说明"
+      ],
+      "verify": [
+        "状态更新接口可调用且生效",
+        "通用更新接口拒绝状态字段（若策略要求）"
+      ]
+    },
+
+    "drop_status_flag": {
+      "risk": "high",
+      "ddl_hint": "按 drop_column 处理",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}Resource.py（移除状态更新入口）"
+      ],
+      "manual_todo": [
+        "service/{class_name}Service.py：移除或废弃状态变更业务逻辑（保留会成为死代码）",
+        "OtherResource 中相关定制接口移除",
+        "README 中状态接口说明删除"
+      ],
+      "verify": ["无状态更新路由残留", "flask routes 输出中无该端点"]
+    },
+
+    "change_soft_delete_field": {
+      "risk": "high",
+      "ddl_hint": "按 add_column / drop_column 处理",
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py（get/update 的软删过滤与 delete 分支）"
+      ],
+      "manual_todo": [
+        "service/{class_name}Service.py：跨表查询中的软删排除条件必须同步改字段名（手写文件，技能不得覆盖）",
+        "README.md：软删除机制说明同步"
+      ],
+      "verify": [
+        "DELETE 行为与字段一致（软删留行 / 硬删无行）",
+        "列表接口不返回已软删记录"
+      ]
+    },
+
+    "change_primary_key": {
+      "risk": "critical",
+      "ddl_hint": "ALTER TABLE {table_name_raw} DROP PRIMARY KEY, ADD PRIMARY KEY ({new_pk});（需人工评估数据与外键）",
+      "requires_user_confirmation": true,
+      "regenerate": [
+        "models/{module_name}.py",
+        "controller/{class_name}Controller.py",
+        "api_1_0/{resource_slug}Resource/{resource_slug}Resource.py",
+        "api_1_0/{resource_slug}Resource/urls.py（路径参数名）"
+      ],
+      "manual_todo": [
+        "service/{class_name}Service.py：以主键为入参的业务方法签名",
+        "README：接口路径示例",
+        "测试与调用方适配新主键"
+      ],
+      "verify": ["所有路径参数类型一致", "集成 CRUD 全流程通过"]
+    },
+
+    "add_foreign_key": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table_name_raw} ADD CONSTRAINT ... FOREIGN KEY ({column}) REFERENCES {ref};",
+      "regenerate": ["models/{module_name}.py"],
+      "manual_todo": [
+        "确认被引用表模型已存在（跨表 relationship 需人工确认加载顺序）",
+        "controller/service 中按需补存在性校验"
+      ],
+      "verify": ["应用可启动（relationship 可解析）", "写入非法外键返回可预期错误"]
+    },
+
+    "drop_foreign_key": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table_name_raw} DROP FOREIGN KEY {name};",
+      "regenerate": ["models/{module_name}.py"],
+      "manual_todo": ["清理不再成立的 relationship / 联表查询（多在 Controller/Service 手写区）"],
+      "verify": ["应用可启动", "既有集成测试通过"]
+    },
+
+    "comment_only": {
+      "risk": "low",
+      "ddl_hint": "可选：ALTER TABLE {table_name_raw} MODIFY COLUMN {column} {type} COMMENT '{comment}';",
+      "regenerate": ["models/{module_name}.py"],
+      "manual_todo": [],
+      "verify": ["接口文档字段描述已更新"]
+    },
+
+    "change_view_definition": {
+      "risk": "medium",
+      "ddl_hint": "CREATE OR REPLACE VIEW {view_name} AS ...;（技能不执行 DDL）",
+      "regenerate": [
+        "models/{module_name}.py（只读模型字段）",
+        "controller/{class_name}Controller.py（仅查询方法）"
+      ],
+      "manual_todo": [
+        "若视图新增/删除输出列，核对 Resource 返回字段与前端契约",
+        "service/{class_name}Service.py 中依赖该视图的业务逻辑需人工核对"
+      ],
+      "verify": ["集合查询接口返回字段与视图一致", "不暴露写接口"]
+    },
+
+    "rename_table": {
+      "risk": "critical",
+      "ddl_hint": "RENAME TABLE {old} TO {new};",
+      "requires_user_confirmation": true,
+      "blocked_from_auto": true,
+      "note": "按「旧表 drop + 新表 add」处理会丢路由与手写业务；必须先询问，再输出重命名清单，不自动批量改名",
+      "manual_todo": ["文件/类名/blueprint 名/路由前缀/注册项/文档全量改名清单"],
+      "verify": ["旧路由下线、新路由可用", "无旧名残留"]
+    },
+
+    "drop_table": {
+      "risk": "critical",
+      "requires_user_confirmation": true,
+      "blocked_from_auto": true,
+      "note": "默认不删除任何文件、不执行 DROP TABLE；只输出待删文件清单、注册项移除清单与推荐下线顺序",
+      "manual_todo": ["人工确认后按清单删除", "先摘路由再删代码，最后处理数据"],
+      "verify": ["应用可启动", "flask routes 输出中无该资源"]
+    }
+  },
+
+  "hand_written_protection": {
+    "detection": [
+      "文件头是否含【AUTO-GENERATED】标记",
+      "含【HAND-WRITTEN】标记的一律视为手写",
+      "无标记但文件存在 → 视为用户已手改，禁止覆盖",
+      "Service 模板默认只有 pass，一旦内容超过 3 行即视为已手写扩展"
+    ],
+    "rules": [
+      "手写文件绝不整文件覆盖，只输出「人工待办清单」",
+      "确需向手写文件追加代码（如新增状态位业务校验）时：先展示代码片段 → 取得用户确认 → 只追加到业务逻辑区",
+      "用户不确认时，必须在报告中明确说明「该接口/校验当前不可用」",
+      "OtherResource 占位文件按手写文件对待"
+    ]
+  },
+
+  "registration": {
+    "append_only_markers": {
+      "file": "api_1_0/__init__.py",
+      "imports_block": ["# ==AUTO_IMPORTS_START==", "# ==AUTO_IMPORTS_END=="],
+      "registry_block": ["# ==AUTO_REGISTRY_START==", "# ==AUTO_REGISTRY_END=="]
+    },
+    "on_add_table": [
+      "在 AUTO_IMPORTS 区块内追加：from api_1_0.{resource_slug}Resource import {resource_slug}_blueprint",
+      "在 AUTO_REGISTRY 区块内追加：({resource_slug}_blueprint, \"/api_1_0\"),",
+      "追加后按 blueprint 名排序，保持稳定 diff"
+    ],
+    "dedupe": [
+      "追加前先检查该 blueprint 是否已在 ROUTER_REGISTRY 中",
+      "同一 SQL 重复生成必须产生零 diff",
+      "marker 缺失时：不自动修改文件，改为输出待办并告警"
+    ],
+    "on_alter_table": [
+      "路由与 blueprint 名不变 → 注册区不动",
+      "仅当 resource_slug 或 blueprint 名变化时，先移除旧项再追加新项"
+    ]
+  },
+
+  "migration": {
+    "skill_does_not": [
+      "执行任何 DDL",
+      "改写 database/ 下的 SQL 文件",
+      "接入 Alembic 或其它迁移框架",
+      "删除或修改任何数据"
+    ],
+    "skill_must": [
+      "在报告中给出 MySQL ddl_hint",
+      "提示发布顺序：加列先 DDL 后发代码；删列先发代码后 DDL",
+      "提示备份与回滚方案"
+    ]
+  },
+
+  "verification": [
+    "导入自检：python -c \"import manage\" 或启动应用，暴露 import 错误与 blueprint 缺失",
+    "注册自检：flask routes 输出中确认目标端点存在",
+    "全量回归：既有接口测试通过",
+    "变化字段最小冒烟：POST 写入 → GET 详情 → PUT 更新 → DELETE",
+    "幂等自检：同一 SQL 再跑一次，确认零 diff"
+  ],
+
+  "report": {
+    "required_sections": [
+      "运行模式判定（逐表）",
+      "结构差异清单（含风险等级）",
+      "逐文件更新动作（覆盖 / 追加 / 跳过 / 待办）",
+      "人工待办清单",
+      "DDL 建议与发布顺序",
+      "验证清单与回归结果"
+    ]
+  }
+}
