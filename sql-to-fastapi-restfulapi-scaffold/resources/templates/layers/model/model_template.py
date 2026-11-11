@@ -1,7 +1,8 @@
 """
 {{table_comment}}数据模型
 
-此文件由 SQL-to-FastAPI-Scaffold 自动生成
+【AUTO-GENERATED】此文件由 SQL-to-FastAPI-Scaffold 自动生成；表结构变更时 skill 会覆盖。
+若已手工修改本文件，请把标记改为 【HAND-WRITTEN】，skill 将跳过覆盖并输出人工待办。
 """
 
 from datetime import datetime

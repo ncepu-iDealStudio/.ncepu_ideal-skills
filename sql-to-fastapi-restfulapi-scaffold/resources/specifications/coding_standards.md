@@ -9,7 +9,7 @@
 目标项目默认使用 [uv](https://docs.astral.sh/uv/) 管理依赖与启动，细则见 `resources/config/package_manager.json`。
 
 | 文件 | 作用 |
-| ------ | ------ |
+|------|------|
 | `pyproject.toml` | **主**依赖清单（PEP 621 + `[dependency-groups].dev`） |
 | `.python-version` | uv 使用的 Python 版本钉选 |
 | `requirements.txt` | 与运行时依赖同步的 pip 兼容清单 |
@@ -226,13 +226,11 @@ class ModelName(BaseModel):
 ### 7.3 依赖与异常
 
 **必须**：
-
 - 所有端点添加 `@handle_service_exceptions`（或项目等价装饰器）
 - 通过 `Depends(get_{table}_service)` 注入 **Service**（**禁止** Resource 直接注入 Repository）
 - 请求体/字段格式校验由 Pydantic Schema 在进入端点前完成
 
 **可选**：
-
 - `current_user = Depends(get_current_active_user)` — 仅在启用鉴权时添加（脚手架默认不启用鉴权，接口开箱即用）
 
 ### 7.4 OpenAPI 文档
@@ -249,7 +247,7 @@ api (Resource) → service（单条委托 + 列表等业务） → repository（
 ```
 
 | 层 | 路径 | Skill 覆盖 | 职责 |
-| ---- | ------ | ------------ | ------ |
+|----|------|------------|------|
 | utils（基线） | `utils/` | **已存在则跳过**（`project_baseline.json`） | 通用工具；不按表生成 |
 | middleware（基线） | `middleware/` | **已存在则跳过** | 安全头 / 限流 / 审计；配置开关默认关 |
 | docker（基线） | `docker/` | **已存在则跳过** | 起步 Docker：app + MySQL（Redis 可选） |
@@ -350,7 +348,7 @@ from utils.custom_exceptions import handle_service_exceptions
 细则见 `resources/config/project_baseline.json`。
 
 | 规则 | 说明 |
-| ------ | ------ |
+|------|------|
 | 策略 | 默认 `brownfield_prefer_existing`：目标已有 `utils/` 则整包跳过 |
 | 日志 | `from utils.logger import get_logger`（不是 loguru） |
 | 脱敏 | `from utils.masking import mask_phone, mask_email` |
@@ -362,7 +360,7 @@ from utils.custom_exceptions import handle_service_exceptions
 企业级常用三件套随骨架拷贝（见 `project_baseline.json` → `packages.middleware`）：
 
 | 中间件 | 作用 | 配置开关（默认 `false`） |
-| -------- | ------ | -------------------------- |
+|--------|------|--------------------------|
 | `SecurityHeadersMiddleware` | 安全响应头 | `middleware_security_headers_enabled` |
 | `RateLimitMiddleware` | 内存令牌桶限流 | `middleware_rate_limit_enabled` |
 | `AuditMiddleware` | HTTP 审计 | `middleware_audit_enabled` |
@@ -376,7 +374,7 @@ from utils.custom_exceptions import handle_service_exceptions
 首次骨架必须从 `project_structure/` 复制（已存在则跳过）：
 
 | 目录/文件 | 作用 |
-| --- | --- |
+|-----------|------|
 | `docker/` | 起步栈：`Dockerfile` + `compose`（api + mysql；redis 为 profile） |
 | `.env.docker` | Compose 环境覆盖 |
 | `deploy/` | 进阶：Nginx、库/缓存调优、Prometheus/Grafana、Logstash、Supervisor 等 |
@@ -414,7 +412,6 @@ REDIS_HOST=redis docker compose -f docker/docker-compose.yml --profile redis up 
 **默认不启用鉴权**：本脚手架生成的 CRUD 接口默认开箱即用、无需登录。
 
 **需要鉴权时（由业务自决，不强制）**：
-
 - `core/permissions` 已提供 `get_current_active_user` / `require_admin` / `require_teacher` / `require_student` 等依赖
 - 统一在 router 挂载（推荐）：`APIRouter(..., dependencies=[Depends(get_current_active_user)])`；或单个路由参数 `current_user = Depends(get_current_active_user)`
 - 执行操作时记录 `current_user.user_id`（可选）
@@ -487,7 +484,7 @@ CREATE TABLE student (
 ### 13.1 目录与命名
 
 | 类型 | 路径 | 命名 |
-| --- | --- | --- |
+|------|------|------|
 | 单元（Service） | `tests/unit/` | `test_{table_name}_service.py` |
 | 集成（API） | `tests/integration/api/v1/` | `test_{table_name}.py` |
 
@@ -510,3 +507,39 @@ CREATE TABLE student (
 
 - `resources/templates/layers/test/unit/test_service_template.py`
 - `resources/templates/layers/test/integration/test_api_template.py`
+
+## 14. 已有项目增量变更规范
+
+策略源：`resources/config/incremental_change_policy.json`；执行流程：`resources/specifications/incremental_update.md`。凡目标项目已有骨架，本节优先于第 8.1 节的静态覆盖表。
+
+### 14.1 文件头标记（增量保护依据）
+
+| 文件 | 必须包含的标记 | 含义 |
+|------|----------------|------|
+| `models/{table}.py`、`schemas/{table}.py` | `【AUTO-GENERATED】` | 允许技能按新 DDL 重新生成 |
+| `repository/{table}_repository.py` | `【AUTO-GENERATED】` | 允许覆盖；禁止在此写业务 |
+| `api/v1/{res}/{res}Resource.py` | `【AUTO-GENERATED】` + 明确的「手写路由区」注释 | 只重生成内置 CRUD，保留手写路由 |
+| `service/{table}_service.py` | `【HAND-WRITTEN】` + `在下方添加商业逻辑方法` 区 | **绝不整文件覆盖** |
+| `tests/unit/test_{table}_service.py` | `【HAND-WRITTEN 占位】` | 不覆盖 |
+| `tests/integration/api/v1/test_{table}.py` | `【覆盖策略】文件已存在则 skill 跳过` | 不覆盖 |
+| `api/v1/__init__.py`、`service/dependencies.py` | `# ---- 脚手架追加区` | 只做幂等追加 |
+
+文件存在但**没有**生成标记 → 视为用户已手改 → 禁止覆盖 → 输出人工待办并询问。
+
+### 14.2 变更处理规则
+
+- `add_table`：生成 7 类文件；**必须**同时新建 `api/v1/{resource_singular}/__init__.py`（`from .{res}Resource import router` + `__all__ = ["router"]`），并在追加区幂等注册。追加前全文去重，同 SQL 连跑两次零 diff。
+- `alter_table`：先取旧结构 → 归一化后字段级对比 → 输出差异清单 → 高风险项确认 → 按 `change_types` 分层更新。禁止把「重复提供 CREATE TABLE」当作新表直接覆盖。
+- `drop_table` / 表重命名：阻断自动执行，只输出清单。
+
+### 14.3 三条强制同步规则
+
+1. **状态位三件套**：`{ClassName}StatusUpdate` ↔ `Service.update_status` ↔ `PATCH /{pk}/status` 同进同退；`StatusUpdate` 字段必须从通用 `Update` 排除。新增时向手写 Service 追加方法须「展示片段 → 用户确认 → 仅追加最小方法」。
+2. **软删字段**：`Repository.delete` / `get` 可覆盖重生成；`Service.get_list` 的软删过滤在手写文件，必须列入待办；集成测试的删除断言同步（软删留行、硬删无行，详情均 404）。
+3. **主键**：变化影响所有层路径参数名与类型，Service 方法签名、测试 payload、README 示例一并列入待办。
+
+### 14.4 迁移与验证边界
+
+技能不执行 DDL、不连库、不改写 `database/`、不接 Alembic、不删数据；只输出 MySQL `ddl_hint` 与发布顺序（加列先 DDL 后发代码；删列先发代码后 DDL）。
+
+增量后必须验证：`uv run python -c "import start"` → `uv run pytest tests/ -c tests/pytest.ini -v` → `/docs` 核对 Schema 与端点 → 变化字段最小 CRUD 冒烟 → 同 SQL 重跑零 diff。变更报告须列出「已重生成 / 已追加注册 / 跳过的手写文件与原因 / 人工待办 / DDL 建议 / 验证结果」。

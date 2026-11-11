@@ -1,7 +1,8 @@
 """
 {{table_comment}}API路由
 
-此文件由 SQL-to-FastAPI-Scaffold 自动生成。
+【AUTO-GENERATED】由 SQL-to-FastAPI-Scaffold 自动生成；表结构变更时只重生成内置 CRUD 区块，
+文件末尾「手写业务路由区」中的自定义端点会被保留。若整份文件已手改，请把标记改为 【HAND-WRITTEN】。
 
 约定：
 - HTTP 层统一只依赖 Service，不直接依赖 Repository。
@@ -147,3 +148,7 @@ async def delete_{{resource_singular}}(
     """删除{{table_comment}}"""
     await service.delete({{primary_key_param}})
     return success_response(None, message="{{table_comment}}删除成功")
+
+
+# ===== 手写业务路由区（技能重生成内置 CRUD 时保留本区，请勿删除本行标记）=====
+# 在此添加自定义端点；业务编排请写在 Service，本层只做 HTTP 编排。

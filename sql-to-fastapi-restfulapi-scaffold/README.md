@@ -19,6 +19,10 @@
 - ✅ 异步 SQLAlchemy（AsyncSession）
 - ✅ 中文文档字符串和注释
 - ✅ 目标项目默认用 **uv** 管理依赖与启动（`pyproject.toml` + `uv sync` / `uv run`）
+- ✅ **已有项目新增表**：按表增量补齐 7 类文件，并幂等追加路由/依赖注册
+- ✅ **已有项目表结构修改**：字段级差异分析（加列/删列/改类型/改约束/改主键/状态位/软删变化），按影响面分层重生成
+- ✅ **手写代码保护**：`Service` / 测试 / `README` 绝不整文件覆盖，改为人工待办清单
+- ✅ 增量变更输出 DDL 建议、发布顺序与回归验证清单（技能本身不执行 DDL）
 
 ## 分层约定
 
@@ -46,11 +50,13 @@ sql-to-fastapi-restfulapi-scaffold/
 │   │   ├── type_mappings.json
 │   │   ├── status_flag_fields.json
 │   │   ├── package_manager.json    # uv 包管理与启动约定
-│   │   └── project_baseline.json   # utils 等基线包清单与复用策略
+│   │   ├── project_baseline.json   # utils 等基线包清单与复用策略
+│   │   └── incremental_change_policy.json  # 增量模式/差异影响面/覆盖保护/注册幂等
 │   ├── specifications/
-│   │   └── coding_standards.md
+│   │   ├── coding_standards.md
+│   │   └── incremental_update.md  # 已有项目增量更新流程
 │   ├── tools/
-│   │   └── check_skill_consistency.py   # 技能资产自洽校验（不渲染项目）
+│   │   └── check_skill_consistency.py
 │   └── templates/
 │       ├── layers/
 │       │   ├── model/
@@ -195,6 +201,7 @@ fastapi_project/
 │   └── v1/
 │       ├── __init__.py
 │       └── student/               # 文件夹用表名原样
+│           ├── __init__.py        # 导出 router（新表必建）
 │           └── studentResource.py # prefix 使用 route_prefix
 ├── middleware/
 │   ├── __init__.py
@@ -231,9 +238,11 @@ fastapi_project/
 5. **api/v1/{resource_singular}/{resource_singular}Resource.py** - 文件夹用表名原样；`APIRouter` 前缀用 `route_prefix`（`_` 换成 `-`）。统一只调 Service（有状态字段时含 `PATCH /{pk}/status`）
 6. **tests/unit/test_{table_name}_service.py** - Service 单元测试占位（仅不存在时新建）
 7. **tests/integration/api/v1/test_{table_name}.py** - 接口 CRUD 集成测试 + 商业逻辑占位（仅不存在时新建）
-8. **service/dependencies.py** - 注册 `get_*_service`（及可选 `get_*_repository`）
+8. **api/v1/{resource_singular}/__init__.py** - 新建并导出 `router`（缺它会导致 `from api.v1.xxx import router` 报 ImportError）
+9. **service/dependencies.py**、**api/v1/__init__.py** - 幂等追加注册 `get_*_service` / `include_router`；追加前去重，同一 SQL 连跑两次零 diff
 
 > 增量生成时 **不**覆盖 `utils/**`、`middleware/**`、`docker/**`、`deploy/**`。import 使用 `project_baseline.json` 的 `canonical_imports`。
+> 以上是 `add_table`（新增表）的产物；**表结构修改**走另一套差异驱动流程，见下文「已有项目的增量更新」。
 
 **路由结构**：
 
@@ -349,6 +358,52 @@ async def get_student_list(
 
 - 手机号（显示前 3 位 + **** + 后 4 位）
 - 邮箱（显示前 3 位 + **** + 后 4 位）
+
+## 已有项目的增量更新
+
+技能不只用于"从零建项目"。目标项目已存在骨架时，**先逐表判定运行模式**（`resources/config/incremental_change_policy.json`），执行流程见 `resources/specifications/incremental_update.md`。
+
+| 你说的 | 模式 | 技能做什么 |
+|--------|------|-----------|
+| 「把这张新表加到现有项目」 | `add_table` | 生成 7 类文件 + 新建 `api/v1/{resource}/__init__.py` + 幂等追加注册 |
+| 「这张表加了几个字段 / 改了类型 / 加了 status」 | `alter_table` | 旧/新结构字段级差异 → 分层重生成 → 手写文件出待办 → DDL 建议 |
+| 「这张表要下线」 | `drop_table` | 只输出待删清单与顺序，不自动删文件、不执行 DDL |
+| 空项目 | `greenfield` | 生成完整骨架 + 全部表 |
+
+### 用法示例
+
+**新增表**：把新的 `CREATE TABLE` 贴给技能，并说明"加到已有项目"即可。
+
+**表结构修改**（推荐同时给旧版 DDL，可减少歧义）：
+
+```text
+现有项目里 student 表结构变了，请同步接口代码。
+旧：CREATE TABLE student (student_id VARCHAR(20) PRIMARY KEY, name VARCHAR(100) NOT NULL, ...);
+新：CREATE TABLE student (student_id VARCHAR(20) PRIMARY KEY, name VARCHAR(100) NOT NULL,
+                         email VARCHAR(120), status TINYINT DEFAULT 1, ...);
+```
+
+技能会先给出差异清单（`added email`、`flag 新增 status`、`risk` 等），确认高风险项后：
+
+- **覆盖**：`models/` `schemas/` `repository/`（仅带 `【AUTO-GENERATED】` 标记的文件）
+- **重生成内置 CRUD、保留手写路由**：`api/v1/{resource}/{resource}Resource.py`
+- **绝不覆盖**：`service/*_service.py`、两类测试、`README.md` → 输出人工待办清单
+- **同步三件套**：新增状态位时 `StatusUpdate` ↔ `update_status` ↔ `PATCH /{pk}/status` 必须同进同退；其中 `update_status` 位于手写 Service，需**先展示片段、取得确认、再仅追加最小方法**
+- **完全不碰**：`utils/` `middleware/` `docker/` `deploy/`
+
+### DDL 边界
+
+技能**不执行 DDL**、不连库、不改 `database/`、不接 Alembic、不删数据。只在变更报告里给出 MySQL `ddl_hint` 建议和发布顺序：加列先 DDL 后发代码；删列先发代码（停止引用）后 DDL。
+
+### 增量后验证
+
+```bash
+uv run python -c "import start"                  # 捕获 import / 列名残留 / 注册漏项
+uv run pytest tests/ -c tests/pytest.ini -v
+uv run uvicorn start:app --reload               # /docs 核对 Schema 与端点
+```
+
+变化字段做 `POST → GET 详情 → PUT → DELETE` 冒烟；再把同一份 SQL 跑一次确认零 diff（幂等）。
 
 ## 项目启动（推荐 uv）
 

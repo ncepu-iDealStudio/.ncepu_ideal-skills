@@ -1,6 +1,7 @@
 """检查 sql-to-fastapi-restfulapi-scaffold 自身是否自洽。
 
-不渲染目标项目。只确认骨架里没有已淘汰文件，命名规则与资源模板使用同一套前缀变量。
+不渲染目标项目。确认骨架里没有已淘汰文件、命名规则与资源模板使用同一套前缀变量，
+并校验「已有项目增量更新」的策略、规范、模板标记与各文档引用是否齐全。
 """
 
 from __future__ import annotations
@@ -20,6 +21,124 @@ OBSOLETE = (
     "utils/loguru.py",
     "core/dependencies.py",
 )
+
+
+REQUIRED_CHANGE_TYPES = (
+    "add_table",
+    "add_column",
+    "drop_column",
+    "rename_column",
+    "modify_column_type",
+    "modify_nullable",
+    "modify_default",
+    "modify_unique",
+    "add_status_flag",
+    "drop_status_flag",
+    "change_soft_delete_field",
+    "change_primary_key",
+    "add_foreign_key",
+    "drop_foreign_key",
+    "comment_only",
+    "rename_table",
+    "drop_table",
+)
+
+
+def check_incremental(errors: list[str]) -> None:
+    """校验已有项目增量更新相关的资源、标记与文档引用。"""
+    config = SKILL_ROOT / "resources" / "config" / "incremental_change_policy.json"
+    spec = SKILL_ROOT / "resources" / "specifications" / "incremental_update.md"
+    init_template = (
+        SKILL_ROOT / "resources" / "templates" / "layers" / "resource" / "resource_init_template.py"
+    )
+    for path in (config, spec, init_template):
+        if not path.is_file():
+            errors.append(f"缺少增量更新资源: {path.relative_to(SKILL_ROOT)}")
+    if not config.is_file():
+        return
+
+    try:
+        policy = json.loads(config.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"incremental_change_policy.json 无法解析: {exc}")
+        return
+
+    for key in (
+        "modes",
+        "mode_detection",
+        "baseline_snapshot",
+        "file_roles",
+        "change_types",
+        "hand_written_protection",
+        "registration",
+        "migration",
+        "verification",
+        "report",
+    ):
+        if key not in policy:
+            errors.append(f"incremental_change_policy.json 缺少 {key}")
+    for mode in ("greenfield", "add_table", "alter_table", "drop_table"):
+        if mode not in policy.get("modes", {}):
+            errors.append(f"incremental_change_policy.json 缺少运行模式 {mode}")
+    for change in REQUIRED_CHANGE_TYPES:
+        if change not in policy.get("change_types", {}):
+            errors.append(f"incremental_change_policy.json 缺少变更类型 {change}")
+    for change in ("add_status_flag", "drop_status_flag", "change_soft_delete_field", "change_primary_key"):
+        entry = policy.get("change_types", {}).get(change, {})
+        if not entry.get("manual_todo"):
+            errors.append(f"变更类型 {change} 缺少手写文件待办清单")
+    if not policy.get("hand_written_protection", {}).get("rules"):
+        errors.append("incremental_change_policy.json 缺少手写保护规则")
+    if not policy.get("registration", {}).get("dedupe"):
+        errors.append("incremental_change_policy.json 缺少注册幂等规则")
+
+    if spec.is_file() and len(spec.read_text(encoding="utf-8")) < 500:
+        errors.append("incremental_update.md 内容过短，疑似占位")
+
+    layers = SKILL_ROOT / "resources" / "templates" / "layers"
+    markers = {
+        "model/model_template.py": "【AUTO-GENERATED】",
+        "schema/schema_template.py": "【AUTO-GENERATED】",
+        "repository/repository_template.py": "【AUTO-GENERATED】",
+        "resource/resource_template.py": "【AUTO-GENERATED】",
+        "service/service_template.py": "【HAND-WRITTEN】",
+        "test/unit/test_service_template.py": "【HAND-WRITTEN 占位】",
+    }
+    for relative, marker in markers.items():
+        path = layers / relative
+        if not path.is_file():
+            errors.append(f"缺少层模板: {relative}")
+        elif marker not in path.read_text(encoding="utf-8"):
+            errors.append(f"层模板 {relative} 缺少归属标记 {marker}")
+    resource_template = layers / "resource" / "resource_template.py"
+    if resource_template.is_file() and "手写业务路由区" not in resource_template.read_text(encoding="utf-8"):
+        errors.append("resource_template.py 缺少手写路由保护区标记")
+    if init_template.is_file() and "import router" not in init_template.read_text(encoding="utf-8"):
+        errors.append("resource_init_template.py 未导出 router")
+
+    references = {
+        SKILL_ROOT / "SKILL.md": (
+            "incremental_change_policy.json",
+            "incremental_update.md",
+            "alter_table",
+            "add_table",
+            "步骤 2.2",
+            "步骤 2.3",
+        ),
+        SKILL_ROOT / "README.md": ("已有项目的增量更新", "alter_table", "incremental_change_policy.json"),
+        SKILL_ROOT / "resources" / "specifications" / "coding_standards.md": (
+            "## 14. 已有项目增量变更规范",
+            "incremental_change_policy.json",
+        ),
+    }
+    for path, needles in references.items():
+        if not path.is_file():
+            errors.append(f"缺少文档: {path.relative_to(SKILL_ROOT)}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for needle in needles:
+            if needle not in text:
+                errors.append(f"{path.relative_to(SKILL_ROOT)} 未引用增量内容: {needle}")
 
 
 def main() -> int:
@@ -70,6 +189,8 @@ def main() -> int:
     flask_doc = SKILL_ROOT / "docs" / "GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md"
     if flask_doc.exists():
         errors.append("FastAPI 技能目录仍保留 Flask 的 Copilot 说明")
+
+    check_incremental(errors)
 
     if errors:
         print("\n".join(errors))
