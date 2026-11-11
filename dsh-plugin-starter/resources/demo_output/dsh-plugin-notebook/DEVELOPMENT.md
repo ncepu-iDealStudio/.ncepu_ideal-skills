@@ -19,7 +19,7 @@ dsh-notebook/
 │   └── client/
 │       └── index.ts        # Client 半边：设置页区块（settings.section）
 ├── cordis.patch.yml       # DSH 安装时用的 bundle patch
-├── package.json           # 清单：dsh.bundle / dsh.client 声明，包名是唯一键
+├── package.json            # 清单：dsh.bundle / dsh.client 声明，包名是唯一键
 ├── tsconfig.json          # tsc 类型检查配置
 ├── tsdown.config.ts       # 构建配置（Host/Client 双目标）
 ├── README.md              # 面向使用者：怎么装、怎么构建
@@ -38,7 +38,7 @@ dsh-notebook/
 DSH 的插件体系基于 Cordis（一个依赖注入 + 生命周期框架）。一个插件就是一个模块，导出两样东西：
 
 | 导出 | 作用 | 时机 |
-|---|---|---|
+| --- | --- | --- |
 | `export const inject` | 声明「我要用哪些服务」（如 `tools` / `webServer`） | 加载时，DSH 等这些服务就绪后才调用 `apply` |
 | `export function apply(ctx)` | 插件主体：注册工具 / 路由 / 事件 | 服务就绪后，只调用一次 |
 
@@ -132,7 +132,7 @@ dsh web --port 3081
 ### 4.4 改完怎么看效果
 
 | 改动位置 | 生效方式 |
-|---|---|
+| --- | --- |
 | Host 半边（`src/index.ts`、`capability.ts`） | 必须 `pnpm build` + **重启 DSH 进程** |
 | Client 半边（`src/client/index.ts`） | `pnpm build` + 刷新浏览器页面即可（dev 模式下可热更新） |
 | `package.json` 的 `dsh.*` 声明 | `dsh plugin remove` 再 `add`，然后重启 |
@@ -210,14 +210,13 @@ dsh web --port 3081
 ### 双面插件的额外坑
 
 | 现象 | 原因 | 修法 |
-|---|---|---|
+| --- | --- | --- |
 | 设置页整块空白，console 报 `__ModuleLoader__ is not defined` | Client 产物没用 tsdown 的 `banner/footer/intro` 包装 | 检查 `tsdown.config.ts` 的 client 目标 |
 | `require is not defined` / 找不到 `react` | `neverBundle` 没排除 `react`、`@deepseek-ai/dsh-*` | 模块表只认这两类，其余全部内联（`alwaysBundle`） |
 | 切换语言后标签没变 | `label` 没用 `ctx.locale.bind(...)`，而是在注册时就取了值 | `label: () => ctx.locale.bind(PLUGIN_ID)('title')` |
 | 页面刷新后样式丢失 | 样式节点没在 `ctx.effect` 里创建 | 用 `document.createElement('style')` + 清理函数 |
 | 换主题后颜色不跟着变 | 用了硬编码颜色 | 全部换成 `var(--dsw-alias-*)` |
 | 两个插件设置区块打架 | `slots.register` 的 `id` 重复 | `id` 用包名（`dsh-notebook`）保证唯一 |
-
 
 ---
 
@@ -226,7 +225,7 @@ dsh web --port 3081
 ### 6.1 包名是唯一键，四处必须一致
 
 | 位置 | 字段 |
-|---|---|
+| --- | --- |
 | `package.json` | `name` |
 | `tsdown.config.ts` | `PLUGIN_ID` |
 | `cordis.patch.yml` | `name`（以及 `id` 建议用插件 id） |
@@ -319,7 +318,7 @@ dsh plugin --profile web add github:<your-account>/dsh-notebook
 ### 8.1 三招定位
 
 | 招式 | 命令 / 做法 | 能回答什么 |
-|---|---|---|
+| --- | --- | --- |
 | 看装配 | `dsh --profile web --dump-config \| grep dsh-notebook` | 插件到底进没进当前组合？ |
 | 看会话日志 | DSH 会话事件流（SessionEvent / Trajectory） | 工具被调用了吗？入参和返回值是什么？ |
 | 事件探针 | 临时注册 `tools/pre-execute` / `tools/post-execute` 监听器打印日志 | 调用被谁拦了？ |
@@ -327,7 +326,7 @@ dsh plugin --profile web add github:<your-account>/dsh-notebook
 ### 8.2 症状 → 根因速查
 
 | 症状 | 优先怀疑 | 处理 |
-|---|---|---|
+| --- | --- | --- |
 | 模型看不到工具 | 缺 `output`、被 `restrict` 过滤、被同名 scope 遮蔽、`run_code` 保留名冲突 | 补齐 `output`；`ctx.tools.schemas(scope)` 查看当前可见工具 |
 | 设置页没出现 | 缺 `dsh.bundle.patch`、`dsh.client` 未声明、Client bundle 不是 `__ModuleLoader__` 格式 | `--dump-config` 确认装配；看浏览器 console |
 | 浏览器报 `__ModuleLoader__ is not defined` | Client 产物没被 tsdown 包上 `banner/footer/intro` | 检查 `tsdown.config.ts` 的 `outputOptions` |

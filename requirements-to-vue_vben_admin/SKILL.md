@@ -46,7 +46,7 @@ description: "把后台管理的需求描述转换成基于 vue-vben-admin（vbe
 本技能面向 **vue-vben-admin v5.x（monorepo）**，不是 v2/v3 的单体版本。关键事实：
 
 | 项 | 值 |
-|---|---|
+| --- | --- |
 | 版本 | 5.x（当前 5.7.0） |
 | 包管理 | **pnpm 11+**，Node **22.18+ / 24.12+** |
 | 结构 | monorepo：`apps/`（web-antd、web-ele、web-naive、web-tdesign、backend-mock）+ `packages/`（@core、effects、icons、locales、stores、styles、types、utils） |
@@ -81,7 +81,7 @@ description: "把后台管理的需求描述转换成基于 vue-vben-admin（vbe
 示例映射：
 
 | 需求原文 | 一级菜单 | 二级页面 | 页面类型 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 系统管理模块包括：用户管理、角色管理、权限管理 | 系统管理 | 用户管理 | CRUD |
 | | | 角色管理 | CRUD |
 | | | 权限管理 | CRUD（树形） |
@@ -94,7 +94,7 @@ description: "把后台管理的需求描述转换成基于 vue-vben-admin（vbe
 ### 页面类型判定
 
 | 关键词 | 页面类型 | 生成内容 |
-|---|---|---|
+| --- | --- | --- |
 | 管理 / 列表 / 记录 | `crud` | 表格 + 搜索 + 增删改查 + 详情 |
 | 分析 / 统计 / 报表 / 看板 | `dashboard` | 图表卡片 + 概览数字 |
 | 权限 / 菜单 / 组织 / 分类 | `tree` | 树形表格或树 + 详情 |
@@ -399,7 +399,7 @@ apps/web-antd/src/
 ## 命名规范
 
 | 对象 | 规则 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | 路由模块文件 | kebab-case | `system.ts`、`statistics.ts` |
 | 路由 `name` | PascalCase | `SystemUser` |
 | 路由 `path` | kebab-case | `/system/user`、`/system/user-role` |

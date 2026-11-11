@@ -65,7 +65,7 @@
 ### 3.1 `app`
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `title` | string | 是 | 系统标题 |
 | `ui` | string | 是 | `antd` / `ele` / `naive` / `tdesign`，默认 `antd` |
 | `vben_version` | string | 是 | 固定 `5.x` |
@@ -73,7 +73,7 @@
 ### 3.2 `modules[]`（一级菜单）
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `name` | string | 是 | 中文模块名，用作菜单标题 |
 | `name_en` | string | 是 | PascalCase，路由 `name` 前缀 |
 | `path` | string | 是 | 以 `/` 开头的 kebab-case |
@@ -84,7 +84,7 @@
 ### 3.3 `children[]`（二级页面）
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `name` | string | 是 | 中文页面名 |
 | `name_en` | string | 是 | PascalCase，路由 `name` |
 | `path` | string | 是 | 相对路径，kebab-case |
@@ -97,7 +97,7 @@
 ### 3.4 `fields[]`
 
 | 字段 | 类型 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `field` | string | 字段名，camelCase |
 | `label` | string | 中文标签 |
 | `type` | string | `string` / `number` / `boolean` / `datetime` / `switch` / `select` / `tag` / `textarea` |
@@ -160,7 +160,7 @@
 ## 5. 校验规则
 
 | 编号 | 规则 | 级别 |
-|---|---|---|
+| --- | --- | --- |
 | R01 | 至少 1 个模块 | error |
 | R02 | 每个模块至少 1 个页面 | error |
 | R03 | `path` 为 kebab-case 且不以 `/` 结尾（模块级以 `/` 开头） | error |
@@ -178,7 +178,7 @@
 需求含糊时**不要猜**，写入 `diagnostics.need_confirm`：
 
 | 情况 | 处理 |
-|---|---|
+| --- | --- |
 | 只写"用户管理"没说字段 | 用 `domain_specific` 模板，标注"字段为推断值，请确认" |
 | 模块名不在词典 | 用原名建模块，图标用默认，标注待确认 |
 | 页面类型模糊（如"数据管理"） | 默认 `crud`，标注待确认 |
@@ -230,7 +230,7 @@
 期望解析结果：
 
 | 模块 | 页面 | 类型 | 模型 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 系统管理 `/system` | 用户管理 `/system/user` | crud | SystemUser |
 | | 角色管理 `/system/role` | crud | SystemRole |
 | | 权限管理 `/system/permission` | **tree** | SystemPermission |

@@ -7,7 +7,7 @@
 **核心特点：支持两种技术栈，由用户选择。**
 
 | 分支 | 技术栈 | 适合 |
-|---|---|---|
+| --- | --- | --- |
 | **Vue3** | Taro 4 + Vue 3 + TS + Vant + Pinia | 团队熟悉 Vue；UI 还原优先 |
 | **React** | Taro 4 + React 18 + TS + Dva + Immer | 复杂业务、企业业务 App |
 
@@ -18,7 +18,7 @@
 用户曾提供两个参考脚手架，实际情况如下：
 
 | 参考 | 现状 | 本技能的处理 |
-|---|---|---|
+| --- | --- | --- |
 | `RealCoolSnow/taro-vue3-ts` | **仓库返回 404（已不存在）** | Vue3 分支按 **Taro 官方规范自建**，不依赖该仓库 |
 | `didilinkin/elf-taro` | 存在，但锁定 **Taro 3.0.0-rc + React 16 + Dva**（2020 年） | React 分支沿用其**架构思路**（Dva + Immer + 拦截器 + 异常捕获），版本适配到 **Taro 4 + React 18** |
 
@@ -27,7 +27,7 @@
 ## 3. 技术基线
 
 | 项 | Vue3 分支 | React 分支 |
-|---|---|---|
+| --- | --- | --- |
 | Taro | 4.x | 4.x |
 | 框架 | Vue 3.4+ | React 18 |
 | 语言 | TypeScript | TypeScript |
@@ -104,7 +104,7 @@ python resources/tools/validate_project.py ./your-project
 12 项检查：
 
 | 检查项 | 说明 |
-|---|---|
+| --- | --- |
 | config/index.ts 声明 framework | 必须是 `vue3` 或 `react` |
 | app.config.ts 存在 | 页面注册入口 |
 | 入口文件与框架匹配 | `app.ts` vs `app.tsx` |
@@ -121,7 +121,7 @@ python resources/tools/validate_project.py ./your-project
 ## 6. 内置能力
 
 | 能力 | Vue3 | React |
-|---|---|---|
+| --- | --- | --- |
 | 登录 + token 持久化 | ✓ `store/modules/user.ts` | ✓ `models/user.ts` |
 | 权限/401 跳登录 | ✓ 请求层统一处理 | ✓ 同左 |
 | 请求封装（多环境） | ✓ `services/request.ts` | ✓ 同左 |
@@ -145,7 +145,7 @@ python resources/tools/validate_project.py ./your-project
 考虑到本机无 Node 依赖环境，做了以下验证：
 
 | 验证项 | 结果 |
-|---|---|
+| --- | --- |
 | Vue3 示例校验（12 项） | ✓ 0 错误 0 警告 |
 | React 示例校验（12 项） | ✓ 0 错误 0 警告 |
 | Vue 模板标签配对（5 文件） | ✓ 全部正确 |
@@ -158,7 +158,7 @@ python resources/tools/validate_project.py ./your-project
 ## 9. 与其它技能的关系
 
 | 技能 | 目标平台 | 技术栈 |
-|---|---|---|
+| --- | --- | --- |
 | `prototype-to-app-uniappx` | App / 小程序 / H5 | uni-app x（Vue 语法） |
 | `prototype-to-flutter-app` | Android / iOS / Web | Flutter（Dart） |
 | **`prototype-to-taro-app`（本技能）** | **小程序 / H5 / RN** | **Taro（Vue3 或 React）** |
@@ -168,8 +168,8 @@ python resources/tools/validate_project.py ./your-project
 ## 10. 相关文档
 
 | 内容 | 路径 |
-|---|---|
+| --- | --- |
 | 双框架代码范式对照 | `resources/specifications/framework_patterns.md` |
 | 原型解析契约 | `resources/specifications/prototype_parser_contract.md` |
 | 依赖版本基线 | `resources/config/dependency_baseline.json` |
-| Taro 官方文档 | https://docs.taro.zone/ |
+| Taro 官方文档 | <https://docs.taro.zone/> |

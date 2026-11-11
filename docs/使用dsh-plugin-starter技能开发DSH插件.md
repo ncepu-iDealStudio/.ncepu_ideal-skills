@@ -12,7 +12,7 @@
 一句话：**把需求或原型，初始化成 DSH 插件起步项目**，并把「接下来怎么写、怎么调、怎么发」写进工程自带的 `DEVELOPMENT.md`。
 
 | 输入 | 输出 |
-|---|---|
+| --- | --- |
 | 一句话需求（文字） | 一个可构建的插件工程 + 开发指南 |
 | 插件原型（HTML / 截图 / PRD 功能清单） | 同上，界面结构按原型还原到设置页区块 |
 | 已有插件目录 | 不重新生成，走「审计 + 改造」流程 |
@@ -20,7 +20,7 @@
 它支持 **四类插件**：
 
 | 类型 | 用户嘴里的说法 | 能力出口 | 有界面 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `tool-only` 工具型 | 「让 AI 能查/抓/算/写」 | `ctx.tools.register(defineTool(...))` | 否 |
 | `route-only` 路由型 | 「给外部脚本提供接口」 | `ctx.webServer.register()` | 否 |
 | `dual-face` 双面型 | 「设置页 / 面板 / 可视化配置」 | 路由 + `settings.section` 插槽 | 是 |
@@ -37,7 +37,7 @@
 技能目录名必须与 `SKILL.md` 的 `name`（`dsh-plugin-starter`）一致：
 
 | 工具 | 路径 |
-|---|---|
+| --- | --- |
 | DSH（用户级） | `~/.dsh/skills/dsh-plugin-starter/`（`$DSH_HOME` 未设时默认 `~/.dsh`） |
 | DSH（项目级） | `<项目根>/.dsh/skills/dsh-plugin-starter/` |
 | CodeBuddy | `<项目根>/.codebuddy/skills/dsh-plugin-starter/` |
@@ -95,7 +95,7 @@ cp -r ncepu_ideal-skills/dsh-plugin-starter ~/.dsh/skills/dsh-plugin-starter
 技能按 `resources/config/plugin_types.json` 的判定表选型。你可以直接用这张表自查：
 
 | 你的真实诉求 | 应选类型 | 不该选什么 |
-|---|---|---|
+| --- | --- | --- |
 | 让 Agent 多一个能力 | `tool-only` | 别做界面，界面只会增加安装/调试成本 |
 | 让别人（脚本/系统）能调我 | `route-only` | 别做成工具，模型并不需要它 |
 | 我自己要能看见、能配置 | `dual-face` | 别只做路由，用户没有入口会以为没生效 |
@@ -150,7 +150,7 @@ dsh-notebook/
 **四个文件各管一件事**（记住这个分工，后面就不会乱）：
 
 | 文件 | 你在这里做什么 | 什么时候需要动 |
-|---|---|---|
+| --- | --- | --- |
 | `package.json` | 声明包名、`dsh.bundle`/`dsh.client`、依赖 | 加依赖、改包名（尽量避免） |
 | `tsdown.config.ts` | 构建目标与打包规则 | 几乎不用动 |
 | `src/index.ts` | 把能力挂到 DSH 上 | 加第二个工具/路由时 |
@@ -213,7 +213,7 @@ python <skill>/resources/tools/validate_plugin.py .
 `validate_plugin.py` 会逐项打印 `[ OK ] / [WARN] / [FAIL]`。**出现 `[FAIL]` 不要往下走**，按提示修：
 
 | 失败项 | 典型原因 |
-|---|---|
+| --- | --- |
 | `dsh.bundle.patch` | `package.json` 缺 `dsh.bundle.patch` |
 | `cordis.patch.yml name` | 与包名不一致（大小写、scope） |
 | `tsdown PLUGIN_ID` | 与包名不一致 |
@@ -233,7 +233,7 @@ dsh web --port 3081                                     # 重启
 按类型验证：
 
 | 类型 | 怎么验 |
-|---|---|
+| --- | --- |
 | `tool-only` | 对 Agent 说「用 `notes_search` 搜一下 XX」，看调用入参与返回值 |
 | `route-only` | `curl -X POST http://127.0.0.1:3081/notes-api/ping` |
 | `dual-face` | 设置页出现新区块 → 操作 → 看到 `{ ok: true }` |
@@ -248,7 +248,7 @@ dsh web --port 3081                                     # 重启
 生成的项目里有一份约 15KB 的开发指南，专为初学者写。10 章结构：
 
 | 章 | 内容 | 什么时候看 |
-|---|---|---|
+| --- | --- | --- |
 | 1 | 你拿到了什么（每个文件职责） | 第一次打开项目 |
 | 2 | 心智模型：`inject` → `apply` → `effect`；Host/Client 为什么必须走 HTTP | 不理解「为什么要写两半」时 |
 | 3 | 环境准备（Node ≥ 20.19 / pnpm / dsh 版本） | 装依赖前 |
@@ -313,7 +313,7 @@ ctx.on('tools/pre-execute', async (exec, next) => { console.log(exec.name, exec.
 ### 6.2 症状 → 根因速查
 
 | 症状 | 优先怀疑 | 修法 |
-|---|---|---|
+| --- | --- | --- |
 | 什么都没发生，也不报错 | 缺 `dsh.bundle.patch` | 补上并重装 |
 | 模型看不到工具 | 缺 `output`；被 `restrict` 过滤；被同名 scope 遮蔽 | 补 `output`；`ctx.tools.schemas(scope)` 排查 |
 | 设置页白屏，console 报 `__ModuleLoader__ is not defined` | Client 产物没被 banner/footer 包装 | 检查 `tsdown.config.ts` 的 `outputOptions` |
@@ -369,7 +369,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 ```
 
 | 字段 | 必需性 | 规则 |
-|---|---|---|
+| --- | --- | --- |
 | `packageName` | ✅ | `^@scope/dsh-xxx$`；禁用 `@deepseek-ai`；最后一段 = slug |
 | `slug` | 建议 | `^dsh-[a-z0-9-]+$`；可由包名推导 |
 | `type` | ✅ | `tool-only` / `route-only` / `dual-face` / `interceptor` |
@@ -423,7 +423,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 ## 10. 与其他技能的边界
 
 | 你可能想做的事 | 该用什么 |
-|---|---|
+| --- | --- |
 | 做 DSH 插件（工具/路由/设置页/拦截器） | **本技能** |
 | 写 DSH 技能（`SKILL.md`） | 技能体系（本仓库的 `docs/dsh中使用superpowers技能.md`） |
 | 从 SQL 生成后端接口工程 | `sql-to-*-restfulapi-scaffold` |
@@ -461,7 +461,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 ## 12. 附录：资源索引
 
 | 内容 | 路径（相对 `dsh-plugin-starter/`） |
-|---|---|
+| --- | --- |
 | 技能主文件（六步工作流、硬约束、坑位表） | `SKILL.md` |
 | 技能说明 | `README.md` |
 | 四类型判定表 | `resources/config/plugin_types.json` |

@@ -3,6 +3,7 @@
 ## 1. 命名规范
 
 ### 1.1 Java类和方法命名
+
 - **类名**：使用 PascalCase（首字母大写）
   - 正确：`StudentService`, `UserController`
   - 错误：`studentService`, `user_controller`
@@ -14,6 +15,7 @@
   - 错误：`student_id`, `user_name`
 
 ### 1.2 数据库命名
+
 - **表名**：使用 snake_case（全部小写，下划线分隔）
   - 正确：`student`, `sys_class`
   - 错误：`Student`, `SysClass`
@@ -22,12 +24,14 @@
   - 错误：`studentId`, `CreatedAt`
 
 ### 1.3 包命名
+
 - 统一使用 `com.security.apisecurity`
 - 分层包：`controller`, `service`, `repository`, `entity`, `dto`, `config`, `exception`, `security`
 
 ## 2. 代码结构规范
 
 ### 2.1 分层架构
+
 ```
 controller/     # 控制层，处理HTTP请求
 service/        # 服务层，业务逻辑
@@ -40,6 +44,7 @@ security/       # 安全相关类
 ```
 
 ### 2.2 Entity 规范
+
 - 每个 Entity 必须有 `@Entity` 和 `@Table` 注解
 - 主键使用 `@Id` 注解
 - 字段使用 `@Column` 注解配置列名、约束等
@@ -47,6 +52,7 @@ security/       # 安全相关类
 - 必须有无参构造函数
 
 ### 2.3 Controller 规范
+
 - 使用 `@RestController` 注解
 - 使用 `@RequestMapping` 定义基础路径
 - 使用 Swagger 注解提供 API 文档
@@ -54,12 +60,14 @@ security/       # 安全相关类
 - 使用 `@Valid` 启用参数校验
 
 ### 2.4 Service 规范
+
 - 使用 `@Service` 注解
 - 使用 `@Transactional` 注解开启事务
 - 使用 `@Autowired` 注入依赖
 - 业务方法返回 DTO/Response，不直接返回 Entity
 
 ### 2.5 Repository 规范
+
 - 继承 `JpaRepository`
 - 使用方法命名约定自动生成查询
 - 复杂查询使用 `@Query` 注解
@@ -67,21 +75,25 @@ security/       # 安全相关类
 ## 3. 安全规范
 
 ### 3.1 输入验证
+
 - 所有用户输入必须经过验证
 - 使用 `@NotNull`、`@NotBlank`、`@Size` 等注解
 - 敏感字段使用 `@JsonIgnore` 避免序列化
 
 ### 3.2 SQL注入防护
+
 - 使用参数化查询（Spring Data JPA 自动处理）
 - 禁止使用字符串拼接构建 SQL
 
 ### 3.3 权限控制
+
 - 使用 `@PreAuthorize` 注解控制访问权限
 - 示例：`@PreAuthorize("hasRole('ADMIN')")`
 
 ## 4. 注释规范
 
 ### 4.1 类注释
+
 ```java
 /**
  * {{类描述}}
@@ -92,6 +104,7 @@ security/       # 安全相关类
 ```
 
 ### 4.2 方法注释
+
 ```java
 /**
  * {{方法描述}}
@@ -104,29 +117,35 @@ security/       # 安全相关类
 ## 5. 异常处理规范
 
 ### 5.1 自定义异常
+
 - 使用业务异常而非系统异常
 - 统一异常码和消息格式
 
 ### 5.2 全局异常处理
+
 - 使用 `@RestControllerAdvice` 统一处理异常
 - 返回统一的 `ApiResponse` 格式
 
 ## 6. 软删除规范
 
 ### 6.1 字段命名
+
 支持以下软删除字段命名：
+
 - `is_deleted`
 - `is_delete`
 - `deleted`
 - `isDelete`
 
 ### 6.2 查询逻辑
+
 - 查询时自动添加 `is_delete = false` 条件
 - 删除时设置为 `true` 而非物理删除
 
 ## 7. API响应规范
 
 ### 7.1 统一响应格式
+
 ```json
 {
   "success": true,
@@ -137,6 +156,7 @@ security/       # 安全相关类
 ```
 
 ### 7.2 分页响应
+
 ```json
 {
   "success": true,

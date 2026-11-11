@@ -362,7 +362,8 @@ def build_tokens(spec: dict) -> dict:
         "CLIENT_ARTIFACT": client_artifact,
         "DEV_LIB_TREE": dev_lib_tree,
         "DEV_FILES_EXTRA": dev_files_extra,
-        "VERIFY_STEPS": verify_steps,
+        # 模板在 token 后自带一个空行；这里去掉片段末尾换行，避免渲染出连续空行（MD012）
+        "VERIFY_STEPS": verify_steps.rstrip("\n"),
         # 由 scaffold() 填充：按类型渲染的《开发指南》扩展章节
         "DEV_TYPE_SECTION": "",
     }
@@ -376,7 +377,8 @@ def build_type_section(spec: dict, tokens: dict) -> str:
     path = TEMPLATE_ROOT / "sections" / f"{plugin_type}.md.tpl"
     if not path.is_file():
         raise ScaffoldError(f"缺少类型章节模板：{path}")
-    return render_text(path.read_text(encoding="utf-8"), tokens, path.name)
+    # 去掉章节末尾换行：主模板已自带一个空行 + '---'，否则会出现连续空行（MD012）
+    return render_text(path.read_text(encoding="utf-8"), tokens, path.name).rstrip("\n")
 
 
 def build_manifest_tokens(plugin: dict, plugin_type: str) -> dict:

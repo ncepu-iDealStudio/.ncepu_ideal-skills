@@ -68,7 +68,7 @@ lib/
 支持三类，可混合：
 
 | 输入 | 提取方式 | 可靠性 |
-|---|---|---|
+| --- | --- | --- |
 | **HTML/CSS 原型代码** | 解析 DOM 结构，映射 Widget 树 | 最高 |
 | **设计图 / 截图** | 视觉理解区域、层级、控件 | 中 |
 | **PRD / 页面清单** | 抽取页面、字段、跳转 | 低，需补视觉决策 |
@@ -168,7 +168,7 @@ class AppSpacing {
 产出页面清单：
 
 | 字段 | 示例 |
-|---|---|
+| --- | --- |
 | `page_name` | `home` |
 | `route` | `/` |
 | `widget_class` | `HomePage` |
@@ -212,7 +212,7 @@ class AppSpacing {
 按布局原型选模板：
 
 | 布局 | 模板 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | 列表 | `list_page_template.dart` | `ListView.builder` + 下拉刷新 + 加载更多 |
 | 详情 | `detail_page_template.dart` | 滚动内容 + 底部操作栏 |
 | 表单 | `form_page_template.dart` | `Form` + `TextFormField` + 校验 |
@@ -333,7 +333,7 @@ class SkillRepositoryImpl implements SkillRepository {
 ### 命名
 
 | 对象 | 规则 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | 文件 | snake_case | `skill_card.dart` |
 | 类 | PascalCase | `SkillCard` |
 | 方法/变量 | camelCase | `fetchSkills` |
@@ -394,7 +394,7 @@ class SkillRepositoryImpl implements SkillRepository {
 ### 原型含 Web 专有特性
 
 | Web | Flutter 处理 |
-|---|---|
+| --- | --- |
 | CSS Grid | `GridView` 或 `Wrap` |
 | 绝对定位 | `Stack` + `Positioned` |
 | CSS 动画 | `AnimatedContainer` / `Hero` / `TweenAnimationBuilder` |

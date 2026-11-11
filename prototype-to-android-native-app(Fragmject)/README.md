@@ -7,13 +7,13 @@
 模板范式对齐开源项目 **[Fragmject](https://github.com/miaowmiaow/fragmject)**（Kotlin + Compose M3 + Hilt + Navigation + Room + Retrofit + Coil，单 Activity、MVI/MVVM），并按 2025+ 稳定版本做现代化适配。
 
 | 你提供 | 技能产出 |
-|---|---|
+| --- | --- |
 | 原型 HTML / 设计稿截图 / PRD 页面清单 | 完整 Gradle 工程 + 分层代码 + 四个页面范本 + mock 数据 + 单元测试 |
 
 ## 2. 技术基线
 
 | 项 | 选型 |
-|---|---|
+| --- | --- |
 | 语言 / 构建 | Kotlin 2.1 / AGP 8.7.3 / Gradle 8.11.1 / JDK 17 |
 | UI | Jetpack Compose + Material3（BOM 2024.12.01） |
 | 架构 | 单 Activity + MVI（`UiState` / `Event` / `StateFlow`） |
@@ -57,7 +57,7 @@ prototype-to-android-native-app/
 ## 4. 模板里的四个页面范本
 
 | 布局 | 范本 | 关键实现 |
-|---|---|---|
+| --- | --- | --- |
 | 列表 | `feature/home` | `LazyColumn` + 三态 + 触底加载 + 刷新按钮 |
 | 详情 | `feature/detail` | 可滚动内容 + 底部固定操作栏 + Toast |
 | 表单 | `feature/login` | `OutlinedTextField` + 校验 + 提交禁用 + 密码遮罩 |
@@ -99,7 +99,7 @@ python resources/tools/validate_project.py ./skill-swap-android --json
 21 项静态检查（不依赖 Android SDK / Gradle / 网络）：
 
 | # | 检查项 | 失败常见原因 |
-|---|---|---|
+| --- | --- | --- |
 | 1 | `settings.gradle.kts` 声明 `:app` | 骨架没复制全 |
 | 2 | 版本目录包含核心依赖 | 漏 Compose / Hilt / Room / Retrofit / Coil |
 | 3 | `namespace` 与 `applicationId` 一致 | 只改了一处，或占位符未替换 |
@@ -147,7 +147,7 @@ debug {
 ## 8. 验证情况
 
 | 验证项 | 结果 |
-|---|---|
+| --- | --- |
 | `parse_prototype.py` 解析 `demo_input/index.html` | 通过（layout=list，主色正确识别 `2B6DE5`，未误取背景灰） |
 | `preview_plan.py` 输出计划 | 通过（45 个文件计划，含包路径） |
 | `render_template.py` 渲染 `demo_output/skill-swap-android` | 通过（57 文件，0 残留占位符，2 个 `{{package_path}}` 目录正确展开） |
@@ -173,7 +173,7 @@ python resources/tools/validate_project.py resources/demo_output/skill-swap-andr
 ## 9. 与其它技能的关系
 
 | 技能 | 目标平台 | 技术栈 |
-|---|---|---|
+| --- | --- | --- |
 | **`prototype-to-android-native-app`（本技能）** | Android 原生（手机 / 平板 / 折叠屏） | Kotlin + Compose + Hilt |
 | `prototype-to-flutter-app` | Android / iOS / Web / 桌面 | Flutter（Dart） |
 | `prototype-to-app-uniappx` | App / 小程序 / H5 | uni-app x（Vue 语法） |
@@ -184,7 +184,7 @@ python resources/tools/validate_project.py resources/demo_output/skill-swap-andr
 ## 10. 相关文档
 
 | 内容 | 路径 |
-|---|---|
+| --- | --- |
 | 技能定义（AI 读） | `SKILL.md` |
 | 原型解析契约 | `resources/specifications/prototype_parser_contract.md` |
 | 分层与 MVI 约定 | `resources/specifications/architecture_conventions.md` |

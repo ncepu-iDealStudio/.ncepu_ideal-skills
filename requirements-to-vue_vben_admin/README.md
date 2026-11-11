@@ -16,7 +16,7 @@
 技能会产出：
 
 | 产出 | 说明 |
-|---|---|
+| --- | --- |
 | **路由与菜单** | 按"XX模块"自动生成一级菜单，模块下的条目生成二级页面 |
 | **CRUD 页面** | 列表 + 搜索 + 新增/编辑抽屉 + 详情 + 删除 |
 | **数据统计页** | Echarts 图表看板 + 概览数字卡片 |
@@ -28,7 +28,7 @@
 本技能面向 **vue-vben-admin v5.x（monorepo）**，不是 v2/v3 的单体版本。
 
 | 项 | 值 |
-|---|---|
+| --- | --- |
 | 版本 | 5.x（参考 5.7.0） |
 | 包管理 | **pnpm 11+** |
 | Node | **22.18+ / 24.12+** |
@@ -127,7 +127,7 @@ python resources/tools/validate_project.py <vben工程根目录>
 14 项检查：
 
 | 检查项 | 说明 |
-|---|---|
+| --- | --- |
 | monorepo 结构 | 必须是 `apps/` + `packages/`（v5） |
 | 路由模块位置 | 必须在 `routes/modules/` 下 |
 | 路由 component | 指向的 `.vue` 文件必须存在 |
@@ -146,7 +146,7 @@ python resources/tools/validate_project.py <vben工程根目录>
 ## 5. 需求 → 模块映射规则
 
 | 需求关键词 | 页面类型 | 生成内容 |
-|---|---|---|
+| --- | --- | --- |
 | 管理 / 列表 / 记录 | `crud` | 表格 + 搜索 + 增删改查 + 详情 |
 | 分析 / 统计 / 报表 / 看板 | `dashboard` | Echarts 图表 + 概览卡片 |
 | 权限 / 菜单 / 组织 / 分类 | `tree` | 树形表格 |
@@ -184,7 +184,7 @@ demo-admin/
 本技能的所有规范均在**真实 vue-vben-admin 仓库**中验证过：
 
 | 验证项 | 结果 |
-|---|---|
+| --- | --- |
 | 解析示例需求 | ✓ 3 模块 / 8 页面，页面名无截断 |
 | 在真实 repo 生成完整模块 | ✓ 31 个文件 |
 | `validate_project.py` 校验 | ✓ **0 错误 0 警告** |
@@ -207,8 +207,8 @@ demo-admin/
 ## 9. 相关文档
 
 | 内容 | 路径 |
-|---|---|
+| --- | --- |
 | 需求解析契约 | `resources/specifications/requirements_parser_contract.md` |
 | 页面生成范式（含完整代码） | `resources/specifications/page_generation_patterns.md` |
 | 框架基线（版本/API/禁用写法） | `resources/config/framework_baseline.json` |
-| vue-vben-admin 官方文档 | https://doc.vben.pro/ |
+| vue-vben-admin 官方文档 | <https://doc.vben.pro/> |

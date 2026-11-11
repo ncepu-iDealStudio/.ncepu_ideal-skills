@@ -61,7 +61,7 @@
 ## 2. 字段约束
 
 | 字段 | 约束 |
-|---|---|
+| --- | --- |
 | `project_name` | snake_case，符合 Dart 包名规范 |
 | `package_name` | 同上，二者通常一致 |
 | `route` | 以 `/` 开头；首页为 `/` |
@@ -78,7 +78,7 @@
 `validate_project.py` 检查：
 
 | 编号 | 规则 | 级别 |
-|---|---|---|
+| --- | --- | --- |
 | F01 | `project_name` 为 snake_case 且不以数字开头 | error |
 | F02 | 每个 `widget_class` 在 `lib/features/**` 中有对应文件 | error |
 | F03 | 每个 `route` 在 `core/router/app_router.dart` 中注册 | error |
@@ -106,7 +106,7 @@
 ### 5.1 HTML / CSS
 
 | HTML 特征 | Flutter 映射 |
-|---|---|
+| --- | --- |
 | 纵向区块堆叠 | `Column` |
 | `display:flex; flex-direction:row` | `Row` |
 | `display:grid` | `GridView` 或 `Wrap` |

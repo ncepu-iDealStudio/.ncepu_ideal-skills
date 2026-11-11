@@ -104,7 +104,7 @@
 ### Admin (管理员)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /admins | 创建管理员 |
 | GET | /admins | 获取管理员列表（分页） |
 | GET | /admins/{id} | 获取管理员详情 |
@@ -114,7 +114,7 @@
 ### Course (课程)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /courses | 创建课程 |
 | GET | /courses | 获取课程列表（分页） |
 | GET | /courses/{id} | 获取课程详情 |
@@ -124,7 +124,7 @@
 ### CourseArrangement (课程安排)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /course-arrangements | 创建课程安排 |
 | GET | /course-arrangements | 获取课程安排列表（分页） |
 | GET | /course-arrangements/{id} | 获取课程安排详情 |
@@ -134,7 +134,7 @@
 ### SsoUser (用户账号)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /sso-users | 创建用户账号 |
 | GET | /sso-users | 获取用户账号列表（分页） |
 | GET | /sso-users/{id} | 获取用户账号详情 |
@@ -144,7 +144,7 @@
 ### Student (学生)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /students | 创建学生 |
 | GET | /students | 获取学生列表（分页） |
 | GET | /students/{id} | 获取学生详情 |
@@ -154,7 +154,7 @@
 ### StudentSelectedCourse (学生选课)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /student-selected-courses | 创建学生选课记录 |
 | GET | /student-selected-courses | 获取学生选课列表（分页） |
 | GET | /student-selected-courses/{id} | 获取学生选课详情 |
@@ -164,7 +164,7 @@
 ### SysClassInfo (班级信息)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /sys-classes | 创建班级 |
 | GET | /sys-classes | 获取班级列表（分页） |
 | GET | /sys-classes/{id} | 获取班级详情 |
@@ -174,7 +174,7 @@
 ### SysCollegeInfo (学院信息)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /sys-colleges | 创建学院 |
 | GET | /sys-colleges | 获取学院列表（分页） |
 | GET | /sys-colleges/{id} | 获取学院详情 |
@@ -184,7 +184,7 @@
 ### SysDepartmentInfo (部门信息)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /sys-departments | 创建部门 |
 | GET | /sys-departments | 获取部门列表（分页） |
 | GET | /sys-departments/{id} | 获取部门详情 |
@@ -194,7 +194,7 @@
 ### Teacher (教师)
 
 | 方法 | 路径 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | POST | /teachers | 创建教师 |
 | GET | /teachers | 获取教师列表（分页） |
 | GET | /teachers/{id} | 获取教师详情 |
@@ -296,23 +296,26 @@ mvn clean package
 java -jar target/api-security-demo-0.0.1-SNAPSHOT.jar
 ```
 
-5. 访问 Swagger UI: http://localhost:8080/api/v1/swagger-ui.html
-6. 访问 API Docs: http://localhost:8080/api/v1/api-docs
+5. 访问 Swagger UI: <http://localhost:8080/api/v1/swagger-ui.html>
+6. 访问 API Docs: <http://localhost:8080/api/v1/api-docs>
 
 ## DTO 设计说明
 
 ### Request DTO
+
 - 包含业务字段
 - 排除自动管理字段（主键、创建时间、软删除字段等）
 - 包含验证注解
 
 ### Response DTO
+
 - 包含所有展示字段
 - 排除敏感字段（密码等）
 
 ## 软删除机制
 
 以下表使用软删除：
+
 - Admin (is_delete)
 - Course (isDelete)
 - CourseArrangement (isDelete)
@@ -324,4 +327,5 @@ java -jar target/api-security-demo-0.0.1-SNAPSHOT.jar
 - Teacher (isDelete)
 
 以下表使用硬删除：
+
 - SsoUser (无软删除字段)

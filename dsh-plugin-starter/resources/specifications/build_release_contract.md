@@ -41,7 +41,7 @@ export default defineConfig([
 ```
 
 | 目标 | 入口 | 产物 | 关键配置 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | host | `src/index.ts` | `lib/index.mjs` + `index.d.mts` | `esm` / `node` / `neverBundle` 排除 cordis 与 dsh-host-* |
 | client | `src/client/index.ts` | `lib/client.js` | `cjs` / `browser` / 排除 react 与 dsh-client-* / 其余内联 / `__ModuleLoader__` 包装 |
 
@@ -74,7 +74,7 @@ dsh web --port 3081                                   # 重启验证
 验证方式按类型不同：
 
 | 类型 | 验证 |
-|---|---|
+| --- | --- |
 | tool-only | 让 Agent 调工具，看入参与返回值 |
 | route-only | `curl -X POST http://127.0.0.1:3081/<prefix>/ping` |
 | dual-face | 设置页出现区块 → 操作 → 看到 `{ok:true}` |
@@ -107,7 +107,7 @@ git push -u origin master
 ## 5. 版本与兼容
 
 | 依赖 | 锁定值 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `@deepseek-ai/cordis` | `^4.0.1` | 必须写进 `peerDependencies` |
 | `@deepseek-ai/dsh-*` | `^0.1.0-rc.7` | 开发者预览版，**破坏性变更频繁** |
 | Node | `>= 20.19`，推荐 22+ | |

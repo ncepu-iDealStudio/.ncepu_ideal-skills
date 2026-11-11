@@ -41,7 +41,7 @@
 ### `plugin`
 
 | 字段 | 必需 | 默认 | 规则 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `packageName` | ✅ | —— | `^@scope/dsh-xxx$`；不能用 `@deepseek-ai`；最后一段 = `slug` |
 | `slug` | 建议 | 由包名推导 | `^dsh-[a-z0-9-]+$` |
 | `type` | ✅ | `tool-only` | `tool-only` / `route-only` / `dual-face` / `interceptor` |
@@ -55,7 +55,7 @@
 ### `capability`
 
 | 字段 | 适用类型 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `summary` | 全部 | 一句话说明这个插件提供什么能力 |
 | `toolName` | `tool-only` 必填 | snake_case，模型可见；`run_code` 禁用 |
 | `toolDescription` | `tool-only` | 从模型视角写「何时使用」，会进入工具描述 |
@@ -70,7 +70,7 @@
 ## 3. 类型与必需字段的对应关系
 
 | type | 必需 spec 字段 | 生成内容 | 有无 Client |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `tool-only` | `capability.toolName` | `src/index.ts`（defineTool）+ `capability.ts` | 无 |
 | `route-only` | `capability.routePrefix` | `src/index.ts`（routes）+ `capability.ts` | 无 |
 | `dual-face` | `capability.routePrefix` | 同上 + `src/client/index.ts`（设置页） | 有 |

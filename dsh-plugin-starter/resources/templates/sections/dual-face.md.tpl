@@ -67,7 +67,7 @@ dsh web --port 3081
 ### 双面插件的额外坑
 
 | 现象 | 原因 | 修法 |
-|---|---|---|
+| --- | --- | --- |
 | 设置页整块空白，console 报 `__ModuleLoader__ is not defined` | Client 产物没用 tsdown 的 `banner/footer/intro` 包装 | 检查 `tsdown.config.ts` 的 client 目标 |
 | `require is not defined` / 找不到 `react` | `neverBundle` 没排除 `react`、`@deepseek-ai/dsh-*` | 模块表只认这两类，其余全部内联（`alwaysBundle`） |
 | 切换语言后标签没变 | `label` 没用 `ctx.locale.bind(...)`，而是在注册时就取了值 | `label: () => ctx.locale.bind(PLUGIN_ID)('title')` |

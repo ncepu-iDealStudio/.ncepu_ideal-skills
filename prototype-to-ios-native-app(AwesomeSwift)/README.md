@@ -7,13 +7,13 @@
 模板范式对齐开源项目 **[AwesomeSwift](https://github.com/JoeyBling/AwesomeSwift)**（SwiftUI + MVVM + Combine + SwiftData + Alamofire + Kingfisher，中文注释、内置登录/信息流/详情/设置/表单/暗黑/国际化），并按 iOS 17+ 稳定 API 做了现代化适配。
 
 | 你提供 | 技能产出 |
-|---|---|
+| --- | --- |
 | 原型 HTML / 设计稿截图 / PRD 页面清单 | XcodeGen 工程声明 + 分层 SwiftUI 代码 + 四个页面范本 + mock 数据 + 单元测试 |
 
 ## 2. 技术基线
 
 | 项 | 选型 |
-|---|---|
+| --- | --- |
 | 语言 / UI | Swift 5.10 + SwiftUI（iOS 17.0+） |
 | 架构 | MVVM + Combine 单向状态流 |
 | 依赖注入 | 手写组合根 `AppContainer`（无第三方 DI） |
@@ -55,7 +55,7 @@ prototype-to-ios-native-app/
 ## 4. 模板里的四个页面范本
 
 | 布局 | 范本 | 关键实现 |
-|---|---|---|
+| --- | --- | --- |
 | 列表 / 信息流 | `Features/Home` | `List` + `LoadState` 三态 + 上拉加载 + `.refreshable` + `.searchable` + Combine 防抖 |
 | 详情 | `Features/Detail` | `ScrollView` + `.safeAreaInset` 底部操作栏 + Alert |
 | 表单 | `Features/Login` | `TextField`/`SecureField` + 校验 + 提交禁用 |
@@ -107,7 +107,7 @@ python resources/tools/validate_project.py ./SkillSwap --json
 22 项静态检查（不需要 macOS / Xcode）：
 
 | # | 检查项 | 失败常见原因 |
-|---|---|---|
+| --- | --- | --- |
 | 1 | `project.yml` 存在且工程名合法 | 用了 kebab-case 或中文名 |
 | 2 | 最低 iOS ≥ 17.0 | 复制了老模板 |
 | 3 | SPM 含 Alamofire / Kingfisher | 漏改 `packages` |
@@ -160,7 +160,7 @@ USE_MOCK = YES
 ## 8. 验证情况
 
 | 验证项 | 结果 |
-|---|---|
+| --- | --- |
 | `parse_prototype.py` 解析 `demo_input/index.html` | 通过（layout=list，view=HomeView，主色正确识别 `2B6DE5`，未误取背景灰） |
 | `preview_plan.py` 输出计划 | 通过（40 个文件计划，含能力开关与待确认项） |
 | `render_template.py` 渲染 `demo_output/skill-swap-ios` | 通过（49 文件，0 残留占位符，1 个 `{{project_name}}` 目录正确改名，主色 RGB 拆分为 2B/6D/E5） |
@@ -187,7 +187,7 @@ python resources/tools/validate_project.py resources/demo_output/skill-swap-ios
 ## 9. 与其它技能的关系
 
 | 技能 | 目标平台 | 技术栈 |
-|---|---|---|
+| --- | --- | --- |
 | **`prototype-to-ios-native-app`（本技能）** | iOS 原生（iPhone / iPad） | SwiftUI + MVVM + SwiftData |
 | `prototype-to-android-native-app` | Android 原生 | Kotlin + Compose + Hilt |
 | `prototype-to-flutter-app` | Android / iOS / Web / 桌面 | Flutter（Dart） |
@@ -199,7 +199,7 @@ python resources/tools/validate_project.py resources/demo_output/skill-swap-ios
 ## 10. 相关文档
 
 | 内容 | 路径 |
-|---|---|
+| --- | --- |
 | 技能定义（AI 读） | `SKILL.md` |
 | 原型解析契约 | `resources/specifications/prototype_parser_contract.md` |
 | 分层与 MVVM 约定 | `resources/specifications/architecture_conventions.md` |

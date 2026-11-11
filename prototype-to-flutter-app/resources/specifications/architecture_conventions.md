@@ -2,7 +2,7 @@
 
 本文定义生成工程的分层规则，确保符合官方推荐且便于后续演进。
 
-参考：https://docs.flutter.dev/app-architecture/guide
+参考：<https://docs.flutter.dev/app-architecture/guide>
 
 ---
 
@@ -19,7 +19,7 @@ UI 层（features/）        ← 只负责展示与交互
 ### UI 层
 
 | 组成 | 职责 | 禁止 |
-|---|---|---|
+| --- | --- | --- |
 | `*_page.dart` | 组装 Widget、绑定事件、监听状态 | 直接发 HTTP、写业务规则 |
 | `*_controller.dart` | 持有状态、调用 Repository、`notifyListeners` | 引用 `BuildContext`、操作 UI |
 | `widgets/` | 该功能私有组件 | 感知数据来源 |
@@ -29,7 +29,7 @@ UI 层（features/）        ← 只负责展示与交互
 ### 数据层
 
 | 组成 | 职责 |
-|---|---|
+| --- | --- |
 | `models/` | 不可变数据模型 + `fromJson` / `toJson` |
 | `repositories/` | **接口** + **实现**，实现里决定走 mock 还是 remote |
 | `sources/remote/` | 真实 API 调用 |
@@ -40,7 +40,7 @@ UI 层（features/）        ← 只负责展示与交互
 ### 基础设施
 
 | 组成 | 职责 |
-|---|---|
+| --- | --- |
 | `core/config` | 环境开关（useMock）、baseUrl |
 | `core/network` | `http` 封装、统一错误处理 |
 | `core/theme` | 颜色、间距、字体、ThemeData |
@@ -271,7 +271,7 @@ testWidgets('首页渲染标题', (tester) async {
 ## 8. 性能约定
 
 | 规则 | 原因 |
-|---|---|
+| --- | --- |
 | 长列表用 `ListView.builder` | 懒加载，避免一次构建全部 |
 | 能 `const` 的 Widget 一律 `const` | 减少重建 |
 | 图片指定 `width` / `height` | 避免布局跳动 |

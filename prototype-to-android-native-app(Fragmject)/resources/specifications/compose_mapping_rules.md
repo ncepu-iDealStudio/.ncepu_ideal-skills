@@ -5,7 +5,7 @@
 ## 1. 布局容器
 
 | 原型 | Compose | 备注 |
-|---|---|---|
+| --- | --- | --- |
 | `display: block` 纵向堆叠 | `Column` | 默认 `verticalArrangement = Arrangement.spacedBy(Dimens.sm)` |
 | `display: flex; flex-direction: row` | `Row` | 对齐用 `verticalAlignment = Alignment.CenterVertically` |
 | 层叠 / 绝对定位 | `Box` + `Modifier.align(Alignment.Xxx)` | 禁止用 `offset` 模拟定位 |
@@ -19,7 +19,7 @@
 ## 2. 视觉样式
 
 | CSS | Compose |
-|---|---|
+| --- | --- |
 | `background-color` | `Modifier.background(color)` 或 `Surface(color = ...)` |
 | `border: 1px solid X` | `Modifier.border(1.dp, color, shape)` |
 | `border-radius` | `RoundedCornerShape(Dimens.cardRadius)` |
@@ -39,7 +39,7 @@
 ## 3. 控件
 
 | 原型 | Compose |
-|---|---|
+| --- | --- |
 | `<button>` | `Button` / `OutlinedButton` / `TextButton` |
 | 卡片列表项 | `Card(onClick = ...)` 或 `Surface(onClick = ...)` |
 | `<input>` | `OutlinedTextField` + `KeyboardOptions` + `isError` |
@@ -103,7 +103,7 @@ Column
 ## 5. 交互映射
 
 | 原型 | Compose |
-|---|---|
+| --- | --- |
 | `onclick` 跳转 | `onClick: () -> Unit` 回传给 Screen 上层，由 `NavController` 处理 |
 | 下拉刷新 | `PullToRefreshBox`（M3 实验 API）或顶部刷新按钮（模板默认） |
 | 上拉加载 | footer `LaunchedEffect` |

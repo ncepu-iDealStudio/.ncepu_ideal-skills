@@ -5,7 +5,7 @@
 ## 技术栈
 
 | 项 | 选型 |
-|---|---|
+| --- | --- |
 | UI | SwiftUI（iOS {{ios_min}}+） |
 | 架构 | MVVM + Combine 单向状态流 |
 | 本地存储 | SwiftData（`@Model`）+ UserDefaults（token） |
@@ -70,7 +70,7 @@ USE_MOCK = YES
 ## 常见问题
 
 | 现象 | 原因 / 处理 |
-|---|---|
+| --- | --- |
 | `xcodegen: command not found` | 未安装 XcodeGen：`brew install xcodegen` |
 | 编译报 SwiftData 相关错误 | 部署目标低于 iOS 17 |
 | 真机提示无签名 | `project.yml` 填 `DEVELOPMENT_TEAM` |

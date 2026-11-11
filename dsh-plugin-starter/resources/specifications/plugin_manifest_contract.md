@@ -13,7 +13,7 @@ DSH 没有单一「manifest 文件」。插件的「身份 + 装配声明」分�
 同一个字符串必须出现在：
 
 | 位置 | 字段 | 不一致的后果 |
-|---|---|---|
+| --- | --- | --- |
 | `package.json` | `name` | —— |
 | `tsdown.config.ts` | `const PLUGIN_ID` | Client bundle 的注册 id 错，浏览器侧加载不到 |
 | `cordis.patch.yml` | `name` | 插件行插不进 profile 的装配层 |
@@ -57,7 +57,7 @@ DSH 没有单一「manifest 文件」。插件的「身份 + 装配声明」分�
 ### 字段逐条解释
 
 | 字段 | 是否必需 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `type: "module"` | 必需 | Host 产物是 ESM |
 | `main` / `types` / `exports["."]` | 必需 | Host 入口，指向 `lib/index.mjs` |
 | `exports["./client"]` | 带界面必需 | Client 入口，DSH 模块系统按「包名 + `/client`」解析 |
@@ -94,7 +94,7 @@ DSH 没有单一「manifest 文件」。插件的「身份 + 装配声明」分�
 ## 4. 安装路径的三个 scope
 
 | scope | 路径 | 用途 |
-|---|---|---|
+| --- | --- | --- |
 | profile 安装 | `dsh plugin --profile web add <dir\|tgz\|github:user/repo>` | 正式安装，写进 profile 的 `package.json` + `dsh.profile.bundles` |
 | 开发期覆盖 | `dsh --profile headless --patch ./dev.patch.yml` | 跳过安装，直接把源码挂进进程（路径相对 profile 目录解析） |
 | 技能安装 | `<DSH_HOME>/skills/<name>/SKILL.md` | 不是插件；这是本仓库这种「技能」的安装方式 |

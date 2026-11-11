@@ -3,7 +3,7 @@
 本目录随脚手架一并复制，供生产/教学演示使用，**不是**起步 `docker compose` 的必跑依赖。
 
 | 内容 | 作用 |
-|------|------|
+| ------ | ------ |
 | `nginx.conf` / `nginx-prod.conf` | 反向代理、限流、TLS 示例 |
 | `mysql.cnf` / `mysql-prod.cnf` | MySQL 调优 |
 | `redis.conf` | Redis 内存与持久化 |

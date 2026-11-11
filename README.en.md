@@ -273,7 +273,7 @@ ncepu_ideal-skills/
 > Choose the configuration guide based on your AI coding assistant:
 
 | 🤖 AI Tool | 📚 Documentation |
-|-----------|-----------|
+| ----------- | ----------- |
 | 🚀 **Trae IDE** | [Configuration Guide](docs/Trea中使用skill配置.md) |
 | 💻 **Claude Code** | [Configuration Guide](docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [Configuration Guide](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
@@ -307,7 +307,7 @@ CREATE TABLE student (
 **📤 Skill Generators Reference**：
 
 | ⚡ Skill | 📥 Input | 📤 Output |
-|--------|--------|-----------|
+| -------- | -------- | ----------- |
 | **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + Project Skeleton |
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + Project Skeleton |
 | **Gin** | MySQL DDL | Model / DAO / Service / Resource + Project Skeleton |
@@ -328,12 +328,11 @@ restoring layout and interactions with mock data. I'll wire up the backend later
 **📤 Skill Generators Reference**：
 
 | ⚡ Skill | 📥 Input | 📤 Output |
-|--------|--------|-----------|
+| -------- | -------- | ----------- |
 | **uni-app x** | prototype code / image / PRD | `.uvue` pages + components + `services` layers + mock data; multi-platform project runnable in HBuilder |
 | **Flutter** | prototype code / image / PRD | `features` layers + Repository + mock data; runs via `flutter pub get && flutter run` |
 
 > 💡 Both frontend skills generate a **data-access seam**: switching to the real backend only requires flipping a `useMock` flag — page code stays unchanged.
-
 
 ## 🗺️ Roadmap
 

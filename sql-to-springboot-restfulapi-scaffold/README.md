@@ -56,6 +56,7 @@ sql-to-springboot-restfulapi-scaffold/
 ## 使用方法
 
 ### 1 配置技能到目标开发IDE中
+
 - 如果你使用的是Trea IDE，你可以直接在IDE中配置技能环境。
 - 操作文档请参考
 [Trea IDE 配置技能](../docs/Trea中使用skill配置.md)
@@ -153,6 +154,7 @@ springboot_project/
 6. **controller/{TableName}Controller.java** - REST 控制器（5 个 CRUD 端点）
 
 **不生成的文件**（根据用户要求）：
+
 - 测试代码
 - 部署相关配置（Docker、Nginx等）
 - 数据库初始化脚本
@@ -163,18 +165,21 @@ springboot_project/
 ### 软删除/硬删除
 
 技能会自动检测表中是否有软删除字段（支持以下字段名）：
+
 - `is_deleted`
 - `is_delete`
 - `deleted`
 - `isDelete`
 
 **软删除逻辑**（有软删除字段时）：
+
 - `getList()` - 只查询未删除的记录
 - `getById()` - 只查询未删除的记录
 - `update()` - 只更新未删除的记录
 - `delete()` - 设置软删除字段为 true
 
 **硬删除逻辑**（无软删除字段时）：
+
 - `getList()` - 查询所有记录
 - `getById()` - 查询所有记录
 - `update()` - 更新所有记录
@@ -183,6 +188,7 @@ springboot_project/
 ### 输入验证
 
 自动为以下字段生成验证注解：
+
 - 手机号（字段名包含 `phone`）：中国手机号格式验证
 - 邮箱（字段名包含 `email`）：邮箱格式验证
 - 年龄（字段名为 `age`）：0-150 范围验证
@@ -191,6 +197,7 @@ springboot_project/
 ### 权限控制
 
 Controller 层使用 `@PreAuthorize` 注解控制访问权限：
+
 - `POST /` - 需要 ADMIN 或 USER 角色
 - `GET /{id}` - 需要 ADMIN 或 USER 角色
 - `GET /` - 需要 ADMIN 或 USER 角色
@@ -202,6 +209,7 @@ Controller 层使用 `@PreAuthorize` 注解控制访问权限：
 生成完成后，按以下步骤启动项目：
 
 1. 安装依赖：
+
 ```bash
 mvn clean install
 ```
@@ -210,10 +218,12 @@ mvn clean install
 编辑 `src/main/resources/application.properties` 文件，配置 MySQL 数据库连接。
 
 3. 启动应用：
+
 ```bash
 mvn spring-boot:run
 ```
 
 4. 访问 API 文档：
-- Swagger UI: http://localhost:8080/api/v1/swagger-ui.html
-- API Docs: http://localhost:8080/api/v1/api-docs
+
+- Swagger UI: <http://localhost:8080/api/v1/swagger-ui.html>
+- API Docs: <http://localhost:8080/api/v1/api-docs>

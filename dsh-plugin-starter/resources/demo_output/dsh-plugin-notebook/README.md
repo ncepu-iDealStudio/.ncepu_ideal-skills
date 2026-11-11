@@ -16,7 +16,7 @@
 Host 侧暴露 `/notebook` 前缀下的 POST 路由（统一 `{ ok, value | error }` 信封）：
 
 | 路由 | 入参 | 作用 |
-|---|---|---|
+| --- | --- | --- |
 | `POST /notebook/ping` | —— | 健康探针，确认 Host 半边就绪 |
 | `POST /notebook/list` | —— | 列出全部笔记（新→旧） |
 | `POST /notebook/add` | `{ text: string }` | 新增一条笔记 |
@@ -73,7 +73,7 @@ curl -X POST http://127.0.0.1:3081/notebook/list -H 'content-type: application/j
 ## 相对「纯生成结果」改了哪三处
 
 | 文件 | 改动 | 对应 `DEVELOPMENT.md` |
-|---|---|---|
+| --- | --- | --- |
 | `src/capability.ts` | 回声实现 → 进程内 `Map` 笔记存储（list/add/remove） | 第 5.1 节「Host 侧加端点」 |
 | `src/index.ts` | 增加 `/list`、`/add`、`/remove` 三个分支 | 第 5.1 节 |
 | `src/client/index.ts` | 单个输入框 → 输入 + 列表 + 删除按钮 | 第 5.1 节「Client 侧加 UI」 |

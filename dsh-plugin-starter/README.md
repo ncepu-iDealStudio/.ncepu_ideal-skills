@@ -26,7 +26,7 @@ DSH 插件的第一道门槛不是写业务代码，而是**一堆静默失败**
 ## 2. 四种插件类型
 
 | 类型 | 能力出口 | 消费者 | 有界面 | 典型需求 |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | `tool-only` | `ctx.tools.register(defineTool(...))` | 模型 | 否 | 「让 AI 能查/抓/算/写」 |
 | `route-only` | `ctx.webServer.register()` | 外部脚本 / 浏览器 | 否 | 「提供 HTTP 接口给别人调」 |
 | `dual-face` | 路由 + `settings.section` 插槽 | 用户（GUI） | 是 | 「设置页 / 面板 / 可视化配置」 |
@@ -159,7 +159,7 @@ python resources/tools/validate_plugin.py <插件目录>
 ```
 
 | 组 | 检查内容 |
-|---|---|
+| --- | --- |
 | 装配 | 必需文件齐全、`package.json` 可解析、`main`/`exports` 指向、**`dsh.bundle.patch` 存在**、`cordis.patch.yml` 的 `id`/`name`/`insert` |
 | 声明 | `tsdown` 的 `PLUGIN_ID` 与包名一致、`dsh.client` ↔ `src/client/index.ts` ↔ `exports['./client']` ↔ tsdown client 目标双向一致、`tsconfig` paths、`peerDependencies` 含 cordis |
 | 产物 | `lib/client.js` 若是 `__ModuleLoader__.load` 格式且 id 等于包名（未构建则仅警告） |
@@ -180,7 +180,7 @@ python resources/tools/validate_plugin.py <插件目录>
 ## 9. 参考来源
 
 | 来源 | 本技能吸收了它什么 |
-|---|---|
+| --- | --- |
 | [`lansi-ai/dsh-plugin-starter`](https://github.com/lansi-ai/dsh-plugin-starter) | 双面架构、tsdown 双目标与 `__ModuleLoader__` 包装、`package.json` 的 `dsh.bundle`/`dsh.client` 声明、17 条坑位、改名清单 |
 | [`yanhua1010/dsh-harness-tutorial`](https://github.com/yanhua1010/dsh-harness-tutorial) | 插件三形态与 Cordis 生命周期、事件模式（waterfall / emit）、headless `--patch` 覆盖层调试、工具流水线五阶段 |
 | 本仓库 `sql-to-*` / `prototype-to-*` 技能 | 分层组织方式：`config` / `specifications` / `templates` / `tools` / `demo_output`，规范先于实现、产物可校验 |

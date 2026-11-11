@@ -16,7 +16,7 @@
 四个端到端生成的完整站点，每个都是标准的 `doc/` + `template/` 结构，且 `validate.py` 零错误通过。
 
 | 目录 | 场景 | 设计包 | 页面 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | blog-swiss | 个人博客 | swiss-minimal | 6 |
 | corp-flat | 公司门户 | flat-material | 6 |
 | showcase-aurora | 动态设计作品集 | tech-aurora | 5 |

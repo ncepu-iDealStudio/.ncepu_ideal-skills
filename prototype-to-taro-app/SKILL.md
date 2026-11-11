@@ -12,7 +12,7 @@ description: "从原型（设计图截图、HTML/CSS 代码或 PRD 页面清单�
 **核心特点：支持双框架，由用户选择。**
 
 | 分支 | 技术栈 | 适合 |
-|---|---|---|
+| --- | --- | --- |
 | **Vue3** | Taro 4 + Vue 3 + TS + Vant + Pinia | 团队熟悉 Vue；需要快速还原 UI |
 | **React** | Taro 4 + React 18 + TS + Dva/Redux + taro-ui | 复杂业务系统、企业业务 App |
 
@@ -46,7 +46,7 @@ description: "从原型（设计图截图、HTML/CSS 代码或 PRD 页面清单�
 ## 技术基线（实测核对）
 
 | 项 | Vue3 分支 | React 分支 |
-|---|---|---|
+| --- | --- | --- |
 | Taro | **4.x** | **4.x** |
 | 框架 | Vue 3.4+ | React 18 |
 | 语言 | TypeScript | TypeScript |
@@ -119,7 +119,7 @@ description: "从原型（设计图截图、HTML/CSS 代码或 PRD 页面清单�
 从设计图／HTML／PRD 中提取页面清单：
 
 | 字段 | 示例 |
-|---|---|
+| --- | --- |
 | `page_name` | `home` |
 | `path` | `pages/home/index` |
 | `title` | `首页` |
@@ -207,7 +207,7 @@ export default {
 ## 双框架关键差异（生成时最易出错）
 
 | 维度 | Vue3 分支 | React 分支 |
-|---|---|---|
+| --- | --- | --- |
 | 页面文件 | `index.vue` | `index.tsx` |
 | 入口 | `app.ts`（createApp） | `app.tsx`（class/函数 + Provider） |
 | 组件定义 | `<script setup>` | 函数组件 + Hooks |
@@ -224,7 +224,7 @@ export default {
 ## 内置能力（生成时一并产出）
 
 | 能力 | 说明 |
-|---|---|
+| --- | --- |
 | **登录** | 登录页 + token 持久化（`Taro.setStorageSync`） |
 | **权限路由** | 无 token 跳登录；白名单页面免登录 |
 | **请求封装** | 统一 baseURL、超时、错误码、401 跳登录 |
@@ -239,7 +239,7 @@ export default {
 ## 命名规范
 
 | 对象 | 规则 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | 页面目录 | kebab-case | `pages/order-list/` |
 | 页面文件 | `index.vue` / `index.tsx` | |
 | 页面配置 | `index.config.ts` | |

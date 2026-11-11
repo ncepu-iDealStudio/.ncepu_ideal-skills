@@ -9,7 +9,7 @@
 目标项目默认使用 [uv](https://docs.astral.sh/uv/) 管理依赖与启动，细则见 `resources/config/package_manager.json`。
 
 | 文件 | 作用 |
-|------|------|
+| ------ | ------ |
 | `pyproject.toml` | **主**依赖清单（PEP 621 + `[dependency-groups].dev`） |
 | `.python-version` | uv 使用的 Python 版本钉选 |
 | `requirements.txt` | 与运行时依赖同步的 pip 兼容清单 |
@@ -225,11 +225,13 @@ class ModelName(BaseModel):
 ### 7.3 依赖与异常
 
 **必须**：
+
 - 所有端点添加 `@handle_service_exceptions`（或项目等价装饰器）
 - 通过 `Depends(get_{table}_service)` 注入 **Service**（**禁止** Resource 直接注入 Repository）
 - 请求体/字段格式校验由 Pydantic Schema 在进入端点前完成
 
 **可选**：
+
 - `current_user: dict = Depends(get_current_user)` — 需要认证时添加
 
 ### 7.4 OpenAPI 文档
@@ -246,7 +248,7 @@ api (Resource) → service（单条委托 + 列表等业务） → repository（
 ```
 
 | 层 | 路径 | Skill 覆盖 | 职责 |
-|----|------|------------|------|
+| ---- | ------ | ------------ | ------ |
 | utils（基线） | `utils/` | **已存在则跳过**（`project_baseline.json`） | 通用工具；不按表生成 |
 | middleware（基线） | `middleware/` | **已存在则跳过** | 安全头 / 限流 / 审计；配置开关默认关 |
 | docker（基线） | `docker/` | **已存在则跳过** | 起步 Docker：app + MySQL（Redis 可选） |
@@ -347,7 +349,7 @@ from utils.custom_exceptions import handle_service_exceptions
 细则见 `resources/config/project_baseline.json`。
 
 | 规则 | 说明 |
-|------|------|
+| ------ | ------ |
 | 策略 | 默认 `brownfield_prefer_existing`：目标已有 `utils/` 则整包跳过 |
 | 日志 | `from utils.logger import get_logger`（不是 loguru） |
 | 脱敏 | `from utils.masking import mask_phone, mask_email` |
@@ -359,7 +361,7 @@ from utils.custom_exceptions import handle_service_exceptions
 企业级常用三件套随骨架拷贝（见 `project_baseline.json` → `packages.middleware`）：
 
 | 中间件 | 作用 | 配置开关（默认 `false`） |
-|--------|------|--------------------------|
+| -------- | ------ | -------------------------- |
 | `SecurityHeadersMiddleware` | 安全响应头 | `middleware_security_headers_enabled` |
 | `RateLimitMiddleware` | 内存令牌桶限流 | `middleware_rate_limit_enabled` |
 | `AuditMiddleware` | HTTP 审计 | `middleware_audit_enabled` |
@@ -373,7 +375,7 @@ from utils.custom_exceptions import handle_service_exceptions
 首次骨架必须从 `project_structure/` 复制（已存在则跳过）：
 
 | 目录/文件 | 作用 |
-|-----------|------|
+| --- | --- |
 | `docker/` | 起步栈：`Dockerfile` + `compose`（api + mysql；redis 为 profile） |
 | `.env.docker` | Compose 环境覆盖 |
 | `deploy/` | 进阶：Nginx、库/缓存调优、Prometheus/Grafana、Logstash、Supervisor 等 |
@@ -409,10 +411,12 @@ REDIS_HOST=redis docker compose -f docker/docker-compose.yml --profile redis up 
 ### 9.4 认证与授权
 
 **根据业务场景选择是否需要认证**：
+
 - 管理后台类接口：需要认证，添加 `Depends(get_current_user)`
 - 公开接口（登录、注册、公共查询等）：不需要认证
 
 **需要认证时的规范**：
+
 - 通过 `get_current_user` 获取当前用户
 - 执行操作时记录 `current_user_id`
 - 在 Service 的业务方法中传入 current_user_id（CRUD 委托方法可按需扩展）
@@ -485,7 +489,7 @@ CREATE TABLE student (
 ### 13.1 目录与命名
 
 | 类型 | 路径 | 命名 |
-|------|------|------|
+| --- | --- | --- |
 | 单元（Service） | `tests/unit/` | `test_{table_name}_service.py` |
 | 集成（API） | `tests/integration/api/v1/` | `test_{table_name}.py` |
 

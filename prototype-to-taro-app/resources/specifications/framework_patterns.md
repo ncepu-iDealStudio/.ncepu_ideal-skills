@@ -396,7 +396,7 @@ export default {
 ## 5. 差异速查表
 
 | 项 | Vue3 | React |
-|---|---|---|
+| --- | --- | --- |
 | 页面文件 | `index.vue` | `index.tsx` |
 | 组件标签 | `<View>`（PascalCase） | `<View>`（PascalCase） |
 | 事件 | `@tap` / `@click` | `onClick` |
@@ -414,7 +414,7 @@ export default {
 ## 6. 生成检查清单
 
 | # | 检查项 |
-|---|---|
+| --- | --- |
 | 1 | 所有页面文件后缀与 `framework` 一致 |
 | 2 | 每页都有 `index.config.ts` |
 | 3 | 全部页面在 `app.config.ts` 的 `pages` 中注册 |

@@ -4,7 +4,7 @@
 生成时复制并替换占位符，不要原样拷贝（含示例业务语义）。
 
 | 文件 | 用途 | 需替换的占位 |
-|---|---|---|
+| --- | --- | --- |
 | `routes/route_module_template.ts` | 一级模块路由文件 | 模块名、path、icon、order、children |
 | `views/crud_list_template.vue` | CRUD 列表页 | 标题、API 函数名、字段 |
 | `views/crud_data_template.ts` | 列定义 + 表单 schema | 字段名、标签、组件类型 |

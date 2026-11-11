@@ -69,13 +69,17 @@ cp -r sql-to-fastapi-restfulapi-scaffold ~/.claude/skills/
 在 Claude Code 中输入 `/skills` 可查看已安装的技能列表。
 
 #### 以下是 配置项目skill的示例图文教程 ：
+
 ```bash
 mkdir -p .claude/skills && cp -r ../../sql-to-fastapi-restfulapi-scaffold .claude/skills/
 ```
+
 ![alt text](images/claude-0.png)
 
 #### 打开 Claude Code，输入 `/skills` 查看已安装的技能列表。
+
 ![alt text](images/claude-1.png)
 
 #### 使用技能 sql-to-fastapi-restfulapi-scaffold 生成 FastAPI 项目脚手架代码。
+
 ![alt text](images/claude-2.png)

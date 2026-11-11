@@ -3,7 +3,7 @@
 当前 Host 注册的是 `{{ROUTE_PREFIX}}` 前缀路由，已实现两个端点：
 
 | 方法 | 路径 | 作用 |
-|---|---|---|
+| --- | --- | --- |
 | POST | `{{ROUTE_PREFIX}}/ping` | 健康探针，确认 Host 半边已就绪 |
 | POST | `{{ROUTE_PREFIX}}/run` | 业务端点，进入 `capability.ts` |
 
@@ -54,7 +54,7 @@ curl -X POST http://127.0.0.1:3081{{ROUTE_PREFIX}}/run \
 ### 写路由的纪律
 
 | 纪律 | 原因 |
-|---|---|
+| --- | --- |
 | 只接受 POST + JSON，返回 `{ ok, value }` / `{ ok, error }` 信封 | 与社区插件、将来的 Client 半边保持一致 |
 | 读 body 要有体积上限（模板里 `BODY_CAP_BYTES`） | 防止超大 payload 打爆内存 |
 | 业务异常转成 `{ ok: false, error }`，不要 500 裸抛 | 调用方（浏览器侧）能稳定拿到结构化错误 |

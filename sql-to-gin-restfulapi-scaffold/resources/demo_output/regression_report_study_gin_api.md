@@ -65,6 +65,7 @@ This report validates current skill assets against the target SQL baseline
   - total entities: 12
 
 Tables:
+
 - admin
 - course
 - course_arrangement
@@ -78,6 +79,7 @@ Tables:
 - teacher
 
 Views:
+
 - v_student_course_score
 
 ### 5) Soft-delete naming coverage
@@ -108,6 +110,7 @@ Views:
 - Coverage by generated full context: 100.00%
 
 Interpretation:
+
 - SQL-to-context automation is now wired and working.
 - Current toolchain supports full baseline scope for this SQL input.
 
@@ -135,6 +138,7 @@ Interpretation:
   - inserted_registry_entries_count: 10
 
 Note:
+
 - Main template contains 2 entries (student and v_student_course_score).
 - After merge preview, total imports and total Init calls are both 12.
 

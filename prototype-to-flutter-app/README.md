@@ -28,7 +28,7 @@
 ## 3. 技术栈与关键决策
 
 | 项 | 选择 | 理由 |
-|---|---|---|
+| --- | --- | --- |
 | 状态管理 | `ChangeNotifier` + `ListenableBuilder` | Flutter 官方教程方案，零第三方依赖 |
 | 网络 | `http` | 官方推荐，API 稳定，依赖轻 |
 | 路由 | `Navigator` + 命名路由表 | 原型阶段够用，无需 go_router |
@@ -167,7 +167,7 @@ Page → Controller → SkillRepository（接口）
 本技能与 `prototype-to-app-uniappx` 是姊妹技能：
 
 | 项 | uni-app x 版 | Flutter 版（本技能） |
-|---|---|---|
+| --- | --- | --- |
 | 目标 | 多端（App/小程序/H5） | Android/iOS/Web/桌面 |
 | 语言 | Vue + TS/UTS | Dart |
 | 状态 | `reactive` / `ref` | `ChangeNotifier` |

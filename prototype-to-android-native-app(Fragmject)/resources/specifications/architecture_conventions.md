@@ -42,7 +42,7 @@ di/                        Hilt 模块
 每个取数页面必须处理：
 
 | 状态 | 判定 | 呈现 |
-|---|---|---|
+| --- | --- | --- |
 | Loading | `isLoading && data.isEmpty()` | `LoadingView()` 居中进度 |
 | Empty | `!isLoading && data.isEmpty() && error == null` | `EmptyView(text)` |
 | Error | `error != null && data.isEmpty()` | `ErrorView(message, onRetry)` |
@@ -72,7 +72,7 @@ try { ... } catch (e: CancellationException) { throw e } catch (e: Exception) { 
 ## 5. Hilt 约定
 
 | 位置 | 注解 |
-|---|---|
+| --- | --- |
 | `App.kt` | `@HiltAndroidApp` |
 | `MainActivity` | `@AndroidEntryPoint` |
 | 每个 ViewModel | `@HiltViewModel` + `@Inject constructor` |

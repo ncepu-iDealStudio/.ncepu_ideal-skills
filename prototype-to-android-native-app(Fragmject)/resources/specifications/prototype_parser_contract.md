@@ -18,7 +18,7 @@
 ## 2. project
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `project_name` | string | ✅ | 工程名，kebab-case，同时作为 `rootProject.name` |
 | `app_title` | string | ✅ | 应用显示名，写入 `strings.xml` 的 `app_name` |
 | `package_name` | string | ✅ | 应用包名，必须匹配 `^[a-z][a-z0-9]*(\.[a-z][a-z0-9_]*)+$` |
@@ -32,7 +32,7 @@
 ## 3. design
 
 | 字段 | 类型 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `primary_color` | string | 6 位 hex，不带 `#`，如 `2B6DE5` |
 | `dark_theme` | bool | 是否生成暗色适配（默认 true，跟随系统） |
 | `radius_style` | string | `sm` / `md` / `lg`，映射到 `Dimens.cardRadius` |
@@ -41,7 +41,7 @@
 ## 4. pages（数组，每项一个页面）
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `page_name` | string | ✅ | 小写 kebab，如 `home`、`order-list` |
 | `route` | string | ✅ | 路由，如 `home`、`detail/{skillId}` |
 | `screen_class` | string | ✅ | `HomeScreen` |
@@ -59,7 +59,7 @@
 ### layout 判定规则
 
 | layout | 特征 |
-|---|---|
+| --- | --- |
 | `list` | 重复卡片、垂直滚动、分页 |
 | `detail` | 单条内容、标题 + 正文 + 操作按钮 |
 | `form` | 多个输入控件 + 提交按钮 |
@@ -87,7 +87,7 @@
 按需声明，**不要无理由加**：
 
 | 场景 | 权限 |
-|---|---|
+| --- | --- |
 | 联网（几乎所有工程） | `INTERNET` |
 | 网络状态判断 | `ACCESS_NETWORK_STATE` |
 | 拍照 | `CAMERA` |

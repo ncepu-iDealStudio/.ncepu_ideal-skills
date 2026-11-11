@@ -39,7 +39,7 @@ Core/…                       Theme / Router / Storage / DI / Common
 ## 3. 三态与边界
 
 | 状态 | 判定 | 呈现 |
-|---|---|---|
+| --- | --- | --- |
 | Loading | `.loading` / `.idle` | `ProgressView`，占满可用空间 |
 | Empty | `.empty` | `ContentUnavailableView`（iOS 17+） |
 | Failed | `.failed(message)` | 图标 + 文案 + 重试按钮 |

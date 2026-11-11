@@ -27,7 +27,7 @@ API(Resource) → Service(单条委托 + 列表等业务) → Repository(仅 cre
 ```
 
 | 层 | 路径 | 覆盖策略 | 职责 |
-|----|------|----------|------|
+| ---- | ------ | ---------- | ------ |
 | Repository | `repository/{table}_repository.py` | 可覆盖 | 仅单条 CRUD |
 | Service | `service/{table}_service.py` | 仅首次生成 | 单条委托 + 列表/状态等业务 |
 | Resource | `api/v1/...` | 可覆盖基础 CRUD | 只调 Service |
@@ -235,7 +235,7 @@ fastapi_project/
 按表生成两类测试（模板见 `resources/templates/layers/test/`）：
 
 | 类型 | 路径 | 内容 |
-|------|------|------|
+| --- | --- | --- |
 | 单元占位 | `tests/unit/test_{table}_service.py` | 面向 Service；默认 `skip`，人手补齐 |
 | 集成 | `tests/integration/api/v1/test_{table}.py` | **可跑** CRUD（真实 MySQL）+ 商业逻辑接口 `skip` 占位 |
 
@@ -272,7 +272,7 @@ uv run pytest tests/integration/api/v1/test_admin.py -c tests/pytest.ini -v
 命中后额外生成：
 
 | 层 | 产物 |
-|----|------|
+| ---- | ------ |
 | Schema | `{ClassName}StatusUpdate`；状态字段从通用 `Update` 排除 |
 | Service | `update_status`（业务入口；内部 `repo.update(字段字典)`） |
 | Resource | `PATCH /{pk}/status` |

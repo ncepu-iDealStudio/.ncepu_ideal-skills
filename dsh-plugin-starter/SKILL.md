@@ -32,7 +32,7 @@ description: "把用户的一句话需求或插件原型，初始化成可直接
 ## 2. 输入形态
 
 | 输入 | 提取方式 | 可靠性 |
-|---|---|---|
+| --- | --- | --- |
 | 一句话需求（文字） | 按第 3.1 节做澄清，落成 spec | 中，靠澄清补全 |
 | 插件原型（HTML/CSS/截图） | 先抽界面元素与交互，再映射到 `settings.section` 区块 | 高（有界面时最准） |
 | PRD / 功能清单 | 抽「能力 → 出口（tool/route/ui）」对照 | 中 |
@@ -72,7 +72,7 @@ description: "把用户的一句话需求或插件原型，初始化成可直接
 ### 3.2 类型判定
 
 | 用户诉求关键词 | 类型 | 能力出口 | 有界面 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 让 AI 能查/抓/算/写 | `tool-only` | `ctx.tools.register(defineTool(...))` | 否 |
 | 提供 HTTP 接口 / 给外部脚本调 | `route-only` | `ctx.webServer.register()` | 否 |
 | 设置页 / 面板 / 可视化配置 | `dual-face` | 路由 + `settings.section` 插槽 | 是 |
@@ -181,7 +181,7 @@ cd <目标目录> && pnpm install && pnpm typecheck && pnpm build
 ## 6. 坑位速查（症状 → 根因 → 修法）
 
 | 症状 | 根因 | 修法 |
-|---|---|---|
+| --- | --- | --- |
 | 设置页/路由完全没生效且无报错 | 缺 `dsh.bundle.patch` | 补 `dsh.bundle.patch: "./cordis.patch.yml"` |
 | 模型看不到工具 | 缺 `output`、被 `restrict` 过滤、被同名 scope 遮蔽 | 补 `output`；`ctx.tools.schemas(scope)` 排查 |
 | 浏览器报 `__ModuleLoader__ is not defined` | Client 产物没被 banner/footer 包装 | 检查 `tsdown.config.ts` 的 `outputOptions` |
@@ -248,7 +248,7 @@ git remote add origin git@github.com:<account>/<repo>.git && git push -u origin 
 ## 10. 资源索引
 
 | 路径 | 用途 |
-|---|---|
+| --- | --- |
 | `resources/tools/scaffold_plugin.py` | 生成器（spec → 工程），支持 4 类型、`--dry-run`、`--force` |
 | `resources/tools/validate_plugin.py` | 18 项静态自检，退出码 0/1 |
 | `resources/tools/example_specs/*.json` | 四种类型的示例 spec，可直接改字段复用 |

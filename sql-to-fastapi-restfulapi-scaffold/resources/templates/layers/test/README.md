@@ -3,6 +3,7 @@
 本目录模板用于按表生成 pytest 测试代码。
 
 文件：
+
 - unit/test_service_template.py
   → 输出：tests/unit/test_{table_name}_service.py
   → 性质：Service 层单元测试占位（默认 skip）

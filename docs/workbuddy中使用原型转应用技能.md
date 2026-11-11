@@ -19,7 +19,7 @@
 这两个技能把这段工作自动化：
 
 | 技能 | 产物 | 适用团队 |
-|---|---|---|
+| --- | --- | --- |
 | `prototype-to-app-uniappx` | uni-app x 工程（App / 小程序 / H5 多端） | 要一套代码同时上小程序和 App |
 | `prototype-to-flutter-app` | Flutter 工程（Android / iOS / Web / 桌面） | 只做 App，或团队已用 Flutter |
 
@@ -93,7 +93,7 @@ cp -r /path/to/ncepu_ideal-skills/.workbuddy/skills/prototype-to-flutter-app .wo
 在动手前先选一个，别两个都用：
 
 | 你的情况 | 选哪个 |
-|---|---|
+| --- | --- |
 | 要同时发微信小程序 + App | ✅ uni-app x |
 | 只做 Android / iOS App | ✅ Flutter |
 | 团队已有 Flutter 技术栈 | ✅ Flutter |
@@ -218,15 +218,17 @@ skill_swap_app/
 3. 浏览器自动打开，看到首页
 
 > ⚠️ 如果 HBuilder 提示"这不是 uni-app x 项目"，检查 `manifest.json` 里是否有这段：
+>
 > ```json
 > "uni-app-x": {}
 > ```
+>
 > 缺了它会被当成普通 uni-app 项目。
 
 ### 6.3 验证清单
 
 | 检查项 | 怎么验证 |
-|---|---|
+| --- | --- |
 | 页面能显示 | 首页出现 12 条 mock 卡片 |
 | 滚动正常 | 列表能滚动，不卡顿 |
 | 跳转正常 | 点卡片能进详情页 |
@@ -241,6 +243,7 @@ skill_swap_app/
 按顺序排查：
 
 1. 文字是否直接写在 `<view>` 里？
+
    ```vue
    <!-- ❌ 白屏 -->
    <view>技能互换</view>
@@ -248,9 +251,11 @@ skill_swap_app/
    <!-- ✅ -->
    <view><text>技能互换</text></view>
    ```
+
    uni-app x 的 App 端**裸文字不渲染**，必须包在 `<text>` 内。
 
 2. 横向排列的元素是否没写方向？
+
    ```css
    /* App 端 flex 默认是竖向！ */
    .row {
@@ -307,7 +312,7 @@ flutter test
 界面上手动验证：
 
 | 检查项 | 预期 |
-|---|---|
+| --- | --- |
 | 首页列表 | 显示 12 条 mock 卡片 |
 | 下拉刷新 | 出现转圈并刷新 |
 | 上拉加载 | 滚到底部触发加载 |
@@ -509,7 +514,7 @@ python .workbuddy/skills/prototype-to-flutter-app/resources/tools/validate_proje
 ### Q6：和 `prototype-to-app-uniappx` 名字很像的 `common-website-design` 有什么区别？
 
 | 技能 | 产物 | 用途 |
-|---|---|---|
+| --- | --- | --- |
 | `common-website-design` | 静态 HTML 页面 | **网站**设计原型，给人看的 |
 | `prototype-to-*-app` | 可运行的 App 工程 | **移动应用**，能装到手机上 |
 
@@ -540,7 +545,7 @@ python .workbuddy/skills/prototype-to-flutter-app/resources/tools/validate_proje
 ## 附录：相关文件
 
 | 内容 | 路径 |
-|---|---|
+| --- | --- |
 | uni-app x 技能说明 | `.workbuddy/skills/prototype-to-app-uniappx/README.md` |
 | Flutter 技能说明 | `.workbuddy/skills/prototype-to-flutter-app/README.md` |
 | uni-app x 工程骨架模板 | `prototype-to-app-uniappx/resources/templates/` |

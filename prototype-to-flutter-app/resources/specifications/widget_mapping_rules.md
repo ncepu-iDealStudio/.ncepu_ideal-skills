@@ -7,7 +7,7 @@
 ## 1. 布局原型选型
 
 | 布局原型 | 判断依据 | 模板 | 典型页面 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `list` | 可滚动的重复单元 | `list_page_template.dart` | 信息流、商品列表 |
 | `detail` | 单体内容 + 图文 + 底部操作 | `detail_page_template.dart` | 文章、商品详情 |
 | `form` | 多个输入项 + 提交 | `form_page_template.dart` | 编辑、新建、反馈 |
@@ -22,7 +22,7 @@
 ## 2. HTML → Flutter 对照
 
 | HTML / CSS | Flutter |
-|---|---|
+| --- | --- |
 | `<div>` | `Container` / `Padding` / `Column` |
 | `display:flex; flex-direction:row` | `Row` |
 | `display:flex; flex-direction:column` | `Column` |
@@ -159,7 +159,7 @@ RefreshIndicator(
 ## 4. 字段 → Dart 类型
 
 | 字段特征 | 类型 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | `id` / `*Id` | `int` | `final int id;` |
 | `count` / `total` / `num` | `int` | `final int count;` |
 | `price` / `amount` / `rating` | `double` | `final double rating;` |
@@ -175,7 +175,7 @@ RefreshIndicator(
 ## 5. 图片处理
 
 | 场景 | 做法 |
-|---|---|
+| --- | --- |
 | 网络图 | `Image.network(url, errorBuilder: ...)` |
 | 本地占位 | `Image.asset('assets/images/placeholder.png')` |
 | 圆形头像 | `ClipOval` + `SizedBox` |
@@ -189,7 +189,7 @@ RefreshIndicator(
 ## 6. 交互映射
 
 | 原型行为 | Flutter 实现 |
-|---|---|
+| --- | --- |
 | 点击跳转 | `Navigator.pushNamed(context, AppRoutes.detail)` |
 | 返回 | `Navigator.pop(context)` |
 | 切换 Tab | `setState` + `IndexedStack` |

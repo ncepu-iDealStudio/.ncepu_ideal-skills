@@ -12,6 +12,7 @@ description: "从SQL CREATE TABLE语句生成完整的Spring Boot RESTful API项
 ## 什么时候使用此技能
 
 使用此技能的场景：
+
 - 用户提供 SQL CREATE TABLE 语句
 - 用户要求从数据库表生成 Spring Boot 接口代码，符合RESTful 风格
 - 用户要求搭建 API 或创建 API 端点
@@ -55,6 +56,7 @@ resources/
 ### 生成范围
 
 **首次生成时生成完整的项目骨架**：
+
 - `pom.xml` - Maven配置（Spring Boot 3.2.0, JPA, Validation 等基础依赖）
 - `src/main/resources/application.properties` - 应用配置
 - `README.md` - 项目说明文档
@@ -66,6 +68,7 @@ resources/
 - `src/main/java/com/security/apisecurity/config/SecurityConfig.java` - 安全配置（代码生成但暂不启用）
 
 **每个表生成的文件**：
+
 1. Entity 层 - JPA实体类 (`entity/{TableName}.java`)
 2. Repository 层 - Spring Data JPA接口 (`repository/{TableName}Repository.java`)
 3. DTO 层 - 请求/响应模型
@@ -83,7 +86,7 @@ resources/
 **排除字段**（以下字段由数据库或后端自动管理，Request DTO中不应出现）：
 
 | 字段类型 | 字段名模式 | 说明 |
-|---------|-----------|------|
+| --------- | ----------- | ------ |
 | 主键字段 | id, auto_id, autoId, uuid, uuid_id, uuidId | 数据库自动生成 |
 | 创建时间 | create_time, createTime, created_at, createdAt | 后端自动填充 |
 | 更新时间 | update_time, updateTime, updated_at, updatedAt | 后端自动填充 |
@@ -97,15 +100,18 @@ resources/
 **包含字段**：所有需要展示给用户的业务字段
 
 **排除字段**：
+
 - 敏感字段：password, pwd, passwd, token, secret 等
 
 ### 软删除机制
 
 **软删除字段识别**：当表中存在以下字段时，删除操作使用软删除：
+
 - is_deleted, is_delete, deleted, isDelete
 - is_enabled, isEnable, enabled
 
 **软删除实现**：
+
 - 删除时设置软删除字段为 `true`，而非物理删除
 - 查询时自动过滤已软删除的记录（`is_delete = false`）
 
@@ -118,6 +124,7 @@ resources/
 ### 步骤 1: 解析用户输入
 
 当用户提供 SQL 语句时，首先解析：
+
 - 表名（用于文件命名和类名）
 - 字段定义（字段名、类型、约束、注释）
 - 主键信息
@@ -127,6 +134,7 @@ resources/
 ### 步骤 2: 识别自动管理字段
 
 根据 `exclude_from_request` 配置识别以下字段，不放入 Request DTO：
+
 - 主键字段
 - 自动生成时间字段
 - 软删除字段
@@ -137,6 +145,7 @@ resources/
 ### 步骤 3: 检查项目是否存在
 
 检查是否为首次生成：
+
 - 如果项目骨架不存在，先生成完整的项目骨架
 - 如果已有项目骨架，只生成新增表的5个文件
 
@@ -154,7 +163,7 @@ resources/
 ### 命名约定
 
 | 源 | 目标 | 示例 |
-|-----|-------|------|
+| ----- | ------- | ------ |
 | 表名（snake_case） | 类名（PascalCase） | `student` → `Student` |
 | 表名 | 文件名（PascalCase） | `student` → `Student.java` |
 | 表名 | 资源路由名（复数） | `student` → `/students` |
@@ -163,6 +172,7 @@ resources/
 ### 文件结构
 
 **首次生成 - 完整项目骨架**：
+
 ```
 springboot_project/
 ├── README.md                          # 项目说明文档
@@ -209,6 +219,7 @@ springboot_project/
 **文件位置**：`entity/{TableName}.java`
 
 **包含内容**：
+
 - `@Entity` + `@Table` 注解
 - 字段定义（含 JPA 注解、约束、注释）
 - 外键关系（`@ManyToOne`/`@OneToOne`）
@@ -221,6 +232,7 @@ springboot_project/
 **文件位置**：`repository/{TableName}Repository.java`
 
 **包含内容**：
+
 - 继承 `JpaRepository<{TableName}, {PKType}>`
 - 软删除查询方法（`findByIsDeleteFalse` 等）
 - 按外键查询方法
@@ -232,6 +244,7 @@ springboot_project/
 **请求 DTO**：`dto/request/{TableName}Request.java`
 
 **包含内容**：
+
 - 业务字段（排除自动管理字段）
 - `@NotBlank`、`@NotNull` 等验证注解
 - Lombok `@Data` 注解
@@ -239,6 +252,7 @@ springboot_project/
 **响应 DTO**：`dto/response/{TableName}Response.java`
 
 **包含内容**：
+
 - 所有展示字段（排除敏感字段）
 - Lombok `@Data`、`@NoArgsConstructor`、`@AllArgsConstructor` 注解
 
@@ -249,6 +263,7 @@ springboot_project/
 **文件位置**：`service/{TableName}Service.java`
 
 **包含内容**：
+
 - `@Service` + `@Transactional` 注解
 - Lombok `@RequiredArgsConstructor`
 - CRUD 业务方法
@@ -263,6 +278,7 @@ springboot_project/
 **文件位置**：`controller/{TableName}Controller.java`
 
 **包含内容**：
+
 - `@RestController` + `@RequestMapping`
 - 5个REST端点：
   - `POST /` - 创建记录
@@ -282,6 +298,7 @@ AI 应读取 `resources/config/type_mappings.json` 获取 SQL 类型到 Java/JPA
 ## 字段分类规则
 
 AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，包括：
+
 - **exclude_from_request**：Request DTO 中排除的字段（如主键、时间戳、软删除字段等）
 - **exclude_from_response**：Response DTO 中排除的字段（如密码等敏感字段）
 - **soft_delete_fields**：软删除字段识别模式
@@ -300,12 +317,14 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 **识别条件**：检查表中是否存在软删除字段
 
 **软删除实现**（有软删除字段时）：
+
 - `getList()` - 使用 `findByIsDeleteFalse`
 - `getById()` - 查询未删除记录
 - `update()` - 更新未删除记录
 - `delete()` - 设置软删除字段为 `true`
 
 **硬删除实现**（无软删除字段时）：
+
 - `delete()` - 直接删除记录
 
 ## 输出格式
@@ -313,6 +332,7 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 生成完成后，向用户展示：
 
 **首次生成时：**
+
 ```
 ✅ 已生成完整的 Spring Boot 项目脚手架
 
@@ -343,6 +363,7 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 ```
 
 **生成 README.md**：在生成完所有文件后，AI 应读取生成的项目结构，动态生成一份详细的 README.md 文档，包含：
+
 - 项目简介和技术栈
 - 完整的项目结构说明
 - 所有生成的 API 接口说明（包含请求/响应示例）
@@ -353,6 +374,7 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 - 安全配置说明（暂未启用）
 
 **后续添加新表时：**
+
 ```
 ✅ 已添加 {TableName} 的 CRUD 代码
 
@@ -371,6 +393,7 @@ AI 应读取 `resources/config/type_mappings.json` 获取字段分类规则，�
 ## 错误处理
 
 当 SQL 解析失败时，提供清晰的错误报告，包括：
+
 - 错误类型
 - 错误位置
 - 错误原因

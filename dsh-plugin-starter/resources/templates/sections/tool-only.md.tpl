@@ -67,7 +67,7 @@ dsh web --port 3081
 ### 常见错法
 
 | 错法 | 后果 |
-|---|---|
+| --- | --- |
 | 用 `input_schema` 键传参 | 注册失败（原生 schema 只有 `{name, description, parameters}`） |
 | 忘记 `output` | 注册失败，模型看不到工具 |
 | `execute` 里 `throw` 裸异常 | 直接把工具循环打崩；应返回 `{ ok: false, error }` |

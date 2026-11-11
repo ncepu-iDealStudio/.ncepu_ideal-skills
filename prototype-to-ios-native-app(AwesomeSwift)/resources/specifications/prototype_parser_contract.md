@@ -18,7 +18,7 @@
 ## 2. project
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `project_name` | string | ✅ | PascalCase，合法 Swift 模块名（`^[A-Z][A-Za-z0-9]{2,}$`） |
 | `app_title` | string | ✅ | 显示名，写入 `CFBundleDisplayName` |
 | `bundle_id` | string | ✅ | 反域名，全小写点分 |
@@ -31,7 +31,7 @@
 ## 3. design
 
 | 字段 | 类型 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `primary_color` | string | 6 位 hex（不带 `#`），渲染时拆成 RGB 写入 colorset |
 | `dark_theme` | bool | 是否生成深色 appearance（默认 true） |
 | `radius_style` | string | `sm` / `md` / `lg` |
@@ -40,7 +40,7 @@
 ## 4. pages[]
 
 | 字段 | 类型 | 必填 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `page_name` | string | ✅ | 小写 kebab，如 `home` |
 | `route` | string | ✅ | `home`（首屏）或 `detail(id:)` |
 | `view_class` | string | ✅ | `HomeView` |
@@ -58,7 +58,7 @@
 ### layout 判定
 
 | layout | 特征 |
-|---|---|
+| --- | --- |
 | `list` | 重复卡片、纵向滚动、分页、搜索 |
 | `detail` | 单条内容 + 底部操作 |
 | `form` | 多个输入控件 + 提交按钮 |

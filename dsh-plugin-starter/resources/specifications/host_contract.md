@@ -29,7 +29,7 @@ export function apply(ctx: Context): void {
 ## 2. 能力出口
 
 | 出口 | API | 面向 | 说明 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 工具 | `ctx.tools.register(defineTool(...))` | 模型 | 模型直接调用，最常用 |
 | 路由 | `ctx.webServer.register({kind, path, handler})` | 浏览器/外部 | `kind` 为 `exact` 或 `prefix`；`(kind, path)` 重复即抛错 |
 | 事件 | `ctx.on('tools/pre-execute', ...)` | 其他插件/系统 | 拦截、审计、埋点 |
@@ -123,7 +123,7 @@ tools/pre-execute (waterfall) → guard → tools/execute (waterfall)
 ```
 
 | 事件 | 模式 | 签名 |
-|---|---|---|
+| --- | --- | --- |
 | `tools/pre-execute` | waterfall | `(exec, next) => {kind:'allow'} \| {kind:'deny', reason} \| {kind:'ask', reason?}` |
 | `tools/execute` | waterfall | `(exec, next) => Promise<ToolExecutionResult>` |
 | `tools/post-execute` | waterfall | `(exec, result, next) => Promise<PostToolDecision>` |
@@ -151,7 +151,7 @@ ctx.on('tools/pre-execute', async (exec, next) => {
 ## 6. 平台差异
 
 | 议题 | 做法 |
-|---|---|
+| --- | --- |
 | Windows 删文件 | 用 `fs.unlink` 等 Node 原生 API，别依赖 bash 执行器（可能找不到 bash） |
 | 编码 | 一律 UTF-8 **无 BOM**；BOM 会让 JSON 解析与 curl 输出出错 |
 | 中文日志 | 用 `ctx.logger`，不要 `console.log` 打 emoji（部分终端编码会崩） |

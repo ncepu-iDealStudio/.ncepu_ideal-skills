@@ -21,7 +21,7 @@ sql-to-fastapi-restfulapi-scaffold/
 **架构约定**：`API (Resource) → Service → Repository → Model`。
 
 | 层 | 职责 | 生成策略 |
-|----|------|----------|
+| ---- | ------ | ---------- |
 | Repository | 仅单条 `create` / `get` / `update` / `delete` | 可覆盖 |
 | Service | 单条委托；列表 / 过滤 / 状态等业务 | 已存在则跳过 |
 | Resource | 只依赖 Service | CRUD 可覆盖 |
@@ -48,6 +48,7 @@ sql-to-fastapi-restfulapi-scaffold/
 ## 触发场景（各工具一致）
 
 当对话中出现以下意图时，技能应被触发：
+
 - 用户提供 SQL `CREATE TABLE` 语句
 - 用户要求从数据库表生成 FastAPI 接口代码（RESTful 风格）
 - 用户要求搭建 API 或生成脚手架代码
@@ -58,6 +59,7 @@ sql-to-fastapi-restfulapi-scaffold/
 ## 配置参考文档
 
 各工具配置说明在技能目录的 **`sql-to-fastapi-restfulapi-scaffold/docs/`**：
+
 - `docs/Trea中使用skill配置.md` —— Trae
 - `docs/claude中使用skill配置.md` —— Claude Code
 - `docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md` —— 归档：

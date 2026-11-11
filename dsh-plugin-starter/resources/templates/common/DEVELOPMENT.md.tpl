@@ -36,7 +36,7 @@
 DSH 的插件体系基于 Cordis（一个依赖注入 + 生命周期框架）。一个插件就是一个模块，导出两样东西：
 
 | 导出 | 作用 | 时机 |
-|---|---|---|
+| --- | --- | --- |
 | `export const inject` | 声明「我要用哪些服务」（如 `tools` / `webServer`） | 加载时，DSH 等这些服务就绪后才调用 `apply` |
 | `export function apply(ctx)` | 插件主体：注册工具 / 路由 / 事件 | 服务就绪后，只调用一次 |
 
@@ -121,10 +121,11 @@ dsh web --port 3081
 ```
 
 {{VERIFY_STEPS}}
+
 ### 4.4 改完怎么看效果
 
 | 改动位置 | 生效方式 |
-|---|---|
+| --- | --- |
 | Host 半边（`src/index.ts`、`capability.ts`） | 必须 `pnpm build` + **重启 DSH 进程** |
 | Client 半边（`src/client/index.ts`） | `pnpm build` + 刷新浏览器页面即可（dev 模式下可热更新） |
 | `package.json` 的 `dsh.*` 声明 | `dsh plugin remove` 再 `add`，然后重启 |
@@ -142,7 +143,7 @@ dsh web --port 3081
 ### 6.1 包名是唯一键，四处必须一致
 
 | 位置 | 字段 |
-|---|---|
+| --- | --- |
 | `package.json` | `name` |
 | `tsdown.config.ts` | `PLUGIN_ID` |
 | `cordis.patch.yml` | `name`（以及 `id` 建议用插件 id） |
@@ -235,7 +236,7 @@ dsh plugin --profile web add github:<your-account>/{{SLUG}}
 ### 8.1 三招定位
 
 | 招式 | 命令 / 做法 | 能回答什么 |
-|---|---|---|
+| --- | --- | --- |
 | 看装配 | `dsh --profile web --dump-config \| grep {{SLUG}}` | 插件到底进没进当前组合？ |
 | 看会话日志 | DSH 会话事件流（SessionEvent / Trajectory） | 工具被调用了吗？入参和返回值是什么？ |
 | 事件探针 | 临时注册 `tools/pre-execute` / `tools/post-execute` 监听器打印日志 | 调用被谁拦了？ |
@@ -243,7 +244,7 @@ dsh plugin --profile web add github:<your-account>/{{SLUG}}
 ### 8.2 症状 → 根因速查
 
 | 症状 | 优先怀疑 | 处理 |
-|---|---|---|
+| --- | --- | --- |
 | 模型看不到工具 | 缺 `output`、被 `restrict` 过滤、被同名 scope 遮蔽、`run_code` 保留名冲突 | 补齐 `output`；`ctx.tools.schemas(scope)` 查看当前可见工具 |
 | 设置页没出现 | 缺 `dsh.bundle.patch`、`dsh.client` 未声明、Client bundle 不是 `__ModuleLoader__` 格式 | `--dump-config` 确认装配；看浏览器 console |
 | 浏览器报 `__ModuleLoader__ is not defined` | Client 产物没被 tsdown 包上 `banner/footer/intro` | 检查 `tsdown.config.ts` 的 `outputOptions` |

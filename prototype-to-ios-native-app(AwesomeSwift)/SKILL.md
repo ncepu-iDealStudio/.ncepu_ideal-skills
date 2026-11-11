@@ -12,7 +12,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 **模板来源**：工程范式对齐开源项目 **AwesomeSwift**（SwiftUI + MVVM + Combine + SwiftData + Alamofire + Kingfisher，中文注释、内置登录/引导/信息流/详情/设置/表单/暗黑模式/国际化/权限/图片选择/Lottie/崩溃捕获），并按 iOS 17+ 的稳定 API 做了现代化适配：
 
 | 参考要点（AwesomeSwift） | 本技能落地方式 |
-|---|---|
+| --- | --- |
 | SwiftUI + MVVM | ✅ 每个 Feature：`XxxView` + `XxxViewModel`（`ObservableObject` + `@Published`） |
 | Combine | ✅ 搜索防抖、状态订阅用 Combine（`debounce` / `AnyCancellable`） |
 | SwiftData | ✅ `@Model` + `ModelContainer`，远端成功写库、失败回读缓存 |
@@ -32,7 +32,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 ## 前置决策（开工前必须确认）
 
 | # | 决策项 | 可选值 | 默认 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | **工程名** | PascalCase，如 `SkillSwap`（同时是模块名 / 目录名 / Scheme） | 必问 |
 | 2 | **应用显示名** | 中文名，如 `技能互换` | 必问 |
 | 3 | **Bundle ID** | 反域名，如 `com.example.skillswap` | 必问 |
@@ -54,7 +54,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 ## 技术基线
 
 | 项 | 选型 |
-|---|---|
+| --- | --- |
 | 语言 / UI | Swift 5.10 + SwiftUI（iOS 17+） |
 | 架构 | MVVM + Combine 单向状态流 |
 | 并发 | async/await（`Task` + `.task`），Combine 仅用于事件流 |
@@ -124,7 +124,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 ### 步骤 1：解析原型 → 页面清单
 
 | 字段 | 示例 |
-|---|---|
+| --- | --- |
 | `page_name` | `home` |
 | `route` | `detail(id:)` / `mine` |
 | `view_class` | `HomeView` |
@@ -147,7 +147,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 从 `resources/templates/project_structure/` 整目录复制，替换占位符（或用 `resources/tools/render_template.py` 一键完成）：
 
 | 占位符 | 含义 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | `{{project_name}}` | 工程名（PascalCase，目录名/模块名/Scheme） | `SkillSwap` |
 | `{{app_name}}` | 应用显示名 | `技能互换` |
 | `{{bundle_id}}` | Bundle Identifier | `com.example.skillswap` |
@@ -162,7 +162,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 四个范本**复制改造**，不要凭空写：
 
 | 布局 | 范本 | 关键实现 |
-|---|---|---|
+| --- | --- | --- |
 | 列表 / 信息流 | `Features/Home` | `List` + `LoadState` 三态 + 上拉加载 + `.refreshable` + `.searchable` |
 | 详情 | `Features/Detail` | `ScrollView` + `safeAreaInset` 底部操作栏 |
 | 表单 | `Features/Login` | `TextField`/`SecureField` + 校验 + 提交禁用 |
@@ -222,7 +222,7 @@ python resources/tools/validate_project.py ./SkillSwap
 ## 原型 → SwiftUI 映射（最易错）
 
 | 原型 | SwiftUI | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `flex-direction: column` | `VStack(spacing:)` | 间距走 `AppTheme.Spacing` |
 | `flex-direction: row` | `HStack` | 对齐用 `alignment:` |
 | `position: absolute` | `ZStack` + `.overlay`/`.offset` | 优先 `overlay` |
@@ -246,7 +246,7 @@ python resources/tools/validate_project.py ./SkillSwap
 ## 内置能力（生成时一并产出）
 
 | 能力 | 落点 | 状态 |
-|---|---|---|
+| --- | --- | --- |
 | 登录 + token 持久化 | `Features/Login` + `Core/Storage/TokenStorage` | ✅ 默认 |
 | 权限路由（未登录进登录页） | `RootView` 依据 `SessionStore.isLoggedIn` 分流 | ✅ |
 | 统一请求封装 + 401 处理 | `APIClient` + `APIError` + `AuthInterceptor` | ✅ |
@@ -270,7 +270,7 @@ python resources/tools/validate_project.py ./SkillSwap
 ## 命名规范
 
 | 对象 | 规则 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | 工程 / 模块 / 目录 | PascalCase | `SkillSwap` |
 | View | `<Feature>View` | `HomeView` |
 | ViewModel | `<Feature>ViewModel` | `HomeViewModel` |

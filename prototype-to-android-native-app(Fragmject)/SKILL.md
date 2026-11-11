@@ -12,7 +12,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 **模板来源**：工程范式对齐开源项目 **Fragmject**（Kotlin + Compose M3 + Hilt + Navigation + Room + Retrofit + Coil，单 Activity、MVI/MVVM、内置登录/列表/表单/设置），并按 2025+ 的稳定版本做了现代化适配：
 
 | 参考要点（Fragmject） | 本技能落地方式 |
-|---|---|
+| --- | --- |
 | 单 Activity + Compose | ✅ `MainActivity` 唯一 Activity，`setContent` 挂根组件 |
 | MVI / MVVM | ✅ 每页 `XxxUiState` + `XxxViewModel` + `StateFlow`，单向数据流 |
 | Hilt 依赖注入 | ✅ `@HiltAndroidApp` + `@AndroidEntryPoint` + `@HiltViewModel`，KSP 编译 |
@@ -33,7 +33,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 **先把下面 5 项问清楚再动手，不要自行假设。**
 
 | # | 决策项 | 可选值 | 默认行为 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | **应用包名** | `com.公司.应用`（全小写） | 必问，不猜 |
 | 2 | **工程名 / 应用标题** | `skill-swap-android` / `技能互换` | 必问 |
 | 3 | 最低系统版本 `minSdk` | 24 / 26 / 29 | 24（覆盖 99%+ 设备） |
@@ -50,7 +50,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 ## 技术基线
 
 | 项 | 版本 / 选型 |
-|---|---|
+| --- | --- |
 | 语言 | Kotlin 2.1+（K2 编译器） |
 | UI | Jetpack Compose + Material3（BOM 管理版本） |
 | 构建 | AGP 8.7+ / Gradle 8.11+ / JDK 17 |
@@ -124,7 +124,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 从设计图 / HTML / PRD 中抽出页面，字段见下表：
 
 | 字段 | 示例 |
-|---|---|
+| --- | --- |
 | `page_name` | `home` |
 | `route` | `home` / `detail/{skillId}` |
 | `screen_class` | `HomeScreen` |
@@ -147,7 +147,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 从 `resources/templates/project_structure/` 整目录复制，替换占位符（也可用 `resources/tools/render_template.py` 一键完成）：
 
 | 占位符 | 含义 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | `{{project_name}}` | 工程名（kebab-case） | `skill-swap-android` |
 | `{{app_name}}` | 应用标题（显示名） | `技能互换` |
 | `{{package_name}}` | 应用包名 | `com.example.skillswap` |
@@ -163,7 +163,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 按布局选范式（模板已内置四个范本，**复制改造**而不是凭空写）：
 
 | 布局 | 参照模板 | 关键实现 |
-|---|---|---|
+| --- | --- | --- |
 | 列表 | `feature/home` | `LazyColumn` + 三态 + 上拉加载 + 手动刷新 |
 | 详情 | `feature/detail` | `Column` + `verticalScroll` + 底部操作栏 |
 | 表单 | `feature/login` | `OutlinedTextField` + 校验 + 提交态禁用 |
@@ -221,7 +221,7 @@ python resources/tools/validate_project.py ./skill-swap-android
 ## 原型 → Compose 映射（最易错）
 
 | 原型写法 | Compose 写法 | 说明 |
-|---|---|---|
+| --- | --- | --- |
 | `flex-direction: column` | `Column` | 垂直排列 |
 | `flex-direction: row` | `Row` | 水平排列 |
 | `position: absolute` | `Box` + `Modifier.align` | 不要用 `offset` 硬凑 |
@@ -244,7 +244,7 @@ python resources/tools/validate_project.py ./skill-swap-android
 ## 内置能力（生成时一并产出）
 
 | 能力 | 落点 | 状态 |
-|---|---|---|
+| --- | --- | --- |
 | 登录 + token 持久化 | `feature/login` + `core/datastore/TokenStore` | ✅ 默认生成 |
 | 权限路由（未登录跳登录） | `feature/root/RootViewModel` + `MainActivity` 起始页判定 | ✅ |
 | 统一请求封装 + 401 处理 | `core/network` + `data/remote` | ✅ |
@@ -268,7 +268,7 @@ python resources/tools/validate_project.py ./skill-swap-android
 ## 命名规范
 
 | 对象 | 规则 | 示例 |
-|---|---|---|
+| --- | --- | --- |
 | 包名 | 全小写点分 | `com.example.skillswap` |
 | 目录 | 全小写，按功能 | `feature/home/` |
 | Activity | PascalCase，后缀 `Activity` | `MainActivity` |

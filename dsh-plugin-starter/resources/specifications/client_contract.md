@@ -30,7 +30,7 @@ window.__ModuleLoader__.load({
 模块表**只认识 `react` 与 `@deepseek-ai/dsh-client-*`**。
 
 | 规则 | 漏了会怎样 |
-|---|---|
+| --- | --- |
 | `neverBundle` 排除 `react`、`@deepseek-ai/dsh-*` | 被打进产物 → 模块表没有行 → 运行期 `require` 抛错 |
 | `alwaysBundle` 内联其余所有依赖 | 模块表同样没有 → 同样抛错 |
 

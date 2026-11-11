@@ -51,7 +51,7 @@ description: "在任何创造性工作之前必须使用此技能——创建功
 三种方式，效果等价：
 
 | 方式 | 做法 | 适用 |
-|---|---|---|
+| --- | --- | --- |
 | 点名 | 直接说"用 brainstorming 技能" | 你明确知道要用哪个 |
 | 描述匹配 | 说出与 `description` 吻合的任务，如"我们要开发一个新系统" | 日常最常用 |
 | 由其他技能转交 | 如 brainstorming 结束时自动转给 writing-plans | 链路式工作流 |
@@ -70,7 +70,7 @@ description: "在任何创造性工作之前必须使用此技能——创建功
 ### 2.1 常用技能速查
 
 | 阶段 | 技能名 | 什么时候用 |
-|---|---|---|
+| --- | --- | --- |
 | 入口 | `using-superpowers` | 对话开始，确立"先找技能再动手"的习惯 |
 | 需求 | `requirement-analysis` | 业务诉求 → PRD、用户故事、验收标准 |
 | 设计 | `brainstorming` | 任何创造性工作之前：探索意图、比选方案、出设计 |
@@ -89,7 +89,7 @@ description: "在任何创造性工作之前必须使用此技能——创建功
 技能在目录里叫什么，和它 frontmatter 里的 `name` **未必一致**。DSH 认的是 `name`：
 
 | 目录名 | frontmatter `name` |
-|---|---|
+| --- | --- |
 | `it-requirement-analysis` | `requirement-analysis` |
 | `prd-html-skill` | `prd-html` |
 | `common-website-design` | `common-website-design` ✓ 一致 |
@@ -190,7 +190,7 @@ requesting-code-review ──► verification-before-completion（完成）
 技能会主动评估"这件事哪里该用 AI"，而不是默认传统方案。对本项目的结论大致是：
 
 | 环节 | AI 适用性 | 推荐能力 |
-|---|---|---|
+| --- | --- | --- |
 | 技能匹配 | ⭐⭐⭐⭐⭐ | 用自然语言描述"我会的/我想学的"，语义向量召回 + 重排 |
 | 技能描述结构化 | ⭐⭐⭐⭐ | 用户只写一句"会修电脑"，LLM 补全为结构化标签 |
 | 内容安全 | ⭐⭐⭐⭐ | 违规文本/图片识别 |
@@ -239,7 +239,7 @@ requesting-code-review ──► verification-before-completion（完成）
 `brainstorming` 把任务分成三类，**拿不准时选更重的那条**：
 
 | 路径 | 判定标准 | 产出 |
-|---|---|---|
+| --- | --- | --- |
 | 探路 Spike | 可行性问题（"AI 匹配到底准不准？"） | 一个答案，代码一次性 |
 | 有界 Bounded | 改动**本仓库里已存在的**流程，小改动 | 对话里的简短设计 + 批准 |
 | **架构级 Architectural** | **新项目、新子系统** | 完整流程：提问→方案→分节设计→书面规格 |
@@ -266,7 +266,7 @@ requesting-code-review ──► verification-before-completion（完成）
 **方案 A：单体 + 语义匹配服务（推荐给首期）**
 
 | 维度 | 说明 |
-|---|---|
+| --- | --- |
 | 架构 | FastAPI 单体 + PostgreSQL + pgvector |
 | 匹配 | 技能名片存向量，双向量相似度召回，规则重排（年级/院系/信用分） |
 | 优点 | 3 个月能上线；运维简单；无跨服务事务 |
@@ -275,7 +275,7 @@ requesting-code-review ──► verification-before-completion（完成）
 **方案 B：微服务 + 独立推荐引擎**
 
 | 维度 | 说明 |
-|---|---|
+| --- | --- |
 | 架构 | 用户服务 / 匹配服务 / 预约服务 + 消息队列 |
 | 优点 | 推荐可独立迭代 |
 | 缺点 | 首期成本高；2 万用户量用不上 |
@@ -309,7 +309,7 @@ requesting-code-review ──► verification-before-completion（完成）
 #### 本项目的任务拆分示例
 
 | # | 任务 | 交付物 | 可独立测试 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | 项目骨架 + 配置 | 可启动的空服务 + `/health` | ✓ |
 | 2 | 用户与实名认证 | 注册/登录/实名校验 | ✓ |
 | 3 | 技能名片 CRUD | 建卡、改卡、查卡 | ✓ |
@@ -362,7 +362,7 @@ uv run uvicorn start:app --reload   # 手动确认关键接口
 ### 3.5 这个范例里技能是怎么串起来的
 
 | 顺序 | 技能 | 输入 | 输出 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | `requirement-analysis` | 一句话想法 | PRD + 用户故事 + 优先级矩阵 |
 | 2 | `brainstorming` | PRD | 方案比选 + 设计文档 + 规格 |
 | 3 | `writing-plans` | 设计文档 | 9 个可独立测试的任务 |
@@ -382,7 +382,7 @@ uv run uvicorn start:app --reload   # 手动确认关键接口
 它的核心是「MD 是唯一事实源，HTML 是派生产物」，并且会在 `spec/` 下建三件套：
 
 | 文件 | 作用 |
-|---|---|
+| --- | --- |
 | `spec/_导航地图.md` | 页面清单 + 跳转关系 + 优先级 |
 | `spec/_公共规范.md` | 项目级 design token |
 | `spec/XX-页面名.md` | 每页规格 |
@@ -410,6 +410,7 @@ uv run uvicorn start:app --reload   # 手动确认关键接口
 ### Q4：装了这么多技能，会不会互相打架
 
 主要风险是**同名技能**。DSH 在同一目录下要求 `name` 唯一。本仓库的做法是：
+
 - `.agents/skills/` 与 `.codebuddy/skills/` 内容完全一致（superpowers-zh 中医版）
 - `.dsh/skills/` 只放 DSH 侧要用的，避免与上面重复
 
@@ -442,7 +443,7 @@ uv run uvicorn start:app --reload   # 手动确认关键接口
 ## 附录：相关文件
 
 | 内容 | 路径 |
-|---|---|
+| --- | --- |
 | superpowers-zh 中文技能（20 个） | `.agents/skills/`、`.codebuddy/skills/` |
 | DSH 原生技能目录 | `.dsh/skills/` |
 | 需求分析技能 | `.dsh/skills/it-requirement-analysis/SKILL.md` |

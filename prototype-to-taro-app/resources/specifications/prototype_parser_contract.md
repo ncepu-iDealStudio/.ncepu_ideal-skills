@@ -59,7 +59,7 @@
 ## 2. 字段约束
 
 | 字段 | 约束 |
-|---|---|
+| --- | --- |
 | `project_name` | kebab-case，用于目录名 |
 | `framework` | **必填**，只能是 `vue3` 或 `react`（无默认值） |
 | `targets` | `weapp` / `h5` / `alipay` / `rn` |
@@ -76,7 +76,7 @@
 同一份 context，两个框架生成不同文件：
 
 | context 字段 | Vue3 产出 | React 产出 |
-|---|---|---|
+| --- | --- | --- |
 | `pages[].path` | `pages/home/index.vue` | `pages/home/index.tsx` |
 | 通用配置 | `pages/home/index.config.ts` | 同左 |
 | `data_model` 状态 | `store/modules/skill.ts`（Pinia） | `models/skill.ts`（Dva） |
@@ -87,7 +87,7 @@
 ## 4. 校验规则
 
 | 编号 | 规则 | 级别 |
-|---|---|---|
+| --- | --- | --- |
 | T01 | `framework` 只能是 `vue3` / `react` | error |
 | T02 | `framework=vue3` 时不应存在 `.tsx` 页面 | error |
 | T03 | `framework=react` 时不应存在 `.vue` 页面 | error |
@@ -106,6 +106,7 @@
 按视觉层级识别：tabBar → 顶部导航 → 内容区 → 重复单元 → 原子元素。
 
 小程序与 Web 的差异要提前告知用户：
+
 - 不支持 hover，用 `hover-class`
 - 没有 DOM，不能用 `document`
 - 滚动用 `scroll-view` 或页面级 `onReachBottom`
@@ -113,7 +114,7 @@
 ### 5.2 HTML / CSS
 
 | HTML | Taro |
-|---|---|
+| --- | --- |
 | `<div>` | `<View>` |
 | `<span>` / 文本 | `<Text>` |
 | `<img>` | `<Image>` |
@@ -130,7 +131,7 @@
 ## 6. 歧义处理
 
 | 情况 | 处理 |
-|---|---|
+| --- | --- |
 | 用户没说框架 | **必须问**，不假设 |
 | 页面字段缺失 | 按通用模板推断并标注待确认 |
 | 是否需要 tabBar 不明 | 默认按"有 tabBar"生成，标注可去掉 |

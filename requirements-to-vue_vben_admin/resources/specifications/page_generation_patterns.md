@@ -7,7 +7,7 @@
 ## 0. 前置：导入来源对照（最容易出错的地方）
 
 | 内容 | 正确导入 | 错误写法 |
-|---|---|---|
+| --- | --- | --- |
 | 页面容器 | `import { Page } from '@vben/common-ui'` | ❌ 自己写 `<div class="page">` |
 | 抽屉 | `import { useVbenDrawer } from '@vben/common-ui'` | ❌ `<el-dialog>` / `<a-modal>` |
 | 行操作 | `import { VbenTableAction } from '@vben/common-ui'` | ❌ 从 `#/adapter/vxe-table` 导入（那是 playground） |
@@ -460,7 +460,7 @@ export async function deleteUser(id: string) {
 ## 6. 状态列渲染器
 
 | 渲染器 | 用途 | 配置 |
-|---|---|---|
+| --- | --- | --- |
 | `CellSwitch` | 开关（可切换状态） | `attrs: { beforeChange }` |
 | `CellTag` | 只读标签 | `props: { ... }` |
 | `CellImage` | 图片 | `props: { width, height }` |
@@ -487,7 +487,7 @@ export async function deleteUser(id: string) {
 每个页面生成后核对这些：
 
 | # | 检查项 |
-|---|---|
+| --- | --- |
 | 1 | `list.vue` 用了 `<Page auto-content-height>` |
 | 2 | 表格用 `useVbenVxeGrid`，不是手写 table |
 | 3 | `proxyConfig.ajax.query` 返回 `{ items, total }` 结构 |

@@ -5,7 +5,7 @@
 ## 技术栈
 
 | 项 | 选型 |
-|---|---|
+| --- | --- |
 | 语言 / 构建 | Kotlin 2.1 / AGP 8.7 / Gradle 8.11 / JDK 17 |
 | UI | Jetpack Compose + Material3 |
 | 架构 | 单 Activity + MVI（UiState / Event） |
@@ -69,7 +69,7 @@ debug {
 ## 常见问题
 
 | 现象 | 原因 / 处理 |
-|---|---|
+| --- | --- |
 | Sync 失败：Unsupported class file major version | JDK 版本不对，切到 JDK 17 |
 | KSP 报版本不匹配 | `libs.versions.toml` 中 `ksp` 必须与 `kotlin` 主版本一致 |
 | Hilt 找不到 ViewModel | 忘记 `@HiltViewModel` 或 `@AndroidEntryPoint` |

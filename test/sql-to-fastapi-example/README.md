@@ -76,14 +76,14 @@ uv run uvicorn start:app --reload
 
 未安装 uv 时：`pip install -r requirements.txt`，再执行 `uvicorn start:app --reload`。
 
-- Swagger：http://localhost:8000/docs
-- ReDoc：http://localhost:8000/redoc
+- Swagger：<http://localhost:8000/docs>
+- ReDoc：<http://localhost:8000/redoc>
 - 健康检查：`GET /health`
 
 ## 配置说明
 
 | 变量 | 说明 |
-|------|------|
+| ------ | ------ |
 | `DATABASE_URL` | MySQL 连接串（`mysql+pymysql://...`，运行时自动转为 aiomysql） |
 | `HOST` / `PORT` | 服务监听地址 |
 | `SECRET_KEY` | JWT 等密钥（脚手架预留） |
@@ -95,7 +95,7 @@ uv run uvicorn start:app --reload
 路由前缀均为 **单数**（`_` → `-`）。每张表默认提供：
 
 | 方法 | 路径 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | GET | `/api/v1/{resource}` | 分页列表 |
 | GET | `/api/v1/{resource}/{pk}` | 详情 |
 | POST | `/api/v1/{resource}` | 创建 |
@@ -106,7 +106,7 @@ uv run uvicorn start:app --reload
 ### 资源一览
 
 | 表 | 路由前缀 | 主键 | 软删除 | 状态接口 |
-|----|----------|------|--------|----------|
+| ---- | ---------- | ------ | -------- | ---------- |
 | admin | `/api/v1/admin` | `auto_id` | `is_delete` | — |
 | course | `/api/v1/course` | `auto_id` | `is_delete` | — |
 | course_arrangement | `/api/v1/course-arrangement` | `auto_id` | `is_delete` | — |
