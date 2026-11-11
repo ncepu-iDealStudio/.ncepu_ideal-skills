@@ -1,3 +1,7 @@
+/**
+ * 【AUTO-GENERATED】由 sql-to-springboot-scaffold 生成；表结构变更时技能会重生成。
+ * 自动管理字段（主键/时间戳/status/软删/版本/审计）按 type_mappings.json 排除。
+ */
 package com.security.apisecurity.dto.request;
 
 import lombok.Data;

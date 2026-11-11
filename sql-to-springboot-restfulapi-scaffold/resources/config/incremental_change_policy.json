@@ -1,0 +1,371 @@
+{
+  "version": "1.0.0",
+  "description": "已有 Spring Boot 目标项目的增量更新策略：新增表 / 表结构变更 / 表下线。技能据此逐表判定运行模式、做字段级差异分析、确定 6 类按表文件的更新动作、保护骨架与手写代码、保证编译级跨层同步、给出 DDL 建议与验证清单。本文件是策略配置，不渲染代码；渲染仍由 resources/templates/ 驱动。",
+  "scope": "仅当目标项目已存在骨架时启用。greenfield 仍按 SKILL.md 步骤 3 生成完整骨架。",
+  "framework_notes": {
+    "no_central_route_registry": "Spring Boot 靠组件扫描 + @RestController/@RequestMapping 自动发现，没有 api/v1/__init__.py 那样的中央路由注册文件；新增表无需追加注册，但必须确认包路径在启动类扫描范围内且 @RequestMapping 路径不与已有 Controller 冲突。",
+    "no_test_generation": "本技能按用户既定要求不生成测试代码（README「不生成的文件」）。增量场景同样不生成测试文件，只输出编译/接口冒烟验证清单；若用户项目已有测试则运行 mvn test。",
+    "ddl_auto": "骨架 application.properties 为 spring.jpa.hibernate.ddl-auto=none；技能不得改成 update/create，DDL 一律由用户手工执行。",
+    "status_field": "本技能只有 5 个 CRUD 端点，不生成 PATCH /{id}/status；status/state/version 等按 type_mappings.json 的 exclude_from_request 排除，不进 Request DTO。若业务需要改状态接口，列入人工待办，由用户自行添加。",
+    "compile_coupling": "Service.mapToResponse() 以全参构造 new {ClassName}Response(...) 组装响应，create()/update() 用 setter 逐字段写入 Entity；Request/Response DTO 字段任何增删或改类型，不同步 Service 会直接导致 mvn clean install 编译失败。这是 Spring 版最关键的跨层耦合。"
+  },
+  "modes": {
+    "greenfield": "项目骨架不存在：从 project_structure/ 生成完整骨架 + 本次 SQL 中所有表",
+    "add_table": "骨架已存在、该表 6 个按表文件全部不存在：生成 6 个文件（无需中央注册）",
+    "alter_table": "骨架已存在、该表任一按表文件已存在：先做旧/新结构字段级差异，再按 change_types 分层更新",
+    "drop_table": "用户明确要求移除/下线某表：只输出待删清单与顺序，默认不自动删除任何文件"
+  },
+  "mode_detection": {
+    "project_exists_if_any": [
+      "pom.xml",
+      "src/main/java/com/security/apisecurity/ApiSecurityApplication.java",
+      "src/main/resources/application.properties"
+    ],
+    "table_files": [
+      "entity/{ClassName}.java",
+      "repository/{ClassName}Repository.java",
+      "dto/request/{ClassName}Request.java",
+      "dto/response/{ClassName}Response.java",
+      "service/{ClassName}Service.java",
+      "controller/{ClassName}Controller.java"
+    ],
+    "table_files_base": "src/main/java/com/security/apisecurity",
+    "rules": [
+      "项目骨架缺失 → greenfield",
+      "项目骨架存在 + 该表 6 个文件全部缺失 → add_table",
+      "项目骨架存在 + 该表任一文件存在 → alter_table（禁止当作 add_table 直接覆盖）",
+      "用户显式声明删除/下线该表 → drop_table",
+      "残留文件不成套（例如只剩 Entity 与 Repository）→ 先向用户确认补齐还是重生成，不得默认覆盖",
+      "一次提供多张表时逐表独立判定，允许同一批次混用 add_table 与 alter_table"
+    ]
+  },
+  "baseline_snapshot": {
+    "purpose": "把「旧表结构」与用户本次提供的 CREATE TABLE 做字段级比对；比对的是结构，不是 Java 代码文本。没有旧结构就询问，禁止猜差异。",
+    "source_priority": [
+      "用户提供的旧版 CREATE TABLE / 建库 SQL 脚本",
+      "目标项目 entity/{ClassName}.java 的 private 字段声明与 @Column(name=..., nullable=..., unique=...) / @Id / @JoinColumn",
+      "目标项目 dto/request/{ClassName}Request.java 与 dto/response/{ClassName}Response.java 的字段声明（交叉校验）",
+      "运行库 information_schema（仅在用户明确同意连接数据库时）"
+    ],
+    "compare_dimensions": [
+      "column_name",
+      "sql_type",
+      "java_type",
+      "nullable",
+      "unique",
+      "default",
+      "comment",
+      "primary_key",
+      "foreign_key",
+      "soft_delete_field",
+      "managed_field_set",
+      "sensitive_field_set",
+      "table_name"
+    ],
+    "normalization": [
+      "MySQL 列名大小写、反引号差异视为相同",
+      "字段名按 naming_rules.json 归一（snake_case ↔ camelCase），@Column(name) 保留原名",
+      "类型别名归一：INT/INTEGER、BOOL/BOOLEAN/TINYINT(1)、DATETIME/TIMESTAMP 等按 type_mappings.json 的等价组",
+      "忽略字段声明顺序、空行、注释格式差异",
+      "soft_delete_field、managed_field_set、sensitive_field_set 必须按最新 SQL 依 type_mappings.json 重新计算，不沿用旧结论"
+    ],
+    "output": {
+      "table_level": ["new_table", "removed_table", "renamed_table", "unchanged"],
+      "column_level": ["added", "removed", "renamed_candidate", "type_changed", "constraint_changed", "managed_flag_changed", "comment_only"],
+      "must_include": ["旧值", "新值", "风险等级", "受影响文件", "是否需要人工确认", "是否会破坏编译"]
+    }
+  },
+  "file_roles": {
+    "entity/{ClassName}.java": {
+      "ownership": "generated",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "overwrite"
+    },
+    "repository/{ClassName}Repository.java": {
+      "ownership": "generated",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "overwrite",
+      "note": "派生查询方法名由软删字段名与主键名拼出，字段变化必须整体重生成，否则应用启动失败"
+    },
+    "dto/request/{ClassName}Request.java": {
+      "ownership": "generated",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "overwrite"
+    },
+    "dto/response/{ClassName}Response.java": {
+      "ownership": "generated",
+      "marker": "【AUTO-GENERATED】",
+      "on_alter": "overwrite"
+    },
+    "service/{ClassName}Service.java": {
+      "ownership": "generated_with_manual_code",
+      "marker": "【AUTO-GENERATED / 手写保护区】",
+      "on_alter": "never_whole_file_overwrite__minimal_merge_with_confirmation",
+      "note": "含 create/update setter 列表、mapToResponse 全参构造、外键存在性校验、软删逻辑；DTO 字段变化时必须最小合并，否则编译失败"
+    },
+    "controller/{ClassName}Controller.java": {
+      "ownership": "generated_with_manual_code",
+      "marker": "【AUTO-GENERATED / 手写保护区】",
+      "on_alter": "never_whole_file_overwrite__minimal_merge_with_confirmation",
+      "note": "含 @PreAuthorize、Swagger 注解、自定义端点；主键类型/路由前缀变化才需最小合并"
+    },
+    "pom.xml": {
+      "ownership": "baseline",
+      "marker": "无",
+      "on_alter": "never_touch",
+      "note": "用户可能已加依赖与镜像配置"
+    },
+    "src/main/resources/application.properties": {
+      "ownership": "baseline",
+      "marker": "无",
+      "on_alter": "never_touch",
+      "note": "含真实数据库账号；ddl-auto=none 不得改成 update"
+    },
+    "ApiSecurityApplication.java:config/**:security/**:exception/**:dto/response/ApiResponse.java:service/UserDetailsServiceImpl.java": {
+      "ownership": "baseline",
+      "marker": "无",
+      "on_alter": "never_touch"
+    },
+    "README.md": {
+      "ownership": "hand_written",
+      "marker": "无",
+      "on_alter": "update_interface_and_field_sections_only",
+      "note": "项目 README 有强制 11 章节；增量时只追加/更新接口与字段章节，禁止重写整份"
+    }
+  },
+  "change_types": {
+    "add_table": {
+      "risk": "low",
+      "ddl_hint": "按用户提供的 CREATE TABLE 建表（技能不执行）",
+      "regenerate": [
+        "entity/{ClassName}.java",
+        "repository/{ClassName}Repository.java",
+        "dto/request/{ClassName}Request.java",
+        "dto/response/{ClassName}Response.java",
+        "service/{ClassName}Service.java",
+        "controller/{ClassName}Controller.java"
+      ],
+      "append_only": [],
+      "registration_note": "无中央注册；确认 6 个文件落在 com.security.apisecurity 子包内、@RequestMapping 使用复数 resourcePath 且不与已有 Controller 冲突",
+      "manual_todo": ["README.md 追加该表的接口说明（完整 URL、请求/响应示例）"],
+      "verify": ["mvn clean install 通过", "Swagger UI 出现该资源的 5 个端点"]
+    },
+    "add_column": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table} ADD COLUMN {column_def};",
+      "regenerate": ["entity/{ClassName}.java", "dto/request/{ClassName}Request.java（若非自动管理字段）", "dto/response/{ClassName}Response.java（若非敏感字段）"],
+      "minimal_merge_required": [
+        "service/{ClassName}Service.java：create()/update() 补 setter；mapToResponse() 的 new {ClassName}Response(...) 补构造参数（顺序必须与 Response DTO 一致）"
+      ],
+      "manual_todo": ["README.md 字段与请求示例同步", "已有测试（若项目自带）中的 payload 与断言"],
+      "breaks_compile_if_skipped": true,
+      "verify": ["mvn clean install 通过（全参构造参数个数匹配）", "POST 写入新列后 GET 详情可读回"]
+    },
+    "drop_column": {
+      "risk": "high",
+      "ddl_hint": "ALTER TABLE {table} DROP COLUMN {column};（先确认无代码引用与数据备份）",
+      "regenerate": ["entity/{ClassName}.java", "dto/request/{ClassName}Request.java", "dto/response/{ClassName}Response.java"],
+      "minimal_merge_required": [
+        "service/{ClassName}Service.java：移除对应 setter 与 mapToResponse 构造参数"
+      ],
+      "manual_todo": [
+        "全局检索该列名（snake_case 与 camelCase 两种形式）：Service 手写业务、Controller 自定义端点、@Query、README",
+        "先移除代码引用再执行 DDL"
+      ],
+      "breaks_compile_if_skipped": true,
+      "verify": ["mvn clean install 通过", "grep 无残留引用"]
+    },
+    "rename_column": {
+      "risk": "high",
+      "ddl_hint": "ALTER TABLE {table} RENAME COLUMN {old} TO {new};（MySQL 8.0 可用 CHANGE COLUMN 并保持类型）",
+      "detection": "差异算法会报 removed + added；必须先询问用户是「重命名」还是「删旧列 + 加新列」",
+      "regenerate": ["entity/{ClassName}.java", "dto/request/{ClassName}Request.java", "dto/response/{ClassName}Response.java", "repository/{ClassName}Repository.java"],
+      "minimal_merge_required": ["service/{ClassName}Service.java：setter / getter / 构造参数改名"],
+      "manual_todo": ["确认是否需要数据回填", "自定义 @Query 中的列名"],
+      "breaks_compile_if_skipped": true,
+      "verify": ["mvn clean install 通过", "旧列名无残留"]
+    },
+    "modify_column_type": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table} MODIFY COLUMN {column} {new_type};",
+      "regenerate": ["entity/{ClassName}.java", "dto/request/{ClassName}Request.java", "dto/response/{ClassName}Response.java"],
+      "minimal_merge_required": ["service/{ClassName}Service.java：涉及该字段的转换/格式化逻辑与构造参数类型"],
+      "manual_todo": ["验证注解（@Pattern/@Min/@Max）是否仍适用"],
+      "breaks_compile_if_skipped": true,
+      "verify": ["Java 类型与 SQL 类型按 type_mappings.json 一致", "mvn clean install 通过"]
+    },
+    "modify_nullable": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table} MODIFY COLUMN {column} {type} [NOT] NULL;",
+      "regenerate": ["entity/{ClassName}.java", "dto/request/{ClassName}Request.java"],
+      "manual_todo": ["收紧为 NOT NULL 时检查 @NotNull/@NotBlank 与历史数据"],
+      "verify": ["mvn clean install 通过", "POST 缺省字段返回 400 或按约定处理"]
+    },
+    "modify_default": {
+      "risk": "low",
+      "ddl_hint": "ALTER TABLE {table} ALTER COLUMN {column} SET DEFAULT {default};",
+      "regenerate": ["entity/{ClassName}.java"],
+      "manual_todo": ["@PrePersist 中的默认赋值按需同步"],
+      "verify": ["POST 不传该字段时落库值符合预期"]
+    },
+    "modify_unique": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table} ADD UNIQUE KEY ... / DROP INDEX ...;",
+      "regenerate": ["entity/{ClassName}.java"],
+      "manual_todo": ["GlobalExceptionHandler 的 DataIntegrityViolationException 映射按需补"],
+      "verify": ["重复值写入返回可预期的错误响应"]
+    },
+    "add_managed_field": {
+      "risk": "medium",
+      "applies_to": "status / state / version / create_time / update_time / creator / modifier / is_delete 等 type_mappings.json exclude_from_request 中的字段",
+      "ddl_hint": "按 add_column 处理",
+      "regenerate": ["entity/{ClassName}.java", "dto/request/{ClassName}Request.java（确认被排除）", "dto/response/{ClassName}Response.java（非敏感字段时纳入）"],
+      "minimal_merge_required": ["service/{ClassName}Service.java：mapToResponse 构造参数；@PrePersist 或审计字段赋值"],
+      "note": "本技能不生成 PATCH /{id}/status 之类专用端点；status 不进 Request DTO。若业务需要改状态接口，只输出人工待办，不自行新增端点。",
+      "manual_todo": ["如需状态变更接口，在 Controller/Service 手工添加并同步 README"],
+      "verify": ["mvn clean install 通过", "Request DTO 不含该字段"]
+    },
+    "change_soft_delete_field": {
+      "risk": "critical",
+      "ddl_hint": "按 add_column / drop_column 处理",
+      "regenerate": [
+        "entity/{ClassName}.java",
+        "repository/{ClassName}Repository.java（findBy{pk}And{SoftDeleteFieldFalse} / findBy{SoftDeleteField} 等派生查询方法名整体重生成）",
+        "dto/request/{ClassName}Request.java（软删字段必须排除）",
+        "dto/response/{ClassName}Response.java"
+      ],
+      "minimal_merge_required": [
+        "service/{ClassName}Service.java：findEntityById / getList / delete 的软删查询与置位逻辑"
+      ],
+      "manual_todo": ["README 软删除机制章节同步"],
+      "break_note": "Repository 派生方法名由字段名拼出；字段名不一致时 Spring Data JPA 在启动阶段抛 No property ... found，应用起不来",
+      "breaks_compile_if_skipped": true,
+      "verify": ["应用能启动（Repository 派生查询可解析）", "DELETE 行为与字段一致，列表不返回已软删记录"]
+    },
+    "change_primary_key": {
+      "risk": "critical",
+      "ddl_hint": "ALTER TABLE {table} DROP PRIMARY KEY, ADD PRIMARY KEY ({new_pk});（需人工评估数据与外键）",
+      "requires_user_confirmation": true,
+      "regenerate": ["entity/{ClassName}.java", "repository/{ClassName}Repository.java（JpaRepository 第二泛型与派生查询）", "dto/response/{ClassName}Response.java"],
+      "minimal_merge_required": [
+        "service/{ClassName}Service.java：findEntityById(...) 参数类型、日志中的 getter",
+        "controller/{ClassName}Controller.java：@PathVariable {pkType} id 类型"
+      ],
+      "manual_todo": ["README 路径示例", "已有测试（若有）的主键取值"],
+      "verify": ["mvn clean install 通过", "CRUD 全流程路径参数类型一致"]
+    },
+    "add_foreign_key": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table} ADD CONSTRAINT ... FOREIGN KEY ({column}) REFERENCES {ref};",
+      "regenerate": ["entity/{ClassName}.java（@ManyToOne/@OneToOne + @JoinColumn）", "repository/{ClassName}Repository.java（按外键派生查询）", "dto/response/{ClassName}Response.java（关联展示字段按需）"],
+      "minimal_merge_required": ["service/{ClassName}Service.java：创建/更新时的外键存在性校验与 mapToResponse 关联字段"],
+      "manual_todo": ["确认被引用表 Entity 已存在，避免启动期关联解析失败"],
+      "verify": ["应用能启动", "写入非法外键值返回可预期错误"]
+    },
+    "drop_foreign_key": {
+      "risk": "medium",
+      "ddl_hint": "ALTER TABLE {table} DROP FOREIGN KEY {name};",
+      "regenerate": ["entity/{ClassName}.java", "repository/{ClassName}Repository.java", "dto/response/{ClassName}Response.java"],
+      "minimal_merge_required": ["service/{ClassName}Service.java：移除关联查询与外键校验"],
+      "verify": ["应用能启动", "mvn clean install 通过"]
+    },
+    "comment_only": {
+      "risk": "low",
+      "ddl_hint": "可选：ALTER TABLE {table} MODIFY COLUMN {column} {type} COMMENT '{comment}';",
+      "regenerate": ["entity/{ClassName}.java", "dto/request/{ClassName}Request.java", "dto/response/{ClassName}Response.java"],
+      "manual_todo": [],
+      "verify": ["Swagger Schema 字段描述已更新"]
+    },
+    "rename_table": {
+      "risk": "critical",
+      "ddl_hint": "RENAME TABLE {old} TO {new};",
+      "requires_user_confirmation": true,
+      "blocked_from_auto": true,
+      "note": "按「旧表 drop + 新表 add」处理会丢类名、路由与手写业务；必须先询问并输出全量改名清单，不自动批量改名",
+      "manual_todo": ["类名/6 个文件名/@Table/@RequestMapping/resourcePath/README 全量改名清单"],
+      "verify": ["旧路由下线、新路由可用", "无旧名残留"]
+    },
+    "drop_table": {
+      "risk": "critical",
+      "requires_user_confirmation": true,
+      "blocked_from_auto": true,
+      "note": "默认不删除任何文件、不执行 DROP TABLE；只输出待删文件清单与推荐下线顺序",
+      "manual_todo": ["人工确认后按清单删除 6 个文件并清理 README 接口章节"],
+      "verify": ["mvn clean install 通过", "Swagger 无该资源"]
+    }
+  },
+  "minimal_merge_protocol": {
+    "applies_to": ["service/{ClassName}Service.java", "controller/{ClassName}Controller.java"],
+    "reason": "两处含手写业务；但 DTO 字段变化不同步会导致 mvn clean install 编译失败，不能简单跳过",
+    "steps": [
+      "展示准备改动的**具体方法片段**（如 create()/update() 的 setter 列表、mapToResponse() 的构造参数、@PathVariable 类型），标明旧值与新值",
+      "取得用户确认；用户不确认则明确提示「项目将无法编译」并把改动列入人工待办",
+      "只做最小范围编辑，禁止整文件覆盖，禁止改动「手写业务代码区」中的自定义方法",
+      "在变更报告中记录「已最小合并到手写文件」及具体方法名"
+    ],
+    "forbidden": ["整文件重新生成 Service/Controller", "静默修改用户自定义端点或 @PreAuthorize", "为了能编译而删掉用户手写方法"]
+  },
+  "hand_written_protection": {
+    "detection": [
+      "读取 Java 文件头注释，命中 【AUTO-GENERATED】 才允许整文件重生成；命中 【AUTO-GENERATED / 手写保护区】 走 minimal_merge_protocol",
+      "文件存在但没有生成标记 → 视为用户已手改，禁止整文件覆盖，改为输出待办并询问",
+      "Controller 中「手写业务代码区」之后的自定义端点与 @PreAuthorize 必须保留"
+    ],
+    "rules": [
+      "pom.xml、application.properties、config/、security/、exception/、ApiResponse.java、UserDetailsServiceImpl.java、ApiSecurityApplication.java 在任何增量模式下都不覆盖",
+      "README.md 只更新接口/字段章节，保持强制 11 章节结构",
+      "技能无法安全合并时生成「人工待办清单」而不是猜测性覆盖"
+    ]
+  },
+  "registration_and_idempotency": {
+    "central_registry": "none",
+    "on_add_table": [
+      "确认 6 个文件写入 com.security.apisecurity.{entity|repository|service|controller|dto.request|dto.response}，处于 ApiSecurityApplication 组件扫描范围内",
+      "确认 @RequestMapping(\"/{resourcePath}\") 用复数资源名（按 naming_rules.json），与已有 Controller 不冲突",
+      "只向 README.md 追加该表接口章节"
+    ],
+    "dedupe": [
+      "生成前按类名全文检索，同名的 Entity/Repository/Service/Controller/DTO 已存在则不重复创建",
+      "同一份 SQL 连续执行两次必须得到零 diff（幂等）",
+      "路由前缀变化时先删旧 @RequestMapping 再写新值，禁止新旧并存"
+    ],
+    "on_alter_table": "默认不动 @RequestMapping 与包路径；仅主键类型/路由前缀变化时做最小替换"
+  },
+  "migration": {
+    "skill_does_not": [
+      "不执行任何 DDL、不连接生产库",
+      "不改 application.properties，尤其不得把 spring.jpa.hibernate.ddl-auto=none 改成 update/create",
+      "不生成或改写建库建表脚本、不接 Flyway/Liquibase",
+      "不删除数据、不删除已有文件"
+    ],
+    "skill_must": [
+      "在变更报告中逐条列出 ddl_hint（MySQL 语法建议），标注「需人工确认/执行」",
+      "提示发布顺序：加列先 DDL 后发代码；删列先发代码（停止引用）后 DDL",
+      "提醒 Hibernate 物理命名策略与 @Column(name) 必须与真实列名一致，备份、灰度与回滚"
+    ]
+  },
+  "verification": {
+    "no_generated_tests": "遵守本技能既定约定：不生成测试代码；以下为验证命令，不是生成物",
+    "commands": [
+      "mvn clean install                      # 编译期捕获 Response 全参构造参数不匹配 / setter 缺失 / 类型错误",
+      "mvn test                              # 仅当项目已有测试时执行",
+      "mvn spring-boot:run                   # 启动期捕获 Repository 派生查询名与外键关联解析失败",
+      "打开 http://localhost:{port}{contextPath}/swagger-ui.html 核对 DTO Schema 与 5 个端点"
+    ],
+    "smoke_flow": "POST 创建 → GET 列表 → GET /{id} 详情 → PUT 更新 → DELETE 删除；变化字段逐一读回校验",
+    "idempotency": "同一 SQL 再跑一次，确认零 diff",
+    "config_guard": "确认 application.properties 中 ddl-auto 仍为 none，DB 账号未被覆盖"
+  },
+  "report": {
+    "required_sections": [
+      "运行模式（逐表）",
+      "旧/新结构差异清单（字段级：旧值/新值/风险/是否破坏编译）",
+      "已重生成文件列表（4 个 AUTO-GENERATED 层）",
+      "已最小合并到手写文件的内容（展示片段并已确认）",
+      "跳过的文件与原因",
+      "人工待办清单（含具体文件与方法）",
+      "DDL 建议与发布顺序",
+      "验证命令与结果（mvn clean install / 启动 / Swagger / 冒烟）"
+    ]
+  }
+}

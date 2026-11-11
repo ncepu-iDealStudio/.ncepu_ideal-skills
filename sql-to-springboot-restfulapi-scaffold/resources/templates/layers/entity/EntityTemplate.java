@@ -1,3 +1,7 @@
+/**
+ * 【AUTO-GENERATED】由 sql-to-springboot-scaffold 生成；表结构变更时技能会重生成。
+ * 若已手工修改本文件，请把标记改为 【HAND-WRITTEN】，技能将跳过覆盖并输出人工待办。
+ */
 package com.security.apisecurity.entity;
 
 import jakarta.persistence.*;

@@ -1,3 +1,9 @@
+/**
+ * 【AUTO-GENERATED / 手写保护区】由 sql-to-springboot-scaffold 生成。
+ * 表结构变更时技能绝不整文件覆盖：仅主键类型或路由前缀变化时，在确认后最小合并
+ * {@code @PathVariable} 类型 / {@code @RequestMapping}。文件末尾「手写业务代码区」中的自定义端点
+ * 与 {@code @PreAuthorize} 必须原样保留。
+ */
 package com.security.apisecurity.controller;
 
 import com.security.apisecurity.dto.request.{{className}}Request;
@@ -132,4 +138,7 @@ public class {{className}}Controller {
         {{entityName}}Service.delete(id);
         return ResponseEntity.ok(ApiResponse.success("{{className}} deleted successfully", null));
     }
+
+    // ===== 手写业务代码区（技能增量更新时保留本区，请勿删除本行标记）=====
+    // 自定义端点与 @PreAuthorize 写在这里；上方 5 个 CRUD 端点由技能维护。
 }

@@ -1,3 +1,9 @@
+/**
+ * 【AUTO-GENERATED / 手写保护区】由 sql-to-springboot-scaffold 生成。
+ * 表结构变更时技能绝不整文件覆盖：只在展示片段并取得用户确认后，最小合并
+ * create()/update() 的 setter 列表与 mapToResponse() 的全参构造参数。
+ * 文件末尾「手写业务代码区」中的自定义方法必须原样保留。
+ */
 package com.security.apisecurity.service;
 
 import com.security.apisecurity.dto.request.{{className}}Request;
@@ -120,4 +126,7 @@ public class {{className}}Service {
                 {% endfor %}
         );
     }
+
+    // ===== 手写业务代码区（技能增量更新时保留本区，请勿删除本行标记）=====
+    // 自定义业务方法写在这里；上方 create/update/mapToResponse 由技能在确认后最小合并。
 }

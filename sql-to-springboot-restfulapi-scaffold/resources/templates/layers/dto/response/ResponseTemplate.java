@@ -1,3 +1,8 @@
+/**
+ * 【AUTO-GENERATED】由 sql-to-springboot-scaffold 生成；表结构变更时技能会重生成。
+ * 敏感字段按 type_mappings.json 排除；本类由 Lombok @AllArgsConstructor 生成全参构造，
+ * 字段增删时必须同步 Service.mapToResponse() 的构造参数，否则编译失败。
+ */
 package com.security.apisecurity.dto.response;
 
 import lombok.Data;

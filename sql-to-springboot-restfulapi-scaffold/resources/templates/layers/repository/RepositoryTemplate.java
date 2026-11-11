@@ -1,3 +1,8 @@
+/**
+ * 【AUTO-GENERATED】由 sql-to-springboot-scaffold 生成；表结构变更时技能会重生成。
+ * 注意：派生查询方法名由软删字段名与主键名拼出，字段变化必须整体重生成，
+ * 否则 Spring Data JPA 启动期抛 No property ... found。
+ */
 package com.security.apisecurity.repository;
 
 import com.security.apisecurity.entity.{{className}};
