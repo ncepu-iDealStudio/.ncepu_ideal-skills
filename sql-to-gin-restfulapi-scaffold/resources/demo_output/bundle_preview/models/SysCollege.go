@@ -1,3 +1,6 @@
+// 【AUTO-GENERATED】
+// 本文件由 sql-to-gin-restfulapi-scaffold 生成，内容可被增量更新覆盖
+
 package models
 
 import "time"

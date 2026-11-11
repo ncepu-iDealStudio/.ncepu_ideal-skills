@@ -55,6 +55,21 @@ REQUIRED_CHANGE_TYPES = [
 # 必须声明为「禁止自动执行」的高危变更
 BLOCKED_FROM_AUTO = ["rename_table", "drop_table"]
 
+# 层模板必须携带的标记（供覆盖策略识别），与 file_roles 对应
+GENERATED = "【AUTO-GENERATED】"
+HAND_WRITTEN = "【HAND-WRITTEN】"
+
+EXPECTED_TEMPLATE_MARKERS = {
+    "model/model_table_template.go": GENERATED,
+    "model/model_view_template.go": GENERATED,
+    "dao/dao_table_template.go": GENERATED,
+    "service/service_table_template.go": HAND_WRITTEN,
+    "service/service_view_template.go": HAND_WRITTEN,
+    "resource/resource_table_template.go": GENERATED,
+    "resource/resource_view_template.go": GENERATED,
+    "resource/resource_urls_template.go": GENERATED,
+}
+
 INCREMENTAL_DOC = SKILL_ROOT / "resources" / "specifications" / "incremental_update.md"
 POLICY = SKILL_ROOT / "resources" / "config" / "incremental_change_policy.json"
 ROUTER_INIT = SKILL_ROOT / "resources" / "templates" / "project_structure" / "apis" / "api_1_0" / "urls.go"
@@ -165,6 +180,18 @@ def check_layer_markers(errors: list[str], policy: dict) -> None:
         errors.append("service 层应定义 ownership=hand_written（保护手写代码）")
 
 
+def check_template_markers(errors: list[str]) -> None:
+    """层模板必须携带生成/手写标记，否则覆盖策略无法自动判定。"""
+    layers = SKILL_ROOT / "resources" / "templates" / "layers"
+    for rel, marker in EXPECTED_TEMPLATE_MARKERS.items():
+        path = layers / rel
+        if not path.exists():
+            errors.append(f"层模板缺失: layers/{rel}")
+            continue
+        if marker not in path.read_text(encoding="utf-8"):
+            errors.append(f"层模板缺少标记 {marker}: layers/{rel}")
+
+
 def check_skill_md(errors: list[str]) -> None:
     skill_md = SKILL_ROOT / "SKILL.md"
     if not skill_md.exists():
@@ -191,6 +218,7 @@ def main() -> int:
     policy = check_policy(errors)
     check_incremental_doc(errors)
     check_router_markers(errors)
+    check_template_markers(errors)
     check_layer_markers(errors, policy)
     check_skill_md(errors)
 
@@ -204,6 +232,7 @@ def main() -> int:
     print(f"  - 运行模式: {len(policy.get('modes', {}))}")
     print(f"  - 变更类型: {len(policy.get('change_types', {}))}")
     print(f"  - 文件归属规则: {len(policy.get('file_roles', {}))}")
+    print(f"  - 已标记模板: {len(EXPECTED_TEMPLATE_MARKERS)}")
     return 0
 
 
