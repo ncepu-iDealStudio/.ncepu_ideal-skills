@@ -1,0 +1,508 @@
+---
+name: "prototype-to-web-nuxt-ui-starter"
+description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单）生成基于 nuxt-ui-templates/starter 的开箱即用 Web 工程：Nuxt 4 + Vue 3 + TypeScript + Nuxt UI + Nitro + Tailwind CSS v4 + ESLint 已配好，含分层目录、文件路由、mock 数据驱动的页面还原、可直接 pnpm dev 的工程。用户提到「原型转 Web」「设计稿做网页」「照这个页面做 Nuxt」「生成 Nuxt 项目」「Nuxt UI」时使用。生成后可直接对接后端 API。"
+---
+
+# Prototype-to-Web (Nuxt UI Starter) Skill
+
+## 概述
+
+把**原型**转换成**开箱即用的 Nuxt UI Starter 工程**。
+
+基于开源模板 [nuxt-ui-templates/starter](https://github.com/nuxt-ui-templates/starter) 起步，已内置：
+
+- **Nuxt 4** — 文件路由、自动导入、SSR/SSG、`$fetch`
+- **Vue 3** — 组合式 API（`<script setup>`）
+- **Nuxt UI** — 100+ 组件、暗色模式、Tailwind 集成
+- **Nitro** — Nuxt 服务端引擎，提供 server API 路由与构建能力
+- **Tailwind CSS v4** — 原子化 CSS
+- **TypeScript** — 类型安全
+- **ESLint** — 代码规范
+
+核心目标：
+
+1. 按**分层架构**（pages / composables / services / types）组织代码
+2. 用 **mock 数据**驱动页面，还原布局、视觉与交互
+3. 产出**能直接 `pnpm dev`** 的工程，无需再补脚手架
+4. Service 层预留数据接缝，对接后端时**只改一处**
+
+**分层约定**（对齐 Nuxt 约定优于配置 + 清晰分层）：
+
+```text
+app/
+├── app.vue                     # 入口：UApp + UHeader + UMain(NuxtPage) + UFooter
+├── app.config.ts               # Nuxt UI 主题（颜色等）
+├── assets/css/main.css         # Tailwind + Nuxt UI 样式入口
+├── components/                 # 自动导入组件（U* 优先）
+│   ├── AppLogo.vue
+│   ├── SkillCard.vue
+│   └── EmptyState.vue
+├── composables/                # 自动导入组合式函数（状态 + 逻辑）
+│   └── useSkills.ts
+├── pages/                      # 文件路由（无需手动注册）
+│   ├── index.vue               # /
+│   └── detail.vue              # /detail
+├── services/                   # 数据服务层（唯一接缝：mock/remote 切换）
+│   └── skillService.ts
+├── types/                      # TypeScript 类型（自动导入）
+│   └── skill.ts
+└── utils/                      # 工具函数（自动导入）
+    └── format.ts
+```
+
+**强制约定**：
+
+- **页面不直接发请求**，只调 composable
+- **composable 不直接 `$fetch`**，只调 service
+- **Service 是唯一数据接缝**，切换 mock/真实只改 service 内的 `useMock` 开关
+- **优先用 Nuxt UI 组件**（`UButton`、`UCard`、`UInput` 等），自定义部分用 Tailwind 工具类
+- **颜色走 Tailwind 语义色**（`text-primary`、`bg-primary`），不硬编码 hex
+
+---
+
+## 什么时候使用此技能
+
+触发场景：
+
+- 用户提供**原型 HTML/CSS**，要求转 Nuxt Web 项目
+- 用户提供**设计图/截图**，要求照做网页
+- 用户提供**PRD/页面清单**，要求生成 Nuxt 工程骨架
+- 用户说"这个页面用 Nuxt 怎么写"、"生成一个 Nuxt UI 项目"
+
+**不适用**：既有 Nuxt 项目重构；纯 Vue 组件片段问答；后端接口实现。
+
+---
+
+## 输入形态
+
+支持三类，可混合：
+
+| 输入 | 提取方式 | 可靠性 |
+| --- | --- | --- |
+| **HTML/CSS 原型代码** | 解析 DOM 结构，映射 Nuxt UI 组件 + Tailwind | 最高 |
+| **设计图 / 截图** | 视觉理解区域、层级、控件 | 中 |
+| **PRD / 页面清单** | 抽取页面、字段、跳转 | 低，需补视觉决策 |
+
+**优先级**：视觉以图片为准，结构以代码为准，业务规则以 PRD 为准。冲突时**停下来问**。
+
+### 最小澄清清单
+
+- 页面清单与主流程：首页、关键跳转
+- 视觉基调：主色（Tailwind 色名，如 green/blue/violet）、是否深色模式
+- 是否需要导航栏（顶部 Header / 侧边栏 Sidebar）
+- 是否需要表单、表格等复杂交互
+
+---
+
+## 关键技术决策（直接影响开箱即用）
+
+### 1. 零重型依赖（模板自带即够用）
+
+模板已含 Nuxt + @nuxt/ui + Tailwind + ESLint + TS。**不额外引入**：
+
+- 状态管理（Pinia）→ 用内置 composables
+- HTTP 客户端（axios）→ 用内置 `$fetch`
+- 路由库 → 用内置文件路由
+- 工具库（lodash）→ 用 ES 内置或手写
+
+**理由**：依赖越少，`pnpm install` 越不容易失败，开箱即用率越高。
+
+### 2. 状态管理用 Composables
+
+```ts
+// app/composables/useSkills.ts
+export const useSkills = () => {
+  const items = ref<Skill[]>([])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
+
+  async function load() {
+    loading.value = true
+    error.value = null
+    try {
+      items.value = await skillService.getSkills()
+    } catch (e) {
+      error.value = e instanceof Error ? e.message : '加载失败'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return { items, loading, error, load }
+}
+```
+
+页面侧：
+
+```vue
+<script setup lang="ts">
+const { items, loading, error, load } = useSkills()
+onMounted(() => load())
+</script>
+```
+
+### 3. 路由使用文件路由
+
+无需手动注册，文件名即路由：
+
+| 文件 | 路由 |
+| --- | --- |
+| `app/pages/index.vue` | `/` |
+| `app/pages/detail.vue` | `/detail` |
+| `app/pages/skills/[id].vue` | `/skills/:id` |
+
+跳转用 `<NuxtLink to="/detail">` 或 `useRouter().push()`。
+
+### 4. 数据服务层（Service）
+
+```ts
+// app/services/skillService.ts
+const useMock = true  // 对接后端时改 false
+
+export const skillService = {
+  async getSkills(): Promise<Skill[]> {
+    if (useMock) {
+      await delay(300)
+      return mockSkills
+    }
+    return await $fetch<Skill[]>('/api/skills')
+  }
+}
+```
+
+**Service 是唯一接缝**：composable 只调 service 方法，不关心数据来源。
+
+### 5. 主题集中管理
+
+颜色在 `app/app.config.ts` 声明，页面用 Tailwind 语义色：
+
+```ts
+// app/app.config.ts
+export default defineAppConfig({
+  ui: {
+    colors: {
+      primary: 'green',
+      neutral: 'slate'
+    }
+  }
+})
+```
+
+页面中用 `text-primary`、`bg-primary`、`border-primary`，不写 hex。
+
+---
+
+## 使用流程
+
+### 步骤 1：解析原型 → page inventory
+
+产出页面清单：
+
+| 字段 | 示例 |
+| --- | --- |
+| `page_name` | `index` |
+| `route` | `/` |
+| `file_path` | `app/pages/index.vue` |
+| `layout_type` | `list` / `detail` / `form` / `grid` / `profile` / `landing` |
+| `data_model` | `Skill` |
+| `components` | `SkillCard`, `EmptyState` |
+| `data_fields` | `id`, `title`, `userName`, `tags` |
+| `interactions` | 跳转、加载更多 |
+
+机器可读中间产物按 `resources/specifications/prototype_parser_contract.md` 输出 `proto_context.json`。HTML 输入可用 `resources/tools/parse_prototype.py` 生成初稿。
+
+### 步骤 2：确认视觉与交互
+
+问清楚：主色（Tailwind 色名）、是否深色模式、导航类型、表单校验规则。
+
+### 步骤 3：生成工程骨架
+
+从 `resources/templates/project_structure/` 复制，替换占位符：
+
+```text
+{{project_name}}        工程名（kebab-case，package.json name）
+{{app_title}}           应用显示名
+{{primary_color}}       主色（Tailwind 色名，如 green/blue）
+{{neutral_color}}       中性色（如 slate）
+```
+
+必生成文件：
+
+- `package.json`（含 Nuxt + @nuxt/ui + Tailwind + ESLint + TS）
+- `nuxt.config.ts`（modules 含 @nuxt/ui、@nuxt/eslint）
+- `tsconfig.json`、`eslint.config.mjs`
+- `app/app.vue`、`app/app.config.ts`
+- `app/assets/css/main.css`
+- `app/components/`（AppLogo + 业务组件）
+- `app/composables/`
+- `app/pages/`
+- `app/services/`
+- `app/types/`
+- `app/utils/`
+- `.gitignore`、`.editorconfig`
+- `README.md`
+
+### 步骤 4：生成页面与组件
+
+按布局原型选 Nuxt UI 组件（详见 `resources/specifications/nuxt_ui_mapping_rules.md`）：
+
+| 布局 | 核心组件 |
+| --- | --- |
+| 列表 | `v-for` + `UCard` |
+| 详情 | `UCard` + 文本组件 |
+| 表单 | `UForm` + `UFormField` + `UInput`/`USelect` |
+| 宫格 | `grid grid-cols-*` + `UCard` |
+| 个人中心 | `UAvatar` + `UList` |
+| 落地页 | `UPageHero` + `UPageSection` |
+
+### 步骤 5：填充 mock 数据
+
+`app/services/*Service.ts` 中提供与真实接口**同形状**的数据：
+
+- 列表至少 6 条，撑满一屏
+- 含边界数据：超长标题、缺图、空列表
+- 用 `setTimeout` 模拟网络延迟，让 Loading 态可见
+
+### 步骤 6：实现交互
+
+必须覆盖：
+
+- 页面跳转与返回（`NuxtLink` / `useRouter`）
+- 加载态（`loading` ref + 骨架屏 / `animate-pulse`）
+- 空态（自定义 `EmptyState` 组件）
+- 错误态（`UAlert` + 重试按钮）
+- 点击反馈（`UButton` / `NuxtLink`）
+- 轻提示（`useToast().add(...)`）
+- 表单校验与提交反馈
+
+### 步骤 7：自检
+
+运行 `resources/tools/validate_project.py`：
+
+- `package.json` 可解析、name 为 kebab-case、type 为 module
+- `nuxt.config.ts` 含 `@nuxt/ui` 模块
+- `app/app.vue` 含 `<NuxtPage />`
+- `app/app.config.ts` 声明 `ui.colors.primary`
+- `app/assets/css/main.css` 导入 tailwindcss 与 @nuxt/ui
+- `postinstall` 为 `nuxt prepare`
+- 页面不直接用原生 `fetch`（应用 service 层 + `$fetch`）
+- 存在 `tsconfig.json`
+- 建议建立 `services/` 与 `composables/` 层
+- 未默认引入 Pinia
+
+---
+
+## 文件结构（生成的目标工程）
+
+```text
+{{project_name}}/
+├── package.json
+├── nuxt.config.ts
+├── tsconfig.json
+├── eslint.config.mjs
+├── .gitignore
+├── .editorconfig
+├── README.md
+└── app/
+    ├── app.vue
+    ├── app.config.ts
+    ├── assets/css/main.css
+    ├── components/
+    │   ├── AppLogo.vue
+    │   ├── SkillCard.vue
+    │   └── EmptyState.vue
+    ├── composables/
+    │   └── useSkills.ts
+    ├── pages/
+    │   ├── index.vue
+    │   └── detail.vue
+    ├── services/
+    │   └── skillService.ts
+    ├── types/
+    │   └── skill.ts
+    └── utils/
+        └── format.ts
+```
+
+---
+
+## 对接后端 API（收尾目标）
+
+三步切换：
+
+### 1. 改开关
+
+`app/services/skillService.ts`：
+
+```ts
+const useMock = false
+const API_BASE = 'https://api.your-domain.com'
+```
+
+### 2. 确认接口路径
+
+service 内 `$fetch` 的路径与返回结构。
+
+### 3. 自动生效
+
+composable 与页面**一行不用改**。
+
+数据流转：
+
+```text
+Page → useSkills() → skillService.getSkills()
+                          ├── useMock=true  → mockSkills（setTimeout 延迟）
+                          └── useMock=false → $fetch('/api/skills')
+```
+
+---
+
+## 代码规范
+
+### 命名
+
+| 对象 | 规则 | 示例 |
+| --- | --- | --- |
+| 工程名 | kebab-case | `skill-swap-web` |
+| 页面文件 | kebab-case + `.vue` | `index.vue`, `detail.vue` |
+| 组件文件 | PascalCase + `.vue` | `SkillCard.vue` |
+| composable | camelCase `use` 前缀 | `useSkills.ts` |
+| service | camelCase + `Service` | `skillService.ts` |
+| 类型文件 | camelCase | `skill.ts` |
+| 类型/接口 | PascalCase | `Skill` |
+| 变量 | camelCase | `skillList` |
+| 常量 | UPPER_SNAKE_CASE | `API_BASE` |
+
+### 组件规范
+
+- **优先用 Nuxt UI 组件**：`UButton`、`UCard`、`UInput` 等
+- **布局用 Tailwind 工具类**：`flex`、`grid`、`gap-*`、`p-*`
+- **图标用 Iconify 语法**：`i-lucide-*`、`i-simple-icons-*`
+- **颜色用语义色**：`text-primary`、`bg-primary`，不写 hex
+- **响应式用断点前缀**：`sm:`、`md:`、`lg:`
+
+### 注释
+
+- 中文注释
+- composable / service 顶部说明：用途、数据来源、主要方法
+- 复杂交互处加行内注释
+
+---
+
+## 输出格式
+
+```text
+✅ 已生成 Nuxt UI Starter 工程：{{project_name}}
+
+📁 结构
+├── app/pages/          {{N}} 个页面（文件路由）
+├── app/components/     组件
+├── app/composables/    状态与逻辑
+├── app/services/       数据服务层（mock/remote 切换）
+└── app/types/          TypeScript 类型
+
+🎨 已还原
+- 页面：首页 / 详情（2 个）
+- 组件：SkillCard、EmptyState
+- 交互：加载态、空态、错误态、点击跳转、Toast 提示
+
+▶️ 如何运行（开箱即用）
+1. pnpm install
+2. pnpm dev
+（无需额外配置；mock 数据已内置）
+
+🔌 如何对接后端
+1. app/services/skillService.ts 中 useMock 改为 false
+2. 设置 API_BASE
+3. 确认 $fetch 接口路径与返回结构
+
+⚠️ 待确认
+- 详情页评论区分页规则
+- 空态文案
+```
+
+---
+
+## 错误处理与边界
+
+### 原型含 Web 专有特性
+
+| 原型特性 | Nuxt UI / Tailwind 处理 |
+| --- | --- |
+| CSS Grid | `grid grid-cols-* gap-*` |
+| 绝对定位 | `relative` + `absolute` |
+| CSS 动画 | `transition-*` / `animate-*` |
+| 渐变色 | `bg-gradient-to-r from-* to-*` |
+| 复杂阴影 | `shadow-md` / `shadow-lg` |
+| 图标字体 | `i-lucide-*` / `i-simple-icons-*` |
+
+### 图片资源
+
+原型图片链接**不可直接引用**。做法：
+
+- 占位用 `UIcon` 或纯色背景块
+- 网络图用 `<img loading="lazy">` + `@error` 回退
+- 本地图片放 `public/` 目录，通过 `/images/xxx.png` 引用
+
+### 无法推断时
+
+不臆造。生成静态可看版本，把不确定项列入"待确认"，不要静默决定。
+
+---
+
+## 资源文件结构
+
+```text
+prototype-to-web(Nuxt UI Starter)/
+├── SKILL.md
+├── README.md
+└── resources/
+    ├── config/
+    │   ├── naming_rules.json
+    │   ├── design_tokens.json
+    │   └── dependency_policy.json
+    ├── specifications/
+    │   ├── prototype_parser_contract.md
+    │   ├── architecture_conventions.md
+    │   └── nuxt_ui_mapping_rules.md
+    ├── templates/
+    │   └── project_structure/
+    │       ├── package.json
+    │       ├── nuxt.config.ts
+    │       ├── tsconfig.json
+    │       ├── eslint.config.mjs
+    │       ├── .gitignore
+    │       ├── .editorconfig
+    │       ├── README.md
+    │       └── app/
+    │           ├── app.vue
+    │           ├── app.config.ts
+    │           ├── assets/css/main.css
+    │           ├── components/
+    │           ├── composables/
+    │           ├── pages/
+    │           ├── services/
+    │           ├── types/
+    │           └── utils/
+    ├── tools/
+    │   ├── parse_prototype.py
+    │   ├── validate_project.py
+    │   └── preview_plan.py
+    └── demo_output/
+        └── skill-swap-web/
+```
+
+---
+
+## 重要提示
+
+1. **基于 Nuxt UI Starter 模板** —— 以 [nuxt-ui-templates/starter](https://github.com/nuxt-ui-templates/starter) 为基线
+2. **页面不碰 `$fetch`** —— 只调 composable，composable 调 service
+3. **Service 是唯一接缝** —— 切换 mock/真实只改 service 内开关
+4. **零重型依赖** —— 模板自带即够用，不引 Pinia/axios
+5. **优先 Nuxt UI 组件** —— `U*` 组件保证一致性，自定义用 Tailwind
+6. **颜色走语义色** —— `text-primary` 等，不写 hex
+7. **三态齐全** —— Loading / Empty / Error 必须有，不能只有成功态
+8. **mock 要像真数据** —— 有长度、有边界、有延迟
+9. **`postinstall` 必须为 `nuxt prepare`** —— 否则类型与自动导入无法生成
+10. **文件路由** —— `app/pages/index.vue` → `/`，无需手动注册

@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0",
+  "description": "依赖策略。目标：最大化开箱即用成功率（pnpm install 不出错）与最小认知负担。基于 Nuxt UI Starter 模板，只做必要扩展。",
+  "principle": "默认零重型依赖。Nuxt 已内置 $fetch、自动导入、组合式 API；能用内置能力的不引包。",
+  "template_base": {
+    "name": "nuxt-ui-templates/starter",
+    "url": "https://github.com/nuxt-ui-templates/starter",
+    "note": "脚手架以该模板为基线，已含 Nuxt 4 + @nuxt/ui + Tailwind CSS v4 + ESLint + TypeScript"
+  },
+  "default_dependencies": {
+    "nuxt": {
+      "version": "^4.6.3",
+      "reason": "模板基线，含 $fetch、自动导入、文件路由、SSR/SSG"
+    },
+    "@nuxt/ui": {
+      "version": "^4.12.0",
+      "reason": "Nuxt 官方 UI 库，100+ 组件、暗色模式、Tailwind 集成"
+    },
+    "tailwindcss": {
+      "version": "^4.3.3",
+      "reason": "Nuxt UI 依赖的原子化 CSS 框架"
+    },
+    "@iconify-json/lucide": {
+      "version": "^1.2.147",
+      "reason": "Lucide 图标集，Nuxt UI 图标语法 i-lucide-*"
+    },
+    "@iconify-json/simple-icons": {
+      "version": "^1.2.100",
+      "reason": "品牌图标集，如 GitHub、Nuxt 等"
+    }
+  },
+  "default_dev_dependencies": {
+    "@nuxt/eslint": {
+      "version": "^1.17.0",
+      "reason": "Nuxt 官方 ESLint 模块，开箱即用配置"
+    },
+    "eslint": {
+      "version": "^10.13.0",
+      "reason": "代码规范检查"
+    },
+    "eslint-plugin-better-tailwindcss": {
+      "version": "^4.10.0",
+      "reason": "Tailwind 类名排序与规范"
+    },
+    "typescript": {
+      "version": "^6.0.3",
+      "reason": "类型检查"
+    },
+    "vue-tsc": {
+      "version": "^3.3.13",
+      "reason": "Vue 单文件组件类型检查"
+    }
+  },
+  "built_in_capabilities": {
+    "view_layer": {
+      "name": "Vue 3",
+      "reason": "组合式 API + 响应式系统，与 Nuxt 深度集成"
+    },
+    "server_engine": {
+      "name": "Nitro",
+      "reason": "Nuxt 内置服务端引擎，提供 server/api 路由、构建产物、部署适配",
+      "usage": "server/api/*.ts 定义接口，$fetch 调用"
+    },
+    "http_client": {
+      "name": "$fetch (ohmyfetch)",
+      "reason": "Nuxt 内置，基于 undici，支持拦截器、重试、类型推断",
+      "usage": "在 app/services/ 中封装"
+    },
+    "state_management": {
+      "name": "Vue Composition API + composables",
+      "reason": "Nuxt 自动导入 composables，原型阶段无需额外状态库"
+    },
+    "routing": {
+      "name": "文件路由 (app/pages/)",
+      "reason": "Nuxt 内置，无需手动注册路由"
+    },
+    "seo": {
+      "name": "useHead / useSeoMeta",
+      "reason": "Nuxt 内置组合式 SEO API"
+    }
+  },
+  "rejected_by_default": {
+    "pinia": {
+      "reason": "原型阶段 composables 已足够；Pinia 增加 store 模板代码与心智负担",
+      "when_to_add": "跨多页面共享复杂状态、需要持久化或 devtools 时间旅行"
+    },
+    "axios": {
+      "reason": "Nuxt 内置 $fetch 功能更强（拦截器、重试、SSR 友好），引 axios 属于重复",
+      "when_to_add": "团队既有 axios 封装习惯且无法迁移"
+    },
+    "@vueuse/core": {
+      "reason": "大部分能力 Nuxt 内置或组合式 API 可手写，原型阶段非必需",
+      "when_to_add": "大量使用 useStorage/useEventListener 等通用 hook"
+    },
+    "vue-router": {
+      "reason": "Nuxt 内置路由，直接用 useRoute/useRouter 即可",
+      "when_to_add": "不建议引入"
+    },
+    "vuex": {
+      "reason": "已被 Pinia 取代，Nuxt 3+ 不再推荐",
+      "when_to_add": "不建议引入"
+    },
+    "element-plus / ant-design-vue": {
+      "reason": "与 Nuxt UI 重叠，混用会导致样式冲突与包体积膨胀",
+      "when_to_add": "不建议引入，统一用 Nuxt UI 组件"
+    },
+    "sass": {
+      "reason": "Tailwind CSS v4 已满足样式需求，无需预处理器",
+      "when_to_add": "需要复杂变量/混入且 Tailwind 无法表达"
+    }
+  },
+  "required_files": [
+    "package.json",
+    "nuxt.config.ts",
+    "tsconfig.json",
+    "eslint.config.mjs",
+    "app/app.vue",
+    "app/app.config.ts",
+    "app/assets/css/main.css",
+    ".gitignore",
+    "README.md"
+  ],
+  "package_manager": {
+    "name": "pnpm",
+    "version": "12.15.0",
+    "note": "模板指定 pnpm；若环境无 pnpm，可用 npm/pnpm 代替但需删除 packageManager 字段或启用 corepack"
+  },
+  "package_json_rules": {
+    "type": "module",
+    "required_scripts": ["dev", "build", "preview", "postinstall", "lint", "typecheck"],
+    "postinstall_must_be": "nuxt prepare",
+    "note": "postinstall 必须为 nuxt prepare，否则类型与自动导入无法生成"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "version": "1.0.0",
+  "description": "设计 token。Nuxt UI Starter 基于 Tailwind CSS v4，颜色通过 app.config.ts 与 CSS 变量管理。页面优先用 U* 组件与 Tailwind 工具类，避免硬编码颜色。",
+  "color": {
+    "primary": "green",
+    "primaryHex": "#00DC82",
+    "neutral": "slate",
+    "success": "emerald",
+    "warning": "amber",
+    "error": "red",
+    "info": "sky"
+  },
+  "color_palette": {
+    "green": {
+      "50": "#EFFDF5",
+      "100": "#D9FBE8",
+      "200": "#B3F5D1",
+      "300": "#75EDAE",
+      "400": "#00DC82",
+      "500": "#00C16A",
+      "600": "#00A155",
+      "700": "#007F45",
+      "800": "#016538",
+      "900": "#0A5331",
+      "950": "#052E16"
+    }
+  },
+  "spacing": {
+    "xs": "0.25rem",
+    "sm": "0.5rem",
+    "md": "0.75rem",
+    "lg": "1rem",
+    "xl": "1.5rem",
+    "2xl": "2rem",
+    "3xl": "3rem",
+    "pagePadding": "1.5rem",
+    "sectionGap": "1.5rem"
+  },
+  "radius": {
+    "none": "0",
+    "sm": "0.25rem",
+    "md": "0.5rem",
+    "lg": "0.75rem",
+    "xl": "1rem",
+    "2xl": "1.5rem",
+    "full": "9999px"
+  },
+  "font_size": {
+    "xs": "0.75rem",
+    "sm": "0.875rem",
+    "base": "1rem",
+    "lg": "1.125rem",
+    "xl": "1.25rem",
+    "2xl": "1.5rem",
+    "3xl": "1.875rem",
+    "4xl": "2.25rem"
+  },
+  "font_weight": {
+    "thin": 100,
+    "light": 300,
+    "normal": 400,
+    "medium": 500,
+    "semibold": 600,
+    "bold": 700
+  },
+  "shadow": {
+    "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+    "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1)"
+  },
+  "sizing": {
+    "headerHeight": "3.5rem",
+    "containerMax": "1280px",
+    "cardMinHeight": "12rem"
+  },
+  "animation": {
+    "durationFast": "150ms",
+    "durationBase": "250ms",
+    "durationSlow": "350ms",
+    "ease": "cubic-bezier(0.4, 0, 0.2, 1)"
+  },
+  "dark_mode": {
+    "enabled": true,
+    "strategy": "class",
+    "note": "Nuxt UI 内置颜色模式切换，无需手动维护深色样式"
+  }
+}

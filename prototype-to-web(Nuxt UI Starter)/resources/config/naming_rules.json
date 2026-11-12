@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "description": "Nuxt UI Starter 工程命名规则。对齐 Nuxt / Vue / TypeScript 社区约定与 Nuxt UI 自动导入机制。",
+  "project_name": {
+    "convention": "kebab-case",
+    "constraint": "必须是小写字母、数字、连字符；不能以数字或连字符开头/结尾；package.json name 字段使用",
+    "example": "skill-swap-web",
+    "forbidden": ["SkillSwapWeb", "skill_swap_web", "Skill-Swap"]
+  },
+  "page_file": {
+    "convention": "kebab-case",
+    "suffix": ".vue",
+    "location": "app/pages/",
+    "note": "文件名即路由路径；index.vue 对应根路由 /",
+    "example": {
+      "首页": "index.vue → /",
+      "详情页": "detail.vue → /detail",
+      "嵌套路由": "skills/[id].vue → /skills/:id"
+    }
+  },
+  "component_file": {
+    "convention": "PascalCase",
+    "suffix": ".vue",
+    "location": "app/components/",
+    "note": "Nuxt 自动导入，组件名即文件名（含子目录时以路径拼接，如 features/SkillCard → <FeaturesSkillCard />）",
+    "example": "SkillCard.vue"
+  },
+  "composable_file": {
+    "convention": "camelCase 前缀 use",
+    "suffix": ".ts",
+    "location": "app/composables/",
+    "note": "Nuxt 自动导入，文件名即组合式函数名",
+    "example": "useSkills.ts → useSkills()"
+  },
+  "service_file": {
+    "convention": "camelCase",
+    "suffix": "Service.ts",
+    "location": "app/services/",
+    "example": "skillService.ts"
+  },
+  "type_file": {
+    "convention": "camelCase",
+    "suffix": ".ts",
+    "location": "app/types/",
+    "example": "skill.ts"
+  },
+  "util_file": {
+    "convention": "camelCase",
+    "suffix": ".ts",
+    "location": "app/utils/",
+    "example": "format.ts"
+  },
+  "interface": {
+    "convention": "PascalCase",
+    "prefix": "I",
+    "optional": true,
+    "example": "ISkill"
+  },
+  "type_alias": {
+    "convention": "PascalCase",
+    "example": "Skill"
+  },
+  "variable": {
+    "convention": "camelCase",
+    "example": "skillList"
+  },
+  "constant": {
+    "convention": "UPPER_SNAKE_CASE",
+    "example": "API_BASE_URL"
+  },
+  "private_member": {
+    "convention": "下划线前缀",
+    "example": "_internalState"
+  },
+  "event_handler": {
+    "convention": "on + PascalCase",
+    "example": "onSubmit"
+  }
+}
