@@ -124,25 +124,21 @@ server/                        # Nitro 服务端（可选，原型阶段通常�
 ### 标准写法
 
 ```ts
-// app/composables/useSkills.ts
 export const useSkills = () => {
-  const items = ref<Skill[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+  const requestFetch = useRequestFetch()
+  const apiBase = useRuntimeConfig().public.apiBase
+  const { data, pending, error, refresh } = useAsyncData(
+    'skills',
+    () => skillService.getSkills(requestFetch, apiBase),
+    { default: () => [] as Skill[] }
+  )
 
-  async function load() {
-    loading.value = true
-    error.value = null
-    try {
-      items.value = await skillService.getSkills()
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : '加载失败'
-    } finally {
-      loading.value = false
-    }
+  return {
+    items: data,
+    loading: pending,
+    error: computed(() => error.value?.message ?? null),
+    load: refresh
   }
-
-  return { items, loading, error, load }
 }
 ```
 
@@ -151,25 +147,12 @@ export const useSkills = () => {
 ```vue
 <script setup lang="ts">
 const { items, loading, error, load } = useSkills()
-onMounted(() => load())
 </script>
-
-<template>
-  <div v-if="loading">加载中...</div>
-  <UAlert v-else-if="error" :title="error" color="red" />
-  <EmptyState v-else-if="!items.length" />
-  <div v-else class="grid gap-4">
-    <SkillCard v-for="item in items" :key="item.id" :item="item" />
-  </div>
-</template>
 ```
 
-### 强制规则
+列表数据走 `useAsyncData`，这样预渲染能拿到内容。`onMounted(() => load())` 只适合纯客户端、且不会在多处重复注册的副作用，不用于页面取数。
 
-1. **状态必须用 `ref` / `reactive`**，保证响应式
-2. **异步操作必须处理 loading 与 error**，不能只有成功态
-3. **不要在 `<script setup>` 顶层直接 `await`** 会阻塞组件初始化，用 `onMounted` 或 `useAsyncData`
-4. **composable 内不引用组件实例**，保持纯逻辑
+共享状态不要在 composable 每次调用时注册 `onMounted`。登录态用 `useState` 加一次初始化。
 
 ---
 
@@ -215,25 +198,19 @@ const useMock = true // 起步用 mock。按接口文档对接时见 api_binding
 const mockSkills: Skill[] = [/* ... */]
 
 export const skillService = {
-  async getSkills(): Promise<Skill[]> {
+  async getSkills(fetcher: typeof $fetch = $fetch, apiBase = ''): Promise<Skill[]> {
     if (useMock) {
-      await delay(300) // 模拟网络延迟
+      await delay(300)
       return mockSkills
     }
-    return await $fetch<Skill[]>('/api/skills')
-  },
-
-  async getSkillById(id: string): Promise<Skill | null> {
-    if (useMock) {
-      await delay(200)
-      return mockSkills.find(s => s.id === id) ?? null
-    }
-    return await $fetch<Skill>(`/api/skills/${id}`)
+    return await fetcher<Skill[]>(`${apiBase}/api/skills`)
   }
 }
 ```
 
-**按接口文档对接**时，页面与 composable 的调用方式不变。文档字段与 `Skill` 这类页面类型不一致时，映射留在 service：`$fetch` 接收原始响应，再返回页面类型。包络、文档写明的请求头也留在 service。步骤见 `api_binding.md`。某个方法的路径和字段对上之后，才关掉该方法的 mock；不要用一个开关把尚未对接的方法一起切走。
+列表 composable 在 `useAsyncData` 回调外取出 `useRequestFetch()` 和 `useRuntimeConfig().public.apiBase`，再传进 service。service 不自己调用 `useRequestFetch()`。
+
+按接口文档对接时，页面与 composable 的调用方式不变。文档字段与页面类型不一致时，映射留在 service。某个方法对上之后才关掉该方法的 mock。步骤见 `api_binding.md`。
 
 ---
 

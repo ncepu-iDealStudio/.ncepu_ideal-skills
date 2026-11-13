@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const { items, loading, error, load } = useSkills()
-
-onMounted(() => load())
 </script>
 
 <template>

@@ -1,25 +1,24 @@
 /**
- * 技能列表组合式函数
- * 持有列表状态，调用 skillService 获取数据
+ * 技能列表。
+ * 用 useAsyncData 包住 service，预渲染和客户端共用同一次结果。
+ * 页面只调用本函数，不要再写 onMounted 去 load。
  */
 export const useSkills = () => {
-  const items = ref<Skill[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+  const requestFetch = useRequestFetch()
+  const apiBase = useRuntimeConfig().public.apiBase
 
-  async function load() {
-    loading.value = true
-    error.value = null
-    try {
-      items.value = await skillService.getSkills()
-    }
-    catch (e) {
-      error.value = e instanceof Error ? e.message : '加载失败，请重试'
-    }
-    finally {
-      loading.value = false
-    }
+  const { data, pending, error, refresh } = useAsyncData(
+    'skills',
+    () => skillService.getSkills(requestFetch, apiBase),
+    { default: () => [] as Skill[] }
+  )
+
+  const message = computed(() => error.value?.message ?? null)
+
+  return {
+    items: data,
+    loading: pending,
+    error: message,
+    load: refresh
   }
-
-  return { items, loading, error, load }
 }

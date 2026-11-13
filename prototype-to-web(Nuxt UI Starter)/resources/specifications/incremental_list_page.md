@@ -128,11 +128,10 @@ export interface News {
 ```ts
 /**
  * 资讯数据服务层（唯一数据接缝）
- * 对接后端时只改本文件：useMock=false，并核对 $fetch 路径。
+ * 对接后端时：useMock=false，用调用方传入的 fetcher 请求。基地址用 apiBase 参数。
  */
 
 const useMock = true
-const API_BASE = '/api'
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -144,19 +143,21 @@ const mockNews: News[] = [
 ]
 
 export const newsService = {
-  async getNews(): Promise<News[]> {
+  async getNews(fetcher: typeof $fetch = $fetch, apiBase = ''): Promise<News[]> {
     if (useMock) {
       await delay(300)
       return mockNews
     }
-    return await $fetch<News[]>(`${API_BASE}/news`)
+    return await fetcher<News[]>(`${apiBase}/api/news`)
   }
 }
 ```
 
 ### 5.3 `app/composables/useNews.ts`
 
-与 `useSkills` 相同：`items` / `loading` / `error` / `load()`，`load` 只调用 `newsService.getNews()`。页面文件里不要出现 `$fetch` 或 `fetch(`。
+与 `useSkills` 相同：在 setup 里取出 `useRequestFetch()` 和 `useRuntimeConfig().public.apiBase`，用 `useAsyncData` 调用 `newsService.getNews(fetcher, apiBase)`。向页面暴露 `items` / `loading` / `error` / `load`。页面文件里不要出现 `$fetch`、`fetch(` 或 `onMounted(() => load())`。
+
+需要示例接口时，增加 `server/api/news.get.ts`，返回字段与 `News` 一致。
 
 ### 5.4 `app/components/NewsCard.vue`
 
@@ -174,7 +175,7 @@ export const newsService = {
 3. 空列表：已有的 `EmptyState`
 4. 有数据：`v-for` 渲染 `NewsCard`
 
-`onMounted(() => load())`。页面不直接请求。
+页面脚本只调用 `useNews()`，不写 `onMounted`。颜色只用语义色：`text-muted`、`bg-default`、`border-default`、`text-primary`。筛选用 `UButton` 或 `UTabs`，下拉用 `USelect`，不用原生 `<button>` / `<select>`。
 
 ---
 

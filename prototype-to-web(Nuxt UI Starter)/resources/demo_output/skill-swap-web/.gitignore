@@ -18,3 +18,5 @@ logs
 .env
 .env.*
 !.env.example
+# 技能解析中间产物，不要和源码放在一起
+proto_context.json

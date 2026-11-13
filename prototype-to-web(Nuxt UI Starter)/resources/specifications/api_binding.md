@@ -80,17 +80,16 @@ interface SkillListResponse {
 }
 
 const useMockSkills = false
-const API_BASE = '/api'
 /** 成功码以接口文档为准，不要沿用示例里的 0。 */
 const SUCCESS_CODE = 0
 
 export const skillService = {
-  async getSkills(): Promise<Skill[]> {
+  async getSkills(fetcher: typeof $fetch = $fetch, apiBase = ''): Promise<Skill[]> {
     if (useMockSkills) {
       await delay(300)
       return mockSkills
     }
-    const raw = await $fetch<SkillListResponse>(`${API_BASE}/skills`, {
+    const raw = await fetcher<SkillListResponse>(`${apiBase}/skills`, {
       // 文档写明 Authorization 时才加。凭证读取方式也以文档为准；文档没写就不要猜。
       headers: { Authorization: `Bearer ${accessToken}` }
     })
@@ -111,6 +110,7 @@ export const skillService = {
 
 要点：
 
+- `fetcher` 和 `apiBase` 由列表 composable 传入：`useRequestFetch()` 与 `useRuntimeConfig().public.apiBase`。service 里不要再写一份基地址
 - 原始响应类型按**这份文档**命名，不替换页面正在用的 `Skill`
 - `SUCCESS_CODE` 按文档填写。文档没写成功值时停下来问，不要沿用示例里的 `0`
 - 请求头只加文档写明的那一个。示例里的 `accessToken` 表示文档已经说明的凭证；文档没写它从哪来，就删掉 `headers` 并停下来问。不要为这个变量新做登录页

@@ -57,7 +57,19 @@ app/
 - **composable 不直接 `$fetch`**，只调 service
 - **Service 是唯一数据接缝**。真实字段与页面类型不一致时，在 service 内映射；某个方法对接完成后，才关掉该方法的 `useMock`
 - **优先用 Nuxt UI 组件**（`UButton`、`UCard`、`UInput` 等），自定义部分用 Tailwind 工具类
-- **颜色走 Tailwind 语义色**（`text-primary`、`bg-primary`），不硬编码 hex
+- **颜色走 Tailwind 语义色**（`text-primary`、`bg-default`、`text-muted`、`border-default`），不写 `bg-slate-*`、`bg-white` 或成对的 `dark:`
+
+生成页面时同时遵守：
+
+1. 列表用 `useAsyncData` 包住 service，并把 `useRequestFetch()` 与 `useRuntimeConfig().public.apiBase` 传进去。页面和会被多次调用的 composable 里不要写 `onMounted(() => load())`。
+2. 登录态这类共享数据只初始化一次（`useState` + `callOnce`，或 `app/plugins/*.client.ts`）。不要在每次调用 composable 时再注册 `onMounted`。
+3. 按钮、筛选、下拉用 `UButton`、`UTabs`、`USelect`，不用原生 `<button>` / `<select>`。
+4. `runtimeConfig.public.apiBase` 必须由 service 读取。不要再写一份无人使用的 `API_BASE`，也不要声明读不到的环境变量。
+5. 工程带 `app/error.vue`（`UError`）和 `server/api` 下至少一个与页面类型同形状的示例接口。
+6. 多个页面重复做登录判断时，用 `definePageMeta({ middleware: 'auth' })`。只有登录页和业务页外壳不同，才拆 `layouts`。起步工程的页头可以继续放在 `app.vue`。
+7. Nuxt 自动导入的 composable、组件、utils 不要再写显式 import。
+8. 不要把密码写入 `localStorage`。不要把 `proto_context.json` 留在工程根目录。
+9. `@theme` 里只写和 Tailwind 默认色阶不同的颜色。
 
 ---
 
@@ -115,32 +127,27 @@ app/
 ```ts
 // app/composables/useSkills.ts
 export const useSkills = () => {
-  const items = ref<Skill[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
-
-  async function load() {
-    loading.value = true
-    error.value = null
-    try {
-      items.value = await skillService.getSkills()
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : '加载失败'
-    } finally {
-      loading.value = false
-    }
+  const requestFetch = useRequestFetch()
+  const apiBase = useRuntimeConfig().public.apiBase
+  const { data, pending, error, refresh } = useAsyncData(
+    'skills',
+    () => skillService.getSkills(requestFetch, apiBase),
+    { default: () => [] as Skill[] }
+  )
+  return {
+    items: data,
+    loading: pending,
+    error: computed(() => error.value?.message ?? null),
+    load: refresh
   }
-
-  return { items, loading, error, load }
 }
 ```
 
-页面侧：
+页面侧只取返回值，不要再 `onMounted`：
 
 ```vue
 <script setup lang="ts">
 const { items, loading, error, load } = useSkills()
-onMounted(() => load())
 </script>
 ```
 
@@ -163,17 +170,17 @@ onMounted(() => load())
 const useMock = true  // 起步阶段用 mock。接口文档对接见 api_binding.md
 
 export const skillService = {
-  async getSkills(): Promise<Skill[]> {
+  async getSkills(fetcher: typeof $fetch = $fetch, apiBase = ''): Promise<Skill[]> {
     if (useMock) {
       await delay(300)
       return mockSkills
     }
-    return await $fetch<Skill[]>('/api/skills')
+    return await fetcher<Skill[]>(`${apiBase}/api/skills`)
   }
 }
 ```
 
-**Service 是唯一接缝**：composable 只调 service 方法，不关心数据来源。上面的 `$fetch<Skill[]>` 只表示起步工程的占位。真实文档的字段、包络与页面类型不一致时，按 `api_binding.md` 在 service 内映射，不能把原始响应直接当成 `Skill[]`。
+**Service 是唯一接缝**：composable 在 setup 里取出 `useRequestFetch()` 后传给 service。上面这个函数签名才是起步工程的写法。真实文档的字段、包络与页面类型不一致时，按 `api_binding.md` 在 service 内映射，不能把原始响应直接当成 `Skill[]`。
 
 ### 5. 主题集中管理
 
