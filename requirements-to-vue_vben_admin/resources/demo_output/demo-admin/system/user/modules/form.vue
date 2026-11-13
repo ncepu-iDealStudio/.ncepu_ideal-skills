@@ -21,7 +21,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (!valid) return;
     const values = await formApi.getValues();
     drawerApi.lock();
-    // TODO: 对接真实接口 create/update
+    // 生成阶段不接真实接口。用户提供接口文档后，按 api_binding.md 调用已有的 create/update。
     console.log('submit', id.value, values);
     setTimeout(() => {
       emit('success');

@@ -77,7 +77,8 @@ requirements-to-vue_vben_admin/
     │   └── framework_baseline.json             # vben5 版本、路径、API、禁用写法
     ├── specifications/
     │   ├── requirements_parser_contract.md     # 需求 → req_context.json 契约
-    │   └── page_generation_patterns.md         # 各页面类型的标准代码写法
+    │   ├── page_generation_patterns.md         # 各页面类型的标准代码写法
+    │   └── api_binding.md                      # 已有页面上按接口文档对接真实数据
     ├── templates/                              # 可复用模板
     ├── tools/
     │   ├── parse_requirements.py               # 中文需求 → req_context.json
@@ -203,6 +204,7 @@ demo-admin/
 2. **字段要确认**：需求通常只写模块名，字段靠推断容易返工
 3. **先生成一个模块验证**：确认风格对了再批量生成其余模块
 4. **必须给 mock**：否则跑起来是空表格，容易误判为生成失败
+5. **接口文档后补**：页面已经生成时，按 `resources/specifications/api_binding.md` 只改 api 函数，不改表格列和路由
 
 ## 9. 相关文档
 
@@ -210,5 +212,6 @@ demo-admin/
 | --- | --- |
 | 需求解析契约 | `resources/specifications/requirements_parser_contract.md` |
 | 页面生成范式（含完整代码） | `resources/specifications/page_generation_patterns.md` |
+| 接口文档对接 | `resources/specifications/api_binding.md` |
 | 框架基线（版本/API/禁用写法） | `resources/config/framework_baseline.json` |
 | vue-vben-admin 官方文档 | <https://doc.vben.pro/> |

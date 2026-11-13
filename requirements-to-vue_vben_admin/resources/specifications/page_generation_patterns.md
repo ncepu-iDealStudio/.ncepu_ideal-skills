@@ -493,7 +493,7 @@ export async function deleteUser(id: string) {
 | 3 | `proxyConfig.ajax.query` 返回 `{ items, total }` 结构 |
 | 4 | `rowConfig.keyField` 与数据主键一致 |
 | 5 | 列定义里操作列有 `slots: { default: 'action' }` |
-| 6 | 表单 schema 的 `fieldName` 与 API 字段一致 |
+| 6 | 表单 schema 的 `fieldName` 与页面类型一致。后端字段名不同时，按 `api_binding.md` 在 api 函数内映射，不改这里的 `fieldName` |
 | 7 | 抽屉用 `connectedComponent` 挂载，`destroyOnClose: true` |
 | 8 | 编辑时 `setData(row)`，新增时 `setData(null)` |
 | 9 | 删除操作带 `popConfirm` |

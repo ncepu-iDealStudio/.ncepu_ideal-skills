@@ -1,6 +1,6 @@
 ---
 name: "requirements-to-vue_vben_admin"
-description: "把后台管理的需求描述转换成基于 vue-vben-admin（vben5）的可运行后台管理脚手架：自动划分功能模块、生成路由菜单、CRUD 页面（列表/搜索/新增编辑抽屉/详情）、API 层与图表页，并内置 mock 数据可直接运行。用户说「做一个后台管理系统」「生成管理端页面」「需要用户管理/订单管理/数据统计」或给出模块清单时使用。"
+description: "把后台管理的需求描述转换成基于 vue-vben-admin（vben5）的可运行后台管理脚手架：自动划分功能模块、生成路由菜单、CRUD 页面（列表/搜索/新增编辑抽屉/详情）、API 层与图表页，并内置 mock 数据可直接运行。用户说「做一个后台管理系统」「生成管理端页面」「需要用户管理/订单管理/数据统计」或给出模块清单时使用。也用于已经生成的 vben 页面：用户提供接口文档，说「接口文档对接」「按 Swagger / OpenAPI / Apifox 接真实数据」「把 mock 换成接口」时，只在 api 函数内对接，不改表格列和路由。"
 ---
 
 # Requirements to Vue Vben Admin Skill
@@ -36,8 +36,9 @@ description: "把后台管理的需求描述转换成基于 vue-vben-admin（vbe
 - 用户给出后台管理系统的**功能模块清单**
 - 用户说"做一个管理后台""生成管理端页面""XX 管理模块"
 - 用户要求基于 vue-vben-admin 生成/扩展页面
+- 页面已经生成，用户提供**接口文档**（OpenAPI / Swagger / Apifox / Markdown / 粘贴的路径与响应示例），要求表格和表单改用真实数据
 
-**不适用**：前端展示型官网（用 `common-website-design`）；移动端（用 `prototype-to-*`）；纯接口开发。
+**不适用**：前端展示型官网（用 `common-website-design`）；移动端（用 `prototype-to-*`）；实现后端接口。已生成页面上按接口文档对接前端**适用**，走「按接口文档对接」一节，不改路由，也不按文档新增页面。
 
 ---
 
@@ -103,6 +104,8 @@ description: "把后台管理的需求描述转换成基于 vue-vben-admin（vbe
 ---
 
 ## 使用流程
+
+下面六步用于**从需求生成页面**。目标应用里这些页面已经在，用户只提供接口文档时，改走「按接口文档对接」。
 
 ### 步骤 1：解析需求
 
@@ -199,6 +202,21 @@ api/<module>/index.ts      # 汇总导出
 - 页面是否用了 `useVbenVxeGrid`（而非自己写 `<table>`）
 - 是否直接用了 `axios`（应该用 `requestClient`）
 - `.vue` 是否含 `<script lang="ts" setup>`
+
+---
+
+## 按接口文档对接
+
+用户已经有本技能生成的 vben 页面，并给出接口文档，要求真实数据进入表格和表单时，走对接，不重新生成模块。
+
+操作契约：`resources/specifications/api_binding.md`。执行时同时满足下面六条：
+
+1. **文档对齐现有函数**。先看 `api/<module>/<page>.ts` 里的 list / create / update / delete，以及 `data.ts` 的列和表单字段。不按文档加菜单或新页面。
+2. **映射只在 api 函数**。后端字段名不同时，在函数内映射成现有的 namespace 类型。不改 `data.ts` 的 `field` / `fieldName`，不改 `list.vue` 的 `query`。
+3. **列表形状不变**。列表函数继续返回页面已经在用的 `{ items, total }`。分页、搜索参数名的转换也留在该函数里。
+4. **表单接到已有函数**。`modules/form.vue` 的提交处改为调用已有的 create / update。请求体字段转换不写在表单里。
+5. **mock 按路径处理**。未出现在文档里的模块继续走 `apps/backend-mock`。已对接路径若仍被 mock 占用，先问用户，不整站改掉 `VITE_GLOB_API_URL`，也不删无关 mock。
+6. **仍用 `requestClient`**。不直接用 `axios`，不重写 vben 的登录和拦截器。路径、主键字段、分页参数或基地址没写清时停下来问。
 
 ---
 
@@ -439,6 +457,11 @@ apps/web-antd/src/
 3. 打开 http://localhost:5555
 （内置 mock，无需后端）
 
+🔌 如何对接后端
+提供接口文档后，按 api_binding.md 只改对应 api 函数：
+映射字段，列表仍返回 { items, total }，表单改调已有的 create/update。
+不改表格列、不改路由。未对接的模块继续走 mock。
+
 ⚠️ 待确认
 - 各模块的字段定义（当前按模块名推断）
 - 是否需要权限码控制
@@ -460,3 +483,4 @@ apps/web-antd/src/
 10. **不要生成用不到的依赖**，vben5 已内置绝大多数能力
 11. **UI 库导入来源**：`web-antd` 用 `ant-design-vue`；`playground` 用 `antdv-next`，两者不同，别照搬
 12. **`VbenTableAction` 从 `@vben/common-ui` 导入**：`playground` 在 adapter 里再导出了它，`web-antd` 没有
+13. **已有页面对接接口文档** —— 按 `api_binding.md` 在 api 函数内映射；不改列字段，不直接用 `axios`，不实现后端
