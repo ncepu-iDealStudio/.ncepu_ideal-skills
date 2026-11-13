@@ -8,22 +8,23 @@
 
 - 用 mock 数据还原页面布局、视觉层级与交互
 - 分层清晰：页面 / 组件 / 服务层分离
-- `services/api` 是唯一数据接缝，对接后端只改这一层
+- `services/api` 是唯一数据接缝。按接口文档对接时，字段映射留在这一层，页面调用方式不变
 - 可直接在 HBuilder 打开运行（App / 小程序 / H5）
 
 核心价值：
 
 1. **能看到效果** —— mock 数据撑满界面，不是空白骨架
 2. **能点得动** —— 还原跳转、下拉刷新、加载更多、弹层
-3. **能接后端** —— 改一个开关即可切到真实接口
+3. **能接后端** —— 提供接口文档后，在 `services/api` 内映射字段并切换对应函数
 
 ## 2. 适用场景
 
 - 拿到原型/设计稿，要快速搭出 uni-app x 工程
 - 需要多端（App + 小程序 + H5）同时交付
 - 后端未就绪，先用 mock 演示
+- 起步工程已经生成，并提供接口文档，要把真实数据接到现有页面
 
-**不适用**：既有 uni-app（非 x）项目迁移；纯组件问答；后端实现。
+**不适用**：既有 uni-app（非 x）项目迁移；纯组件问答；实现后端接口。按接口文档对接前端见第 7 节。
 
 ## 3. 关键技术点
 
@@ -34,7 +35,7 @@ uni-app x 在 2026 年推出**蒸汽模式**，改用 js/ts，渲染性能反超
 本技能**默认输出蒸汽模式（TS）**，同时提供 uts 写法的切换说明：
 
 | 项 | 蒸汽模式（默认） | UTS 模式 |
-|---|---|---|
+| --- | --- | --- |
 | 入口 | `main.ts` | `main.uts` |
 | 脚本块 | `<script setup lang="ts">` | `<script setup>` |
 | 类型 | `.ts` | `.uts`，必须显式标注 |
@@ -47,7 +48,7 @@ uni-app x 在 2026 年推出**蒸汽模式**，改用 js/ts，渲染性能反超
 uni-app x 与 uni-app 有实质差异，踩坑会导致白屏或跑不起来：
 
 | 差异 | 说明 |
-|---|---|
+| --- | --- |
 | 页面后缀 | 必须是 `.uvue`，不是 `.vue` |
 | flex 方向 | App 端**默认竖向**，横向必须显式 `flex-direction: row` |
 | 样式继承 | **不继承**，每个 `<text>` 自带样式 |
@@ -70,9 +71,11 @@ prototype-to-app-uniappx/
     ├── specifications/
     │   ├── prototype_parser_contract.md    # 原型 → context 契约
     │   ├── page_mapping_rules.md           # HTML → 组件映射
-    │   └── visual_restoration_rules.md     # 视觉还原规则与检查清单
+    │   ├── visual_restoration_rules.md     # 视觉还原规则与检查清单
+    │   └── api_binding.md                  # 已有工程上按接口文档对接真实数据
     ├── templates/
     │   ├── project_structure/              # 工程骨架
+    │   │   ├── README.md                   # 说明文档模板（生成工程必备）
     │   │   ├── manifest.json               # 必须含 "uni-app-x": {}
     │   │   ├── pages.json                  # 页面注册 + tabBar
     │   │   ├── App.uvue / main.ts
@@ -119,10 +122,11 @@ python resources/tools/preview_plan.py proto_context.json
 python resources/tools/validate_project.py ./skill-swap-demo
 ```
 
-检查 10 项：
+检查 11 项：
 
 | 检查项 | 说明 |
-|---|---|
+| --- | --- |
+| 含 README.md | 工程根目录必须带说明文档 |
 | pages.json 存在 | 页面管理配置必需 |
 | 页面文件存在 | 注册的页面必须真实存在 |
 | 无 .vue 页面 | 必须是 .uvue |
@@ -134,10 +138,13 @@ python resources/tools/validate_project.py ./skill-swap-demo
 | image 有尺寸 | 避免布局塌陷 |
 | v-for 带 :key | 列表正确性 |
 
+> Windows 下脚本已内置 UTF-8 输出兼容（`sys.stdout.reconfigure`），GBK 控制台也不会再因 emoji 崩溃。
+
 ## 6. 生成的目标工程
 
 ```text
 skill-swap/
+├── README.md              # 工程说明文档（必备）
 ├── manifest.json          # 含 "uni-app-x": {}
 ├── pages.json             # 页面注册 + tabBar
 ├── App.uvue               # 全局样式与应用生命周期
@@ -158,24 +165,14 @@ skill-swap/
 
 ## 7. 对接后端 API
 
-三步，**页面代码零改动**：
+起步工程保持 mock。用户提供接口文档后，按 `resources/specifications/api_binding.md` 只改 `services/api`：设置 `BASE_URL`，在对应函数内把文档字段映射成页面类型，再让该函数走 `request()`。
 
-```ts
-// 1. services/api/request.ts
-export const USE_MOCK = false           // 改这里
-export const BASE_URL = 'https://api.your-domain.com'
-
-// 2. 核对 services/api/skill.ts 中函数签名与接口返回结构
-
-// 3. 完成 —— 页面不用动
-```
-
-数据流转：
+页面调用方式不变。不要只把全局 `USE_MOCK` 改成 `false` 就结束，也不要在页面里直接 `uni.request`。还没对上的函数继续走 mock。
 
 ```text
-Page → services/api/*.ts → USE_MOCK ?
-                             ├── true  → services/mock/*
-                             └── false → uni.request → 后端
+Page → services/api/getSkillList()
+          ├── 该函数尚未对接 → services/mock
+          └── 该函数已对接   → request() 解开包络 → 映射为 Skill[]
 ```
 
 ## 8. 运行方式
@@ -186,14 +183,14 @@ Page → services/api/*.ts → USE_MOCK ?
 
 ## 9. 示例产物
 
-`resources/demo_output/skill-swap-demo/` 是完整示例（校园技能互换 App，3 个页面 + tabBar + 12 条 mock 数据），已通过 `validate_project.py` 全部 10 项检查。
+`resources/demo_output/skill-swap-demo/` 是完整示例（校园技能互换 App，3 个页面 + tabBar + 12 条 mock 数据），包含根目录 `README.md` 说明文档，已通过 `validate_project.py` 全部 11 项检查。
 
 ## 10. 与 Flutter 版技能的关系
 
 与 `prototype-to-flutter-app` 是姊妹技能，共享同一套原型解析契约设计思路：
 
 | 项 | 本技能（uni-app x） | Flutter 版 |
-|---|---|---|
+| --- | --- | --- |
 | 目标 | App / 小程序 / H5 多端 | Android / iOS / Web / 桌面 |
 | 语言 | Vue + TS/UTS | Dart |
 | 状态 | `ref` / `reactive` | `ChangeNotifier` |

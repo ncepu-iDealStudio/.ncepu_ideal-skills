@@ -1,6 +1,6 @@
 ---
 name: "prototype-to-app-uniappx"
-description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单）生成符合 uni-app x 最佳实践的脚手架项目：用 mock 数据还原页面布局、视觉与交互，产出可直接在 HBuilder 运行的多端工程。用户提到「原型转 uniappx」「截图转 App」「照这个设计稿做小程序/App」「把原型做成可以点的应用」时使用。完成后可基于分层 mock 适配层平滑对接后端 API。"
+description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单）生成符合 uni-app x 最佳实践的脚手架项目：用 mock 数据还原页面布局、视觉与交互，产出可直接在 HBuilder 运行的多端工程。用户提到「原型转 uniappx」「截图转 App」「照这个设计稿做小程序/App」「把原型做成可以点的应用」时使用。也用于已生成的工程：用户提供接口文档，说「接口文档对接」「按 Swagger / OpenAPI / Apifox 接真实数据」「把 mock 换成接口」时，只在 services/api 内对接，不重做页面。"
 ---
 
 # Prototype-to-App（uni-app x）Skill
@@ -31,7 +31,7 @@ utils/                → 纯函数工具（格式化、校验）
 **强制约定**：
 
 - 页面**不直接写死**业务数据，必须从 `services/api` 取（哪怕当前返回的是 mock）
-- `services/api` 是**唯一**对接后端的接缝，改造时只动这一层
+- `services/api` 是**唯一**对接后端的接缝。按接口文档对接时，字段映射留在这一层；页面调用方式不变
 - 组件**不感知**数据来源，只接收 props、抛出事件
 
 ---
@@ -44,8 +44,9 @@ utils/                → 纯函数工具（格式化、校验）
 - 用户提供**设计图/截图**，要求照着做 App / 小程序
 - 用户提供**PRD 或页面清单**，要求生成可点原型
 - 用户说"把这个页面做成 uni-app x"、"原型转 App"、"截图转小程序"
+- 起步工程已经生成，用户提供**接口文档**（OpenAPI / Swagger / Apifox / Markdown / 粘贴的路径与响应示例），要求把 mock 换成真实数据
 
-**不适用**：已有 uni-app（非 x）工程要迁移 —— 请参考官方升级指南；纯原生开发；后端接口实现。
+**不适用**：已有 uni-app（非 x）工程要迁移 —— 请参考官方升级指南；纯原生开发；实现后端接口。本技能生成的工程上按接口文档对接前端**适用**，走「对接后端 API」一节，不实现后端，也不按文档生成新页面。
 
 ---
 
@@ -249,7 +250,7 @@ export const mockSkillList: Skill[] = [
   4. **在 VS Code 中开发**：说明 VS Code 只负责编辑、运行仍需 HBuilderX；推荐扩展；`jsconfig.json` 与 `.vscode/settings.json` 的作用；明确本工程非 CLI 工程，禁止 `npm run dev`
   5. **目录结构**：用代码块呈现真实生成的目录树
   6. **页面清单**：表格列出每个页面的路由与用途
-  7. **对接后端 API**：`USE_MOCK` 开关 + `BASE_URL` + 函数签名对齐，强调页面代码零改动
+  7. **对接后端 API**：说明提供接口文档后只改 `services/api`：设置 `BASE_URL`，在对应函数内把文档字段映射成现有返回类型；未对接的函数继续走 mock。不要写成「把 `USE_MOCK` 改成 false 就完成」
   8. **注意事项**：`.uvue` 后缀、flex 默认竖向、文字须在 `<text>` 内、新页面须注册 `pages.json`
 - 文档内容必须与工程实际一致（页面数量、目录树、组件名等以真实生成为准），不要照抄模板占位符
 - Markdown 排版约定：表格分隔行统一写成 `| --- | --- |`（竖线两侧各一个空格），**不要**写成 `|---|---|`，否则 markdownlint 的 MD060 会报表格风格不一致
@@ -309,42 +310,19 @@ export const mockSkillList: Skill[] = [
 
 ---
 
-## 对接后端 API（本技能的收尾目标）
+## 对接后端 API
 
-生成的工程天然预留了接缝。对接真实接口时**只需三步**：
+起步工程默认 `USE_MOCK = true`。用户提供接口文档之后，按 `resources/specifications/api_binding.md` 只改 `services/api`：在对应函数里把文档字段映射成现有返回类型，再让该函数走 `request()`。
 
-### 1. 切换数据源开关
+不要把全局 `USE_MOCK` 改成 `false` 当作对接完成。`request<Skill[]>()` 只在文档的 `data` 已经是 `Skill[]` 时成立；字段名不一致时，必须先映射再返回。
 
-`services/api/request.ts` 中：
+还没对上的函数继续走 mock。页面和组件的调用方式不变。
 
-```ts
-export const USE_MOCK = true   // 改成 false 即切到真实请求
+```text
+Page → services/api/getSkillList()
+            ├── 该函数尚未对接 → services/mock
+            └── 该函数已对接   → request() 解开包络 → 映射为 Skill[]
 ```
-
-### 2. 配置 baseURL
-
-```ts
-const BASE_URL = 'https://api.your-domain.com'
-```
-
-### 3. 对齐接口返回结构
-
-`services/api/*.ts` 中的函数签名保持不变，只改内部实现：
-
-```ts
-// 改造前（mock）
-export async function getSkillList(page: number): Promise<Skill[]> {
-  await mockDelay()
-  return mockSkillList
-}
-
-// 改造后（真实请求）
-export async function getSkillList(page: number): Promise<Skill[]> {
-  return request<Skill[]>({ url: '/skills', method: 'GET', data: { page } })
-}
-```
-
-**页面代码一行都不用改** —— 这是分层设计的价值。
 
 ---
 
@@ -401,10 +379,9 @@ export async function getSkillList(page: number): Promise<Skill[]> {
 3. 若提示非 uni-app x 项目，检查 manifest.json 是否含 "uni-app-x": {}
 
 🔌 如何对接后端
-1. services/api/request.ts 中 USE_MOCK 改为 false
-2. 设置 BASE_URL
-3. 按 services/api/*.ts 中的函数签名对齐接口
-（页面代码无需改动）
+提供接口文档后，按 api_binding.md 只改 services/api：
+设置 BASE_URL，在对应函数内映射字段，再让该函数走 request()。
+未对接的函数继续走 mock。页面调用方式不变。
 
 ⚠️ 待确认
 - 详情页的评论区分页规则
@@ -474,7 +451,8 @@ prototype-to-app-uniappx/
     ├── specifications/
     │   ├── prototype_parser_contract.md   # 原型 → context 的契约
     │   ├── page_mapping_rules.md          # 原型结构 → 组件的映射
-    │   └── visual_restoration_rules.md    # 视觉还原规则
+    │   ├── visual_restoration_rules.md    # 视觉还原规则
+    │   └── api_binding.md                 # 已有工程上按接口文档对接
     ├── templates/
     │   ├── project_structure/       # 工程骨架
     │   ├── pages/                   # 页面布局模板
@@ -501,3 +479,4 @@ prototype-to-app-uniappx/
 9. **不要臆造交互** —— 原型没体现的，列进待确认清单
 10. **中文注释与文案** —— 与团队习惯保持一致
 11. **工程必须带 README.md** —— 生成后根目录必须含说明文档（运行/结构/页面清单/对接后端/注意事项），内容与实际工程一致
+12. **已有工程对接接口文档** —— 按 `api_binding.md` 在 `services/api` 内映射；不改页面调用，不把全局 `USE_MOCK` 提前关掉，不实现后端

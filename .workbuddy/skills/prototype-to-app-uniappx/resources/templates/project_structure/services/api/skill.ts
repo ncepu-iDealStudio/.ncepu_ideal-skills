@@ -2,7 +2,8 @@
  * 示例业务接口：技能列表
  *
  * 页面只调用这里导出的函数，不直接接触 mock 或 HTTP 细节。
- * 对接后端时，只需把函数体从 mock 换成 request(...)，函数签名保持不变。
+ * 对接接口文档时，保持函数签名不变，在函数内把文档字段映射成 Skill，再走 request()。
+ * 文档的 data 还不是 Skill 时，不要写成 request<Skill[]>()。未对接的函数继续走 USE_MOCK。
  */
 
 import { USE_MOCK, request } from './request'

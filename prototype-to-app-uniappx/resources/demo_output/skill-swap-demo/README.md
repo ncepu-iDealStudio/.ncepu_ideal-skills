@@ -58,11 +58,9 @@ skill-swap-demo/
 
 ## 对接后端 API
 
-工程已预留数据接缝，对接真实后端只需三步（**页面代码零改动**）：
+页面只调用 `services/api`。提供接口文档后，在对应函数内把文档字段映射成现有返回类型，再让该函数走 `request()`。设置 `BASE_URL`。尚未对接的函数继续走 mock。
 
-1. 打开 `services/api/request.ts`，将 `USE_MOCK` 改为 `false`
-2. 设置 `BASE_URL` 为你的后端域名
-3. 按 `services/api/skill.ts` 中的函数签名与后端接口对齐返回结构
+不要在仍有函数未对接时把 `USE_MOCK` 改成 `false`。页面代码不用改。
 
 ## 注意事项
 

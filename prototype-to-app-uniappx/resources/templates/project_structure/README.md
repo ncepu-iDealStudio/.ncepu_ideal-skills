@@ -64,18 +64,14 @@
 
 ## 对接后端 API
 
-工程已预留数据接缝，对接真实后端只需三步（**页面代码零改动**）：
+页面只调用 `services/api`。提供接口文档后，在对应函数内把文档字段映射成现有返回类型，再让该函数走 `request()`。设置 `BASE_URL`。尚未对接的函数继续走 mock。
 
-1. 打开 `services/api/request.ts`，将 `USE_MOCK` 改为 `false`
-2. 设置 `BASE_URL` 为你的后端域名
-3. 按 `services/api/*.ts` 中的函数签名与后端接口对齐返回结构
-
-数据流转：
+不要在仍有函数未对接时把 `USE_MOCK` 改成 `false`。页面代码不用改。
 
 ```text
-页面 → services/api/*.ts → USE_MOCK ?
-                             ├── true  → services/mock/*（当前）
-                             └── false → uni.request → 后端
+页面 → services/api/*.ts
+         ├── 该函数尚未对接 → services/mock/*（当前）
+         └── 该函数已对接   → uni.request → 映射为页面类型
 ```
 
 ## 注意事项

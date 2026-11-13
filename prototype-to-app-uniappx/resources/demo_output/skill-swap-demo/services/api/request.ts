@@ -5,10 +5,11 @@
  * - USE_MOCK = true  时所有请求走 services/mock
  * - USE_MOCK = false 时走真实 HTTP
  *
- * 对接后端时通常只需改这里的两处配置。
+ * 对接接口文档时：在对应业务函数内映射字段，再让该函数走 request()。
+ * 仍有函数未对接时，不要把 USE_MOCK 改成 false。
  */
 
-/** 是否使用 mock 数据。对接真实后端时改为 false。 */
+/** 是否使用 mock 数据。未对接的函数读取它；不要提前改成 false。 */
 export const USE_MOCK = true
 
 /** 后端接口基地址。对接时改成你的域名。 */

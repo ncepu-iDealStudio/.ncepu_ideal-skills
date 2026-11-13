@@ -8,22 +8,23 @@
 
 - 用 mock 数据还原页面布局、视觉层级与交互
 - 分层清晰：页面 / 组件 / 服务层分离
-- `services/api` 是唯一数据接缝，对接后端只改这一层
+- `services/api` 是唯一数据接缝。按接口文档对接时，字段映射留在这一层，页面调用方式不变
 - 可直接在 HBuilder 打开运行（App / 小程序 / H5）
 
 核心价值：
 
 1. **能看到效果** —— mock 数据撑满界面，不是空白骨架
 2. **能点得动** —— 还原跳转、下拉刷新、加载更多、弹层
-3. **能接后端** —— 改一个开关即可切到真实接口
+3. **能接后端** —— 提供接口文档后，在 `services/api` 内映射字段并切换对应函数
 
 ## 2. 适用场景
 
 - 拿到原型/设计稿，要快速搭出 uni-app x 工程
 - 需要多端（App + 小程序 + H5）同时交付
 - 后端未就绪，先用 mock 演示
+- 起步工程已经生成，并提供接口文档，要把真实数据接到现有页面
 
-**不适用**：既有 uni-app（非 x）项目迁移；纯组件问答；后端实现。
+**不适用**：既有 uni-app（非 x）项目迁移；纯组件问答；实现后端接口。按接口文档对接前端见第 7 节。
 
 ## 3. 关键技术点
 
@@ -70,7 +71,8 @@ prototype-to-app-uniappx/
     ├── specifications/
     │   ├── prototype_parser_contract.md    # 原型 → context 契约
     │   ├── page_mapping_rules.md           # HTML → 组件映射
-    │   └── visual_restoration_rules.md     # 视觉还原规则与检查清单
+    │   ├── visual_restoration_rules.md     # 视觉还原规则与检查清单
+    │   └── api_binding.md                  # 已有工程上按接口文档对接真实数据
     ├── templates/
     │   ├── project_structure/              # 工程骨架
     │   │   ├── README.md                   # 说明文档模板（生成工程必备）
@@ -163,24 +165,14 @@ skill-swap/
 
 ## 7. 对接后端 API
 
-三步，**页面代码零改动**：
+起步工程保持 mock。用户提供接口文档后，按 `resources/specifications/api_binding.md` 只改 `services/api`：设置 `BASE_URL`，在对应函数内把文档字段映射成页面类型，再让该函数走 `request()`。
 
-```ts
-// 1. services/api/request.ts
-export const USE_MOCK = false           // 改这里
-export const BASE_URL = 'https://api.your-domain.com'
-
-// 2. 核对 services/api/skill.ts 中函数签名与接口返回结构
-
-// 3. 完成 —— 页面不用动
-```
-
-数据流转：
+页面调用方式不变。不要只把全局 `USE_MOCK` 改成 `false` 就结束，也不要在页面里直接 `uni.request`。还没对上的函数继续走 mock。
 
 ```text
-Page → services/api/*.ts → USE_MOCK ?
-                             ├── true  → services/mock/*
-                             └── false → uni.request → 后端
+Page → services/api/getSkillList()
+          ├── 该函数尚未对接 → services/mock
+          └── 该函数已对接   → request() 解开包络 → 映射为 Skill[]
 ```
 
 ## 8. 运行方式
