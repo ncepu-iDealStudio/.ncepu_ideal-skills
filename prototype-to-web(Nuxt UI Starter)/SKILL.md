@@ -1,6 +1,6 @@
 ---
 name: "prototype-to-web-nuxt-ui-starter"
-description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单）生成基于 nuxt-ui-templates/starter 的开箱即用 Web 工程：Nuxt 4 + Vue 3 + TypeScript + Nuxt UI + Nitro + Tailwind CSS v4 + ESLint 已配好，含分层目录、文件路由、mock 数据驱动的页面还原、可直接 pnpm dev 的工程。用户提到「原型转 Web」「设计稿做网页」「照这个页面做 Nuxt」「生成 Nuxt 项目」「Nuxt UI」时使用。也用于已生成的工程：用户贴一张列表页原型图，说「加栏目」「新增信息列表页」「按这张图加一页」时，在现有工程上追加栏目和列表页，而不是重做项目。生成后可直接对接后端 API。"
+description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单）生成基于 nuxt-ui-templates/starter 的开箱即用 Web 工程：Nuxt 4 + Vue 3 + TypeScript + Nuxt UI + Nitro + Tailwind CSS v4 + ESLint 已配好，含分层目录、文件路由、mock 数据驱动的页面还原、可直接 pnpm dev 的工程。用户提到「原型转 Web」「设计稿做网页」「照这个页面做 Nuxt」「生成 Nuxt 项目」「Nuxt UI」时使用。也用于已生成的工程：用户贴一张列表页原型图，说「加栏目」「新增信息列表页」「按这张图加一页」时，在现有工程上追加栏目和列表页，而不是重做项目。用户提供接口文档，说「接口文档对接」「按 Swagger / OpenAPI / Apifox 接真实数据」「把 mock 换成接口」时，只在 service 内对接真实数据，不重做页面。"
 ---
 
 # Prototype-to-Web (Nuxt UI Starter) Skill
@@ -24,7 +24,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 1. 按**分层架构**（pages / composables / services / types）组织代码
 2. 用 **mock 数据**驱动页面，还原布局、视觉与交互
 3. 产出**能直接 `pnpm dev`** 的工程，无需再补脚手架
-4. Service 层预留数据接缝，对接后端时**只改一处**
+4. Service 层是唯一数据接缝。按接口文档对接时，字段映射和请求都留在 service，页面调用方式不变
 
 **分层约定**（对齐 Nuxt 约定优于配置 + 清晰分层）：
 
@@ -55,7 +55,7 @@ app/
 
 - **页面不直接发请求**，只调 composable
 - **composable 不直接 `$fetch`**，只调 service
-- **Service 是唯一数据接缝**，切换 mock/真实只改 service 内的 `useMock` 开关
+- **Service 是唯一数据接缝**。真实字段与页面类型不一致时，在 service 内映射；某个方法对接完成后，才关掉该方法的 `useMock`
 - **优先用 Nuxt UI 组件**（`UButton`、`UCard`、`UInput` 等），自定义部分用 Tailwind 工具类
 - **颜色走 Tailwind 语义色**（`text-primary`、`bg-primary`），不硬编码 hex
 
@@ -70,8 +70,9 @@ app/
 - 用户提供**PRD/页面清单**，要求生成 Nuxt 工程骨架
 - 用户说"这个页面用 Nuxt 怎么写"、"生成一个 Nuxt UI 项目"
 - 起步工程已经生成，用户再给一张**列表页原型图**，要求新增栏目或信息列表页
+- 起步工程已经生成，用户提供**接口文档**（OpenAPI / Swagger / Apifox / Markdown / 粘贴的路径与响应示例），要求把 mock 换成真实数据
 
-**不适用**：把任意既有 Nuxt 项目整体重构；纯 Vue 组件片段问答；后端接口实现。本技能生成的工程上追加栏目和列表页**适用**，走下一节，不要当成重构推掉。
+**不适用**：把任意既有 Nuxt 项目整体重构；纯 Vue 组件片段问答；实现后端接口。本技能生成的工程上追加栏目、列表页，以及按接口文档对接前端，都**适用**。对接不实现后端，也不按文档生成新页面。
 
 ---
 
@@ -159,7 +160,7 @@ onMounted(() => load())
 
 ```ts
 // app/services/skillService.ts
-const useMock = true  // 对接后端时改 false
+const useMock = true  // 起步阶段用 mock。接口文档对接见 api_binding.md
 
 export const skillService = {
   async getSkills(): Promise<Skill[]> {
@@ -172,7 +173,7 @@ export const skillService = {
 }
 ```
 
-**Service 是唯一接缝**：composable 只调 service 方法，不关心数据来源。
+**Service 是唯一接缝**：composable 只调 service 方法，不关心数据来源。上面的 `$fetch<Skill[]>` 只表示起步工程的占位。真实文档的字段、包络与页面类型不一致时，按 `api_binding.md` 在 service 内映射，不能把原始响应直接当成 `Skill[]`。
 
 ### 5. 主题集中管理
 
@@ -213,9 +214,28 @@ export default defineAppConfig({
 
 ---
 
+## 已有工程：按接口文档对接真实数据
+
+用户已经有起步工程，并给出接口文档，要求页面显示真实数据时，走对接，不走全量生成，也不走加页。
+
+骨架已存在的判定：目录里同时有 `nuxt.config.ts`、`app/services/`。没有 service 层就停，不要在页面里直接请求。
+
+操作契约：`resources/specifications/api_binding.md`。执行时同时满足下面六条：
+
+1. **文档对齐现有方法**。先列出 `*Service.ts` 里已有方法和页面真正用到的字段，再用文档去对。不按文档把工程重做成接口大全，也不生成文档里多出来的页面。
+2. **适配只在 service**。`$fetch` 取文档中的原始结构，再映射成现有页面类型（如 `Skill`）。页面和 composable 的调用方式保持不变。
+3. **包络在 service 解开**。响应是 `{ code, data, message }` 时在 service 解包；业务失败抛错，交给现有 `error` 态。
+4. **鉴权只加文档写明的请求头**。不新做登录页，不写刷新令牌或通用拦截器。文档没写清鉴权方式时停下来问。
+5. **按方法关 mock**。该方法的路径、字段和包络都对上之后，才关掉该方法的 `useMock`。没对上的方法继续走 mock。
+6. **仍用 `$fetch`**。不引入 axios、Pinia，不改 `app.config.ts` 和无关页面。路径对不上、字段对不上、包络有歧义时停下来问，不猜。
+
+分页和筛选只对接页面上已经有的交互。
+
+---
+
 ## 使用流程
 
-下面六步用于**从零生成**工程。目标目录已经是 Nuxt UI Starter 工程、用户只要加栏目或列表页时，改走上一节。
+下面六步用于**从零生成**工程。目标目录已经是 Nuxt UI Starter 工程时：加栏目或列表页走「按原型图加栏目和信息列表页」；提供接口文档走「按接口文档对接真实数据」。
 
 ### 步骤 1：解析原型 → page inventory
 
@@ -351,34 +371,21 @@ export default defineAppConfig({
 
 ---
 
-## 对接后端 API（收尾目标）
+## 对接后端 API
 
-三步切换：
+起步工程默认 `useMock = true`，页面先用 mock。用户提供接口文档之后，按 `resources/specifications/api_binding.md` 在对应 service 内映射字段并切换该方法的真实请求。
 
-### 1. 改开关
-
-`app/services/skillService.ts`：
-
-```ts
-const useMock = false
-const API_BASE = 'https://api.your-domain.com'
-```
-
-### 2. 确认接口路径
-
-service 内 `$fetch` 的路径与返回结构。
-
-### 3. 自动生效
-
-composable 与页面**一行不用改**。
+不要只把整个文件的 `useMock` 改成 `false` 就结束。远程结果往往不是页面类型本身，不能把 `$fetch` 的返回值直接当成 `Skill[]`。
 
 数据流转：
 
 ```text
 Page → useSkills() → skillService.getSkills()
-                          ├── useMock=true  → mockSkills（setTimeout 延迟）
-                          └── useMock=false → $fetch('/api/skills')
+                          ├── 该方法仍为 mock → mockSkills
+                          └── 该方法已对接   → $fetch 原始响应 → 映射为 Skill[]
 ```
+
+页面与 composable 的调用方式不变。映射、解包、文档要求的请求头都留在 service。
 
 ---
 
@@ -437,9 +444,9 @@ Page → useSkills() → skillService.getSkills()
 （无需额外配置；mock 数据已内置）
 
 🔌 如何对接后端
-1. app/services/skillService.ts 中 useMock 改为 false
-2. 设置 API_BASE
-3. 确认 $fetch 接口路径与返回结构
+提供接口文档后，按 api_binding.md 只改对应 service：
+映射字段、解开包络，再关掉该方法的 useMock。
+页面与 composable 调用方式不变。
 
 ⚠️ 待确认
 - 详情页评论区分页规则
@@ -490,7 +497,8 @@ prototype-to-web(Nuxt UI Starter)/
     │   ├── prototype_parser_contract.md
     │   ├── architecture_conventions.md
     │   ├── nuxt_ui_mapping_rules.md
-    │   └── incremental_list_page.md
+    │   ├── incremental_list_page.md
+    │   └── api_binding.md
     ├── templates/
     │   └── project_structure/
     │       ├── package.json
@@ -534,3 +542,4 @@ prototype-to-web(Nuxt UI Starter)/
 9. **`postinstall` 必须为 `nuxt prepare`** —— 否则类型与自动导入无法生成
 10. **文件路由** —— `app/pages/index.vue` → `/`，无需手动注册
 11. **已有工程加列表页** —— 按 `incremental_list_page.md` 追加 `app/navigation.ts` 与成套分层文件，不覆盖起步工程
+12. **已有工程对接接口文档** —— 按 `api_binding.md` 在 service 内映射；不改页面调用，不实现后端

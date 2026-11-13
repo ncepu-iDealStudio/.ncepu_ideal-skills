@@ -11,7 +11,7 @@
 - 按分层架构组织代码（pages / composables / services / types）
 - 文件路由，无需手动注册
 - 内置 mock 数据，无需后端即可看到完整界面与交互
-- Service 模式预留数据接缝，对接后端只改一处
+- Service 是唯一数据接缝。按接口文档对接时，字段映射留在 service，页面调用方式不变
 
 核心价值：
 
@@ -25,8 +25,9 @@
 - 需要给客户演示"能点"的网页，但后端还没好
 - 新项目起手，需要一套符合规范的目录与分层
 - 起步工程已经生成，再拿一张信息列表页原型图，要加栏目、加列表页
+- 起步工程已经生成，并提供接口文档，要把真实数据接到现有页面
 
-**不适用**：把任意既有 Nuxt 项目整体重构；纯 Vue 组件片段问答；后端接口实现。本技能已经生成的工程上追加栏目和列表页是支持的，见第 10 节。
+**不适用**：把任意既有 Nuxt 项目整体重构；纯 Vue 组件片段问答；实现后端接口。本技能已经生成的工程上追加栏目和列表页见第 10 节；按接口文档对接前端见第 7 节。
 
 ## 3. 技术栈与关键决策
 
@@ -60,7 +61,8 @@ prototype-to-web(Nuxt UI Starter)/
     │   ├── prototype_parser_contract.md    # 原型 → context 契约
     │   ├── architecture_conventions.md     # 分层架构与依赖方向
     │   ├── nuxt_ui_mapping_rules.md        # HTML → Nuxt UI 组件映射
-    │   └── incremental_list_page.md        # 已有工程上按原型图加栏目和列表页
+    │   ├── incremental_list_page.md        # 已有工程上按原型图加栏目和列表页
+    │   └── api_binding.md                  # 已有工程上按接口文档对接真实数据
     ├── templates/
     │   └── project_structure/              # 完整工程骨架（可直接复制）
     │       ├── package.json
@@ -153,24 +155,14 @@ skill-swap-web/
 
 ## 7. 对接后端 API
 
-三步，**页面代码零改动**：
+起步工程保持 mock。用户提供接口文档后，按 `resources/specifications/api_binding.md` 只改对应的 service：把文档字段映射成页面类型，解开 `{ code, data, message }` 这类包络，再关掉**该方法**的 mock。
 
-```ts
-// 1. app/services/skillService.ts
-const useMock = false
-const API_BASE = 'https://api.your-domain.com'
-
-// 2. 核对 $fetch 的接口路径与返回结构
-
-// 3. composable 与页面自动切换数据源（无需改）
-```
-
-数据流转：
+页面和 composable 的调用方式不变。不要只把 `useMock` 改成 `false` 就结束，也不要引入 axios。
 
 ```text
 Page → useSkills() → skillService.getSkills()
-                        ├── useMock=true  → mockSkills（setTimeout 延迟）
-                        └── useMock=false → $fetch('/api/skills')
+                        ├── 该方法仍为 mock → mockSkills
+                        └── 该方法已对接   → $fetch 原始响应 → 映射为 Skill[]
 ```
 
 ## 8. 示例产物

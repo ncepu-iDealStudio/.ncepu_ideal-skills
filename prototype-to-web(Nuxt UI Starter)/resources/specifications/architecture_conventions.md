@@ -210,7 +210,7 @@ const id = computed(() => route.query.id as string)
 
 ```ts
 // app/services/skillService.ts
-const useMock = true // 对接后端时改 false
+const useMock = true // 起步用 mock。按接口文档对接时见 api_binding.md
 
 const mockSkills: Skill[] = [/* ... */]
 
@@ -233,11 +233,7 @@ export const skillService = {
 }
 ```
 
-**对接后端三步**：
-
-1. `useMock` 改为 `false`
-2. 确认 `$fetch` 的 API 路径与返回结构
-3. 页面与 composable 零改动
+**按接口文档对接**时，页面与 composable 的调用方式不变。文档字段与 `Skill` 这类页面类型不一致时，映射留在 service：`$fetch` 接收原始响应，再返回页面类型。包络、文档写明的请求头也留在 service。步骤见 `api_binding.md`。某个方法的路径和字段对上之后，才关掉该方法的 mock；不要用一个开关把尚未对接的方法一起切走。
 
 ---
 
@@ -303,3 +299,13 @@ test('渲染技能标题', () => {
 - 栏目只追加到 `app/navigation.ts`
 - 新列表页沿用本节的依赖方向：页面 → composable → service
 - 不覆盖已有页面，不重跑整套模板复制
+
+---
+
+## 11. 已有工程按接口文档对接
+
+起步工程生成之后，用户提供接口文档、要求真实数据刷新页面时，按 `api_binding.md` 执行。
+
+- 只改已有 service 方法，不改页面和 composable 的调用方式
+- 文档字段与页面类型不一致时，映射留在 service
+- 不实现后端，不按文档生成新页面
