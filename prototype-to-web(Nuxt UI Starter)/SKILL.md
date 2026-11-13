@@ -1,6 +1,6 @@
 ---
 name: "prototype-to-web-nuxt-ui-starter"
-description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单）生成基于 nuxt-ui-templates/starter 的开箱即用 Web 工程：Nuxt 4 + Vue 3 + TypeScript + Nuxt UI + Nitro + Tailwind CSS v4 + ESLint 已配好，含分层目录、文件路由、mock 数据驱动的页面还原、可直接 pnpm dev 的工程。用户提到「原型转 Web」「设计稿做网页」「照这个页面做 Nuxt」「生成 Nuxt 项目」「Nuxt UI」时使用。生成后可直接对接后端 API。"
+description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单）生成基于 nuxt-ui-templates/starter 的开箱即用 Web 工程：Nuxt 4 + Vue 3 + TypeScript + Nuxt UI + Nitro + Tailwind CSS v4 + ESLint 已配好，含分层目录、文件路由、mock 数据驱动的页面还原、可直接 pnpm dev 的工程。用户提到「原型转 Web」「设计稿做网页」「照这个页面做 Nuxt」「生成 Nuxt 项目」「Nuxt UI」时使用。也用于已生成的工程：用户贴一张列表页原型图，说「加栏目」「新增信息列表页」「按这张图加一页」时，在现有工程上追加栏目和列表页，而不是重做项目。生成后可直接对接后端 API。"
 ---
 
 # Prototype-to-Web (Nuxt UI Starter) Skill
@@ -31,6 +31,7 @@ description: "从原型（HTML/CSS 代码、设计图截图或 PRD 页面清单�
 ```text
 app/
 ├── app.vue                     # 入口：UApp + UHeader + UMain(NuxtPage) + UFooter
+├── navigation.ts               # 顶栏栏目唯一登记处（UNavigationMenu 的数据源）
 ├── app.config.ts               # Nuxt UI 主题（颜色等）
 ├── assets/css/main.css         # Tailwind + Nuxt UI 样式入口
 ├── components/                 # 自动导入组件（U* 优先）
@@ -68,8 +69,9 @@ app/
 - 用户提供**设计图/截图**，要求照做网页
 - 用户提供**PRD/页面清单**，要求生成 Nuxt 工程骨架
 - 用户说"这个页面用 Nuxt 怎么写"、"生成一个 Nuxt UI 项目"
+- 起步工程已经生成，用户再给一张**列表页原型图**，要求新增栏目或信息列表页
 
-**不适用**：既有 Nuxt 项目重构；纯 Vue 组件片段问答；后端接口实现。
+**不适用**：把任意既有 Nuxt 项目整体重构；纯 Vue 组件片段问答；后端接口实现。本技能生成的工程上追加栏目和列表页**适用**，走下一节，不要当成重构推掉。
 
 ---
 
@@ -192,7 +194,28 @@ export default defineAppConfig({
 
 ---
 
+## 已有工程：按原型图加栏目和信息列表页
+
+用户已经有起步工程，又给了一张信息列表页设计图时，走增量，不走下面的全量步骤。
+
+骨架已存在的判定：目录里同时有 `nuxt.config.ts`、`app/pages/`、`app/services/`。
+
+操作契约：`resources/specifications/incremental_list_page.md`。执行时同时满足下面六条：
+
+1. **不覆盖工程**。禁止再复制 `resources/templates/project_structure/`，禁止改主题色和已有页面、service、composable。
+2. **栏目只追加**。登记处是 `app/navigation.ts` 的 `navItems`。`app.vue` 用 `UNavigationMenu` 渲染（桌面放在 `UHeader` 默认插槽，移动端放 `#body`）。文件还不存在时，先补首页一项，再追加新栏目，并只把导航接线补进现有 `UHeader`。
+3. **一图一页**。只生成当前这张图的列表页。顶栏里其他没给页面图的栏目名写入待确认，不生成。
+4. **成套文件**。每个新列表页都有 `app/types/{entity}.ts`、`app/services/{entity}Service.ts`、`app/composables/use{Entity}.ts`、`app/components/{Entity}Card.vue`、`app/pages/{kebab}.vue`。命名与起步工程的 Skill 列表一致。
+5. **分层不变**。页面只调 composable，composable 只调 service，service 内 `useMock`。mock 至少 6 条，含超长标题和缺图。页面具备 loading / empty / error。没有第二张详情图时不生成详情页。
+6. **路由冲突就停**。目标 `app/pages/*.vue` 已存在时先问用户，不覆盖。改完运行 `resources/tools/validate_project.py`。
+
+图看不清的字段不要猜，列入输出里的「待确认」。
+
+---
+
 ## 使用流程
+
+下面六步用于**从零生成**工程。目标目录已经是 Nuxt UI Starter 工程、用户只要加栏目或列表页时，改走上一节。
 
 ### 步骤 1：解析原型 → page inventory
 
@@ -231,7 +254,7 @@ export default defineAppConfig({
 - `package.json`（含 Nuxt + @nuxt/ui + Tailwind + ESLint + TS）
 - `nuxt.config.ts`（modules 含 @nuxt/ui、@nuxt/eslint）
 - `tsconfig.json`、`eslint.config.mjs`
-- `app/app.vue`、`app/app.config.ts`
+- `app/app.vue`、`app/navigation.ts`、`app/app.config.ts`
 - `app/assets/css/main.css`
 - `app/components/`（AppLogo + 业务组件）
 - `app/composables/`
@@ -289,6 +312,7 @@ export default defineAppConfig({
 - 存在 `tsconfig.json`
 - 建议建立 `services/` 与 `composables/` 层
 - 未默认引入 Pinia
+- `app/navigation.ts` 存在时，`app.vue` 用 `UNavigationMenu` 渲染，且每个站内栏目路由都有页面文件
 
 ---
 
@@ -305,6 +329,7 @@ export default defineAppConfig({
 ├── README.md
 └── app/
     ├── app.vue
+    ├── navigation.ts
     ├── app.config.ts
     ├── assets/css/main.css
     ├── components/
@@ -464,7 +489,8 @@ prototype-to-web(Nuxt UI Starter)/
     ├── specifications/
     │   ├── prototype_parser_contract.md
     │   ├── architecture_conventions.md
-    │   └── nuxt_ui_mapping_rules.md
+    │   ├── nuxt_ui_mapping_rules.md
+    │   └── incremental_list_page.md
     ├── templates/
     │   └── project_structure/
     │       ├── package.json
@@ -476,6 +502,7 @@ prototype-to-web(Nuxt UI Starter)/
     │       ├── README.md
     │       └── app/
     │           ├── app.vue
+    │           ├── navigation.ts
     │           ├── app.config.ts
     │           ├── assets/css/main.css
     │           ├── components/
@@ -506,3 +533,4 @@ prototype-to-web(Nuxt UI Starter)/
 8. **mock 要像真数据** —— 有长度、有边界、有延迟
 9. **`postinstall` 必须为 `nuxt prepare`** —— 否则类型与自动导入无法生成
 10. **文件路由** —— `app/pages/index.vue` → `/`，无需手动注册
+11. **已有工程加列表页** —— 按 `incremental_list_page.md` 追加 `app/navigation.ts` 与成套分层文件，不覆盖起步工程

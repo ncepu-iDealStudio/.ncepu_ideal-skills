@@ -24,8 +24,9 @@
 - 拿到设计稿/原型，要快速搭出 Nuxt Web 工程骨架
 - 需要给客户演示"能点"的网页，但后端还没好
 - 新项目起手，需要一套符合规范的目录与分层
+- 起步工程已经生成，再拿一张信息列表页原型图，要加栏目、加列表页
 
-**不适用**：既有 Nuxt 项目重构；纯 Vue 组件片段问答；后端接口实现。
+**不适用**：把任意既有 Nuxt 项目整体重构；纯 Vue 组件片段问答；后端接口实现。本技能已经生成的工程上追加栏目和列表页是支持的，见第 10 节。
 
 ## 3. 技术栈与关键决策
 
@@ -58,7 +59,8 @@ prototype-to-web(Nuxt UI Starter)/
     ├── specifications/
     │   ├── prototype_parser_contract.md    # 原型 → context 契约
     │   ├── architecture_conventions.md     # 分层架构与依赖方向
-    │   └── nuxt_ui_mapping_rules.md        # HTML → Nuxt UI 组件映射
+    │   ├── nuxt_ui_mapping_rules.md        # HTML → Nuxt UI 组件映射
+    │   └── incremental_list_page.md        # 已有工程上按原型图加栏目和列表页
     ├── templates/
     │   └── project_structure/              # 完整工程骨架（可直接复制）
     │       ├── package.json
@@ -113,7 +115,7 @@ python resources/tools/preview_plan.py proto_context.json
 python resources/tools/validate_project.py ./skill-swap-web
 ```
 
-检查 12 项：package.json 合法性、必备文件、nuxt.config 含 @nuxt/ui、app.vue 含 NuxtPage、app.config 声明 primary、页面无原生 fetch、main.css 导入、postinstall 为 nuxt prepare、无 Pinia、tsconfig 存在、services 层、composables 层。
+检查 13 项：package.json 合法性、必备文件、nuxt.config 含 @nuxt/ui、app.vue 含 NuxtPage、app.config 声明 primary、页面无原生 fetch、main.css 导入、postinstall 为 nuxt prepare、无 Pinia、tsconfig 存在、services 层、composables 层、`app/navigation.ts` 的栏目都能落到页面文件。
 
 加 `--json` 输出机器可读结果。
 
@@ -130,6 +132,7 @@ skill-swap-web/
 ├── README.md
 └── app/
     ├── app.vue                   # UApp + UHeader + NuxtPage + UFooter
+    ├── navigation.ts             # 顶栏栏目，供 UNavigationMenu 使用
     ├── app.config.ts             # ui.colors.primary = 'green'
     ├── assets/css/main.css       # @import tailwindcss + @nuxt/ui
     ├── components/
@@ -187,3 +190,15 @@ Page → useSkills() → skillService.getSkills()
 | 输入 | 同样支持三类原型 | 同样支持三类原型 | 同样支持三类原型 |
 
 可按团队技术栈选择对应技能。
+
+## 10. 起步之后加栏目和信息列表页
+
+起步工程生成之后，可以把一张**信息列表页原型图**交给 AI，并说明要新增的栏目。技能按 `resources/specifications/incremental_list_page.md` 在现有工程上追加，不重做项目。
+
+会新增或补齐：
+
+- `app/navigation.ts`：只在末尾追加一个栏目，并用 `UNavigationMenu` 显示在顶栏
+- 一套列表页文件：`types`、`services`（mock）、`composables`、卡片组件、`pages/*.vue`
+- 加载、空列表、失败重试三种状态
+
+已经存在的页面、主题色和依赖不会被覆盖。同一路由的页面文件如果已经在，会先停下来问，而不是直接改。图里看不清的字段会列入待确认；没有单独的详情图时，不会顺便生成详情页。

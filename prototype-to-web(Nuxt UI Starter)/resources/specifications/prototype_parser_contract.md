@@ -118,7 +118,7 @@
 | `<select>` | `USelect` |
 | `<form>` | `UForm` + `UFormField` |
 | `<ul><li>` 重复 | `v-for` 循环 + `UCard` 等组件 |
-| 导航栏 | `UHeader` + `UNavigation` |
+| 导航栏 | `UHeader` + `UNavigationMenu`（数据在 `app/navigation.ts`） |
 | 卡片 | `UCard` |
 | 表格 | `UTable` |
 | 模态框 | `UModal` |
@@ -133,6 +133,8 @@
 4. 优先用 Nuxt UI 组件（`U*`），自定义部分用 Tailwind 工具类
 
 不确定的写入 `need_confirm`。
+
+起步工程已经存在、用户只要求按图新增栏目或信息列表页时，不重新生成整站。按 `incremental_list_page.md` 只追加一个列表页和一项 `navItems`。
 
 ### 5.3 PRD / 页面清单
 

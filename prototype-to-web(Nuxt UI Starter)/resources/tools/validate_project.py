@@ -29,6 +29,7 @@ CHECK_NO_PINIA = "未默认引入 Pinia（原型阶段用 composables）"
 CHECK_TYPESCRIPT = "存在 tsconfig.json"
 CHECK_SERVICE_LAYER = "存在 services 数据服务层"
 CHECK_COMPOSABLES = "存在 composables 逻辑层"
+CHECK_NAVIGATION = "navigation.ts 的栏目能落到页面文件"
 
 VALID_PRIMARY_COLORS = {
     "green", "emerald", "blue", "indigo", "violet", "purple",
@@ -231,6 +232,48 @@ def check_composables(root: Path, results: list) -> None:
         results.append((CHECK_COMPOSABLES, "warn", "建议建立 app/composables/ 存放状态与逻辑"))
 
 
+def route_has_page(root: Path, route: str) -> bool:
+    path = route.split("?", 1)[0].split("#", 1)[0]
+    if path.startswith(("http://", "https://")):
+        return True
+    if not path.startswith("/"):
+        return False
+    parts = [part for part in path.strip("/").split("/") if part]
+    pages = root / "app" / "pages"
+    if not parts:
+        return (pages / "index.vue").exists()
+    relative = Path(*parts)
+    return (pages / f"{relative}.vue").exists() or (pages / relative / "index.vue").exists()
+
+
+def check_navigation(root: Path, results: list) -> None:
+    nav_path = root / "app" / "navigation.ts"
+    app_vue = root / "app" / "app.vue"
+    if not nav_path.exists():
+        results.append((CHECK_NAVIGATION, "warn", "未找到 app/navigation.ts，新增栏目时无法只追加一项"))
+        return
+
+    nav_text = nav_path.read_text(encoding="utf-8", errors="ignore")
+    app_text = app_vue.read_text(encoding="utf-8", errors="ignore") if app_vue.exists() else ""
+    problems = []
+    if "navItems" not in app_text or "UNavigationMenu" not in app_text:
+        problems.append("app.vue 未用 UNavigationMenu 渲染 navItems")
+
+    missing = []
+    for route in re.findall(r"""to:\s*['"]([^'"]+)['"]""", nav_text):
+        if ":" in route:
+            continue
+        if not route_has_page(root, route):
+            missing.append(route)
+    if missing:
+        problems.append("栏目路由没有对应页面: " + ", ".join(missing))
+
+    if problems:
+        results.append((CHECK_NAVIGATION, "error", "; ".join(problems)))
+    else:
+        results.append((CHECK_NAVIGATION, "ok", ""))
+
+
 def main() -> int:
     if len(sys.argv) < 2:
         print("用法: python validate_project.py <项目目录> [--json]")
@@ -256,6 +299,7 @@ def main() -> int:
     check_typescript(root, results)
     check_service_layer(root, results)
     check_composables(root, results)
+    check_navigation(root, results)
 
     errors = [r for r in results if r[1] == "error"]
     warns = [r for r in results if r[1] == "warn"]

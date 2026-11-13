@@ -1,4 +1,6 @@
 <script setup>
+import { navItems } from './navigation'
+
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -32,8 +34,15 @@ useSeoMeta({
           <AppLogo class="w-auto h-6 shrink-0" />
         </NuxtLink>
       </template>
+
+      <UNavigationMenu :items="navItems" />
+
       <template #right>
         <UColorModeButton />
+      </template>
+
+      <template #body>
+        <UNavigationMenu :items="navItems" orientation="vertical" class="-mx-2.5" />
       </template>
     </UHeader>
 

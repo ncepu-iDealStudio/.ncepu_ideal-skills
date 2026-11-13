@@ -37,6 +37,7 @@ pnpm typecheck
 ```text
 app/
 ├── app.vue                    # 根组件（UApp + Header + NuxtPage + Footer）
+├── navigation.ts              # 顶栏栏目，新增栏目只在此追加
 ├── app.config.ts              # Nuxt UI 主题配置（primary=green）
 ├── assets/css/main.css        # Tailwind + Nuxt UI 样式入口
 ├── components/                # 自动导入组件

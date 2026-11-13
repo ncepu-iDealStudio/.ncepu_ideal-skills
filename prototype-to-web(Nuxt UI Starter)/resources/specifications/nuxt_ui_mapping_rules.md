@@ -72,7 +72,7 @@
 
 | HTML | Nuxt UI |
 | --- | --- |
-| 顶部导航栏 | `<UHeader>` + `<UNavigation>` |
+| 顶部导航栏 | `<UHeader>` + `<UNavigationMenu :items="navItems">`，数据来自 `app/navigation.ts` |
 | 侧边栏 | `<USidebar>` |
 | 面包屑 | `<UBreadcrumb>` |
 | 页脚 | `<UFooter>` |

@@ -91,6 +91,7 @@ pages  →  composables  →  services  →  types/utils
 ```text
 app/
 ├── app.vue                    # 根组件：UApp + UHeader + UMain(NuxtPage) + UFooter
+├── navigation.ts              # 顶栏栏目唯一登记处，供 UNavigationMenu 使用
 ├── app.config.ts              # Nuxt UI 主题（colors.primary / neutral）
 ├── assets/
 │   └── css/main.css           # @import tailwindcss + @nuxt/ui
@@ -292,3 +293,13 @@ test('渲染技能标题', () => {
 ```
 
 注意：模板默认不含测试依赖，需要时再引入 `@vue/test-utils` + `vitest`。
+
+---
+
+## 10. 已有工程新增栏目与列表页
+
+起步工程生成之后，用户用一张信息列表页原型图加栏目、加列表页时，按 `incremental_list_page.md` 执行。
+
+- 栏目只追加到 `app/navigation.ts`
+- 新列表页沿用本节的依赖方向：页面 → composable → service
+- 不覆盖已有页面，不重跑整套模板复制
