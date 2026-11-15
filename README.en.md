@@ -159,6 +159,23 @@ Turn **prototypes** into a **multi-platform Taro project** (WeChat/Alipay mini p
 
 ---
 
+### 1️⃣3️⃣ modern-web-guidance
+
+A **reference skill**: before an AI writes or modifies Web frontend UI code, it searches and retrieves
+from **209 modern Web platform guides** shipped with this repo, steering output toward native browser
+APIs, platform-level performance and accessibility, with lightweight Baseline-aware fallbacks.
+Ported from [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance)
+and reworked to be **offline, self-contained, and Chinese-driven**.
+
+- 17 guide categories: dialogs/drawers/tables/forms/dark mode/container queries/view transitions/performance (LCP, INP, CLS)/security & Passkeys/accessibility/Web Components/built-in AI, etc.
+- Zero-dependency local search: `mwg.py search / retrieve / list / categories` + `build_index.py` — fully offline, no telemetry (replaces upstream's network-dependent `npx modern-web-guidance`)
+- Chinese `SKILL.md` defines triggers and the "search → retrieve → implement per guide → disclose" workflow
+- Guides are verbatim upstream English copies (CC-BY 4.0 / code Apache-2.0); see [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
+
+📖 **Details**: [Documentation](modern-web-guidance/README.md)
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -248,6 +265,15 @@ ncepu_ideal-skills/
 │       ├── templates/
 │       ├── tools/
 │       └── demo_output/
+├── 📁 modern-web-guidance/                          # 🌐 modern Web platform guides (reference, offline)
+│   ├── README.md
+│   ├── SKILL.md                                     # Chinese router: triggers + 4-step workflow
+│   ├── ATTRIBUTION.md                               # Upstream credit + dual license
+│   └── resources/
+│       ├── guides/                                  # 209 verbatim guides (17 categories, CC-BY 4.0)
+│       ├── guides_index.json                       # Derived search index
+│       ├── specifications/                          # Local search tool contract
+│       └── tools/                                   # build_index.py / mwg.py (zero-dep)
 ├── 📁 .codebuddy/skills/                           # 20 superpowers-zh skills
 ├── 📁 .agents/skills/                              # 20 superpowers-zh skills
 ├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype, diagnosing-superpowers, prototype-to-*
@@ -287,7 +313,7 @@ ncepu_ideal-skills/
 
 ### 2️⃣ Use the Skill
 
-Skills fall into two categories with different inputs.
+Skills fall into three categories with different inputs.
 
 #### A. Backend: generate API scaffolding from SQL
 
@@ -333,6 +359,28 @@ restoring layout and interactions with mock data. I'll wire up the backend later
 | **Flutter** | prototype code / image / PRD | `features` layers + Repository + mock data; runs via `flutter pub get && flutter run` |
 
 > 💡 Both frontend skills generate a **data-access seam**: switching to the real backend only requires flipping a `useMock` flag — page code stays unchanged.
+
+#### C. Reference: retrieve modern guidance before writing Web UI code
+
+`modern-web-guidance` does not scaffold a project — it injects expert guides **before** implementation.
+Simply give the AI a Web UI task and the skill triggers the search workflow.
+
+**📥 Example Input**：
+
+```text
+Implement a confirmation dialog that closes when the backdrop is clicked,
+supports Esc to dismiss, and prevents the page behind from scrolling.
+```
+
+**📤 Output**: spec-compliant implementation code + a `### Modern Web Guidance` disclosure section.
+
+```sh
+# Also usable as a standalone local CLI (from the modern-web-guidance/ directory)
+python3 resources/tools/mwg.py search "light dismiss dialog"
+python3 resources/tools/mwg.py retrieve "light-dismiss-a-dialog,dialog"
+```
+
+> 🌐 Guides ship with the repo: fully offline, no telemetry. After updating `guides/`, run `python3 resources/tools/build_index.py` first.
 
 ## 🗺️ Roadmap
 

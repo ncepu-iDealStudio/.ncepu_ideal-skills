@@ -205,6 +205,20 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ---
 
+### 1️⃣6️⃣ modern-web-guidance
+
+**参考型技能**：在 AI 编写/修改 Web 前端界面代码前，先从随仓库自带的 **209 份现代 Web 平台指南**里检索并取回专家指南，让产出优先使用浏览器原生 API、平台级性能与无障碍能力，按 Baseline 做轻量回退，远离遗留写法。移植自 [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance)，改为**离线自包含 + 中文驱动**。
+
+- 覆盖 17 类主题：对话框/抽屉/表格/表单/暗色/容器查询/视图过渡/性能（LCP·INP·CLS）/安全与 Passkeys/无障碍/Web Components/内置 AI 等
+- 零依赖本地检索：`mwg.py search / retrieve / list / categories` + `build_index.py` 重建索引，完全离线、无遥测（替代上游需联网的 `npx modern-web-guidance`）
+- 中文 `SKILL.md` 定义触发条件与「检索 → 取回 → 按指南实现 → 披露」工作流；指南内 npx 交叉引用统一映射为本地工具
+- 指南为上游英文原文逐字副本（CC-BY 4.0 / 代码 Apache-2.0），署名与来源见 [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
+- 检索契约：[resources/specifications/local_search_contract.md](modern-web-guidance/resources/specifications/local_search_contract.md)
+
+📖 **详细说明**：[查看文档](modern-web-guidance/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```text
@@ -323,6 +337,15 @@ ncepu_ideal-skills/
 │       ├── templates/                              # common + 四类型 + 指南分章
 │       ├── tools/                                  # scaffold_plugin.py / validate_plugin.py
 │       └── demo_output/                            # 示例产物 dsh-plugin-notebook
+├── 📁 modern-web-guidance/                          # 🌐 现代 Web 平台指南技能（参考型，离线自包含）
+│   ├── README.md
+│   ├── SKILL.md                                     # 中文路由器：触发 + 4 步工作流
+│   ├── ATTRIBUTION.md                               # 上游署名 + 双许可声明
+│   └── resources/
+│       ├── guides/                                  # 209 份指南原文（17 类，CC-BY 4.0）
+│       ├── guides_index.json                       # 派生检索索引
+│       ├── specifications/                          # 本地检索工具契约
+│       └── tools/                                   # build_index.py / mwg.py（零依赖）
 ├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
 ├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
 ├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype、diagnosing-superpowers
@@ -363,7 +386,7 @@ ncepu_ideal-skills/
 
 ### 2️⃣ 使用技能
 
-本仓库技能分两大类，输入方式不同。
+本仓库技能分三类，输入方式不同。
 
 #### A. 后端：从 SQL 生成接口脚手架
 
@@ -411,6 +434,26 @@ CREATE TABLE student (
 | **Android 原生** | 原型代码 / 图片 / PRD | Compose 四页范本 + 单 Activity MVI + Hilt + Room + mock 数据，Android Studio 打开即运行 |
 
 > 💡 上述技能都会生成**数据访问层接缝**：切换到真实后端只需改一个开关（`useMock` / `AppContainer` 装配），页面代码无需改动。
+
+#### C. 参考型：编写 Web 前端界面前检索现代指南
+
+`modern-web-guidance` 不「生成工程」，而是**在动手前注入专家指南**。把 Web UI 任务直接交给 AI，技能会触发检索工作流。
+
+**📥 示例输入**：
+
+```text
+请实现一个点击遮罩层关闭的确认对话框，要能用键盘 Esc 关闭、并避免背景页面滚动。
+```
+
+**📤 产出**：符合现代 Web 规范的实现代码 + 回复末尾 `### Modern Web Guidance` 披露用到的指南。
+
+```sh
+# 也可直接当本地命令行工具用（在 modern-web-guidance/ 目录下）
+python3 resources/tools/mwg.py search "light dismiss dialog"
+python3 resources/tools/mwg.py retrieve "light-dismiss-a-dialog,dialog"
+```
+
+> 🌐 指南随仓库自带、完全离线、无遥测；检索前如更新过 `guides/`，先跑 `python3 resources/tools/build_index.py`。
 
 ## 🗺️ 未来规划
 
