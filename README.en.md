@@ -171,6 +171,7 @@ and reworked to be **offline, self-contained, and Chinese-driven**.
 - Zero-dependency local search: `mwg.py search / retrieve / list / categories` + `build_index.py` — fully offline, no telemetry (replaces upstream's network-dependent `npx modern-web-guidance`)
 - Chinese `SKILL.md` defines triggers and the "search → retrieve → implement per guide → disclose" workflow
 - Guides are verbatim upstream English copies (CC-BY 4.0 / code Apache-2.0); see [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
+- 📘 Usage guide: [Using modern-web-guidance for modern Web frontend](docs/使用modern-web-guidance技能编写现代Web前端指南.md)
 
 📖 **Details**: [Documentation](modern-web-guidance/README.md)
 
@@ -306,6 +307,7 @@ ncepu_ideal-skills/
 | 🧩 **CodeBuddy** | [Configuration Guide](docs/CodeBuddy中使用skill配置.md) |
 | 🛠️ **WorkBuddy** | [Prototype-to-App Guide](docs/workbuddy中使用原型转应用技能.md) |
 | 🐋 **DSH (DeepSeek Harness)** | [superpowers Guide](docs/dsh中使用superpowers技能.md) |
+| 🌐 **Modern Web Guidance** | [modern-web-guidance Usage Guide](docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
 
 > 📝 **Note**: Please refer to the `docs/` directory for detailed configuration guides
 

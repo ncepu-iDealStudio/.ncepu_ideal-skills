@@ -214,6 +214,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 中文 `SKILL.md` 定义触发条件与「检索 → 取回 → 按指南实现 → 披露」工作流；指南内 npx 交叉引用统一映射为本地工具
 - 指南为上游英文原文逐字副本（CC-BY 4.0 / 代码 Apache-2.0），署名与来源见 [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
 - 检索契约：[resources/specifications/local_search_contract.md](modern-web-guidance/resources/specifications/local_search_contract.md)
+- 📘 使用指南：[docs/使用modern-web-guidance技能编写现代Web前端指南.md](docs/使用modern-web-guidance技能编写现代Web前端指南.md)
 
 📖 **详细说明**：[查看文档](modern-web-guidance/README.md)
 
@@ -379,6 +380,7 @@ ncepu_ideal-skills/
 | 🛠️ **WorkBuddy** | [原型转应用技能指南](docs/workbuddy中使用原型转应用技能.md) |
 | 🐋 **DSH（DeepSeek Harness）** | [superpowers 技能指南](docs/dsh中使用superpowers技能.md) |
 | 🧩 **DSH 插件开发** | [dsh-plugin-starter 使用指南](docs/使用dsh-plugin-starter技能开发DSH插件.md) |
+| 🌐 **现代 Web 前端指南** | [modern-web-guidance 使用指南](docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
 
 > 📝 **提示**：详细配置说明请参考 `docs/` 目录
 
