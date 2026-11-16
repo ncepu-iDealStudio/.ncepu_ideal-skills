@@ -25,6 +25,11 @@ class PrototypeInspector(html.parser.HTMLParser):
         self.script = False
         self.external_refs: list[str] = []
         self.mock_data = False
+        self.local_hrefs: list[str] = []
+        self.has_modal = False
+        self.has_filter = False
+        self.has_toast = False
+        self.has_required = False
         self._in_title = False
         self._in_script = False
 
@@ -54,6 +59,16 @@ class PrototypeInspector(html.parser.HTMLParser):
             val = a.get(key, "")
             if val.startswith(("http://", "https://", "//")):
                 self.external_refs.append(f"{tag} {key}={val}")
+        href = a.get("href", "")
+        if href and not href.startswith(("http://", "https://", "//", "#", "mailto:", "javascript:")):
+            self.local_hrefs.append(href.split("#", 1)[0])
+        attrs_blob = " ".join(f"{k}={v}" for k, v in a.items()).lower()
+        if "modal" in attrs_blob:
+            self.has_modal = True
+        if "filter" in attrs_blob or "reset" in attrs_blob:
+            self.has_filter = True
+        if "required" in attrs_blob:
+            self.has_required = True
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "title":
@@ -66,6 +81,15 @@ class PrototypeInspector(html.parser.HTMLParser):
             self.title += data.strip()
         if "MOCK_" in data:
             self.mock_data = True
+        low = data.lower()
+        if "modal" in low:
+            self.has_modal = True
+        if "filter" in low or "resetfilter" in low:
+            self.has_filter = True
+        if "toast" in low:
+            self.has_toast = True
+        if "required" in low:
+            self.has_required = True
 
 
 def inspect_html(path: Path) -> tuple[list[str], PrototypeInspector]:
@@ -120,8 +144,33 @@ def main(argv: list[str] | None = None) -> int:
     html_files = sorted(p for p in root.rglob("*.html") if p.is_file())
     for page in html_files:
         rel = page.relative_to(root).as_posix()
-        page_errors, _ = inspect_html(page)
+        page_errors, info = inspect_html(page)
         errors.extend(f"{rel}: {e}" for e in page_errors)
+        for marker, present in [
+            ("modal", info.has_modal),
+            ("filter", info.has_filter),
+            ("toast", info.has_toast),
+            ("required", info.has_required),
+        ]:
+            if not present:
+                errors.append(f"{rel}: missing interaction marker '{marker}'")
+
+    if args.mode == "multi":
+        for side in SIDES:
+            side_dir = root / side
+            if not side_dir.is_dir():
+                continue
+            if not (side_dir / "index.html").is_file():
+                errors.append(f"{side}/index.html: missing index for multi-page mode")
+        for page in html_files:
+            rel = page.relative_to(root).as_posix()
+            _, info = inspect_html(page)
+            for href in info.local_hrefs:
+                if not href:
+                    continue
+                target = (page.parent / href).resolve()
+                if not target.is_file() or target.suffix.lower() != ".html":
+                    errors.append(f"{rel}: broken link -> {href}")
 
     if errors:
         for err in errors:

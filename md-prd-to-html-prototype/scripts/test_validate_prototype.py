@@ -122,9 +122,80 @@ class ValidateHtmlOfflineTest(unittest.TestCase):
                 '<!DOCTYPE html><html lang="zh-CN"><head><meta name="viewport" '
                 'content="width=device-width"><title>T</title></head><body>'
                 '<style>body{font-family:sans-serif}</style>'
-                "<script>const MOCK_users=[{name:'张三'}];</script></body></html>",
+                "<button id='addBtn' onclick='openModal()'>新增</button>"
+                "<div id='modal' class='modal hidden'></div>"
+                "<input id='kw'><button onclick='filterRows()'>筛选</button>"
+                "<button onclick='resetFilter()'>重置</button>"
+                "<form><input name='x' required></form>"
+                "<script>const MOCK_users=[{name:'张三'}]; "
+                "function openModal(){} function filterRows(){} "
+                "function resetFilter(){} function toast(){}</script></body></html>",
                 encoding="utf-8",
             )
+            proc = run_validator(root)
+            self.assertEqual(proc.returncode, 0, proc.stdout)
+
+
+class ValidateMultiAndInteractionTest(unittest.TestCase):
+    def build_page(self, side_dir, name, body):
+        (side_dir / name).write_text(
+            '<!DOCTYPE html><html lang="zh-CN"><head><meta name="viewport" '
+            'content="width=device-width"><title>T</title></head><body>'
+            '<style>body{}</style>' + body +
+            "<script>const MOCK_users=[];</script></body></html>",
+            encoding="utf-8",
+        )
+
+    def test_multi_mode_requires_index(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "_原型说明.md").write_text("# 状态\n", encoding="utf-8")
+            side = root / "www"
+            side.mkdir()
+            self.build_page(side, "list.html", "<a href='list.html'>列表</a>")
+            proc = run_validator(root, "--mode", "multi")
+            self.assertEqual(proc.returncode, 1, proc.stdout)
+            self.assertIn("index.html", proc.stdout)
+
+    def test_multi_mode_broken_href_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "_原型说明.md").write_text("# 状态\n", encoding="utf-8")
+            side = root / "www"
+            side.mkdir()
+            self.build_page(side, "index.html", "<a href='missing.html'>详情</a>")
+            proc = run_validator(root, "--mode", "multi")
+            self.assertEqual(proc.returncode, 1, proc.stdout)
+            self.assertIn("broken link", proc.stdout.lower())
+
+    def test_missing_interaction_markers_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "_原型说明.md").write_text("# 状态\n", encoding="utf-8")
+            side = root / "www"
+            side.mkdir()
+            self.build_page(side, "index.html", "<div>no interactions</div>")
+            proc = run_validator(root)
+            self.assertEqual(proc.returncode, 1, proc.stdout)
+            for marker in ["modal", "filter", "toast", "required"]:
+                self.assertIn(marker, proc.stdout.lower())
+
+    def test_full_interaction_passes(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "_原型说明.md").write_text("# 状态\n", encoding="utf-8")
+            side = root / "www"
+            side.mkdir()
+            body = (
+                "<button id='addBtn' onclick=\"openModal()\">新增</button>"
+                "<div id='modal' class='modal hidden'></div>"
+                "<input id='kw'><button onclick='filterRows()'>筛选</button>"
+                "<button onclick='resetFilter()'>重置</button>"
+                "<form><input name='x' required></form>"
+                "<script>function openModal(){} function filterRows(){} "
+                "function resetFilter(){} function toast(){}</script>"
+            )
+            self.build_page(side, "index.html", body)
             proc = run_validator(root)
             self.assertEqual(proc.returncode, 0, proc.stdout)
 
