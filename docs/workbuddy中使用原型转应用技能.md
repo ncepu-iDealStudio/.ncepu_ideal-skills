@@ -518,7 +518,11 @@ python .workbuddy/skills/prototype-to-flutter-app/resources/tools/validate_proje
 | `common-website-design` | 静态 HTML 页面 | **网站**设计原型，给人看的 |
 | `prototype-to-*-app` | 可运行的 App 工程 | **移动应用**，能装到手机上 |
 
-前者是"画出来的样子"，后者是"跑起来的应用"。
+前者是"画出来的样子"，后者是"跑起来的应用"。写网站原型里的语义 HTML、焦点、对话框或动效时，`common-website-design` 会按需查阅 `modern-web-guidance`，页面原型和设计包仍以该技能为准。
+
+### Q7：写界面时要不要查现代 Web 指南？
+
+只有 **uni-app x 的 H5** 在写浏览器里的对话框、表单、暗色或焦点时，才检索仓库里的 `modern-web-guidance`。App 端 flex 默认竖向、文字必须在 `<text>` 内，这些约束优先。Flutter 版不套用这些指南。用法见 [使用指南第 14 节](使用modern-web-guidance技能编写现代Web前端指南.md)，技能说明见 uni-app x README 第 11 节。
 
 ---
 
@@ -553,4 +557,5 @@ python .workbuddy/skills/prototype-to-flutter-app/resources/tools/validate_proje
 | 示例产物（uni-app x） | `prototype-to-app-uniappx/resources/demo_output/skill-swap-demo/` |
 | 示例产物（Flutter） | `prototype-to-flutter-app/resources/demo_output/skill_swap_app/` |
 | DSH 中使用 superpowers | `docs/dsh中使用superpowers技能.md` |
+| H5 界面叠加 modern-web-guidance | `docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |
 | 官方文档 | [uni-app x](https://doc.dcloud.net.cn/uni-app-x/) ・ [Flutter](https://docs.flutter.dev/) |

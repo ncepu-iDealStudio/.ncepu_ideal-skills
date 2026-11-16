@@ -484,3 +484,19 @@ apps/web-antd/src/
 11. **UI 库导入来源**：`web-antd` 用 `ant-design-vue`；`playground` 用 `antdv-next`，两者不同，别照搬
 12. **`VbenTableAction` 从 `@vben/common-ui` 导入**：`playground` 在 adapter 里再导出了它，`web-antd` 没有
 13. **已有页面对接接口文档** —— 按 `api_binding.md` 在 api 函数内映射；不改列字段，不直接用 `axios`，不实现后端
+14. **界面平台行为按需查阅** —— 表格排序、表单校验、对话框、暗色、焦点落到浏览器界面时，按下一节查阅 `modern-web-guidance`。没有这类任务时不要调用它
+
+---
+
+## 与 modern-web-guidance 叠加
+
+本技能的模块划分、路由、CRUD 四件套、`requestClient` 和 mock 保持不变。只有在编写或修改浏览器里的表格、表单、对话框、暗色或焦点行为时，才查阅 `modern-web-guidance`。
+
+在仓库根目录执行：
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+查询用 UI 原语，不写 vben、Ant Design 或业务模块名。指南里的行为映射到已有的 `useVbenVxeGrid`、`useVbenForm`、`useVbenDrawer` 和 `ant-design-vue`，不用原生 `<dialog>` 拆掉管理端组件。不改路由，不改 `data.ts` 的列字段。接口对接仍只走 `api_binding.md`。没有这类界面任务时不要调用它。

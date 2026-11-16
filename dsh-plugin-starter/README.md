@@ -191,3 +191,7 @@ python resources/tools/validate_plugin.py <插件目录>
 
 - DSH 仍是**开发者预览版**（`0.1.x`），`@deepseek-ai/*` 的 API 会破坏性变更。模板锁定 `^0.1.0-rc.7` / cordis `^4.0.1`，升级前先读 changelog。
 - 本技能的静态校验**不能替代真实编译**：交付时若未跑 `pnpm typecheck && pnpm build`，应明确说明「编译未验证」。
+
+## 11. 与 modern-web-guidance 叠加
+
+四类插件的清单、构建和校验不变。只有 **dual-face** 的设置页在写表单、焦点、对比度时，才先检索仓库里的 `modern-web-guidance`。工具型、路由型、拦截器没有浏览器界面，不必调用它。用法见 [使用指南第 14 节](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。

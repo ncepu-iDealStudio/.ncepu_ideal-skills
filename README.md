@@ -77,6 +77,7 @@ python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 - 内置验证器 `scripts/validate.py`（Python 标准库，零依赖）
 - 成品示例：[test/page-design-showcase](test/page-design-showcase/README.md)
 - 安装位置：`.workbuddy/skills/common-website-design/`、`.dsh/skills/common-website-design/`
+- 写语义 HTML、焦点、对话框、滚动或动效时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；页面原型和设计包仍以本技能为准
 
 ---
 
@@ -93,6 +94,7 @@ IT 需求分析专家技能：把业务诉求转化为可落地、可验收、�
 PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HTML 交付，把 PRD / 需求文档 / 页面清单转成可交互的多页面原型，并支持打包成单文件离线 HTML。
 
 - 安装位置：`.cursor/skills/prd-html-skill/`、`.dsh/skills/prd-html-skill/`
+- 写对话框、表单、表格时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；生成顺序和 spec 三件套不变
 
 ---
 
@@ -101,6 +103,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 读取本地 Markdown 格式 PRD，提取角色、页面、字段与交互逻辑，输出**完全独立的单文件 HTML 原型**（内联全部 CSS/JS，无外部资源，双击即可打开）。
 
 - 安装位置：`.workbuddy/skills/md-prd-to-html-prototype/`
+- 写弹窗、表单、表格时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；仍全部内联，不引外部资源
 
 ---
 
@@ -112,6 +115,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 强制规避 uni-app x 与 uni-app 的差异坑（`.uvue`、flex 默认竖向、文字须在 `<text>` 内、`manifest.json` 需 `"uni-app-x": {}`）
 - 分层：页面 / 组件 / `services/api`（唯一数据接缝）/ `services/mock`
 - 校验脚本 10 项，示例产物 `resources/demo_output/skill-swap-demo/`
+- 仅 H5 界面按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；App 与小程序约束优先
 
 📖 **详细说明**：[查看文档](prototype-to-app-uniappx/README.md)
 
@@ -139,6 +143,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 覆盖 vben5 的三个易错点：`ant-design-vue` 与 `antdv-next` 之别、`VbenTableAction` 导入来源、路由 glob 自动收集
 - 校验脚本 14 项，示例产物 `resources/demo_output/demo-admin/`（3 模块 8 页面）
 - 已在**真实 vben 仓库**中生成并验证：0 错误 0 警告
+- 写表格、表单、对话框时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)，映射到 vben 已有组件
 
 📖 **详细说明**：[查看文档](requirements-to-vue_vben_admin/README.md)
 
@@ -157,6 +162,9 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 > 说明：参考仓库 `RealCoolSnow/taro-vue3-ts` 已 404，Vue3 分支按 Taro 官方规范自建；
 > `elf-taro` 为 Taro3.0-rc + React16，本技能把其架构思路适配到 Taro 4 + React 18。
+
+- 仅 H5 按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；小程序和 React Native 不套用
+- 📘 使用指南：[docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md](docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
 
 📖 **详细说明**：[查看文档](prototype-to-taro-app/README.md)
 
@@ -199,6 +207,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 内置 `DEVELOPMENT.md`：改代码 → 构建 → 装进 DSH → 调试 → 打包发布的完整闭环，含按类型的扩展代码与「症状 → 根因」调试表
 - 零依赖工具链：`scaffold_plugin.py`（spec → 工程）、`validate_plugin.py`（18 项静态自检）
 - 示例产物：`resources/demo_output/dsh-plugin-notebook/`（双面型：路由 + 设置页 + 笔记增删查）
+- 仅 dual-face 设置页按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；工具型、路由型、拦截器不调用
 - 📘 使用指南：[docs/使用dsh-plugin-starter技能开发DSH插件.md](docs/使用dsh-plugin-starter技能开发DSH插件.md)
 
 📖 **详细说明**：[查看文档](dsh-plugin-starter/README.md)
@@ -214,7 +223,8 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 中文 `SKILL.md` 定义触发条件与「检索 → 取回 → 按指南实现 → 披露」工作流；指南内 npx 交叉引用统一映射为本地工具
 - 指南为上游英文原文逐字副本（CC-BY 4.0 / 代码 Apache-2.0），署名与来源见 [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
 - 检索契约：[resources/specifications/local_search_contract.md](modern-web-guidance/resources/specifications/local_search_contract.md)
-- 📘 使用指南：[docs/使用modern-web-guidance技能编写现代Web前端指南.md](docs/使用modern-web-guidance技能编写现代Web前端指南.md)
+- 可单独使用。写浏览器界面时，也可与 [Nuxt UI Starter](<prototype-to-web(Nuxt UI Starter)/README.md>)、vben 后台、静态 HTML 原型、Taro / uni-app x 的 H5、DSH 双面设置页叠加。对方技能仍决定目录、分层和组件库
+- 📘 使用指南：[docs/使用modern-web-guidance技能编写现代Web前端指南.md](docs/使用modern-web-guidance技能编写现代Web前端指南.md)（第 14 节为叠加对照）
 
 📖 **详细说明**：[查看文档](modern-web-guidance/README.md)
 
@@ -236,6 +246,9 @@ ncepu_ideal-skills/
 │   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
 │   ├── dsh中使用superpowers技能.md
 │   ├── workbuddy中使用原型转应用技能.md
+│   ├── 在Codebuddy插件中使用prototype-to-taro-app技能指南.md
+│   ├── 使用dsh-plugin-starter技能开发DSH插件.md
+│   ├── 使用modern-web-guidance技能编写现代Web前端指南.md
 │   └── images/                                     # 配置截图
 ├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI 项目生成技能
 │   ├── README.md
@@ -448,6 +461,15 @@ CREATE TABLE student (
 ```
 
 **📤 产出**：符合现代 Web 规范的实现代码 + 回复末尾 `### Modern Web Guidance` 披露用到的指南。
+
+可单独使用。下列技能在写到浏览器界面时也会先检索它，它们自己的目录、分层和组件库不变：
+
+- [prototype-to-web(Nuxt UI Starter)](<prototype-to-web(Nuxt UI Starter)/README.md>)、[requirements-to-vue_vben_admin](requirements-to-vue_vben_admin/README.md)：映射到各自的 UI 组件
+- [common-website-design](.dsh/skills/common-website-design/README.md)、[prd-html-skill](.cursor/skills/prd-html-skill/README.md)、[md-prd-to-html-prototype](.workbuddy/skills/md-prd-to-html-prototype/SKILL.md)：直接落进 HTML
+- [prototype-to-taro-app](prototype-to-taro-app/README.md)、[prototype-to-app-uniappx](prototype-to-app-uniappx/README.md)：仅 H5
+- [dsh-plugin-starter](dsh-plugin-starter/README.md)：仅双面型设置页
+
+小程序、App、Flutter、iOS、Android 和后端脚手架不套用。对照见使用指南第 14 节。
 
 ```sh
 # 也可直接当本地命令行工具用（在 modern-web-guidance/ 目录下）

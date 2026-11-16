@@ -550,3 +550,19 @@ prototype-to-web(Nuxt UI Starter)/
 10. **文件路由** —— `app/pages/index.vue` → `/`，无需手动注册
 11. **已有工程加列表页** —— 按 `incremental_list_page.md` 追加 `app/navigation.ts` 与成套分层文件，不覆盖起步工程
 12. **已有工程对接接口文档** —— 按 `api_binding.md` 在 service 内映射；不改页面调用，不实现后端
+13. **界面平台行为按需查阅** —— 对话框、表格、表单、暗色、滚动、焦点、图片优先级落到 HTML/CSS/DOM 时，按下一节查阅 `modern-web-guidance`。没有这类任务时不要调用它
+
+---
+
+## 与 modern-web-guidance 叠加
+
+本技能的生成流程、目录、分层、Nuxt UI 组件和 service 接缝保持不变。只有在编写或修改会落到标准 HTML/CSS/DOM 的界面时，才额外查阅仓库里的 `modern-web-guidance`。
+
+在仓库根目录执行：
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+查询用 UI 原语（如 `dialog`、`form validation`），不写 Nuxt、Vue 或业务名。指南里的原生行为映射到已有的 `U*` 组件上。不改 `pages → composables → services`，不因为指南更换请求库或重做工程。接口对接仍只走 `api_binding.md`。没有这类界面任务时不要调用它。

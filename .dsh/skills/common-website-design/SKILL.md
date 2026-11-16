@@ -212,3 +212,14 @@ site/
 - `designs/` — 9 个内置设计包
 - `assets/style-tile.html` — 样式确认页模板（第 3 步用，复制后只改 `:root` 令牌）
 - `scripts/validate.py` — 输出验证器
+
+## 与 modern-web-guidance 叠加
+
+页面原型、内容模型、设计包和 `html-contract` 保持不变。写语义 HTML、焦点、对话框、滚动、排版或动效时，先查阅仓库根目录的 `modern-web-guidance`，再落进当前页面。
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+指南与 `html-contract` 冲突时，以 `html-contract` 为准。不因为指南改页面原型，不生成 Vue/Hugo 工程。没有这类界面任务时不要调用它。

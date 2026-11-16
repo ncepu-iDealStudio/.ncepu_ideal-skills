@@ -292,3 +292,17 @@ export default {
 8. **小程序有包体积限制** —— 主包 2MB，注意静态资源
 9. **appid 留占位** —— 让用户填自己的
 10. **中文注释与文案**
+11. **H5 界面按需查阅** —— 只有编译目标包含 H5、且在写浏览器里的对话框、表单、暗色、焦点时，才按下一节查阅 `modern-web-guidance`。小程序和 React Native 不套用这些指南
+
+---
+
+## 与 modern-web-guidance 叠加
+
+框架选择、`app.config.ts` 注册、`services/request.ts` 和 mock 保持不变。指南只用于 **H5** 上会跑到的 HTML/CSS/DOM。
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+微信小程序、支付宝小程序和 React Native 没有 `<dialog>`、Popover、View Transitions。这些端继续用 Taro 组件，不把指南里的原生 DOM 写进去。查询时不写 Taro、Vue 或 React。

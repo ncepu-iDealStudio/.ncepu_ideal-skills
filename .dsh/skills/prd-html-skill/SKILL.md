@@ -147,3 +147,14 @@ prd-html/
 ```
 
 首次使用项目时：复制 `assets/` 模板到项目 spec/ 并填充；`design-specs/` 按选型拼装进项目 `spec/_公共规范.md`。
+
+## 与 modern-web-guidance 叠加
+
+生成顺序、spec 三件套和「MD 是事实源」保持不变。逐页写对话框、表单、表格、键盘操作时，先查阅仓库根目录的 `modern-web-guidance`，再把行为写进该页 HTML。
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+不因为指南增加外部 CDN，不改导航地图和公共规范的选型流程。没有这类界面任务时不要调用它。

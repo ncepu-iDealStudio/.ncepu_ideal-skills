@@ -391,6 +391,8 @@ uv run uvicorn start:app --reload   # 手动确认关键接口
 
 > 注意：这两个技能产出的是**设计原型**，不是可上线的业务系统，与第 3 节的开发链路是并列关系，不是替代关系。
 
+写这些原型里的对话框、表单、表格、焦点或动效时，两个技能会按需查阅 `modern-web-guidance`，再把行为写进 HTML。生成顺序、spec 三件套、设计包和「不引外部资源」不变。没有这类界面任务时不必调用。详见 [使用指南第 14 节](使用modern-web-guidance技能编写现代Web前端指南.md)。
+
 ---
 
 ## 5. 常见问题
@@ -449,3 +451,4 @@ uv run uvicorn start:app --reload   # 手动确认关键接口
 | 需求分析技能 | `.dsh/skills/it-requirement-analysis/SKILL.md` |
 | 技能设计方法（方法论背景） | `docs/生成企业级脚手架项目的混合SKILL设计方法.md` |
 | SQL 转脚手架技能 | `sql-to-{fastapi,flask,gin,springboot}-restfulapi-scaffold/` |
+| 原型页叠加 modern-web-guidance | `docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |

@@ -480,3 +480,19 @@ prototype-to-app-uniappx/
 10. **中文注释与文案** —— 与团队习惯保持一致
 11. **工程必须带 README.md** —— 生成后根目录必须含说明文档（运行/结构/页面清单/对接后端/注意事项），内容与实际工程一致
 12. **已有工程对接接口文档** —— 按 `api_binding.md` 在 `services/api` 内映射；不改页面调用，不把全局 `USE_MOCK` 提前关掉，不实现后端
+13. **H5 界面按需查阅** —— 只有目标包含 H5、且在写浏览器里的对话框、表单、暗色、焦点时，才按下一节查阅 `modern-web-guidance`。App 与小程序不套用这些指南
+
+---
+
+## 与 modern-web-guidance 叠加
+
+分层、`.uvue` 约束、`pages.json` 注册和 `services/api` 接缝保持不变。指南只用于 **H5** 上会跑到的 HTML/CSS/DOM。
+
+在仓库根目录执行：
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+App 端 flex 默认竖向、文字必须在 `<text>` 内，这些约束优先于指南。不要把 `<dialog>`、subgrid、锚点定位写进 `.uvue`。查询时不写 uni-app 或 Vue。没有 H5 界面任务时不要调用它。

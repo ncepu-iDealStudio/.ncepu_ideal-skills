@@ -175,3 +175,7 @@ python resources/tools/validate_project.py ./your-project
 | 原型解析契约 | `resources/specifications/prototype_parser_contract.md` |
 | 依赖版本基线 | `resources/config/dependency_baseline.json` |
 | Taro 官方文档 | <https://docs.taro.zone/> |
+
+## 11. 与 modern-web-guidance 叠加
+
+框架选择、页面注册和请求封装不变。只有 H5 上的对话框、表单、暗色、焦点才先检索仓库里的 `modern-web-guidance`，再映射到当前框架的组件。小程序和 React Native 不套用这些指南。没有这类界面任务时不必调用它。用法见 [使用指南第 14 节](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。

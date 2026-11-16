@@ -72,6 +72,7 @@ python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 Turn a natural-language website brief into a framework-agnostic static HTML design prototype (multi-page HTML, shared styles, and `site-manifest.json`). It does not generate Vue, Hugo, Hexo, or EJS project code.
 
 - Installed at `.workbuddy/skills/common-website-design/` and `.dsh/skills/common-website-design/`
+- When writing semantic HTML, focus, dialogs, scrolling, or motion, it may also consult [modern-web-guidance](modern-web-guidance/README.md). Page archetypes and design packs stay authoritative.
 - Sample output: [test/page-design-showcase](test/page-design-showcase/README.md)
 
 ---
@@ -89,6 +90,7 @@ Turn a business request into an implementable IT specification: PRD, user storie
 Turn a PRD, requirement note, or page list into a clickable multi-page HTML prototype, including a single-file offline HTML bundle.
 
 - Installed at `.cursor/skills/prd-html-skill/` and `.dsh/skills/prd-html-skill/`
+- When writing dialogs, forms, or tables, it may also consult [modern-web-guidance](modern-web-guidance/README.md). Generation order and the spec trio stay unchanged.
 
 ---
 
@@ -97,6 +99,7 @@ Turn a PRD, requirement note, or page list into a clickable multi-page HTML prot
 Read a local Markdown PRD and emit a self-contained single-file HTML prototype (inlined CSS and JS, no external assets).
 
 - Installed at `.workbuddy/skills/md-prd-to-html-prototype/`
+- When writing dialogs, forms, or tables, it may also consult [modern-web-guidance](modern-web-guidance/README.md). CSS and JS stay inlined.
 
 ---
 
@@ -108,6 +111,7 @@ Turn **prototypes** (HTML/CSS code, design screenshots, or a PRD page list) into
 - Encodes uni-app x vs uni-app pitfalls (`.uvue` pages, column-default flex, text must live inside `<text>`, `"uni-app-x": {}` in manifest)
 - Layers: pages / components / `services/api` (the only data seam) / `services/mock`
 - 10 validation checks; sample output at `resources/demo_output/skill-swap-demo/`
+- Consults [modern-web-guidance](modern-web-guidance/README.md) for H5 browser UI only. App and mini-program constraints stay in force.
 
 📖 **Details**: [Documentation](prototype-to-app-uniappx/README.md)
 
@@ -135,6 +139,7 @@ Turn a **backend admin requirements description** into a **runnable admin scaffo
 - Encodes three vben5 pitfalls: `ant-design-vue` vs `antdv-next`, `VbenTableAction` import source, route glob auto-collection
 - 14 validation checks; sample output at `resources/demo_output/demo-admin/` (3 modules, 8 pages)
 - Verified inside the **real vben repository**: 0 errors, 0 warnings
+- When writing tables, forms, or dialogs, it may also consult [modern-web-guidance](modern-web-guidance/README.md) and map the advice onto existing vben components.
 
 📖 **Details**: [Documentation](requirements-to-vue_vben_admin/README.md)
 
@@ -155,6 +160,9 @@ Turn **prototypes** into a **multi-platform Taro project** (WeChat/Alipay mini p
 > from official Taro conventions; `elf-taro` targets Taro3.0-rc + React16, whose architecture is
 > adapted here to Taro 4 + React 18.
 
+- Consults [modern-web-guidance](modern-web-guidance/README.md) for H5 only. Mini programs and React Native keep Taro components.
+- 📘 Usage guide: [Using prototype-to-taro-app in CodeBuddy](docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
+
 📖 **Details**: [Documentation](prototype-to-taro-app/README.md)
 
 ---
@@ -171,7 +179,8 @@ and reworked to be **offline, self-contained, and Chinese-driven**.
 - Zero-dependency local search: `mwg.py search / retrieve / list / categories` + `build_index.py` — fully offline, no telemetry (replaces upstream's network-dependent `npx modern-web-guidance`)
 - Chinese `SKILL.md` defines triggers and the "search → retrieve → implement per guide → disclose" workflow
 - Guides are verbatim upstream English copies (CC-BY 4.0 / code Apache-2.0); see [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
-- 📘 Usage guide: [Using modern-web-guidance for modern Web frontend](docs/使用modern-web-guidance技能编写现代Web前端指南.md)
+- Usable on its own. It can also run alongside Nuxt UI Starter, vben admin, the static HTML prototype skills, Taro / uni-app x H5, and DSH dual-face settings pages. Those skills still own directories, layers, and component libraries.
+- 📘 Usage guide: [Using modern-web-guidance for modern Web frontend](docs/使用modern-web-guidance技能编写现代Web前端指南.md) (section 14 is the overlay map)
 
 📖 **Details**: [Documentation](modern-web-guidance/README.md)
 
@@ -193,6 +202,9 @@ ncepu_ideal-skills/
 │   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
 │   ├── dsh中使用superpowers技能.md
 │   ├── workbuddy中使用原型转应用技能.md
+│   ├── 在Codebuddy插件中使用prototype-to-taro-app技能指南.md
+│   ├── 使用dsh-plugin-starter技能开发DSH插件.md
+│   ├── 使用modern-web-guidance技能编写现代Web前端指南.md
 │   └── images/                                     # Setup screenshots
 ├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI skill
 │   ├── README.md
@@ -307,6 +319,7 @@ ncepu_ideal-skills/
 | 🧩 **CodeBuddy** | [Configuration Guide](docs/CodeBuddy中使用skill配置.md) |
 | 🛠️ **WorkBuddy** | [Prototype-to-App Guide](docs/workbuddy中使用原型转应用技能.md) |
 | 🐋 **DSH (DeepSeek Harness)** | [superpowers Guide](docs/dsh中使用superpowers技能.md) |
+| 🧩 **DSH plugins** | [dsh-plugin-starter Usage Guide](docs/使用dsh-plugin-starter技能开发DSH插件.md) |
 | 🌐 **Modern Web Guidance** | [modern-web-guidance Usage Guide](docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
 
 > 📝 **Note**: Please refer to the `docs/` directory for detailed configuration guides
@@ -375,6 +388,15 @@ supports Esc to dismiss, and prevents the page behind from scrolling.
 ```
 
 **📤 Output**: spec-compliant implementation code + a `### Modern Web Guidance` disclosure section.
+
+It also runs alongside these skills when they write browser UI. Their own directories, layers, and component libraries stay in charge:
+
+- Nuxt UI Starter and vue-vben-admin: map the advice onto their existing UI components
+- common-website-design, prd-html-skill, and md-prd-to-html-prototype: write the behavior into HTML
+- prototype-to-taro-app and prototype-to-app-uniappx: H5 only
+- dsh-plugin-starter: dual-face settings pages only
+
+Mini programs, native apps, Flutter, iOS, Android, and backend scaffolds do not use it. The map is section 14 of the usage guide.
 
 ```sh
 # Also usable as a standalone local CLI (from the modern-web-guidance/ directory)

@@ -470,6 +470,8 @@ pnpm dev:h5
 
 浏览器打开终端提示的地址（通常 `http://localhost:10086`）。**第一次验收建议先看 H5**，不用装微信开发者工具。
 
+编译目标包含 H5，并且在写浏览器里的对话框、表单、暗色或焦点时，技能会先检索仓库里的 `modern-web-guidance`，再映射到当前框架的组件。微信小程序、支付宝小程序和 React Native 继续用 Taro 组件，不套用指南里的原生 DOM。没有这类界面任务时不必调用。详见 [使用指南第 14 节](使用modern-web-guidance技能编写现代Web前端指南.md)，技能说明见 README 第 11 节。
+
 ### 9.4 其他平台
 
 ```powershell
@@ -620,6 +622,7 @@ defineConstants: {
 | 依赖版本基线 | `resources/config/dependency_baseline.json` |
 | 完整示例产物 | `resources/demo_output/skill-swap-vue3/`、`skill-swap-react/` |
 | Taro 官方文档 | <https://docs.taro.zone/> |
+| H5 界面叠加 modern-web-guidance | [使用指南第 14 节](使用modern-web-guidance技能编写现代Web前端指南.md) |
 
 ---
 

@@ -68,3 +68,14 @@ tags:
 2. 不要生成依赖本地css/js外部文件的原型，全部内联。
 3. 不要做华丽高保真美工，保持适合需求评审的低保真业务原型。
 4. 不生成真正业务逻辑，仅做前端模拟交互。
+
+## 与 modern-web-guidance 叠加
+
+单文件、CSS/JS 全部内联、低保真评审这些约束保持不变。写弹窗、表单、表格、键盘操作前，先查阅仓库根目录的 `modern-web-guidance`，再把行为内联进同一个 HTML。
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+不因为指南拆出外部 css/js，不编造业务字段。没有这类界面任务时不要调用它。用法见仓库 `docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节。

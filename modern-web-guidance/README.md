@@ -160,3 +160,14 @@ python3 resources/tools/mwg.py search "light dismiss dialog"
 声明「已修改」。
 
 > 详细操作与验收清单见 [resources/specifications/local_search_contract.md 第 8–9 节](resources/specifications/local_search_contract.md)。
+
+## 与本仓库其它技能叠加
+
+本技能不生成工程。下列技能在写到浏览器界面时会先检索本技能，它们自己的目录、分层和组件库保持不变：
+
+- `prototype-to-web(Nuxt UI Starter)`、`requirements-to-vue_vben_admin`：映射到各自的 UI 组件
+- `common-website-design`、`prd-html-skill`、`md-prd-to-html-prototype`：直接落进 HTML
+- `prototype-to-taro-app`、`prototype-to-app-uniappx`：仅 H5
+- `dsh-plugin-starter`：仅 dual-face 设置页
+
+后端脚手架和 Flutter / iOS / Android 技能不叠加。说明见 [docs/使用modern-web-guidance技能编写现代Web前端指南.md](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。

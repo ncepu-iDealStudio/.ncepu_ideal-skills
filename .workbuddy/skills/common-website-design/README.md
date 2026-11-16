@@ -100,3 +100,7 @@ python scripts/validate.py <输出根目录>/template
 ## 成品示例
 
 `../../../test/page-design-showcase/` 是本 skill 的产出示例，含设计包画廊与四个端到端生成的站点。
+
+## 与 modern-web-guidance 叠加
+
+页面原型、设计包和校验不变。写语义 HTML、焦点、对话框、滚动或动效时，先检索仓库根目录的 `modern-web-guidance`，再落进当前页面。与 `html-contract` 冲突时仍以契约为准。没有这类界面任务时不必调用它。用法见 [使用指南第 14 节](../../../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。

@@ -273,3 +273,18 @@ git remote add origin git@github.com:<account>/<repo>.git && git push -u origin 
 - [ ] 生成的 `DEVELOPMENT.md` 未改动、路径正确
 - [ ] 已明确告知用户：下一步是 `pnpm install && pnpm build` 与 `dsh plugin --profile web add .`
 - [ ] 只跑过静态检查时，明确说明「编译未验证」，不谎称通过
+
+---
+
+## 12. 与 modern-web-guidance 叠加
+
+清单、`tsdown` 双目标、包名四处一致和 `validate_plugin.py` 保持不变。只有插件类型是 **dual-face**、并且正在写设置页界面时，才查阅 `modern-web-guidance`。
+
+在仓库根目录执行：
+
+```sh
+python modern-web-guidance/resources/tools/mwg.py search "<2-5 词的单一 UI 能力>"
+python modern-web-guidance/resources/tools/mwg.py retrieve "<id>"
+```
+
+`tool-only`、`route-only`、`interceptor` 没有可对照的浏览器界面，不要调用它。查询用 `form validation`、`focus-visible` 这类原语，不写 DSH 或插件名。指南里的行为写进设置页，不改 `dsh.bundle` / `dsh.client` 声明。

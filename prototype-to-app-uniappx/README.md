@@ -197,3 +197,7 @@ Page → services/api/getSkillList()
 | 布局约束 | flex 默认竖向、文字须在 text 内 | Widget 树、无 CSS |
 
 按团队技术栈二选一即可。
+
+## 11. 与 modern-web-guidance 叠加
+
+分层、`.uvue` 约束和数据接缝不变。只有 H5 上的对话框、表单、暗色、焦点才先检索仓库里的 `modern-web-guidance`。App 端 flex 默认竖向、文字必须在 `<text>` 内，这些约束优先于指南。没有 H5 界面任务时不必调用它。接口对接仍按第 7 节。用法见 [使用指南第 14 节](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。
