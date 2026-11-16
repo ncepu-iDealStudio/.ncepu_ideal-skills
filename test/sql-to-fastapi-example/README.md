@@ -5,7 +5,7 @@
 > ⚠️ **历史快照说明**：本目录是某次生成结果的冻结样例，按**当时版本**的技能生成，
 > 因此仍保留旧骨架文件（`config/settings.py`、`utils/loguru.py`、`app/events.py`、
 > `app/router.py`、`core/dependencies.py`）——这些文件在**当前**主技能
-> [`sql-to-fastapi-restfulapi-scaffold`](../../sql-to-fastapi-restfulapi-scaffold/README.md)
+> [`sql-to-fastapi-restfulapi-scaffold`](../../sql-to/sql-to-fastapi-restfulapi-scaffold/README.md)
 > 中已被列为淘汰项并改为 `config_unified.py` + `utils/logger.py` 的新骨架。
 > 下方的项目结构如实描述本目录的**实际内容**，请勿把它当作当前技能的输出规范。
 

@@ -170,4 +170,4 @@ python3 resources/tools/mwg.py search "light dismiss dialog"
 - `prototype-to-taro-app`、`prototype-to-app-uniappx`：仅 H5
 - `dsh-plugin-starter`：仅 dual-face 设置页
 
-后端脚手架和 Flutter / iOS / Android 技能不叠加。说明见 [docs/使用modern-web-guidance技能编写现代Web前端指南.md](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。
+后端脚手架和 Flutter / iOS / Android 技能不叠加。说明见 [docs/使用modern-web-guidance技能编写现代Web前端指南.md](../.docs/使用modern-web-guidance技能编写现代Web前端指南.md)。

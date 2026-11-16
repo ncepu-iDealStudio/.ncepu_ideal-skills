@@ -6,7 +6,7 @@
 
 适用目录：
 
-- `sql-to-fastapi-restfulapi-scaffold/`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/`
 
 ## 2. 前置条件
 
@@ -19,14 +19,14 @@
 
 在 Copilot 对话中明确引用：
 
-- `sql-to-fastapi-restfulapi-scaffold/SKILL.md`
-- `sql-to-fastapi-restfulapi-scaffold/README.md`
-- `sql-to-fastapi-restfulapi-scaffold/resources/config/naming_rules.json`
-- `sql-to-fastapi-restfulapi-scaffold/resources/config/type_mappings.json`
-- `sql-to-fastapi-restfulapi-scaffold/resources/config/project_baseline.json`
-- `sql-to-fastapi-restfulapi-scaffold/resources/config/status_flag_fields.json`
-- `sql-to-fastapi-restfulapi-scaffold/resources/specifications/coding_standards.md`
-- `sql-to-fastapi-restfulapi-scaffold/resources/templates/`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/SKILL.md`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/README.md`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/resources/config/naming_rules.json`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/resources/config/type_mappings.json`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/resources/config/project_baseline.json`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/resources/config/status_flag_fields.json`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/resources/specifications/coding_standards.md`
+- `sql-to/sql-to-fastapi-restfulapi-scaffold/resources/templates/`
 
 ## 4. 推荐交互
 

@@ -412,13 +412,13 @@ python3 resources/tools/mwg.py search "light dismiss dialog"   # 抽样验证
 
 | 技能 | 何时查阅 | 说明 |
 | --- | --- | --- |
-| [prototype-to-web(Nuxt UI Starter)](../prototype-to-web(Nuxt%20UI%20Starter)/README.md) | 对话框、表格、表单、暗色、滚动、焦点、图片优先级，映射到 Nuxt UI | 该技能 README 第 11 节 |
+| [prototype-to-web(Nuxt UI Starter)](../prototype-to/prototype-to-web(Nuxt%20UI%20Starter)/README.md) | 对话框、表格、表单、暗色、滚动、焦点、图片优先级，映射到 Nuxt UI | 该技能 README 第 11 节 |
 | [requirements-to-vue_vben_admin](../requirements-to-vue_vben_admin/README.md) | 同上，映射到 VxeGrid / Vben 表单 / Ant Design Vue | 该技能 README 第 10 节 |
 | [common-website-design](../.dsh/skills/common-website-design/README.md) | 写静态 HTML 的语义、焦点、对话框、滚动、动效 | `.dsh` 与 `.workbuddy` 两份说明相同 |
 | [prd-html-skill](../.cursor/skills/prd-html-skill/README.md) | 逐页写可点原型的对话框、表单、表格 | `.cursor` 与 `.dsh` 两份说明相同 |
 | [md-prd-to-html-prototype](../.workbuddy/skills/md-prd-to-html-prototype/SKILL.md) | 单文件原型里的弹窗、表单、表格；仍全部内联 | 无单独 README，规则写在 `SKILL.md` |
-| [prototype-to-taro-app](../prototype-to-taro-app/README.md) | 仅 H5 | 该技能 README 第 11 节；CodeBuddy 指南见 [在 CodeBuddy 中使用](在Codebuddy插件中使用prototype-to-taro-app技能指南.md) |
-| [prototype-to-app-uniappx](../prototype-to-app-uniappx/README.md) | 仅 H5；App 端约束优先 | 该技能 README 第 11 节；WorkBuddy 指南见 [原型转应用](workbuddy中使用原型转应用技能.md) |
+| [prototype-to-taro-app](../prototype-to/prototype-to-taro-app/README.md) | 仅 H5 | 该技能 README 第 11 节；CodeBuddy 指南见 [在 CodeBuddy 中使用](在Codebuddy插件中使用prototype-to-taro-app技能指南.md) |
+| [prototype-to-app-uniappx](../prototype-to/prototype-to-app-uniappx/README.md) | 仅 H5；App 端约束优先 | 该技能 README 第 11 节；WorkBuddy 指南见 [原型转应用](workbuddy中使用原型转应用技能.md) |
 | [dsh-plugin-starter](../dsh-plugin-starter/README.md) | 仅 dual-face 设置页 | 该技能 README 第 11 节；插件指南见 [开发 DSH 插件](使用dsh-plugin-starter技能开发DSH插件.md) |
 
 后端脚手架、Flutter、iOS、Android 不叠加。没有上述界面任务时，不要调用本技能。

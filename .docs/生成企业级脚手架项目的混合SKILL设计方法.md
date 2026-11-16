@@ -323,7 +323,7 @@
 
 | 术语 | 含义 | 在当前仓库中的落点（示例） | 建议阅读顺序 |
 | --- | --- | --- | --- |
-| 语义上下文（context / IR） | 将 SQL 与规则解析后的统一中间语义输入 | `sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json`、`resources/config/template_context_example.json` | 先看 context 字段结构，再看模板如何消费 |
+| 语义上下文（context / IR） | 将 SQL 与规则解析后的统一中间语义输入 | `sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json`、`resources/config/template_context_example.json` | 先看 context 字段结构，再看模板如何消费 |
 | 规则层（config） | 命名、类型、生成档位等策略配置 | `resources/config/naming_rules.json`、`resources/config/type_mappings.json`、`resources/config/generation_profiles.json` | 先看命名规则，再看类型映射 |
 | 规范层（specifications） | 解析契约、合并策略、质量约束 | `resources/specifications/sql_parser_contract.md`、`resources/specifications/router_registry_merge_strategy.md` | 先看 parser contract，再看 merge strategy |
 | 模板层（templates） | 把 context 渲染成目标代码 | `resources/templates/project_structure/`、`resources/templates/layers/` | 先看 project_structure，再看 layers |
@@ -336,7 +336,7 @@
 
 1. 先运行一键流水线，建立全局认知：
 
-- `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
+- `python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
 
 1. 再看 context 产物，理解“语义中心”输入长什么样：
 
@@ -416,7 +416,7 @@
 
 1. 问：我只想快速看效果，最短命令是什么？
 
-- 答：优先执行 `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`，可一次性得到完整链路验证和报告。
+- 答：优先执行 `python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`，可一次性得到完整链路验证和报告。
 
 1. 问：快照 compare 失败就一定是 bug 吗？
 
@@ -430,12 +430,12 @@
 
 1. 第一步：先跑一键流水线
 
-- 命令：`python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
+- 命令：`python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
 - 目标：快速定位是 context、模板渲染、路由合并还是快照环节失败。
 
 1. 第二步：看 pipeline 报告中的失败步骤
 
-- 文件：`sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json`
+- 文件：`sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json`
 - 目标：确认失败阶段和错误摘要。
 
 1. 第三步：按失败类型分治
@@ -492,20 +492,20 @@
 
 1. 跑一次完整验证
 
-- `python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
+- `python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py`
 
 1. 看结果文件
 
-- `sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json`
+- `sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json`
 
 1. 理解输入语义
 
-- `sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json`
+- `sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json`
 
 1. 理解输出来源
 
-- `sql-to-gin-restfulapi-scaffold/resources/templates/project_structure/`
-- `sql-to-gin-restfulapi-scaffold/resources/templates/layers/`
+- `sql-to/sql-to-gin-restfulapi-scaffold/resources/templates/project_structure/`
+- `sql-to/sql-to-gin-restfulapi-scaffold/resources/templates/layers/`
 
 常见问题速答：
 
@@ -542,7 +542,7 @@
 
 ## 3) 验证
 - 执行命令：
- - python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+ - python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 - 结果摘要：
  - pipeline_report: PASS/FAIL
  - snapshot compare: PASS/FAIL

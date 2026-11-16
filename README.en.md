@@ -31,7 +31,7 @@
 
 Generate complete FastAPI RESTful API project scaffolding from SQL `CREATE TABLE` statements
 
-📖 **Details**：[View Documentation](sql-to-fastapi-restfulapi-scaffold/README.md)
+📖 **Details**：[View Documentation](sql-to/sql-to-fastapi-restfulapi-scaffold/README.md)
 
 ---
 
@@ -39,7 +39,7 @@ Generate complete FastAPI RESTful API project scaffolding from SQL `CREATE TABLE
 
 Generate Flask + Flask-RESTful enterprise API project scaffolding from MySQL DDL scripts
 
-📖 **Details**：[View Documentation](sql-to-flask-restfulapi-scaffold/README.md)
+📖 **Details**：[View Documentation](sql-to/sql-to-flask-restfulapi-scaffold/README.md)
 
 ---
 
@@ -47,7 +47,7 @@ Generate Flask + Flask-RESTful enterprise API project scaffolding from MySQL DDL
 
 Generate complete Spring Boot RESTful API project scaffolding from SQL `CREATE TABLE` statements
 
-📖 **Details**：[View Documentation](sql-to-springboot-restfulapi-scaffold/README.md)
+📖 **Details**：[View Documentation](sql-to/sql-to-springboot-restfulapi-scaffold/README.md)
 
 ---
 
@@ -60,10 +60,10 @@ Status: ✅ Production-ready workflow with one-command regression (context gener
 Quick command:
 
 ```bash
-python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 ```
 
-📖 **Details**：[View Documentation](sql-to-gin-restfulapi-scaffold/README.md)
+📖 **Details**：[View Documentation](sql-to/sql-to-gin-restfulapi-scaffold/README.md)
 
 ---
 
@@ -113,7 +113,7 @@ Turn **prototypes** (HTML/CSS code, design screenshots, or a PRD page list) into
 - 10 validation checks; sample output at `resources/demo_output/skill-swap-demo/`
 - Consults [modern-web-guidance](modern-web-guidance/README.md) for H5 browser UI only. App and mini-program constraints stay in force.
 
-📖 **Details**: [Documentation](prototype-to-app-uniappx/README.md)
+📖 **Details**: [Documentation](prototype-to/prototype-to-app-uniappx/README.md)
 
 ---
 
@@ -126,7 +126,7 @@ Turn **prototypes** into an **out-of-the-box Flutter project** following Flutter
 - Guards against anti-patterns: hardcoded colors, direct HTTP calls from `features`
 - 11 validation checks; sample output at `resources/demo_output/skill_swap_app/`
 
-📖 **Details**: [Documentation](prototype-to-flutter-app/README.md)
+📖 **Details**: [Documentation](prototype-to/prototype-to-flutter-app/README.md)
 
 ---
 
@@ -161,9 +161,9 @@ Turn **prototypes** into a **multi-platform Taro project** (WeChat/Alipay mini p
 > adapted here to Taro 4 + React 18.
 
 - Consults [modern-web-guidance](modern-web-guidance/README.md) for H5 only. Mini programs and React Native keep Taro components.
-- 📘 Usage guide: [Using prototype-to-taro-app in CodeBuddy](docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
+- 📘 Usage guide: [Using prototype-to-taro-app in CodeBuddy](.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
 
-📖 **Details**: [Documentation](prototype-to-taro-app/README.md)
+📖 **Details**: [Documentation](prototype-to/prototype-to-taro-app/README.md)
 
 ---
 
@@ -180,7 +180,7 @@ and reworked to be **offline, self-contained, and Chinese-driven**.
 - Chinese `SKILL.md` defines triggers and the "search → retrieve → implement per guide → disclose" workflow
 - Guides are verbatim upstream English copies (CC-BY 4.0 / code Apache-2.0); see [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
 - Usable on its own. It can also run alongside Nuxt UI Starter, vben admin, the static HTML prototype skills, Taro / uni-app x H5, and DSH dual-face settings pages. Those skills still own directories, layers, and component libraries.
-- 📘 Usage guide: [Using modern-web-guidance for modern Web frontend](docs/使用modern-web-guidance技能编写现代Web前端指南.md) (section 14 is the overlay map)
+- 📘 Usage guide: [Using modern-web-guidance for modern Web frontend](.docs/使用modern-web-guidance技能编写现代Web前端指南.md) (section 14 is the overlay map)
 
 📖 **Details**: [Documentation](modern-web-guidance/README.md)
 
@@ -207,7 +207,7 @@ ncepu_ideal-skills/
 ├── 📄 README.en.md                                 # English documentation
 ├── 📄 CODEBUDDY.md                                 # CodeBuddy skill notes
 ├── 📄 .gitignore
-├── 📁 docs/                                        # Guides and design notes
+├── 📁 .docs/                                       # Guides and design notes
 │   ├── Trea中使用skill配置.md
 │   ├── claude中使用skill配置.md
 │   ├── CodeBuddy中使用skill配置.md
@@ -219,78 +219,33 @@ ncepu_ideal-skills/
 │   ├── 使用dsh-plugin-starter技能开发DSH插件.md
 │   ├── 使用modern-web-guidance技能编写现代Web前端指南.md
 │   └── images/                                     # Setup screenshots
-├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI skill
-│   ├── README.md
-│   ├── SKILL.md
-│   ├── docs/
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       └── tools/                                  # check_skill_consistency.py (self-check)
-├── 📁 sql-to-flask-restfulapi-scaffold/            # 🐍 Flask skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       ├── static/
-│       └── demo_output/
-├── 📁 sql-to-springboot-restfulapi-scaffold/       # ☕ Spring Boot skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       └── templates/
-├── 📁 sql-to-gin-restfulapi-scaffold/              # 🌀 Gin skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       ├── static/
-│       └── demo_output/
-├── 📁 prototype-to-app-uniappx/                    # 📱 prototype -> uni-app x skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
-├── 📁 prototype-to-flutter-app/                    # 🐦 prototype -> Flutter skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
+├── 📁 sql-to/                                      # 🏭 SQL -> backend scaffolds (4 skills)
+│   ├── sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI skill (README + SKILL + docs/ + resources/)
+│   ├── sql-to-flask-restfulapi-scaffold/           # 🐍 Flask skill (README + SKILL + resources/)
+│   ├── sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot skill (README + SKILL + resources/)
+│   └── sql-to-gin-restfulapi-scaffold/             # 🌀 Gin skill (README + SKILL + resources/)
+├── 📁 prototype-to/                                # 🎨 Prototype -> app projects (6 skills)
+│   │   Each skill ships README.md, SKILL.md, and resources/{config,specifications,templates,tools,demo_output}
+│   ├── prototype-to-app-uniappx/                   # 📱 prototype -> uni-app x
+│   ├── prototype-to-flutter-app/                   # 🐦 prototype -> Flutter
+│   ├── prototype-to-web(Nuxt UI Starter)/          # 🌐 prototype -> Nuxt UI Starter
+│   ├── prototype-to-taro-app/                      # 📦 prototype -> Taro multi-platform
+│   ├── prototype-to-ios-native-app(AwesomeSwift)/  # 🍎 prototype -> native iOS (SwiftUI)
+│   └── prototype-to-android-native-app(Fragmject)/ # 🤖 prototype -> native Android (Compose)
+├── 📁 security/                                    # 🔒 API hardening (1 skill)
+│   └── fastapi-api-security-authentication/        # Bearer JWT + role/object permissions
+│       ├── SKILL.md
+│       ├── references/
+│       └── scripts/
 ├── 📁 requirements-to-vue_vben_admin/              # 🧩 requirements -> vben admin skill
 │   ├── README.md
 │   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
-├── 📁 prototype-to-taro-app/                       # 📦 prototype -> Taro skill
+│   └── resources/                                  # config / specifications / templates / tools / demo_output
+├── 📁 database-schema-designer/                    # database schema design skill
 │   ├── README.md
 │   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
+│   ├── NOTICE
+│   └── references/
 ├── 📁 modern-web-guidance/                          # 🌐 modern Web platform guides (reference, offline)
 │   ├── README.md
 │   ├── SKILL.md                                     # Chinese router: triggers + 4-step workflow
@@ -300,14 +255,13 @@ ncepu_ideal-skills/
 │       ├── guides_index.json                       # Derived search index
 │       ├── specifications/                          # Local search tool contract
 │       └── tools/                                   # build_index.py / mwg.py (zero-dep)
-├── 📁 database-schema-designer/                    # database schema design skill
+├── 📁 dsh-plugin-starter/                          # 🧩 DSH plugin starter skill
 │   ├── README.md
 │   ├── SKILL.md
-│   ├── NOTICE
-│   └── references/
+│   └── resources/                                  # config / specifications / templates / tools / demo_output
 ├── 📁 .codebuddy/skills/                           # 20 superpowers-zh skills
 ├── 📁 .agents/skills/                              # 20 superpowers-zh skills
-├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype, diagnosing-superpowers, prototype-to-*
+├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype, diagnosing-superpowers, prototype-to-app-uniappx, prototype-to-flutter-app
 ├── 📁 .cursor/skills/                              # it-requirement-analysis, prd-html-skill
 ├── 📁 .dsh/skills/                                 # common-website-design, it-requirement-analysis, prd-html-skill, diagnosing-superpowers
 └── 📁 test/                                        # Generated samples and fixture SQL
@@ -320,7 +274,6 @@ ncepu_ideal-skills/
         ├── gallery/
         └── sites/
 ```
-
 ---
 
 ## 🚀 Quick Start
@@ -331,16 +284,16 @@ ncepu_ideal-skills/
 
 | 🤖 AI Tool | 📚 Documentation |
 | ----------- | ----------- |
-| 🚀 **Trae IDE** | [Configuration Guide](docs/Trea中使用skill配置.md) |
-| 💻 **Claude Code** | [Configuration Guide](docs/claude中使用skill配置.md) |
-| ⚡ **GitHub Copilot** | [Configuration Guide](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
-| 🧩 **CodeBuddy** | [Configuration Guide](docs/CodeBuddy中使用skill配置.md) |
-| 🛠️ **WorkBuddy** | [Prototype-to-App Guide](docs/workbuddy中使用原型转应用技能.md) |
-| 🐋 **DSH (DeepSeek Harness)** | [superpowers Guide](docs/dsh中使用superpowers技能.md) |
-| 🧩 **DSH plugins** | [dsh-plugin-starter Usage Guide](docs/使用dsh-plugin-starter技能开发DSH插件.md) |
-| 🌐 **Modern Web Guidance** | [modern-web-guidance Usage Guide](docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
+| 🚀 **Trae IDE** | [Configuration Guide](.docs/Trea中使用skill配置.md) |
+| 💻 **Claude Code** | [Configuration Guide](.docs/claude中使用skill配置.md) |
+| ⚡ **GitHub Copilot** | [Configuration Guide](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
+| 🧩 **CodeBuddy** | [Configuration Guide](.docs/CodeBuddy中使用skill配置.md) |
+| 🛠️ **WorkBuddy** | [Prototype-to-App Guide](.docs/workbuddy中使用原型转应用技能.md) |
+| 🐋 **DSH (DeepSeek Harness)** | [superpowers Guide](.docs/dsh中使用superpowers技能.md) |
+| 🧩 **DSH plugins** | [dsh-plugin-starter Usage Guide](.docs/使用dsh-plugin-starter技能开发DSH插件.md) |
+| 🌐 **Modern Web Guidance** | [modern-web-guidance Usage Guide](.docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
 
-> 📝 **Note**: Please refer to the `docs/` directory for detailed configuration guides
+> 📝 **Note**: Please refer to the `.docs/` directory for detailed configuration guides
 
 ---
 

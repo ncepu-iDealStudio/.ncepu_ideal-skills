@@ -13,10 +13,10 @@ This report validates current skill assets against the target SQL baseline
 ## Evidence Inputs
 
 - SQL baseline: test/api_security_demo-20260717.sql
-- Example context: sql-to-gin-restfulapi-scaffold/resources/config/template_context_example.json
-- Generated full context: sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json
-- Router merge target: sql-to-gin-restfulapi-scaffold/resources/templates/project_structure/apis/api_1_0/urls.go
-- Router merge preview target: sql-to-gin-restfulapi-scaffold/resources/demo_output/urls_merge_preview.go
+- Example context: sql-to/sql-to-gin-restfulapi-scaffold/resources/config/template_context_example.json
+- Generated full context: sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json
+- Router merge target: sql-to/sql-to-gin-restfulapi-scaffold/resources/templates/project_structure/apis/api_1_0/urls.go
+- Router merge preview target: sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/urls_merge_preview.go
 
 ## Executed Checks
 
@@ -54,7 +54,7 @@ This report validates current skill assets against the target SQL baseline
 - Output summary:
   - bundle files: 12
   - manifest generated:
-    - sql-to-gin-restfulapi-scaffold/resources/demo_output/bundle_preview/manifest.json
+    - sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/bundle_preview/manifest.json
 
 ### 4) SQL baseline extraction
 
@@ -118,13 +118,13 @@ Interpretation:
 
 - Status: PASS
 - Tool:
-  - sql-to-gin-restfulapi-scaffold/resources/tools/generate_context_from_sql.py
+  - sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/generate_context_from_sql.py
 - Output:
   - tables: 11
   - views: 1
   - entities: 12
   - generated file:
-    - sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json
+    - sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json
   - sql_source_path (相对仓库根，可移植):
     - test/api_security_demo-20260717.sql
 
@@ -146,9 +146,9 @@ Note:
 
 - Status: PASS
 - Tool:
-  - sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+  - sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 - Output artifacts:
-  - sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json
+  - sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/pipeline_report.json
 - Key summary from latest run:
   - all steps ok: true
   - sql_entities: 12
@@ -159,10 +159,10 @@ Note:
 
 - Status: PASS
 - Tool:
-  - sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py
+  - sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py
 - Snapshot files:
-  - sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots/generated_context_study_flask_api.snapshot.json
-  - sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots/bundle_manifest.snapshot.json
+  - sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots/generated_context_study_flask_api.snapshot.json
+  - sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots/bundle_manifest.snapshot.json
 - Latest compare mode result:
   - context snapshot: match
   - manifest snapshot: match

@@ -47,7 +47,7 @@
 | pnpm | 推荐 | 技能按 pnpm 生成流程说明；npm 也能跑 |
 | Python 3.8+ | 推荐 | 三个辅助脚本（解析 / 预览 / 校验）只用标准库 |
 | 微信开发者工具 | 看小程序效果必须 | 导入 `dist/` 目录 |
-| 本仓库代码 | 必须 | 提供技能目录 `prototype-to-taro-app/` |
+| 本仓库代码 | 必须 | 提供技能目录 `prototype-to/prototype-to-taro-app/` |
 
 检查版本：
 
@@ -79,21 +79,21 @@ npm i -g pnpm
 
 ```powershell
 New-Item -ItemType Directory -Force -Path .codebuddy/skills | Out-Null
-Copy-Item -Recurse -Force "<本仓库路径>\prototype-to-taro-app" .codebuddy/skills/
+Copy-Item -Recurse -Force "<本仓库路径>\prototype-to\prototype-to-taro-app" .codebuddy/skills/
 ```
 
 例如：
 
 ```powershell
 # 把 <本仓库路径> 换成你机器上的实际位置
-Copy-Item -Recurse -Force "E:\Open_source_project\ncepu_ideal-skills\prototype-to-taro-app" .codebuddy/skills/
+Copy-Item -Recurse -Force "E:\Open_source_project\ncepu_ideal-skills\prototype-to\prototype-to-taro-app" .codebuddy/skills/
 ```
 
 **Bash（macOS / Linux）**：
 
 ```bash
 mkdir -p .codebuddy/skills
-cp -r <本仓库路径>/prototype-to-taro-app .codebuddy/skills/
+cp -r <本仓库路径>/prototype-to/prototype-to-taro-app .codebuddy/skills/
 ```
 
 复制完的项目结构：
@@ -132,7 +132,7 @@ prototype-to-taro-app/
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME\.codebuddy\skills" | Out-Null
-Copy-Item -Recurse -Force "<本仓库路径>\prototype-to-taro-app" "$HOME\.codebuddy\skills\"
+Copy-Item -Recurse -Force "<本仓库路径>\prototype-to\prototype-to-taro-app" "$HOME\.codebuddy\skills\"
 ```
 
 ---

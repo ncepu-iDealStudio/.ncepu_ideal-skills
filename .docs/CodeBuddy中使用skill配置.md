@@ -46,7 +46,7 @@ fastapi_project/
 - [ ] Python 3.10+（技能模板默认钉选 3.12）
 - [ ] `uv`（推荐）。没装也没关系，后面有 pip 兼容方案
 - [ ] 一个可连接的 MySQL（只启动服务、看 Swagger 可以不连；跑集成测试需要）
-- [ ] 本仓库代码（提供技能目录 `sql-to-fastapi-restfulapi-scaffold/`）
+- [ ] 本仓库代码（提供技能目录 `sql-to/sql-to-fastapi-restfulapi-scaffold/`）
 
 安装 `uv`（可选）：
 
@@ -78,22 +78,22 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ```powershell
 New-Item -ItemType Directory -Force -Path .codebuddy/skills | Out-Null
-Copy-Item -Recurse -Force "<本仓库路径>\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
+Copy-Item -Recurse -Force "<本仓库路径>\sql-to\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
 ```
 
 例如：
 
 ```powershell
-Copy-Item -Recurse -Force "<本仓库路径>\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
+Copy-Item -Recurse -Force "<本仓库路径>\sql-to\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
 # 例如（把路径换成你本机克隆仓库的实际位置）：
-# Copy-Item -Recurse -Force "D:\work\ncepu_ideal-skills\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
+# Copy-Item -Recurse -Force "D:\work\ncepu_ideal-skills\sql-to\sql-to-fastapi-restfulapi-scaffold" .codebuddy/skills/
 ```
 
 #### Bash（macOS / Linux）
 
 ```bash
 mkdir -p .codebuddy/skills
-cp -r <本仓库路径>/sql-to-fastapi-restfulapi-scaffold .codebuddy/skills/
+cp -r <本仓库路径>/sql-to/sql-to-fastapi-restfulapi-scaffold .codebuddy/skills/
 ```
 
 ### 2.3 为什么必须复制整个目录
@@ -121,7 +121,7 @@ sql-to-fastapi-restfulapi-scaffold/
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME\.codebuddy\skills" | Out-Null
-Copy-Item -Recurse -Force "<本仓库路径>\sql-to-fastapi-restfulapi-scaffold" "$HOME\.codebuddy\skills\"
+Copy-Item -Recurse -Force "<本仓库路径>\sql-to\sql-to-fastapi-restfulapi-scaffold" "$HOME\.codebuddy\skills\"
 ```
 
 ---

@@ -31,8 +31,10 @@ def extract_sql_baseline(sql_path: Path) -> tuple[int, int]:
 
 
 def main() -> int:
-    repo_root = Path(__file__).resolve().parents[3]
-    skill_root = repo_root / "sql-to-gin-restfulapi-scaffold"
+    # 本脚本位于 <仓库根>/sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/ 下：
+    # parents[2] 是技能根目录，parents[4] 才是仓库根目录。
+    skill_root = Path(__file__).resolve().parents[2]
+    repo_root = Path(__file__).resolve().parents[4]
     tools = skill_root / "resources" / "tools"
     demo = skill_root / "resources" / "demo_output"
     tmpl_urls = skill_root / "resources" / "templates" / "project_structure" / "apis" / "api_1_0" / "urls.go"

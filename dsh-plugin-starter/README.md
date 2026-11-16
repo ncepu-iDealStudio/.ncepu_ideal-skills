@@ -194,4 +194,4 @@ python resources/tools/validate_plugin.py <插件目录>
 
 ## 11. 与 modern-web-guidance 叠加
 
-四类插件的清单、构建和校验不变。只有 **dual-face** 的设置页在写表单、焦点、对比度时，才先检索仓库里的 `modern-web-guidance`。工具型、路由型、拦截器没有浏览器界面，不必调用它。用法见 [使用指南第 14 节](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。
+四类插件的清单、构建和校验不变。只有 **dual-face** 的设置页在写表单、焦点、对比度时，才先检索仓库里的 `modern-web-guidance`。工具型、路由型、拦截器没有浏览器界面，不必调用它。用法见 [使用指南第 14 节](../.docs/使用modern-web-guidance技能编写现代Web前端指南.md)。

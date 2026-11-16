@@ -70,7 +70,7 @@ cp -r sql-to-fastapi-restfulapi-scaffold ~/.claude/skills/
 
 #### 以下是 配置项目skill的示例图文教程 ：
 ```bash
-mkdir -p .claude/skills && cp -r ../../sql-to-fastapi-restfulapi-scaffold .claude/skills/
+mkdir -p .claude/skills && cp -r ../../sql-to/sql-to-fastapi-restfulapi-scaffold .claude/skills/
 ```
 ![alt text](images/claude-0.png)
 

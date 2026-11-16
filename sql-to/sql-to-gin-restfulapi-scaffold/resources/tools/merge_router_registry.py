@@ -166,7 +166,7 @@ def main() -> int:
     diagnostics = {
         **import_diag,
         **registry_diag,
-        "target_file": str(urls_path),
+        "target_file": urls_path.as_posix(),
     }
     print(json.dumps(diagnostics, ensure_ascii=False, indent=2))
     return 0

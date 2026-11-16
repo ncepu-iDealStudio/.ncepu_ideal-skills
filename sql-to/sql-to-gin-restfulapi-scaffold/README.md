@@ -265,9 +265,9 @@ sql-to-gin-example/
 
 可先阅读仓库根目录 `docs/` 下通用使用文档，再结合本 README 操作本 Skill：
 
-1. [`docs/claude中使用skill配置.md`](../docs/claude中使用skill配置.md)
-2. [`docs/Trea中使用skill配置.md`](../docs/Trea中使用skill配置.md)
-3. [`docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`](../docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md)
+1. [`docs/claude中使用skill配置.md`](../../.docs/claude中使用skill配置.md)
+2. [`docs/Trea中使用skill配置.md`](../../.docs/Trea中使用skill配置.md)
+3. [`docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`](../../.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md)
 
 说明：
 
@@ -277,7 +277,7 @@ sql-to-gin-example/
 常用命令（仓库根目录执行）：
 
 ```bash
-python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 ```
 
 该命令会串联执行：context 生成、context 校验、计划预览、模板渲染、路由合并预演、覆盖率统计、快照校验。
@@ -299,8 +299,8 @@ python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 3. 快照变更要可解释
 
 - 先 compare，确认是预期变化后再 update：
-  - `python sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py`
-  - `python sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py --update`
+  - `python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py`
+  - `python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/check_snapshots.py --update`
 
 4. 增量合并保持幂等
 

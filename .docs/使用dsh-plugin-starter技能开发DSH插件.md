@@ -425,7 +425,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 | 你可能想做的事 | 该用什么 |
 | --- | --- |
 | 做 DSH 插件（工具/路由/设置页/拦截器） | **本技能** |
-| 写 DSH 技能（`SKILL.md`） | 技能体系（本仓库的 `docs/dsh中使用superpowers技能.md`） |
+| 写 DSH 技能（`SKILL.md`） | 技能体系（本仓库的 `.docs/dsh中使用superpowers技能.md`） |
 | 从 SQL 生成后端接口工程 | `sql-to-*-restfulapi-scaffold` |
 | 从原型生成前端 App | `prototype-to-*` |
 | 写双面型设置页的表单、焦点、对比度 | 本技能生成工程；界面行为按需查阅 `modern-web-guidance` |
@@ -465,7 +465,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 | --- | --- |
 | 技能主文件（六步工作流、硬约束、坑位表） | `SKILL.md` |
 | 技能说明 | `README.md`（第 11 节：与 modern-web-guidance 叠加） |
-| 现代 Web 指南（仅设置页） | `../docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |
+| 现代 Web 指南（仅设置页） | `.docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |
 | 四类型判定表 | `resources/config/plugin_types.json` |
 | 命名与一致性规则 | `resources/config/naming_rules.json` |
 | 清单契约 | `resources/specifications/plugin_manifest_contract.md` |

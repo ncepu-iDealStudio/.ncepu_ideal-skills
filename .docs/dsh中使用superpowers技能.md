@@ -449,6 +449,6 @@ uv run uvicorn start:app --reload   # 手动确认关键接口
 | superpowers-zh 中文技能（20 个） | `.agents/skills/`、`.codebuddy/skills/` |
 | DSH 原生技能目录 | `.dsh/skills/` |
 | 需求分析技能 | `.dsh/skills/it-requirement-analysis/SKILL.md` |
-| 技能设计方法（方法论背景） | `docs/生成企业级脚手架项目的混合SKILL设计方法.md` |
+| 技能设计方法（方法论背景） | `.docs/生成企业级脚手架项目的混合SKILL设计方法.md` |
 | SQL 转脚手架技能 | `sql-to-{fastapi,flask,gin,springboot}-restfulapi-scaffold/` |
-| 原型页叠加 modern-web-guidance | `docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |
+| 原型页叠加 modern-web-guidance | `.docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |

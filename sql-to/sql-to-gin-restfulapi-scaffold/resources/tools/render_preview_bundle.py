@@ -50,14 +50,14 @@ def main() -> int:
         out = OUTPUT_DIR / "models" / f"{entity['entity_name']}.go"
         ensure_parent(out)
         out.write_text(content, encoding="utf-8")
-        manifest.append(str(out.relative_to(ROOT)).replace('\\\\', '/'))
+        manifest.append(out.relative_to(ROOT).as_posix())
 
     manifest_file = OUTPUT_DIR / "manifest.json"
     ensure_parent(manifest_file)
     manifest_file.write_text(json.dumps({"files": manifest}, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # 打印相对仓库根的路径，避免把开发者本机绝对路径写进回归报告
-    repo_root = Path(__file__).resolve().parents[3]
+    repo_root = Path(__file__).resolve().parents[4]  # <仓库根>/sql-to/<技能>/resources/tools/ 的上 4 层
     try:
         manifest_display = manifest_file.relative_to(repo_root).as_posix()
     except ValueError:

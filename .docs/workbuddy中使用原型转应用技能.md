@@ -552,10 +552,10 @@ python .workbuddy/skills/prototype-to-flutter-app/resources/tools/validate_proje
 | --- | --- |
 | uni-app x 技能说明 | `.workbuddy/skills/prototype-to-app-uniappx/README.md` |
 | Flutter 技能说明 | `.workbuddy/skills/prototype-to-flutter-app/README.md` |
-| uni-app x 工程骨架模板 | `prototype-to-app-uniappx/resources/templates/` |
-| Flutter 工程骨架模板 | `prototype-to-flutter-app/resources/templates/` |
-| 示例产物（uni-app x） | `prototype-to-app-uniappx/resources/demo_output/skill-swap-demo/` |
-| 示例产物（Flutter） | `prototype-to-flutter-app/resources/demo_output/skill_swap_app/` |
-| DSH 中使用 superpowers | `docs/dsh中使用superpowers技能.md` |
-| H5 界面叠加 modern-web-guidance | `docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |
+| uni-app x 工程骨架模板 | `prototype-to/prototype-to-app-uniappx/resources/templates/` |
+| Flutter 工程骨架模板 | `prototype-to/prototype-to-flutter-app/resources/templates/` |
+| 示例产物（uni-app x） | `prototype-to/prototype-to-app-uniappx/resources/demo_output/skill-swap-demo/` |
+| 示例产物（Flutter） | `prototype-to/prototype-to-flutter-app/resources/demo_output/skill_swap_app/` |
+| DSH 中使用 superpowers | `.docs/dsh中使用superpowers技能.md` |
+| H5 界面叠加 modern-web-guidance | `.docs/使用modern-web-guidance技能编写现代Web前端指南.md` 第 14 节 |
 | 官方文档 | [uni-app x](https://doc.dcloud.net.cn/uni-app-x/) ・ [Flutter](https://docs.flutter.dev/) |

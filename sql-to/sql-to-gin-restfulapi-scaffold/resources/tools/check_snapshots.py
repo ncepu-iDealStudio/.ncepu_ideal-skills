@@ -79,17 +79,17 @@ def main() -> int:
     parser.add_argument("--update", action="store_true", help="create/refresh snapshots")
     parser.add_argument(
         "--context",
-        default="sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json",
+        default="sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json",
         help="generated context json path",
     )
     parser.add_argument(
         "--manifest",
-        default="sql-to-gin-restfulapi-scaffold/resources/demo_output/bundle_preview/manifest.json",
+        default="sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/bundle_preview/manifest.json",
         help="generated manifest json path",
     )
     parser.add_argument(
         "--snapshot-dir",
-        default="sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots",
+        default="sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots",
         help="snapshot directory path",
     )
     args = parser.parse_args()

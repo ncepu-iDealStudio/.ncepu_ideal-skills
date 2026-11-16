@@ -6,7 +6,7 @@
 
 适用目录：
 
-- `sql-to-flask-restfulapi-scaffold/`
+- `sql-to/sql-to-flask-restfulapi-scaffold/`
 
 ## 2. 前置条件
 
@@ -19,13 +19,13 @@
 
 在 Copilot 对话中，建议明确引用以下文件作为生成依据：
 
-- `sql-to-flask-restfulapi-scaffold/SKILL.md`
-- `sql-to-flask-restfulapi-scaffold/README.md`
-- `sql-to-flask-restfulapi-scaffold/resources/config/type_mappings.json`
-- `sql-to-flask-restfulapi-scaffold/resources/config/naming_rules.json`
-- `sql-to-flask-restfulapi-scaffold/resources/specifications/coding_standards.md`
-- `sql-to-flask-restfulapi-scaffold/resources/specifications/sql_parser_contract.md`
-- `sql-to-flask-restfulapi-scaffold/resources/specifications/router_registry_merge_strategy.md`
+- `sql-to/sql-to-flask-restfulapi-scaffold/SKILL.md`
+- `sql-to/sql-to-flask-restfulapi-scaffold/README.md`
+- `sql-to/sql-to-flask-restfulapi-scaffold/resources/config/type_mappings.json`
+- `sql-to/sql-to-flask-restfulapi-scaffold/resources/config/naming_rules.json`
+- `sql-to/sql-to-flask-restfulapi-scaffold/resources/specifications/coding_standards.md`
+- `sql-to/sql-to-flask-restfulapi-scaffold/resources/specifications/sql_parser_contract.md`
+- `sql-to/sql-to-flask-restfulapi-scaffold/resources/specifications/router_registry_merge_strategy.md`
 
 ## 4. 推荐交互方式
 
@@ -34,7 +34,7 @@
 在 Copilot Chat 中输入类似提示：
 
 ```text
-请严格按照 sql-to-flask-restfulapi-scaffold/SKILL.md 与 resources 下的配置和规范，
+请严格按照 sql-to/sql-to-flask-restfulapi-scaffold/SKILL.md 与 resources 下的配置和规范，
 读取 test/api_security_demo-20260717.sql，
 生成 Flask + Flask-RESTful 分层脚手架代码。
 要求：
@@ -78,9 +78,9 @@
 可先在终端执行以下脚本做前置校验：
 
 ```bash
-python sql-to-flask-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to-flask-restfulapi-scaffold/resources/config/template_context_example.json
-python sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/api_security_demo-20260717.sql
-python sql-to-flask-restfulapi-scaffold/resources/tools/render_preview_bundle.py
+python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to/sql-to-flask-restfulapi-scaffold/resources/config/template_context_example.json
+python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/api_security_demo-20260717.sql
+python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/render_preview_bundle.py
 ```
 
 ## 7. 常见问题

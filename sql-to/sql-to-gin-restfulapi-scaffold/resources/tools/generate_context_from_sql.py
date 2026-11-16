@@ -255,7 +255,7 @@ def main() -> int:
 
     # 把 SQL 来源记录成相对仓库根的路径，保证产物/快照可移植，
     # 不把开发者本机的绝对路径写进 context。
-    repo_root = Path(__file__).resolve().parents[3]
+    repo_root = Path(__file__).resolve().parents[4]  # <仓库根>/sql-to/<技能>/resources/tools/ 的上 4 层
     try:
         sql_source_rel = sql_path.resolve().relative_to(repo_root).as_posix()
     except ValueError:
@@ -294,7 +294,7 @@ def main() -> int:
     print(
         json.dumps(
             {
-                "output": str(out_path),
+                "output": out_path.as_posix(),
                 "tables": len(tables),
                 "views": len(views),
                 "entities": len(entities),

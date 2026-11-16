@@ -6,7 +6,7 @@
       "name": "generate_context",
       "exit_code": 0,
       "ok": true,
-      "output": "{\n  \"output\": \"sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json\",\n  \"tables\": 11,\n  \"views\": 1,\n  \"entities\": 12\n}"
+      "output": "{\n  \"output\": \"sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json\",\n  \"tables\": 11,\n  \"views\": 1,\n  \"entities\": 12\n}"
     },
     {
       "name": "validate_context",
@@ -24,19 +24,19 @@
       "name": "render_bundle",
       "exit_code": 0,
       "ok": true,
-      "output": "bundle files: 12\nmanifest: sql-to-gin-restfulapi-scaffold/resources/demo_output/bundle_preview/manifest.json"
+      "output": "bundle files: 12\nmanifest: sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/bundle_preview/manifest.json"
     },
     {
       "name": "merge_registry_preview",
       "exit_code": 0,
       "ok": true,
-      "output": "{\n  \"inserted_imports_count\": 10,\n  \"duplicate_imports_removed_count\": 0,\n  \"import_merge_skipped\": false,\n  \"import_skip_reason\": \"\",\n  \"inserted_registry_entries_count\": 10,\n  \"duplicate_registry_entries_removed_count\": 0,\n  \"registry_merge_skipped\": false,\n  \"registry_skip_reason\": \"\",\n  \"target_file\": \"sql-to-gin-restfulapi-scaffold/resources/demo_output/urls_merge_preview.go\"\n}"
+      "output": "{\n  \"inserted_imports_count\": 10,\n  \"duplicate_imports_removed_count\": 0,\n  \"import_merge_skipped\": false,\n  \"import_skip_reason\": \"\",\n  \"inserted_registry_entries_count\": 10,\n  \"duplicate_registry_entries_removed_count\": 0,\n  \"registry_merge_skipped\": false,\n  \"registry_skip_reason\": \"\",\n  \"target_file\": \"sql-to/sql-to-gin-restfulapi-scaffold/resources/demo_output/urls_merge_preview.go\"\n}"
     },
     {
       "name": "check_snapshots",
       "exit_code": 0,
       "ok": true,
-      "output": "{\n  \"ok\": true,\n  \"update_mode\": false,\n  \"checks\": [\n    {\n      \"target\": \"sql-to-gin-restfulapi-scaffold/resources/demo_output/generated_context_study_flask_api.json\",\n      \"snapshot\": \"sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots/generated_context_study_flask_api.snapshot.json\",\n      \"exists\": true,\n      \"snapshot_exists\": true,\n      \"ok\": true,\n      \"updated\": false,\n      \"reason\": \"match\",\n      \"target_hash\": \"fbfd011be55d5871625b59fda66fd73ccea8c7d9e672b95adcd629db0b4e988e\",\n      \"snapshot_hash\": \"fbfd011be55d5871625b59fda66fd73ccea8c7d9e672b95adcd629db0b4e988e\"\n    },\n    {\n      \"target\": \"sql-to-gin-restfulapi-scaffold/resources/demo_output/bundle_preview/manifest.json\",\n      \"snapshot\": \"sql-to-gin-restfulapi-scaffold/resources/demo_output/snapshots/bundle_manifest.snapshot.json\",\n      \"exists\": true,\n      \"snapshot_exists\": true,\n      \"ok\": true,\n      \"updated\": false,\n      \"reason\": \"match\",\n      \"target_hash\": \"9b602b33830728cae612c316c61165d8df550ef1d17f16fbe8e7f8a2274795f2\",\n      \"snapshot_hash\": \"9b602b33830728cae612c316c61165d8df550ef1d17f16fbe8e7f8a2274795f2\"\n    }\n  ]\n}"
+      "output": "{\n  \"ok\": true,\n  \"update_mode\": false,\n  \"checks\": [\n    {\n      \"target\": \"sql-to\\\\sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\generated_context_study_flask_api.json\",\n      \"snapshot\": \"sql-to\\\\sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\snapshots\\\\generated_context_study_flask_api.snapshot.json\",\n      \"exists\": true,\n      \"snapshot_exists\": true,\n      \"ok\": true,\n      \"updated\": false,\n      \"reason\": \"match\",\n      \"target_hash\": \"fbfd011be55d5871625b59fda66fd73ccea8c7d9e672b95adcd629db0b4e988e\",\n      \"snapshot_hash\": \"fbfd011be55d5871625b59fda66fd73ccea8c7d9e672b95adcd629db0b4e988e\"\n    },\n    {\n      \"target\": \"sql-to\\\\sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\bundle_preview\\\\manifest.json\",\n      \"snapshot\": \"sql-to\\\\sql-to-gin-restfulapi-scaffold\\\\resources\\\\demo_output\\\\snapshots\\\\bundle_manifest.snapshot.json\",\n      \"exists\": true,\n      \"snapshot_exists\": true,\n      \"ok\": true,\n      \"updated\": false,\n      \"reason\": \"match\",\n      \"target_hash\": \"9b602b33830728cae612c316c61165d8df550ef1d17f16fbe8e7f8a2274795f2\",\n      \"snapshot_hash\": \"9b602b33830728cae612c316c61165d8df550ef1d17f16fbe8e7f8a2274795f2\"\n    }\n  ]\n}"
     }
   ],
   "coverage": {

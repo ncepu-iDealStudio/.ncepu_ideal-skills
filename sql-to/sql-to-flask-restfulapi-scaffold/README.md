@@ -253,9 +253,9 @@ sql-to-flask-example/
 
 优先阅读仓库根目录 `docs/` 下文档：
 
-1. [`docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`](../docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md)
-2. [`docs/claude中使用skill配置.md`](../docs/claude中使用skill配置.md)
-3. [`docs/Trea中使用skill配置.md`](../docs/Trea中使用skill配置.md)
+1. [`docs/GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md`](../../.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md)
+2. [`docs/claude中使用skill配置.md`](../../.docs/claude中使用skill配置.md)
+3. [`docs/Trea中使用skill配置.md`](../../.docs/Trea中使用skill配置.md)
 
 说明：
 
@@ -267,9 +267,9 @@ sql-to-flask-example/
 在仓库根目录执行：
 
 ```bash
-python sql-to-flask-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to-flask-restfulapi-scaffold/resources/config/template_context_example.json
-python sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/api_security_demo-20260717.sql
-python sql-to-flask-restfulapi-scaffold/resources/tools/render_preview_bundle.py
+python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to/sql-to-flask-restfulapi-scaffold/resources/config/template_context_example.json
+python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/api_security_demo-20260717.sql
+python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/render_preview_bundle.py
 ```
 
 执行顺序建议：先校验 context，再预览计划，最后渲染预览产物。

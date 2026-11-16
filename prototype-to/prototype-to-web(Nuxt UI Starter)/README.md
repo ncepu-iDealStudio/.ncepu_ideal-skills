@@ -197,4 +197,4 @@ Page → useSkills() → skillService.getSkills()
 
 ## 11. 与 modern-web-guidance 叠加
 
-生成流程、目录和数据接缝不变。写到对话框、表格、表单、暗色、滚动、焦点或图片优先级时，先用仓库里的 `modern-web-guidance` 检索对应指南，再映射到 Nuxt UI 组件。没有这类界面任务时不必调用它。接口对接仍按第 7 节。用法见 [使用指南第 14 节](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。
+生成流程、目录和数据接缝不变。写到对话框、表格、表单、暗色、滚动、焦点或图片优先级时，先用仓库里的 `modern-web-guidance` 检索对应指南，再映射到 Nuxt UI 组件。没有这类界面任务时不必调用它。接口对接仍按第 7 节。用法见 [使用指南第 14 节](../../.docs/使用modern-web-guidance技能编写现代Web前端指南.md)。

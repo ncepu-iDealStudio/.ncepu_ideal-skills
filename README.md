@@ -33,7 +33,7 @@
 
 从 SQL `CREATE TABLE` 语句生成完整的 FastAPI RESTful API 项目脚手架
 
-📖 **详细说明**：[查看文档](sql-to-fastapi-restfulapi-scaffold/README.md)
+📖 **详细说明**：[查看文档](sql-to/sql-to-fastapi-restfulapi-scaffold/README.md)
 
 ---
 
@@ -41,7 +41,7 @@
 
 从 MySQL DDL 脚本生成 Flask + Flask-RESTful 风格的企业级接口项目脚手架
 
-📖 **详细说明**：[查看文档](sql-to-flask-restfulapi-scaffold/README.md)
+📖 **详细说明**：[查看文档](sql-to/sql-to-flask-restfulapi-scaffold/README.md)
 
 ---
 
@@ -49,7 +49,7 @@
 
 从 SQL `CREATE TABLE` 语句生成完整的 Spring Boot RESTful API 项目脚手架
 
-📖 **详细说明**：[查看文档](sql-to-springboot-restfulapi-scaffold/README.md)
+📖 **详细说明**：[查看文档](sql-to/sql-to-springboot-restfulapi-scaffold/README.md)
 
 ---
 
@@ -62,10 +62,10 @@
 快速命令：
 
 ```bash
-python sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
+python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
 ```
 
-📖 **详细说明**：[查看文档](sql-to-gin-restfulapi-scaffold/README.md)
+📖 **详细说明**：[查看文档](sql-to/sql-to-gin-restfulapi-scaffold/README.md)
 
 ---
 
@@ -117,7 +117,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 校验脚本 10 项，示例产物 `resources/demo_output/skill-swap-demo/`
 - 仅 H5 界面按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；App 与小程序约束优先
 
-📖 **详细说明**：[查看文档](prototype-to-app-uniappx/README.md)
+📖 **详细说明**：[查看文档](prototype-to/prototype-to-app-uniappx/README.md)
 
 ---
 
@@ -130,7 +130,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 强制规避硬编码颜色、`features` 层直连 HTTP 等反模式
 - 校验脚本 11 项，示例产物 `resources/demo_output/skill_swap_app/`
 
-📖 **详细说明**：[查看文档](prototype-to-flutter-app/README.md)
+📖 **详细说明**：[查看文档](prototype-to/prototype-to-flutter-app/README.md)
 
 ---
 
@@ -164,9 +164,9 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 > `elf-taro` 为 Taro3.0-rc + React16，本技能把其架构思路适配到 Taro 4 + React 18。
 
 - 仅 H5 按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；小程序和 React Native 不套用
-- 📘 使用指南：[docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md](docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
+- 📘 使用指南：[.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md](.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
 
-📖 **详细说明**：[查看文档](prototype-to-taro-app/README.md)
+📖 **详细说明**：[查看文档](prototype-to/prototype-to-taro-app/README.md)
 
 ---
 
@@ -180,7 +180,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 数据访问层留接缝：切真实后端只改 `AppContainer` 装配，页面代码不动
 - 校验脚本 22 项（不需要 macOS / Xcode），示例产物 `resources/demo_output/skill-swap-ios/`
 
-📖 **详细说明**：[查看文档](prototype-to-ios-native-app/README.md)
+📖 **详细说明**：[查看文档](<prototype-to/prototype-to-ios-native-app(AwesomeSwift)/README.md>)
 
 ---
 
@@ -194,7 +194,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 内置四个页面范本；`Navigation3` 仍在实验期，默认用 Navigation Compose，用户要求时才切换
 - 校验脚本 21 项，示例产物 `resources/demo_output/skill-swap-android/`
 
-📖 **详细说明**：[查看文档](<prototype-to-android-native-app(Fragmject)/README.md>)
+📖 **详细说明**：[查看文档](<prototype-to/prototype-to-android-native-app(Fragmject)/README.md>)
 
 ---
 
@@ -208,7 +208,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 零依赖工具链：`scaffold_plugin.py`（spec → 工程）、`validate_plugin.py`（18 项静态自检）
 - 示例产物：`resources/demo_output/dsh-plugin-notebook/`（双面型：路由 + 设置页 + 笔记增删查）
 - 仅 dual-face 设置页按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；工具型、路由型、拦截器不调用
-- 📘 使用指南：[docs/使用dsh-plugin-starter技能开发DSH插件.md](docs/使用dsh-plugin-starter技能开发DSH插件.md)
+- 📘 使用指南：[.docs/使用dsh-plugin-starter技能开发DSH插件.md](.docs/使用dsh-plugin-starter技能开发DSH插件.md)
 
 📖 **详细说明**：[查看文档](dsh-plugin-starter/README.md)
 
@@ -223,8 +223,8 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 中文 `SKILL.md` 定义触发条件与「检索 → 取回 → 按指南实现 → 披露」工作流；指南内 npx 交叉引用统一映射为本地工具
 - 指南为上游英文原文逐字副本（CC-BY 4.0 / 代码 Apache-2.0），署名与来源见 [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
 - 检索契约：[resources/specifications/local_search_contract.md](modern-web-guidance/resources/specifications/local_search_contract.md)
-- 可单独使用。写浏览器界面时，也可与 [Nuxt UI Starter](<prototype-to-web(Nuxt UI Starter)/README.md>)、vben 后台、静态 HTML 原型、Taro / uni-app x 的 H5、DSH 双面设置页叠加。对方技能仍决定目录、分层和组件库
-- 📘 使用指南：[docs/使用modern-web-guidance技能编写现代Web前端指南.md](docs/使用modern-web-guidance技能编写现代Web前端指南.md)（第 14 节为叠加对照）
+- 可单独使用。写浏览器界面时，也可与 [Nuxt UI Starter](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>)、vben 后台、静态 HTML 原型、Taro / uni-app x 的 H5、DSH 双面设置页叠加。对方技能仍决定目录、分层和组件库
+- 📘 使用指南：[.docs/使用modern-web-guidance技能编写现代Web前端指南.md](.docs/使用modern-web-guidance技能编写现代Web前端指南.md)（第 14 节为叠加对照）
 
 📖 **详细说明**：[查看文档](modern-web-guidance/README.md)
 
@@ -251,7 +251,7 @@ ncepu_ideal-skills/
 ├── 📄 README.en.md                                 # 英文说明
 ├── 📄 CODEBUDDY.md                                 # CodeBuddy 技能说明
 ├── 📄 .gitignore
-├── 📁 docs/                                        # 配置指南与设计方法
+├── 📁 .docs/                                       # 配置指南与设计方法
 │   ├── Trea中使用skill配置.md
 │   ├── claude中使用skill配置.md
 │   ├── CodeBuddy中使用skill配置.md
@@ -263,107 +263,50 @@ ncepu_ideal-skills/
 │   ├── 使用dsh-plugin-starter技能开发DSH插件.md
 │   ├── 使用modern-web-guidance技能编写现代Web前端指南.md
 │   └── images/                                     # 配置截图
-├── 📁 sql-to-fastapi-restfulapi-scaffold/          # ⚡ FastAPI 项目生成技能
-│   ├── README.md
-│   ├── SKILL.md
-│   ├── docs/                                       # 本技能的 IDE 配置说明
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       └── tools/                                  # check_skill_consistency.py（自洽校验）
-├── 📁 sql-to-flask-restfulapi-scaffold/            # 🐍 Flask 接口项目生成技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       ├── static/
-│       └── demo_output/
-├── 📁 sql-to-springboot-restfulapi-scaffold/       # ☕ Spring Boot 项目生成技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       └── templates/
-├── 📁 sql-to-gin-restfulapi-scaffold/              # 🌀 Gin 接口项目生成技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       ├── static/
-│       └── demo_output/
-├── 📁 prototype-to-app-uniappx/                    # 📱 原型转 uni-app x 工程技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
-├── 📁 prototype-to-flutter-app/                    # 🐦 原型转 Flutter 工程技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
+├── 📁 sql-to/                                      # 🏭 SQL → 后端脚手架（4 个技能）
+│   ├── sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI 项目生成技能
+│   │   ├── README.md
+│   │   ├── SKILL.md
+│   │   ├── docs/                                   # 本技能的 IDE 配置说明
+│   │   └── resources/
+│   │       ├── config/
+│   │       ├── specifications/
+│   │       ├── templates/
+│   │       └── tools/                              # check_skill_consistency.py（自洽校验）
+│   ├── sql-to-flask-restfulapi-scaffold/           # 🐍 Flask 接口项目生成技能
+│   │   ├── README.md
+│   │   ├── SKILL.md
+│   │   └── resources/                              # config / specifications / templates / tools / static / demo_output
+│   ├── sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot 项目生成技能
+│   │   ├── README.md
+│   │   ├── SKILL.md
+│   │   └── resources/                              # config / specifications / templates
+│   └── sql-to-gin-restfulapi-scaffold/             # 🌀 Gin 接口项目生成技能
+│       ├── README.md
+│       ├── SKILL.md
+│       └── resources/                              # config / specifications / templates / tools / static / demo_output
+├── 📁 prototype-to/                                # 🎨 原型 → 应用工程（6 个技能）
+│   │   每个技能含 README.md、SKILL.md 与 resources/（config / specifications / templates / tools / demo_output）
+│   ├── prototype-to-app-uniappx/                   # 📱 原型转 uni-app x 工程技能
+│   ├── prototype-to-flutter-app/                   # 🐦 原型转 Flutter 工程技能
+│   ├── prototype-to-web(Nuxt UI Starter)/          # 🌐 原型转 Nuxt UI Starter 工程技能
+│   ├── prototype-to-taro-app/                      # 📦 原型转 Taro 多端工程技能
+│   ├── prototype-to-ios-native-app(AwesomeSwift)/  # 🍎 原型转原生 iOS 工程技能（SwiftUI）
+│   └── prototype-to-android-native-app(Fragmject)/ # 🤖 原型转原生 Android 工程技能（Compose）
+├── 📁 security/                                    # 🔒 接口鉴权加固（1 个技能）
+│   └── fastapi-api-security-authentication/        # Bearer JWT + 角色/对象权限
+│       ├── SKILL.md
+│       ├── references/
+│       └── scripts/
 ├── 📁 requirements-to-vue_vben_admin/              # 🧩 需求转 vben 后台管理技能
 │   ├── README.md
 │   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
-├── 📁 prototype-to-taro-app/                       # 📦 原型转 Taro 多端工程技能
+│   └── resources/                                  # config / specifications / templates / tools / demo_output
+├── 📁 database-schema-designer/                    # 🗄️ 数据库模型设计技能
 │   ├── README.md
 │   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       └── demo_output/
-├── 📁 prototype-to-ios-native-app/                 # 🍎 原型转原生 iOS 工程技能（SwiftUI）
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       ├── demo_input/
-│       └── demo_output/
-├── 📁 prototype-to-android-native-app(Fragmject)/   # 🤖 原型转原生 Android 工程技能（Compose）
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/
-│       ├── specifications/
-│       ├── templates/
-│       ├── tools/
-│       ├── demo_input/
-│       └── demo_output/
-├── 📁 dsh-plugin-starter/                          # 🧩 DSH 插件起步项目生成技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/
-│       ├── config/                                 # 四类型判定表 + 命名规则
-│       ├── specifications/                         # 清单/Host/Client/构建发布 契约
-│       ├── templates/                              # common + 四类型 + 指南分章
-│       ├── tools/                                  # scaffold_plugin.py / validate_plugin.py
-│       └── demo_output/                            # 示例产物 dsh-plugin-notebook
+│   ├── NOTICE
+│   └── references/                                 # 访谈、PostgreSQL、MySQL、输出格式、示例
 ├── 📁 modern-web-guidance/                          # 🌐 现代 Web 平台指南技能（参考型，离线自包含）
 │   ├── README.md
 │   ├── SKILL.md                                     # 中文路由器：触发 + 4 步工作流
@@ -373,14 +316,13 @@ ncepu_ideal-skills/
 │       ├── guides_index.json                       # 派生检索索引
 │       ├── specifications/                          # 本地检索工具契约
 │       └── tools/                                   # build_index.py / mwg.py（零依赖）
-├── 📁 database-schema-designer/                    # 🗄️ 数据库模型设计技能
+├── 📁 dsh-plugin-starter/                          # 🧩 DSH 插件起步项目生成技能
 │   ├── README.md
 │   ├── SKILL.md
-│   ├── NOTICE
-│   └── references/                                 # 访谈、PostgreSQL、MySQL、输出格式、示例
+│   └── resources/                                  # config / specifications / templates / tools / demo_output
 ├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
 ├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
-├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype、diagnosing-superpowers
+├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype、diagnosing-superpowers、prototype-to-app-uniappx、prototype-to-flutter-app
 ├── 📁 .cursor/skills/                              # it-requirement-analysis、prd-html-skill
 ├── 📁 .dsh/skills/                                 # common-website-design、it-requirement-analysis、prd-html-skill、diagnosing-superpowers
 └── 📁 test/                                        # 🧪 技能生成示例与样例数据
@@ -404,16 +346,16 @@ ncepu_ideal-skills/
 
 | 🤖 AI 工具 | 📚 配置文档 |
 | ----------- | ----------- |
-| 🚀 **Trae IDE** | [配置指南](docs/Trea中使用skill配置.md) |
-| 💻 **Claude Code** | [配置指南](docs/claude中使用skill配置.md) |
-| ⚡ **GitHub Copilot** | [配置指南](docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
-| 🧩 **CodeBuddy** | [配置指南](docs/CodeBuddy中使用skill配置.md) |
-| 🛠️ **WorkBuddy** | [原型转应用技能指南](docs/workbuddy中使用原型转应用技能.md) |
-| 🐋 **DSH（DeepSeek Harness）** | [superpowers 技能指南](docs/dsh中使用superpowers技能.md) |
-| 🧩 **DSH 插件开发** | [dsh-plugin-starter 使用指南](docs/使用dsh-plugin-starter技能开发DSH插件.md) |
-| 🌐 **现代 Web 前端指南** | [modern-web-guidance 使用指南](docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
+| 🚀 **Trae IDE** | [配置指南](.docs/Trea中使用skill配置.md) |
+| 💻 **Claude Code** | [配置指南](.docs/claude中使用skill配置.md) |
+| ⚡ **GitHub Copilot** | [配置指南](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
+| 🧩 **CodeBuddy** | [配置指南](.docs/CodeBuddy中使用skill配置.md) |
+| 🛠️ **WorkBuddy** | [原型转应用技能指南](.docs/workbuddy中使用原型转应用技能.md) |
+| 🐋 **DSH（DeepSeek Harness）** | [superpowers 技能指南](.docs/dsh中使用superpowers技能.md) |
+| 🧩 **DSH 插件开发** | [dsh-plugin-starter 使用指南](.docs/使用dsh-plugin-starter技能开发DSH插件.md) |
+| 🌐 **现代 Web 前端指南** | [modern-web-guidance 使用指南](.docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
 
-> 📝 **提示**：详细配置说明请参考 `docs/` 目录
+> 📝 **提示**：详细配置说明请参考 `.docs/` 目录
 
 ---
 
@@ -484,9 +426,9 @@ CREATE TABLE student (
 
 可单独使用。下列技能在写到浏览器界面时也会先检索它，它们自己的目录、分层和组件库不变：
 
-- [prototype-to-web(Nuxt UI Starter)](<prototype-to-web(Nuxt UI Starter)/README.md>)、[requirements-to-vue_vben_admin](requirements-to-vue_vben_admin/README.md)：映射到各自的 UI 组件
+- [prototype-to-web(Nuxt UI Starter)](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>)、[requirements-to-vue_vben_admin](requirements-to-vue_vben_admin/README.md)：映射到各自的 UI 组件
 - [common-website-design](.dsh/skills/common-website-design/README.md)、[prd-html-skill](.cursor/skills/prd-html-skill/README.md)、[md-prd-to-html-prototype](.workbuddy/skills/md-prd-to-html-prototype/SKILL.md)：直接落进 HTML
-- [prototype-to-taro-app](prototype-to-taro-app/README.md)、[prototype-to-app-uniappx](prototype-to-app-uniappx/README.md)：仅 H5
+- [prototype-to-taro-app](prototype-to/prototype-to-taro-app/README.md)、[prototype-to-app-uniappx](prototype-to/prototype-to-app-uniappx/README.md)：仅 H5
 - [dsh-plugin-starter](dsh-plugin-starter/README.md)：仅双面型设置页
 
 小程序、App、Flutter、iOS、Android 和后端脚手架不套用。对照见使用指南第 14 节。

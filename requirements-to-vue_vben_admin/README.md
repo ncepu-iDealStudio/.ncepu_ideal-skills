@@ -218,4 +218,4 @@ demo-admin/
 
 ## 10. 与 modern-web-guidance 叠加
 
-生成模块、路由和 API 层的方式不变。写表格排序、表单校验、对话框、暗色或焦点时，先检索仓库里的 `modern-web-guidance`，再映射到 vben 已有组件。没有这类界面任务时不必调用它。接口对接仍按第 8 节第 5 条。用法见 [使用指南第 14 节](../docs/使用modern-web-guidance技能编写现代Web前端指南.md)。
+生成模块、路由和 API 层的方式不变。写表格排序、表单校验、对话框、暗色或焦点时，先检索仓库里的 `modern-web-guidance`，再映射到 vben 已有组件。没有这类界面任务时不必调用它。接口对接仍按第 8 节第 5 条。用法见 [使用指南第 14 节](../.docs/使用modern-web-guidance技能编写现代Web前端指南.md)。
