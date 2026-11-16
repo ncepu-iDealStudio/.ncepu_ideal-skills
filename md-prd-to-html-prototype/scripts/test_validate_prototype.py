@@ -53,5 +53,81 @@ class ValidateCLIAndLayoutTest(unittest.TestCase):
             self.assertIn("OK", proc.stdout)
 
 
+class ValidateHtmlOfflineTest(unittest.TestCase):
+    def make_root(self, td, html_name="index.html"):
+        root = Path(td)
+        (root / "_原型说明.md").write_text("# 状态\n", encoding="utf-8")
+        side = root / "www"
+        side.mkdir(exist_ok=True)
+        return root, side / html_name
+
+    def test_cdn_link_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root, page = self.make_root(td)
+            page.write_text(
+                '<!DOCTYPE html><html lang="zh-CN"><head><meta name="viewport" '
+                'content="width=device-width"><title>T</title>'
+                '<link rel="stylesheet" href="https://cdn.example.com/a.css"></head>'
+                '<body><style>body{}</style><script>const MOCK_x=[];</script></body></html>',
+                encoding="utf-8",
+            )
+            proc = run_validator(root)
+            self.assertEqual(proc.returncode, 1, proc.stdout)
+            self.assertIn("external", proc.stdout.lower())
+
+    def test_external_script_src_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root, page = self.make_root(td)
+            page.write_text(
+                '<!DOCTYPE html><html lang="zh-CN"><head><meta name="viewport" '
+                'content="width=device-width"><title>T</title></head><body>'
+                '<style>body{}</style><script src="https://cdn.example.com/a.js"></script>'
+                '</body></html>',
+                encoding="utf-8",
+            )
+            proc = run_validator(root)
+            self.assertEqual(proc.returncode, 1, proc.stdout)
+            self.assertIn("script", proc.stdout.lower())
+
+    def test_missing_style_or_script_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root, page = self.make_root(td)
+            page.write_text(
+                '<!DOCTYPE html><html lang="zh-CN"><head><meta name="viewport" '
+                'content="width=device-width"><title>T</title></head><body>hi</body></html>',
+                encoding="utf-8",
+            )
+            proc = run_validator(root)
+            self.assertEqual(proc.returncode, 1, proc.stdout)
+            self.assertIn("<style>", proc.stdout)
+            self.assertIn("<script>", proc.stdout)
+
+    def test_missing_doctype_lang_viewport_title_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root, page = self.make_root(td)
+            page.write_text(
+                "<html><head></head><body><style>body{}</style>"
+                "<script>const MOCK_x=[];</script></body></html>",
+                encoding="utf-8",
+            )
+            proc = run_validator(root)
+            self.assertEqual(proc.returncode, 1, proc.stdout)
+            for token in ["DOCTYPE", "lang", "viewport", "title"]:
+                self.assertIn(token, proc.stdout)
+
+    def test_inline_html_passes(self):
+        with tempfile.TemporaryDirectory() as td:
+            root, page = self.make_root(td)
+            page.write_text(
+                '<!DOCTYPE html><html lang="zh-CN"><head><meta name="viewport" '
+                'content="width=device-width"><title>T</title></head><body>'
+                '<style>body{font-family:sans-serif}</style>'
+                "<script>const MOCK_users=[{name:'张三'}];</script></body></html>",
+                encoding="utf-8",
+            )
+            proc = run_validator(root)
+            self.assertEqual(proc.returncode, 0, proc.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
