@@ -186,6 +186,19 @@ and reworked to be **offline, self-contained, and Chinese-driven**.
 
 ---
 
+### 1️⃣4️⃣ database-schema-designer
+
+Design a database schema from a natural-language description or an existing schema. PostgreSQL and MySQL each get their own dialect; SQLite and MongoDB are secondary. A one-line request is refined with a few numbered product decisions (default 4 rounds). A detailed specification is read first, and only schema-changing gaps are confirmed.
+
+- A new schema ships an executable script plus `database-design.md`. An existing schema ships a difference list and migrations.
+- PostgreSQL 18-only syntax is used only after the major version is known. Supabase is not assumed to be 18.
+- To continue into this repo's SQL scaffolds, target MySQL and pass `schema.mysql.sql`. Those skills do not run DDL.
+- Adapted from OneWave AI's skill of the same name (MIT); see `NOTICE`.
+
+📖 **Details**: [Documentation](database-schema-designer/README.md)
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -287,6 +300,11 @@ ncepu_ideal-skills/
 │       ├── guides_index.json                       # Derived search index
 │       ├── specifications/                          # Local search tool contract
 │       └── tools/                                   # build_index.py / mwg.py (zero-dep)
+├── 📁 database-schema-designer/                    # database schema design skill
+│   ├── README.md
+│   ├── SKILL.md
+│   ├── NOTICE
+│   └── references/
 ├── 📁 .codebuddy/skills/                           # 20 superpowers-zh skills
 ├── 📁 .agents/skills/                              # 20 superpowers-zh skills
 ├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype, diagnosing-superpowers, prototype-to-*
@@ -353,6 +371,8 @@ CREATE TABLE student (
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + Project Skeleton |
 | **Gin** | MySQL DDL | Model / DAO / Service / Resource + Project Skeleton |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + Project Skeleton |
+
+If the tables are not designed yet, use [database-schema-designer](database-schema-designer/README.md) to produce a MySQL script, then pass `schema.mysql.sql` to one of the skills above. Those skills do not run DDL. Do not pass a PostgreSQL script to them.
 
 #### B. Frontend: generate an app project from a prototype
 

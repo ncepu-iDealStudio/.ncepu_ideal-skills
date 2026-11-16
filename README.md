@@ -230,6 +230,19 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ---
 
+### 1️⃣7️⃣ database-schema-designer
+
+从**自然语言或已有库结构**设计数据库模型：PostgreSQL 与 MySQL 各用自己的写法，也可同时出两份脚本；SQLite 与 MongoDB 为补充。一句话需求先用少量选项把会改变表结构的产品决定问清，默认最多 4 轮；已有详细规格说明书时只确认缺口。
+
+- 新建库交付可执行脚本和 `database-design.md`；已有库先读现有定义，交付差异和迁移，不另起一套全量脚本
+- PostgreSQL 18 专有语法先核对版本；Supabase 不默认当成 18
+- 要接着用本仓库的 SQL 脚手架生成后端时，引擎选 MySQL，把 `schema.mysql.sql` 交给对应技能
+- 改编自 OneWave AI 的同名技能（MIT），见目录内 `NOTICE`
+
+📖 **详细说明**：[查看文档](database-schema-designer/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```text
@@ -360,6 +373,11 @@ ncepu_ideal-skills/
 │       ├── guides_index.json                       # 派生检索索引
 │       ├── specifications/                          # 本地检索工具契约
 │       └── tools/                                   # build_index.py / mwg.py（零依赖）
+├── 📁 database-schema-designer/                    # 🗄️ 数据库模型设计技能
+│   ├── README.md
+│   ├── SKILL.md
+│   ├── NOTICE
+│   └── references/                                 # 访谈、PostgreSQL、MySQL、输出格式、示例
 ├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
 ├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
 ├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype、diagnosing-superpowers
@@ -426,6 +444,8 @@ CREATE TABLE student (
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + 项目骨架 |
 | **Gin** | MySQL DDL | Model / DAO / Service / Resource + 项目骨架 |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + 项目骨架 |
+
+表结构还没定时，先用 [database-schema-designer](database-schema-designer/README.md) 出 MySQL 脚本，再把 `schema.mysql.sql` 交给上表里的技能。那些技能不执行 DDL。PostgreSQL 脚本不要直接交给它们。
 
 #### B. 前端：从原型生成应用工程
 
