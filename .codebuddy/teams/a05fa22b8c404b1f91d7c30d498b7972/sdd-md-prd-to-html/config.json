@@ -1,0 +1,39 @@
+{
+  "name": "sdd-md-prd-to-html",
+  "mainConversationId": "a05fa22b8c404b1f91d7c30d498b7972",
+  "workspacePath": "e:/Open_source_project/ncepu_ideal-skills",
+  "createdAt": "2026-11-16T08:53:37.017Z",
+  "options": {
+    "workspacePath": "e:/Open_source_project/ncepu_ideal-skills"
+  },
+  "members": [
+    {
+      "memberId": "impl-t1@sdd-md-prd-to-html",
+      "name": "impl-t1",
+      "role": "实现任务1：校验器CLI与目录层",
+      "sessionId": "aabb07ad73b6405ebb8866d9d87f6437",
+      "status": "completed"
+    },
+    {
+      "memberId": "impl-t2@sdd-md-prd-to-html",
+      "name": "impl-t2",
+      "role": "实现任务2：HTML结构与离线检查",
+      "sessionId": "0df428b56f8e484fa9afa3066272e7c6",
+      "status": "completed"
+    },
+    {
+      "memberId": "impl-t3@sdd-md-prd-to-html",
+      "name": "impl-t3",
+      "role": "实现任务3：多页链接与交互标记",
+      "sessionId": "f22746d514ca49bbbdb5b814cc2c57ce",
+      "status": "completed"
+    },
+    {
+      "memberId": "impl-t4@sdd-md-prd-to-html",
+      "name": "impl-t4",
+      "role": "实现任务4：三份references规范",
+      "sessionId": "0b95f2f55e044e50975cd6b4750d094d",
+      "status": "running"
+    }
+  ]
+}

@@ -96,10 +96,12 @@ Turn a PRD, requirement note, or page list into a clickable multi-page HTML prot
 
 ### 8️⃣ md-prd-to-html-prototype
 
-Read a local Markdown PRD and emit a self-contained single-file HTML prototype (inlined CSS and JS, no external assets).
+Read a local Markdown PRD and emit a single-file low-fidelity HTML prototype. Pages and fields come from the document; missing ones are asked before generation.
 
-- Installed at `.workbuddy/skills/md-prd-to-html-prototype/`
-- When writing dialogs, forms, or tables, it may also consult [modern-web-guidance](modern-web-guidance/README.md). CSS and JS stay inlined.
+- Source: `md-prd-to-html-prototype/`. Test copy: `.workbuddy/skills/md-prd-to-html-prototype/`, kept identical to the source
+- Tailwind is the only allowed CDN. All other CSS and JS stay in that HTML file.
+- When writing dialogs, forms, or tables, it may also consult [modern-web-guidance](modern-web-guidance/README.md) without adding another external asset.
+- 📖 Details: [md-prd-to-html-prototype/README.md](md-prd-to-html-prototype/README.md)
 
 ---
 
@@ -199,6 +201,17 @@ Design a database schema from a natural-language description or an existing sche
 
 ---
 
+### 1️⃣5️⃣ security-audit
+
+Audit existing code for broken access control, injection, XSS, SSRF, authentication and JWTs, secrets, deserialization, uploads, and dependencies. A local candidate scan feeds a fixed report. It does not implement FastAPI login or object permissions — that is `fastapi-api-security-authentication`.
+
+- Adapted from [developer-agent-skills/security-audit](https://github.com/reddygopalkrishna/developer-agent-skills/blob/main/skills/security-audit/SKILL.md) (MIT); see `NOTICE`
+- Candidate scan: `python security/security-audit/scripts/scan_sinks.py <project-root>`
+
+📖 **Details**: [Documentation](security/security-audit/README.md)
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -232,8 +245,12 @@ ncepu_ideal-skills/
 │   ├── prototype-to-taro-app/                      # 📦 prototype -> Taro multi-platform
 │   ├── prototype-to-ios-native-app(AwesomeSwift)/  # 🍎 prototype -> native iOS (SwiftUI)
 │   └── prototype-to-android-native-app(Fragmject)/ # 🤖 prototype -> native Android (Compose)
-├── 📁 security/                                    # 🔒 API hardening (1 skill)
-│   └── fastapi-api-security-authentication/        # Bearer JWT + role/object permissions
+├── 📁 security/                                    # 🔒 Security (2 skills)
+│   ├── fastapi-api-security-authentication/        # Bearer JWT + role/object permissions
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── scripts/
+│   └── security-audit/                             # Code audit (checklist + candidate scan)
 │       ├── SKILL.md
 │       ├── references/
 │       └── scripts/

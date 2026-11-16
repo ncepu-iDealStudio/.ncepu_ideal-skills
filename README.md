@@ -100,10 +100,12 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ### 8️⃣ md-prd-to-html-prototype
 
-读取本地 Markdown 格式 PRD，提取角色、页面、字段与交互逻辑，输出**完全独立的单文件 HTML 原型**（内联全部 CSS/JS，无外部资源，双击即可打开）。
+读取本地 Markdown 格式 PRD，提取角色、页面、字段与交互逻辑，输出**单文件 HTML 低保真原型**。页面和字段以文档为准；文档没写清就先问。
 
-- 安装位置：`.workbuddy/skills/md-prd-to-html-prototype/`
-- 写弹窗、表单、表格时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；仍全部内联，不引外部资源
+- 本体：`md-prd-to-html-prototype/`。测试副本：`.workbuddy/skills/md-prd-to-html-prototype/`，与本体文件保持一致
+- 只允许 Tailwind 这一处 CDN，其余 CSS/JS 写在同一个 HTML 里
+- 写弹窗、表单、表格时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)，不为它再增加外链
+- 📖 说明：[md-prd-to-html-prototype/README.md](md-prd-to-html-prototype/README.md)
 
 ---
 
@@ -243,6 +245,19 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ---
 
+### 1️⃣8️⃣ security-audit
+
+审计**已有代码**的安全问题：越权、注入、XSS、SSRF、认证与 JWT、密钥、反序列化、上传与路径、依赖和日志。先跑本地候选扫描，再按清单判定，输出固定格式的报告。
+
+- 改编自 [developer-agent-skills/security-audit](https://github.com/reddygopalkrishna/developer-agent-skills/blob/main/skills/security-audit/SKILL.md)（MIT），见目录内 `NOTICE`
+- 候选扫描：`python security/security-audit/scripts/scan_sinks.py <项目根>`。命中不是结论
+- 本仓库四套后端脚手架有单独落点。FastAPI **补登录和对象权限**仍用 `fastapi-api-security-authentication`，本技能只指出缺口
+- 报告不写攻击步骤和密钥原文
+
+📖 **详细说明**：[查看文档](security/security-audit/README.md)
+
+---
+
 ## 🏗️ 仓库结构
 
 ```text
@@ -293,8 +308,12 @@ ncepu_ideal-skills/
 │   ├── prototype-to-taro-app/                      # 📦 原型转 Taro 多端工程技能
 │   ├── prototype-to-ios-native-app(AwesomeSwift)/  # 🍎 原型转原生 iOS 工程技能（SwiftUI）
 │   └── prototype-to-android-native-app(Fragmject)/ # 🤖 原型转原生 Android 工程技能（Compose）
-├── 📁 security/                                    # 🔒 接口鉴权加固（1 个技能）
-│   └── fastapi-api-security-authentication/        # Bearer JWT + 角色/对象权限
+├── 📁 security/                                    # 🔒 安全（2 个技能）
+│   ├── fastapi-api-security-authentication/        # Bearer JWT + 角色/对象权限
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── scripts/
+│   └── security-audit/                             # 代码安全审计（清单 + 候选扫描）
 │       ├── SKILL.md
 │       ├── references/
 │       └── scripts/

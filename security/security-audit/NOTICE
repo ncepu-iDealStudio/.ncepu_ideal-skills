@@ -1,0 +1,21 @@
+This skill is adapted from Reddy Gopal Krishna's security-audit skill:
+
+  https://github.com/reddygopalkrishna/developer-agent-skills/tree/main/skills/security-audit
+
+Copyright (c) 2026 Reddy Gopal Krishna
+Licensed under the MIT License. See LICENSE.
+
+Modifications in this adaptation:
+
+- The entry file is a Chinese router: when to use it, when to stop, and how it
+  divides work with fastapi-api-security-authentication. The OWASP checks stay
+  in references/checklist.md.
+- Findings use a fixed report shape (references/report-format.md). Impact is
+  one sentence. The report does not include exploit steps, payloads, or secret
+  values.
+- references/stack-map.md maps the checks onto this repo's FastAPI, Flask,
+  Gin, and Spring Boot scaffolds. FastAPI login and object-permission fixes
+  stay in fastapi-api-security-authentication.
+- scripts/scan_sinks.py flags candidate dangerous APIs on disk. A hit is not a
+  confirmed finding. The script redacts quoted literals and does not print
+  secret file contents.
