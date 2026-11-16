@@ -102,7 +102,7 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 读取本地 Markdown 格式 PRD，提取角色、页面、字段与交互逻辑，输出**单文件 HTML 低保真原型**。页面和字段以文档为准；文档没写清就先问。
 
-- 本体：`md-prd-to-html-prototype/`。测试副本：`.workbuddy/skills/md-prd-to-html-prototype/`，与本体文件保持一致
+- 本体：`md-prd-to-html-prototype/`。修改只改这一处，不向插件目录拷贝副本
 - 只允许 Tailwind 这一处 CDN，其余 CSS/JS 写在同一个 HTML 里
 - 写弹窗、表单、表格时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)，不为它再增加外链
 - 📖 说明：[md-prd-to-html-prototype/README.md](md-prd-to-html-prototype/README.md)
@@ -446,7 +446,7 @@ CREATE TABLE student (
 可单独使用。下列技能在写到浏览器界面时也会先检索它，它们自己的目录、分层和组件库不变：
 
 - [prototype-to-web(Nuxt UI Starter)](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>)、[requirements-to-vue_vben_admin](requirements-to-vue_vben_admin/README.md)：映射到各自的 UI 组件
-- [common-website-design](.dsh/skills/common-website-design/README.md)、[prd-html-skill](.cursor/skills/prd-html-skill/README.md)、[md-prd-to-html-prototype](.workbuddy/skills/md-prd-to-html-prototype/SKILL.md)：直接落进 HTML
+- [common-website-design](.dsh/skills/common-website-design/README.md)、[prd-html-skill](.cursor/skills/prd-html-skill/README.md)、[md-prd-to-html-prototype](md-prd-to-html-prototype/README.md)：直接落进 HTML
 - [prototype-to-taro-app](prototype-to/prototype-to-taro-app/README.md)、[prototype-to-app-uniappx](prototype-to/prototype-to-app-uniappx/README.md)：仅 H5
 - [dsh-plugin-starter](dsh-plugin-starter/README.md)：仅双面型设置页
 

@@ -10,7 +10,7 @@
 
 ## 目录
 
-本体在仓库根目录 `md-prd-to-html-prototype/`。`.workbuddy/skills/md-prd-to-html-prototype/` 是整份测试副本，文件与本体保持一致。目录名与 `SKILL.md` 的 `name` 一致。
+技能本体就是本目录。目录名与 `SKILL.md` 的 `name` 一致。修改时只改这里，不向 `.workbuddy`、`.cursor`、`.dsh` 等插件目录拷贝副本。
 
 ```text
 md-prd-to-html-prototype/
@@ -34,7 +34,7 @@ md-prd-to-html-prototype/
     └── test_validate_prototype.py
 ```
 
-当前 `SKILL.md` 只使用 `resources/`。`references/` 和 `scripts/` 仍随本体整份同步到测试副本，避免两处文件集合不一致。
+当前 `SKILL.md` 只使用 `resources/`。`references/` 和 `scripts/` 是尚未接入的多端草稿，留在本目录里，不单独再拷一份到插件目录。
 
 ## 和 prd-html-skill 的差别
 

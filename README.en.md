@@ -98,7 +98,7 @@ Turn a PRD, requirement note, or page list into a clickable multi-page HTML prot
 
 Read a local Markdown PRD and emit a single-file low-fidelity HTML prototype. Pages and fields come from the document; missing ones are asked before generation.
 
-- Source: `md-prd-to-html-prototype/`. Test copy: `.workbuddy/skills/md-prd-to-html-prototype/`, kept identical to the source
+- Source: `md-prd-to-html-prototype/`. Edit that directory only; do not copy it into plugin skill folders.
 - Tailwind is the only allowed CDN. All other CSS and JS stay in that HTML file.
 - When writing dialogs, forms, or tables, it may also consult [modern-web-guidance](modern-web-guidance/README.md) without adding another external asset.
 - 📖 Details: [md-prd-to-html-prototype/README.md](md-prd-to-html-prototype/README.md)
