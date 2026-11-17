@@ -122,6 +122,21 @@
       "marker": "无",
       "on_alter": "update_generated_api_section_only"
     },
+    "scripts/export_openapi.py": {
+      "ownership": "baseline",
+      "marker": "无",
+      "on_alter": "fill_if_missing_never_overwrite"
+    },
+    "docs/openapi.json": {
+      "ownership": "exported",
+      "marker": "无",
+      "on_alter": "regenerate_by_export_script"
+    },
+    "docs/api.md": {
+      "ownership": "exported",
+      "marker": "无",
+      "on_alter": "regenerate_by_export_script"
+    },
     "utils/**:middleware/**:docker/**:deploy/**": {
       "ownership": "baseline",
       "marker": "project_baseline.json",
@@ -147,7 +162,7 @@
         "service/dependencies.py"
       ],
       "manual_todo": [],
-      "verify": ["新路由出现在 /docs", "集成 CRUD 流程可跑通"]
+      "verify": ["新路由出现在 /docs", "集成 CRUD 流程可跑通", "uv run python scripts/export_openapi.py 重写 docs/openapi.json 与 docs/api.md"]
     },
     "add_column": {
       "risk": "low",
@@ -158,7 +173,7 @@
         "tests/integration/api/v1/test_{table}.py：create_payload / update_payload / 断言按需补新列",
         "README.md：字段与接口示例同步"
       ],
-      "verify": ["新列出现在 Create / Update / Response Schema", "POST 写入新列后 GET 详情可读回"]
+      "verify": ["新列出现在 Create / Update / Response Schema", "POST 写入新列后 GET 详情可读回", "重新导出 docs/openapi.json 与 docs/api.md"]
     },
     "drop_column": {
       "risk": "high",
@@ -336,6 +351,7 @@
       "不删除数据、不删除已有文件"
     ],
     "skill_must": [
+      "代码变更后运行 scripts/export_openapi.py 重写 docs/openapi.json 与 docs/api.md，禁止手改这两份文件来同步字段",
       "在变更报告中逐条列出 ddl_hint（MySQL 语法建议），标注「需人工确认/执行」",
       "提示代码与库表发布顺序：加列先 DDL 后发代码；删列先发代码（停止引用）后 DDL",
       "提醒备份、灰度与回滚"
@@ -345,6 +361,7 @@
     "uv run python -c \"import start\" 或等价导入检查（捕获 ImportError / 列名残留）",
     "uv run pytest tests/ -c tests/pytest.ini -v",
     "启动后访问 /docs，确认新增/变更的 Schema 与端点",
+    "uv run python scripts/export_openapi.py，确认 docs/openapi.json 与代码路径一致",
     "对变化字段执行最小 CRUD 冒烟：POST 写入 → GET 详情读回 → PUT 更新 → DELETE",
     "确认同一 SQL 重复执行结果幂等"
   ],

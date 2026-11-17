@@ -93,6 +93,8 @@
 | `api/v1/__init__.py`、`service/dependencies.py` | 追加区 | `# ---- 脚手架追加区` | 幂等追加 |
 | `models/__init__.py` | 视项目惯例 | — | 仅当项目已有按表导出惯例时追加 |
 | `README.md` | 手写 | — | 只更新接口/字段章节 |
+| `scripts/export_openapi.py` | 基线 | — | 缺失才补入，已有不覆盖 |
+| `docs/openapi.json` `docs/api.md` | 导出 | — | 跑导出脚本覆盖，禁止手改 |
 | `utils/**` `middleware/**` `docker/**` `deploy/**` | 基线 | `project_baseline.json` | **完全不碰** |
 
 保护细则：文件存在但**没有生成标记** → 一律视为用户已手改 → 禁止覆盖 → 出待办并询问。
@@ -234,13 +236,15 @@ uv run uvicorn start:app --reload    # /docs
 【验证】
   uv run python -c "import start"        待执行
   uv run pytest tests/ -c tests/pytest.ini -v   待执行
+  uv run python scripts/export_openapi.py       待执行
 ```
 
 ---
 
 ## 10. 与既有策略的关系
 
-- `project_baseline.json` 管**基线包**（utils / middleware / docker / deploy），增量场景一律 `never_touch`。
+- `project_baseline.json` 管**基线包**（utils / middleware / docker / deploy），增量场景一律 `never_touch`。`scripts/export_openapi.py` 同样只补缺失、不覆盖。
+- 接口文档以 `resources/specifications/api_docs.md` 为准：`docs/openapi.json` 给 Apifox / Apipost 导入，`docs/api.md` 给人读。字段或路由变了就重新导出，不手改。
 - `incremental_change_policy.json` 管**按表文件**的运行模式、差异影响面、覆盖与保护、注册幂等。
 - `SKILL.md` 步骤 2.1 的静态覆盖策略仍然有效；当与本文冲突时，**以本文和 `change_types` 为准**（例如新增状态位要求对手写 Service 追加方法）。
 - `status_flag_fields.json`、`naming_rules.json`、`type_mappings.json` 在增量场景照常适用。

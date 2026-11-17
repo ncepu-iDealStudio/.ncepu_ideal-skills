@@ -532,14 +532,15 @@ CREATE TABLE student (
 - `alter_table`：先取旧结构 → 归一化后字段级对比 → 输出差异清单 → 高风险项确认 → 按 `change_types` 分层更新。禁止把「重复提供 CREATE TABLE」当作新表直接覆盖。
 - `drop_table` / 表重命名：阻断自动执行，只输出清单。
 
-### 14.3 三条强制同步规则
+### 14.3 强制同步规则
 
 1. **状态位三件套**：`{ClassName}StatusUpdate` ↔ `Service.update_status` ↔ `PATCH /{pk}/status` 同进同退；`StatusUpdate` 字段必须从通用 `Update` 排除。新增时向手写 Service 追加方法须「展示片段 → 用户确认 → 仅追加最小方法」。
 2. **软删字段**：`Repository.delete` / `get` 可覆盖重生成；`Service.get_list` 的软删过滤在手写文件，必须列入待办；集成测试的删除断言同步（软删留行、硬删无行，详情均 404）。
 3. **主键**：变化影响所有层路径参数名与类型，Service 方法签名、测试 payload、README 示例一并列入待办。
+4. **接口文档**：代码落盘后执行 `uv run python scripts/export_openapi.py`，覆盖 `docs/openapi.json` 与 `docs/api.md`。导入 Apifox 或 Apipost 用 JSON。禁止手改这两份文件来同步字段。细则见 `api_docs.md`。
 
 ### 14.4 迁移与验证边界
 
 技能不执行 DDL、不连库、不改写 `database/`、不接 Alembic、不删数据；只输出 MySQL `ddl_hint` 与发布顺序（加列先 DDL 后发代码；删列先发代码后 DDL）。
 
-增量后必须验证：`uv run python -c "import start"` → `uv run pytest tests/ -c tests/pytest.ini -v` → `/docs` 核对 Schema 与端点 → 变化字段最小 CRUD 冒烟 → 同 SQL 重跑零 diff。变更报告须列出「已重生成 / 已追加注册 / 跳过的手写文件与原因 / 人工待办 / DDL 建议 / 验证结果」。
+增量后必须验证：`uv run python -c "import start"` → `uv run pytest tests/ -c tests/pytest.ini -v` → `/docs` 核对 Schema 与端点 → `uv run python scripts/export_openapi.py` → 变化字段最小 CRUD 冒烟 → 同 SQL 重跑零 diff。变更报告须列出「已重生成 / 已追加注册 / 跳过的手写文件与原因 / 人工待办 / DDL 建议 / 验证结果」。

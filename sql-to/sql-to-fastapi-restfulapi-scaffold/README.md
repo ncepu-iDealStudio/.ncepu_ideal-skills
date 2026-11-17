@@ -14,6 +14,7 @@
 - ✅ 生成 FastAPI Resource（**统一只依赖 Service**；校验靠 Schema）
 - ✅ 生成单元测试占位（`tests/unit/test_{table}_service.py`，已存在则跳过）
 - ✅ 生成集成测试（`tests/integration/api/v1/test_{table}.py`：CRUD 可跑 + 业务占位，已存在则跳过）
+- ✅ 导出 `docs/openapi.json`（Apifox / Apipost 按 OpenAPI 导入）和给人读的 `docs/api.md`
 - ✅ 支持软删除/硬删除自动判断
 - ✅ 识别状态/标识位字段，自动生成专用改状态接口（`PATCH /{pk}/status`）
 - ✅ 异步 SQLAlchemy（AsyncSession）
@@ -54,7 +55,8 @@ sql-to-fastapi-restfulapi-scaffold/
 │   │   └── incremental_change_policy.json  # 增量模式/差异影响面/覆盖保护/注册幂等
 │   ├── specifications/
 │   │   ├── coding_standards.md
-│   │   └── incremental_update.md  # 已有项目增量更新流程
+│   │   ├── incremental_update.md  # 已有项目增量更新流程
+│   │   └── api_docs.md            # openapi.json / api.md 导出约定
 │   ├── tools/
 │   │   └── check_skill_consistency.py
 │   └── templates/
@@ -85,7 +87,9 @@ sql-to-fastapi-restfulapi-scaffold/
 │           ├── utils/              # 基线工具包（与 project_baseline 对齐）
 │           ├── middleware/         # 基线中间件：安全头 / 限流 / 审计
 │           ├── docker/             # 起步 Docker：app + MySQL（Redis 可选）
-│           └── deploy/             # 进阶运维配置（Nginx/监控/日志等）
+│           ├── deploy/             # 进阶运维配置（Nginx/监控/日志等）
+│           └── scripts/
+│               └── export_openapi.py
 ├── README.md
 └── SKILL.md
 ```
@@ -389,7 +393,17 @@ async def get_student_list(
 - **重生成内置 CRUD、保留手写路由**：`api/v1/{resource}/{resource}Resource.py`
 - **绝不覆盖**：`service/*_service.py`、两类测试、`README.md` → 输出人工待办清单
 - **同步三件套**：新增状态位时 `StatusUpdate` ↔ `update_status` ↔ `PATCH /{pk}/status` 必须同进同退；其中 `update_status` 位于手写 Service，需**先展示片段、取得确认、再仅追加最小方法**
-- **完全不碰**：`utils/` `middleware/` `docker/` `deploy/`
+- **完全不碰**：`utils/` `middleware/` `docker/` `deploy/`，以及已存在的 `scripts/export_openapi.py`
+- **重新导出**：`uv run python scripts/export_openapi.py`，覆盖 `docs/openapi.json` 与 `docs/api.md`
+
+### 接口文档
+
+生成或改完接口代码后，技能会在目标项目里补上 `scripts/export_openapi.py`（已有则不覆盖），并运行它写出：
+
+- `docs/openapi.json`：导入 Apifox 或 Apipost 时选 OpenAPI / Swagger，上传这个文件
+- `docs/api.md`：给人阅读。平台不会把它转成可调试的接口
+
+文档从当前应用的路由导出，路径和响应包裹与代码一致。默认 CRUD 不带登录。你后来加在应用上的路由，重新导出后会一起出现。字段变了就重新导出，不要手改这两份文件。约定见 `resources/specifications/api_docs.md`。
 
 ### DDL 边界
 
@@ -401,6 +415,7 @@ async def get_student_list(
 uv run python -c "import start"                  # 捕获 import / 列名残留 / 注册漏项
 uv run pytest tests/ -c tests/pytest.ini -v
 uv run uvicorn start:app --reload               # /docs 核对 Schema 与端点
+uv run python scripts/export_openapi.py          # 重写 docs/openapi.json 与 docs/api.md
 ```
 
 变化字段做 `POST → GET 详情 → PUT → DELETE` 冒烟；再把同一份 SQL 跑一次确认零 diff（幂等）。
@@ -437,8 +452,14 @@ uv run uvicorn start:app --reload               # /docs 核对 Schema 与端点
    uv run python start.py
    ```
 
-5. 访问 API 文档
+5. 导出接口文档，并访问在线文档
 
+   ```bash
+   uv run python scripts/export_openapi.py
+   ```
+
+   - 导入 Apifox 或 Apipost：选择 OpenAPI / Swagger，上传 `docs/openapi.json`
+   - 给人看的说明：`docs/api.md`
    - Swagger UI: <http://localhost:8000/docs>
    - ReDoc: <http://localhost:8000/redoc>
 

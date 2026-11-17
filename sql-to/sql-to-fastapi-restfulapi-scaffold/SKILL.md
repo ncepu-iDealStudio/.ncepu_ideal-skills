@@ -1,6 +1,6 @@
 ---
 name: sql-to-fastapi-restfulapi-scaffold
-description: "从SQL CREATE TABLE生成FastAPI脚手架：Model/Schema/Repository/Service/Resource/测试。API统一只调Service。Repository仅单条CRUD。utils/middleware/docker/deploy为基线（project_baseline.json）：已存在则跳过；docker为app+MySQL（Redis可选）；deploy为进阶运维配置。按表生成unit占位与integration测试。表含status时生成PATCH /{pk}/status。默认uv管理依赖。支持已有项目增量：按 incremental_change_policy.json 判定 greenfield/add_table/alter_table/drop_table，做字段级差异分析、分层重生成、手写代码保护、注册幂等与DDL建议。"
+description: "从SQL CREATE TABLE生成FastAPI脚手架：Model/Schema/Repository/Service/Resource/测试。API统一只调Service。Repository仅单条CRUD。utils/middleware/docker/deploy为基线（project_baseline.json）：已存在则跳过；docker为app+MySQL（Redis可选）；deploy为进阶运维配置。按表生成unit占位与integration测试。表含status时生成PATCH /{pk}/status。默认uv管理依赖。生成后从应用导出 docs/openapi.json（供 Apifox/Apipost 按 OpenAPI 导入）与 docs/api.md。支持已有项目增量：按 incremental_change_policy.json 判定 greenfield/add_table/alter_table/drop_table，做字段级差异分析、分层重生成、手写代码保护、注册幂等与DDL建议；接口文档按代码重新导出，不手改。"
 ---
 
 # SQL-to-FastAPI-Scaffold Skill
@@ -78,7 +78,8 @@ resources/
 │   └── incremental_change_policy.json # 增量变更策略（模式判定/差异影响面/覆盖保护/注册幂等）
 ├── specifications/         # 规范文档
 │   ├── coding_standards.md # 代码规范
-│   └── incremental_update.md # 已有项目增量更新流程（新增表/表结构变更/表下线）
+│   ├── incremental_update.md # 已有项目增量更新流程（新增表/表结构变更/表下线）
+│   └── api_docs.md       # openapi.json / api.md 导出约定
 └── tools/
     └── check_skill_consistency.py # 技能自洽校验（含增量资源检查）
 ```
@@ -136,6 +137,7 @@ resources/
 7. 集成测试（CRUD 可运行 + 业务占位，**已存在则跳过**）- `tests/integration/api/v1/test_{table_name}.py`
 8. 路由包导出 - `api/v1/{resource_name}/__init__.py`（模板 `resource_init_template.py`；新表必建）
 9. 幂等注册 - `api/v1/__init__.py` 追加区 + `service/dependencies.py` 追加区（见步骤 2.3；同 SQL 重跑零 diff）
+10. 接口文档 - 代码落盘后运行 `scripts/export_openapi.py`，覆盖 `docs/openapi.json` 与 `docs/api.md`（见步骤 7）
 
 > ⚠️ **【强制规则】资源文件夹与路由前缀必须全部使用单数（singular）**
 > `resource_name` 由**表名原样**作为单数使用，**严禁**对资源名做任何复数化处理。
@@ -360,8 +362,21 @@ uv run uvicorn start:app --reload               # /docs 核对 Schema 与端点
 - Schema 设计说明
 - 软删除机制说明
 - 鉴权说明：明确告知「生成的 CRUD 接口默认不启用登录鉴权、开箱即用、无需 Token」；并说明启用方式（在 `api/v1/<resource>/<resource>Resource.py` 的 `router` 上挂载 `Depends(get_current_active_user)`，详见 `core.permissions`）
+- 接口文档：写明导入 Apifox 或 Apipost 时选择 OpenAPI / Swagger，上传 `docs/openapi.json`；`docs/api.md` 只给人阅读
 
 > **增量场景**：`add_table` 时只**追加**新表接口章节；`alter_table` 时只**更新**受影响字段/接口示例，禁止重写整份 README（用户可能已手写部署与鉴权说明）。
+
+### 步骤 7: 导出接口文档
+
+代码落盘后，把接口文档从当前应用导出，不要按 SQL 另写一份 JSON。
+
+1. 目标项目还没有 `scripts/export_openapi.py` 时，从 `resources/templates/project_structure/scripts/export_openapi.py` 原样写入。已存在则跳过，不覆盖。
+2. 在项目根目录执行：`uv run python scripts/export_openapi.py`。依赖还没装时先 `uv sync`。脚本只读已注册路由，不连接数据库。
+3. 脚本覆盖写出 `docs/openapi.json` 和 `docs/api.md`。OpenAPI 的路径、请求体、响应与代码一致，包括 `SuccessResponse` / `PaginationResponse` 包裹，以及表含状态字段时的 `PATCH /{pk}/status`。默认 CRUD 不声明鉴权。
+4. 用户后来手写的路由只要挂在同一个应用上，重新导出就会带上。禁止手改这两份文件来同步字段或路径。
+5. `greenfield`、`add_table`、`alter_table` 都要重新导出。`drop_table` 只出清单、不删代码时不必导出；用户按清单改完代码后，再导出一次。
+
+细则见 `resources/specifications/api_docs.md`。
 
 ## 代码生成规范
 
@@ -428,6 +443,11 @@ fastapi_project/
 │   ├── docker-compose.yml
 │   └── README.md
 ├── deploy/                 # 进阶运维，不进默认 compose
+├── scripts/
+│   └── export_openapi.py   # 从应用导出 docs/openapi.json 与 docs/api.md
+├── docs/                   # 导出产物，不手改
+│   ├── openapi.json
+│   └── api.md
 ├── repository/
 │   └── __init__.py
 ├── service/
@@ -455,7 +475,8 @@ fastapi_project/
 - `tests/unit/test_{table_name}_service.py`（**仅不存在时创建**，Service 占位）
 - `tests/integration/api/v1/test_{table_name}.py`（**仅不存在时创建**，CRUD + 业务占位）
 - 幂等追加注册：`api/v1/__init__.py`、`service/dependencies.py`（必要时 `models/__init__.py`）
-- **不**再生成或覆盖 `utils/**`、`middleware/**`、`docker/**`、`deploy/**`
+- 重新导出 `docs/openapi.json`、`docs/api.md`（运行步骤 7 的脚本，不手改）
+- **不**再生成或覆盖 `utils/**`、`middleware/**`、`docker/**`、`deploy/**`、已存在的 `scripts/export_openapi.py`
 
 **后续生成 - `alter_table`（表结构修改，见步骤 2.2 / `incremental_update.md`）**：
 - 先输出旧/新字段级差异清单，高风险项先确认
@@ -464,7 +485,8 @@ fastapi_project/
 - 状态位增删时同步 `StatusUpdate` / `update_status` / `PATCH /{pk}/status` 三件套
 - **跳过并出待办**：`service/*_service.py`、两类测试、`README.md`（只更新接口章节）
 - 注册项默认不动；输出 DDL 建议与人工待办清单
-- 仍**不**碰 `utils/**`、`middleware/**`、`docker/**`、`deploy/**`
+- 重新导出 `docs/openapi.json`、`docs/api.md`（运行步骤 7 的脚本，不手改）
+- 仍**不**碰 `utils/**`、`middleware/**`、`docker/**`、`deploy/**`、已存在的 `scripts/export_openapi.py`
 
 ## 各层代码详细说明
 
@@ -683,6 +705,9 @@ tests/
 │   └── audit.py
 ├── docker/                # BASELINE（起步 compose）
 ├── deploy/                # BASELINE（进阶运维）
+├── scripts/export_openapi.py
+├── docs/openapi.json      # Apifox / Apipost 导入这个文件
+├── docs/api.md            # 给人阅读
 ├── repository/            # 数据访问层（仅 create/delete/update/get，增删改查，可覆盖）
 │   └── {table_name}_repository.py
 ├── service/               # 业务服务（单条委托 + 列表等业务）
@@ -715,7 +740,10 @@ tests/
 3. cp .env.example .env 并配置数据库
 4. uv run uvicorn start:app --reload
    （或：uv run python start.py）
-5. （可选 Docker）docker compose -f docker/docker-compose.yml up --build
+5. uv run python scripts/export_openapi.py
+   导入 Apifox 或 Apipost：选 OpenAPI / Swagger，上传 docs/openapi.json
+   docs/api.md 只给人看
+6. （可选 Docker）docker compose -f docker/docker-compose.yml up --build
 
 （兼容）未使用 uv 时：pip install -r requirements.txt && uvicorn start:app --reload
 ```
@@ -734,6 +762,7 @@ tests/
 7. tests/integration/api/v1/test_{table_name}.py（仅不存在时新建，CRUD+业务占位）
 8. 新建 api/v1/{resource_name}/__init__.py（导出 router）
 9. 幂等追加注册：api/v1/__init__.py、service/dependencies.py（Resource 使用 get_*_service）
+10. docs/openapi.json、docs/api.md（uv run python scripts/export_openapi.py，覆盖旧文件）
 
 📝 下一步：
 1. 重启应用即可使用新接口（`uv run uvicorn start:app --reload`）
@@ -761,6 +790,7 @@ tests/
   uv run python -c "import start"
   uv run pytest tests/ -c tests/pytest.ini -v
   /docs 核对 Schema 与端点；变化字段最小 CRUD 冒烟；同 SQL 重跑零 diff
+  uv run python scripts/export_openapi.py
 ```
 
 > 完整报告模板见 `resources/specifications/incremental_update.md` 第 9 节。
@@ -783,7 +813,8 @@ tests/
 | 文件 | 作用 |
 |------|------|
 | `resources/config/incremental_change_policy.json` | 机器可读策略：4 种运行模式判定、旧结构来源优先级、字段差异维度、文件归属标记、17 类 `change_types` 的影响面与动作、手写保护、注册幂等、DDL 边界、验证与报告字段 |
-| `resources/specifications/incremental_update.md` | 执行流程：差异识别、影响面矩阵、三条强制同步规则、追加到手写 Service 的确认流程、注册清单、DDL 发布顺序、验证命令、变更报告模板 |
+| `resources/specifications/incremental_update.md` | 执行流程：差异识别、影响面矩阵、强制同步规则、追加到手写 Service 的确认流程、注册清单、DDL 发布顺序、验证命令、变更报告模板 |
+| `resources/specifications/api_docs.md` | 接口文档：`docs/openapi.json` 供 Apifox / Apipost 导入，`docs/api.md` 给人读；按代码重新导出，不手改 |
 
 ## 重要提示
 
