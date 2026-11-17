@@ -12,6 +12,7 @@
 - ✅ 生成 Request/Response DTO（数据传输对象）
 - ✅ 生成 Service Layer（业务逻辑层：CRUD 操作）
 - ✅ 生成 Controller Layer（REST 控制器：5 个 CRUD 端点）
+- ✅ 导出 `docs/openapi.json`（Apifox / Apipost 按 OpenAPI 导入）和给人读的 `docs/api.md`
 - ✅ 支持软删除/硬删除自动判断
 - ✅ 遵循项目代码规范和最佳实践
 - ✅ 包含安全特性（JWT 认证、权限控制）
@@ -34,7 +35,8 @@ sql-to-springboot-restfulapi-scaffold/
 │   │   └── incremental_change_policy.json # 增量模式/差异影响面/最小合并/DDL边界
 │   ├── specifications/                 # 规范文档
 │   │   ├── coding_standards.md         # 代码规范标准
-│   │   └── incremental_update.md       # 已有项目增量更新流程
+│   │   ├── incremental_update.md       # 已有项目增量更新流程
+│   │   └── api_docs.md                 # openapi.json / api.md 导出约定
 │   ├── tools/
 │   │   └── check_skill_consistency.py  # 技能自洽校验（不渲染项目）
 │   └── templates/                      # 代码模板
@@ -48,6 +50,8 @@ sql-to-springboot-restfulapi-scaffold/
 │       │       └── response/
 │       └── project_structure/          # 首次生成的项目骨架
 │           ├── pom.xml
+│           ├── scripts/
+│           │   └── export_openapi.py
 │           └── src/main/
 │               ├── resources/
 │               │   └── application.properties
@@ -236,7 +240,8 @@ Controller 层使用 `@PreAuthorize` 注解控制访问权限：
 
 - **整文件重生成**：`entity/`、`repository/`、`dto/request/`、`dto/response/`（4 个 `【AUTO-GENERATED】` 层）
 - **最小合并**（展示片段 → 用户确认）：`service/{X}Service.java` 的 `create()/update()` setter 与 `mapToResponse()` 全参构造；主键/路由变化时 `controller/{X}Controller.java` 的 `@PathVariable` 类型
-- **完全不碰**：`pom.xml`、`application.properties`（含真实 DB 账号、`ddl-auto=none`）、`config/`、`security/`、`exception/`、`ApiResponse.java`、`UserDetailsServiceImpl.java`
+- **完全不碰**：`pom.xml`、`application.properties`（含真实 DB 账号、`ddl-auto=none`）、`config/`、`security/`、`exception/`、`ApiResponse.java`、`UserDetailsServiceImpl.java`，以及已存在的 `scripts/export_openapi.py`
+- **重新导出**：`python scripts/export_openapi.py`，覆盖 `docs/openapi.json` 与 `docs/api.md`
 - **README**：只更新接口/字段章节，保留强制 11 章节结构
 
 ### 三个 Spring 特有的坑
@@ -257,6 +262,7 @@ Controller 层使用 `@PreAuthorize` 注解控制访问权限：
 mvn clean install        # 编译期捕获 DTO/Service 映射错误
 mvn test                 # 仅当项目已有测试时
 mvn spring-boot:run      # 启动期捕获 Repository 派生查询与外键关联错误
+python scripts/export_openapi.py
 # Swagger: http://localhost:{port}{contextPath}/swagger-ui.html
 ```
 
@@ -279,6 +285,15 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-4. 访问 API 文档：
+4. 导出接口文档，并访问在线文档
+
+```bash
+python scripts/export_openapi.py
+```
+
+- 导入 Apifox 或 Apipost：选择 OpenAPI / Swagger，上传 `docs/openapi.json`
+- 给人看的说明：`docs/api.md`
 - Swagger UI: http://localhost:8080/api/v1/swagger-ui.html
 - API Docs: http://localhost:8080/api/v1/api-docs
+
+应用已经启动时再执行一次导出，文档会改用 springdoc 的结果。应用没启动时，脚本按 Controller 和 DTO 生成，不连接数据库。

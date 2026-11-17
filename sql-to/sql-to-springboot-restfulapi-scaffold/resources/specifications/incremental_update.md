@@ -139,6 +139,8 @@ Page<Student> findByIsDeleteFalse(boolean isDelete, Pageable pageable);
 | `pom.xml`、`application.properties` | 基线 | **完全不碰**（含真实 DB 账号、`ddl-auto=none`） |
 | `config/` `security/` `exception/` `ApiResponse.java` `UserDetailsServiceImpl.java` `ApiSecurityApplication.java` | 基线 | **完全不碰** |
 | `README.md` | 手写 | 只更新接口/字段章节，保留强制 11 章节结构 |
+| `scripts/export_openapi.py` | 基线 | 缺失才补入，已有不覆盖 |
+| `docs/openapi.json` `docs/api.md` | 导出 | 跑导出脚本覆盖，禁止手改 |
 
 **最小合并协议**（`Service` / `Controller`）：
 
@@ -196,6 +198,9 @@ mvn spring-boot:run
 
 # 4) Swagger：核对 DTO Schema 与 5 个端点
 #    http://localhost:{port}{contextPath}/swagger-ui.html
+
+# 5) 导出可导入的接口文档（应用已启动时会改用 springdoc 的结果）
+python scripts/export_openapi.py
 ```
 
 接口冒烟：`POST` 创建 → `GET` 列表 → `GET /{id}` 详情 → `PUT` 更新 → `DELETE` 删除，变化字段逐一读回校验。
@@ -210,9 +215,10 @@ mvn spring-boot:run
 3. 整文件重生成 4 个 `【AUTO-GENERATED】` 层：`Entity` → `Repository` → `Request` → `Response`
 4. 按最小合并协议更新 `Service`（必须）与 `Controller`（主键/路由变化时）
 5. 只更新 README 的接口/字段章节；基线文件一律不碰
-6. 汇总「人工待办清单」
-7. 输出 DDL 建议与发布顺序
-8. 按第 8 节验证
+6. 运行 `python scripts/export_openapi.py`，覆盖 `docs/openapi.json` 与 `docs/api.md`
+7. 汇总「人工待办清单」
+8. 输出 DDL 建议与发布顺序
+9. 按第 8 节验证
 
 ---
 
@@ -248,6 +254,7 @@ mvn spring-boot:run
   mvn clean install            待执行
   mvn spring-boot:run         待执行（Swagger 核对）
   POST→GET→PUT→DELETE 冒烟    待执行
+  python scripts/export_openapi.py  待执行
   同 SQL 重跑零 diff          待执行
 ```
 
@@ -258,5 +265,6 @@ mvn spring-boot:run
 - `type_mappings.json`：SQL → Java 类型、`exclude_from_request` / `exclude_from_response` / `soft_delete_fields` / 验证注解，增量场景照常适用且必须重新计算。
 - `naming_rules.json`：类名/文件名/复数 `resourcePath` 与包路径，增量场景照常适用。
 - `coding_standards.md` 第 8 节：文件头标记与手写保护区约定。
+- `api_docs.md`：`docs/openapi.json` 给 Apifox / Apipost 导入，`docs/api.md` 给人读。字段或路由变了就重新导出，不手改。
 - `incremental_change_policy.json`：本节所有规则的可读策略源；与 `SKILL.md` 静态描述冲突时**以策略文件为准**。
 - `check_skill_consistency.py` 只校验技能目录自洽，不渲染目标项目。

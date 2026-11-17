@@ -163,6 +163,8 @@ security/       # 安全相关类
 | `service/*Service.java`、`controller/*Controller.java` | `【AUTO-GENERATED / 手写保护区】` + `手写业务代码区` 注释 | **绝不整文件覆盖**；仅在确认后做最小合并 |
 | `pom.xml`、`application.properties`、`config/`、`security/`、`exception/`、`ApiResponse.java`、`UserDetailsServiceImpl.java`、`ApiSecurityApplication.java` | 基线，无标记 | 任何增量模式下都不覆盖 |
 | `README.md` | 手写 | 只更新接口/字段章节，保留强制 11 章节结构 |
+| `scripts/export_openapi.py` | 基线，无标记 | 缺失才补入，已有不覆盖 |
+| `docs/openapi.json`、`docs/api.md` | 导出 | 跑 `scripts/export_openapi.py` 覆盖，禁止手改 |
 
 Java 文件用类注释承载标记，例如：
 
@@ -193,4 +195,4 @@ Java 文件用类注释承载标记，例如：
 
 技能不执行 DDL、不连库、**不改 `application.properties`**（`spring.jpa.hibernate.ddl-auto=none` 不得改成 `update`/`create`）、不接 Flyway/Liquibase、不删数据；只输出 MySQL `ddl_hint` 与发布顺序（加列先 DDL 后发代码；删列先发代码后 DDL）。
 
-按既定要求**不生成测试代码**。增量后验证：`mvn clean install` →（项目已有测试时）`mvn test` → `mvn spring-boot:run` → Swagger 核对 DTO Schema 与 5 个端点 → `POST/GET/PUT/DELETE` 冒烟 → 同一 SQL 重跑零 diff。变更报告须列出「已重生成 / 已最小合并 / 跳过与待办 / DDL 建议 / 验证结果」。
+按既定要求**不生成测试代码**。增量后验证：`mvn clean install` →（项目已有测试时）`mvn test` → `mvn spring-boot:run` → Swagger 核对 DTO Schema 与 5 个端点 → `python scripts/export_openapi.py` → `POST/GET/PUT/DELETE` 冒烟 → 同一 SQL 重跑零 diff。变更报告须列出「已重生成 / 已最小合并 / 跳过与待办 / DDL 建议 / 验证结果」。导入 Apifox 或 Apipost 用 `docs/openapi.json`，细则见 `api_docs.md`。

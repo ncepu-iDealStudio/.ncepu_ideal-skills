@@ -1,6 +1,6 @@
 ---
 name: "sql-to-springboot-scaffold"
-description: "从SQL CREATE TABLE语句生成完整的Spring Boot RESTful API项目脚手架，包含Entity、Repository、Service、Controller、Request/Response DTO层。支持已有项目增量：按 incremental_change_policy.json 判定 greenfield/add_table/alter_table/drop_table，做字段级差异分析、分层重生成、DTO↔Service 编译级最小合并、骨架与手写代码保护、DDL建议与验证清单。按既定要求不生成测试代码、不执行DDL。"
+description: "从SQL CREATE TABLE语句生成完整的Spring Boot RESTful API项目脚手架，包含Entity、Repository、Service、Controller、Request/Response DTO层。生成后导出 docs/openapi.json（供 Apifox/Apipost 按 OpenAPI 导入）与 docs/api.md。支持已有项目增量：按 incremental_change_policy.json 判定 greenfield/add_table/alter_table/drop_table，做字段级差异分析、分层重生成、DTO↔Service 编译级最小合并、骨架与手写代码保护、DDL建议与验证清单；接口文档按代码重新导出，不手改。按既定要求不生成测试代码、不执行DDL。"
 ---
 
 # SQL-to-SpringBoot-Scaffold Skill
@@ -55,7 +55,8 @@ resources/
 │   └── incremental_change_policy.json # 增量模式/差异影响面/最小合并/DDL边界
 ├── specifications/         # 规范文档
 │   ├── coding_standards.md # 代码规范
-│   └── incremental_update.md # 已有项目增量更新流程（新增表/表结构变更/表下线）
+│   ├── incremental_update.md # 已有项目增量更新流程（新增表/表结构变更/表下线）
+│   └── api_docs.md       # openapi.json / api.md 导出约定
 └── tools/
     └── check_skill_consistency.py # 技能自洽校验（含增量资源检查，不渲染项目）
 ```
@@ -211,6 +212,7 @@ mvn clean install        # 编译期捕获 Response 全参构造参数不匹配 
 mvn test                 # 仅当项目已有测试时执行
 mvn spring-boot:run      # 启动期捕获 Repository 派生查询名与外键关联解析失败
 # 打开 http://localhost:{port}{contextPath}/swagger-ui.html 核对 DTO Schema 与 5 个端点
+python scripts/export_openapi.py
 ```
 
 变化字段做最小冒烟：`POST` → `GET` 列表 → `GET /{id}` → `PUT` → `DELETE`；确认 `ddl-auto` 仍为 `none`、DB 账号未被覆盖；最后重跑同一 SQL 确认零 diff。
@@ -225,6 +227,19 @@ mvn spring-boot:run      # 启动期捕获 Repository 派生查询名与外键�
 ### 步骤 5: 输出生成结果
 
 以清晰的格式展示生成的文件列表和内容。
+
+### 步骤 6: 导出接口文档
+
+代码落盘后导出接口文档。生成 Java 代码仍由模板驱动；不要按 SQL 手写 `openapi.json`。
+
+1. 目标项目还没有 `scripts/export_openapi.py` 时，从 `resources/templates/project_structure/scripts/export_openapi.py` 原样写入。已存在则跳过，不覆盖。
+2. 在项目根目录执行：`python scripts/export_openapi.py`。
+3. 脚本覆盖写出 `docs/openapi.json` 和 `docs/api.md`。应用已启动且 `/api-docs` 对得上当前 Controller 时，用 springdoc 的结果；否则按 Controller 与 Request/Response DTO 生成。这一步不连数据库，也不改 `application.properties`。
+4. 路径与代码一致，例如服务器 `http://127.0.0.1:8080/api/v1` 加映射 `/students`。响应包在 `ApiResponse` 里。默认 CRUD 不声明鉴权。用户后来加在 Controller 上的端点，重新导出后会带上。
+5. `greenfield`、`add_table`、`alter_table` 都要重新导出。`drop_table` 只出清单、不改代码时不必导出；用户按清单改完代码后，再导出一次。
+6. README 第 7 章写明：导入 Apifox 或 Apipost 时选择 OpenAPI / Swagger，上传 `docs/openapi.json`。`docs/api.md` 只给人阅读。11 章结构保持不变。
+
+细则见 `resources/specifications/api_docs.md`。
 
 ## 代码生成规范
 
@@ -244,6 +259,11 @@ mvn spring-boot:run      # 启动期捕获 Repository 派生查询名与外键�
 springboot_project/
 ├── README.md                          # 项目说明文档
 ├── pom.xml
+├── scripts/
+│   └── export_openapi.py              # 导出 docs/openapi.json 与 docs/api.md
+├── docs/                              # 导出产物，不手改
+│   ├── openapi.json                   # Apifox / Apipost 导入这个文件
+│   └── api.md                         # 给人阅读
 ├── src/main/resources/
 │   └── application.properties
 └── src/main/java/com/security/apisecurity/
@@ -282,7 +302,8 @@ springboot_project/
 **后续生成 - `add_table`（新增表）**：
 - 只生成该表的 6 个文件，落 `com.security.apisecurity` 对应子包；**无中央注册文件**，靠组件扫描自动发现
 - 检查 `@RequestMapping` 复数路径不冲突；`README.md` 追加接口章节
-- 不覆盖 `pom.xml`、`application.properties`、`config/`、`security/`、`exception/` 等骨架
+- 重新导出 `docs/openapi.json`、`docs/api.md`（运行步骤 6 的脚本，不手改）
+- 不覆盖 `pom.xml`、`application.properties`、`config/`、`security/`、`exception/` 等骨架，也不覆盖已存在的 `scripts/export_openapi.py`
 - 不生成测试代码
 
 **后续生成 - `alter_table`（表结构修改，见步骤 3.2）**：
@@ -290,6 +311,7 @@ springboot_project/
 - 整文件重生成：`entity/{X}.java`、`repository/{X}Repository.java`、`dto/request/{X}Request.java`、`dto/response/{X}Response.java`
 - 最小合并（经确认）：`service/{X}Service.java` 的 `create/update/mapToResponse`；主键或路由变化时 `controller/{X}Controller.java`
 - 只更新 README 接口/字段章节；骨架完全不碰
+- 重新导出 `docs/openapi.json`、`docs/api.md`（运行步骤 6 的脚本，不手改）
 - 输出 DDL 建议与人工待办清单；仍不生成测试代码
 
 ## 各层代码详细说明
@@ -448,7 +470,7 @@ README 必须包含以下 11 个章节（缺一不可）：
 | 4 | 环境自检清单 | `java -version`、`mvn -v`、`mysql --version` 三条可复制命令及期望输出 |
 | 5 | 项目结构 | 按实际生成目录输出（含 `security-placeholder/` 等实际存在的目录） |
 | 6 | 接口说明 | 每个端点的 方法 / 完整路径 / 说明 / 成功状态码，并给出请求体与响应示例 |
-| 7 | **接口文档（Swagger）访问地址** | Swagger UI、`swagger-ui/index.html`、OpenAPI JSON、OpenAPI YAML 的**完整可点击 URL**；注明必须带 context-path、改端口/前缀要同步替换、404 排查项 |
+| 7 | **接口文档（Swagger）访问地址** | Swagger UI、`swagger-ui/index.html`、OpenAPI JSON、OpenAPI YAML 的**完整可点击 URL**；注明必须带 context-path、改端口/前缀要同步替换、404 排查项。同时写明：导入 Apifox 或 Apipost 时选择 OpenAPI / Swagger，上传 `docs/openapi.json`；`docs/api.md` 只给人阅读 |
 | 8 | 配置说明 | 数据源、`ddl-auto`、Swagger 路径、CORS，从 `application.properties` 读取；提醒环境变量 `DB_USERNAME`/`DB_PASSWORD` |
 | 9 | 快速开始 | 建库建表 → 编译 → 启动 → 打开 Swagger，命令可直接复制执行；附无 MySQL 时的 H2 方案 |
 | 10 | DTO 设计说明 + 软删除机制 | Request 排除字段及原因、Response 排除敏感字段、软删除字段识别与查询过滤 |
@@ -467,14 +489,17 @@ README 必须包含以下 11 个章节（缺一不可）：
 4. dto/response/{TableName}Response.java
 5. service/{TableName}Service.java       （包含软删除逻辑、外键检查）
 6. controller/{TableName}Controller.java
+7. docs/openapi.json、docs/api.md（python scripts/export_openapi.py，覆盖旧文件）
 
 📝 软删除检测：{检测结果}
 📝 无中央路由注册（Spring 组件扫描）；已确认包路径与 @RequestMapping 复数路径不冲突
 📝 未改动：pom.xml、application.properties（ddl-auto 仍为 none）、config/、security/、exception/
 📝 下一步：
 1. mvn clean install
-2. mvn spring-boot:run 后打开 Swagger 核对 5 个端点
-3. 重启应用即可使用新接口
+2. python scripts/export_openapi.py
+3. mvn spring-boot:run 后打开 Swagger 核对 5 个端点；应用已启动时再导出一次，即可改用 springdoc 的文档
+4. 重启应用即可使用新接口
+   导入 Apifox 或 Apipost：选 OpenAPI / Swagger，上传 docs/openapi.json
 ```
 
 **表结构变更时（alter_table）：**
@@ -499,6 +524,7 @@ README 必须包含以下 11 个章节（缺一不可）：
   ALTER TABLE {table} ADD COLUMN ...;   -- 加列：先 DDL 后发代码
 【验证】
   mvn clean install / mvn spring-boot:run / Swagger 核对 / POST→GET→PUT→DELETE 冒烟 / 同 SQL 重跑零 diff
+  python scripts/export_openapi.py
 ```
 
 > 完整报告模板见 `resources/specifications/incremental_update.md` 第 10 节。
@@ -518,6 +544,7 @@ README 必须包含以下 11 个章节（缺一不可）：
 |------|------|
 | `resources/config/incremental_change_policy.json` | 机器可读策略：4 种运行模式、旧结构来源优先级、字段差异维度、6 类按表文件的归属标记、17 类 `change_types` 的影响面与动作、最小合并协议、骨架保护、幂等、DDL 边界、验证与报告字段 |
 | `resources/specifications/incremental_update.md` | 执行流程：差异识别、影响面矩阵、三条 Spring 特有同步规则、最小合并协议、新表检查清单、DDL 发布顺序、验证命令、变更报告模板 |
+| `resources/specifications/api_docs.md` | 接口文档：`docs/openapi.json` 供 Apifox / Apipost 导入，`docs/api.md` 给人读；按代码重新导出，不手改 |
 | `resources/tools/check_skill_consistency.py` | 技能目录自洽校验（含增量资源、模板标记、文档引用），**不渲染目标项目** |
 
 `resources/specifications/coding_standards.md` 第 8 节给出文件头标记与手写保护区约定。
@@ -534,7 +561,7 @@ README 必须包含以下 11 个章节（缺一不可）：
 8. **中文文档**：所有文档字符串、注释使用中文
 9. **安全配置**：代码照常生成，但暂不启用（依赖注释状态）
 10. **README 环境准备**：必须写出 JDK 17、Maven 3.8+ 的安装与环境变量配置步骤，以及 Maven 镜像源（阿里云）配置，否则初学者无法跑起来
-11. **README 接口文档地址**：必须给出完整可点击的 Swagger UI 与 OpenAPI 地址（含 `http://localhost:{port}{contextPath}` 前缀），并说明 context-path 与端口变化时的同步要求
+11. **README 接口文档地址**：必须给出完整可点击的 Swagger UI 与 OpenAPI 地址（含 `http://localhost:{port}{contextPath}` 前缀），并说明 context-path 与端口变化时的同步要求。同时写明导入 Apifox 或 Apipost 时上传 `docs/openapi.json`
 12. **README 可执行性**：所有命令（编译、启动、建表）必须可直接复制执行，不能出现 `xxx`、`<你的路径>` 之外的模糊占位
 13. **🔴 已有项目必须先判模式**：骨架存在时禁止按首次生成口径全量重写；逐表判 `greenfield` / `add_table` / `alter_table` / `drop_table`，规则见 `incremental_change_policy.json`
 14. **🔴 表结构变更必须做差异分析**：先取旧结构 → 字段级对比 → 输出差异清单 → 高风险项确认 → 按 `change_types` 分层更新；**禁止**把「又给了一遍 CREATE TABLE」当成新表覆盖

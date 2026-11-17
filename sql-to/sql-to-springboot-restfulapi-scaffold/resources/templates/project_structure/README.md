@@ -218,6 +218,7 @@ mysql --version  # 8.x（用 H2 练手时可跳过）
 - 本项目 `springdoc.api-docs.path={{apiDocsPath}}`，不是 springdoc 默认的 `/v3/api-docs`。
 - 打开 404 时检查：`pom.xml` 是否有 `springdoc-openapi-starter-webmvc-ui`、`springdoc.swagger-ui.enabled=true`、启动日志是否有 springdoc 报错。
 - 当前安全配置未启用，Swagger 与接口均无需 token；启用 `SecurityConfig` 后 `/api-docs/**`、`/swagger-ui/**` 已放行。
+- 导入 Apifox 或 Apipost 时选择 OpenAPI / Swagger，上传项目里的 `docs/openapi.json`。`docs/api.md` 只给人阅读，不要把它当接口定义导入。生成或改完代码后执行 `python scripts/export_openapi.py` 覆盖这两份文件。应用已启动时，脚本改用上面的 OpenAPI JSON；没启动时按 Controller 和 DTO 生成，不连数据库。
 
 ## 配置说明
 

@@ -131,6 +131,21 @@
       "marker": "无",
       "on_alter": "update_interface_and_field_sections_only",
       "note": "项目 README 有强制 11 章节；增量时只追加/更新接口与字段章节，禁止重写整份"
+    },
+    "scripts/export_openapi.py": {
+      "ownership": "baseline",
+      "marker": "无",
+      "on_alter": "fill_if_missing_never_overwrite"
+    },
+    "docs/openapi.json": {
+      "ownership": "exported",
+      "marker": "无",
+      "on_alter": "regenerate_by_export_script"
+    },
+    "docs/api.md": {
+      "ownership": "exported",
+      "marker": "无",
+      "on_alter": "regenerate_by_export_script"
     }
   },
   "change_types": {
@@ -148,7 +163,7 @@
       "append_only": [],
       "registration_note": "无中央注册；确认 6 个文件落在 com.security.apisecurity 子包内、@RequestMapping 使用复数 resourcePath 且不与已有 Controller 冲突",
       "manual_todo": ["README.md 追加该表的接口说明（完整 URL、请求/响应示例）"],
-      "verify": ["mvn clean install 通过", "Swagger UI 出现该资源的 5 个端点"]
+      "verify": ["mvn clean install 通过", "Swagger UI 出现该资源的 5 个端点", "python scripts/export_openapi.py 重写 docs/openapi.json 与 docs/api.md"]
     },
     "add_column": {
       "risk": "medium",
@@ -159,7 +174,7 @@
       ],
       "manual_todo": ["README.md 字段与请求示例同步", "已有测试（若项目自带）中的 payload 与断言"],
       "breaks_compile_if_skipped": true,
-      "verify": ["mvn clean install 通过（全参构造参数个数匹配）", "POST 写入新列后 GET 详情可读回"]
+      "verify": ["mvn clean install 通过（全参构造参数个数匹配）", "POST 写入新列后 GET 详情可读回", "重新导出 docs/openapi.json 与 docs/api.md"]
     },
     "drop_column": {
       "risk": "high",
@@ -339,6 +354,7 @@
       "不删除数据、不删除已有文件"
     ],
     "skill_must": [
+      "代码变更后运行 scripts/export_openapi.py 重写 docs/openapi.json 与 docs/api.md，禁止手改这两份文件来同步字段",
       "在变更报告中逐条列出 ddl_hint（MySQL 语法建议），标注「需人工确认/执行」",
       "提示发布顺序：加列先 DDL 后发代码；删列先发代码（停止引用）后 DDL",
       "提醒 Hibernate 物理命名策略与 @Column(name) 必须与真实列名一致，备份、灰度与回滚"
@@ -350,7 +366,8 @@
       "mvn clean install                      # 编译期捕获 Response 全参构造参数不匹配 / setter 缺失 / 类型错误",
       "mvn test                              # 仅当项目已有测试时执行",
       "mvn spring-boot:run                   # 启动期捕获 Repository 派生查询名与外键关联解析失败",
-      "打开 http://localhost:{port}{contextPath}/swagger-ui.html 核对 DTO Schema 与 5 个端点"
+      "打开 http://localhost:{port}{contextPath}/swagger-ui.html 核对 DTO Schema 与 5 个端点",
+      "python scripts/export_openapi.py，确认 docs/openapi.json 与 Controller 路径一致"
     ],
     "smoke_flow": "POST 创建 → GET 列表 → GET /{id} 详情 → PUT 更新 → DELETE 删除；变化字段逐一读回校验",
     "idempotency": "同一 SQL 再跑一次，确认零 diff",
