@@ -22,10 +22,13 @@ Omit design-document sections that do not apply (for example, scaling notes for 
 
 A complete, executable script for one engine and version, in dependency order.
 
-- PostgreSQL: extensions, tables, constraints, indexes, triggers, and row-level security when it applies.
-- MySQL: `ENGINE=InnoDB`, `DEFAULT CHARSET=utf8mb4` and an explicit collation on every table, constraints, indexes, and `ON UPDATE CURRENT_TIMESTAMP(6)` or triggers. Do not emit Postgres-only syntax (`timestamptz`, `uuidv7()`, partial `CREATE INDEX ... WHERE`, `EXECUTE FUNCTION`, `GENERATED ... AS IDENTITY` as a habit).
+- PostgreSQL: extensions, tables, constraints, indexes, triggers, and row-level security when it applies. Do not emit `REFERENCES` / `FOREIGN KEY` unless the user asked for foreign keys.
+- MySQL: `ENGINE=InnoDB`, `DEFAULT CHARSET=utf8mb4` and an explicit collation on every table, `TIMESTAMP` in UTC for `created_at` / `updated_at`, constraints, indexes, and `ON UPDATE CURRENT_TIMESTAMP` or triggers. Do not emit Postgres-only syntax (`timestamptz`, `uuidv7()`, partial `CREATE INDEX ... WHERE`, `EXECUTE FUNCTION`, `GENERATED ... AS IDENTITY` as a habit).
+- Naming and types, both engines: singular table names, a `<table>_id` primary key, reference columns named after the referenced primary key and typed identically, `TIMESTAMP` / `timestamptz` for instants in UTC (never `DATETIME`), and integer status/flag columns with the code map in the comment and a `CHECK` on the domain.
+- Reference columns are plain `<table>_id` columns: no `REFERENCES` clause, their own index, and the intended `ON DELETE` recorded in `database-design.md` as enforced by the service layer.
+- **Every table and every column has a comment.** MySQL: a `COMMENT '...'` on each column plus `COMMENT='...'` on the table. PostgreSQL: `COMMENT ON TABLE` and one `COMMENT ON COLUMN` per column, after the DDL. Write them in the user's language and state the field's business meaning, unit, and allowed values—not its type. Keep the wording aligned with the `Meaning` column in `database-design.md`. SQLite has no comment syntax: put a `--` comment above each column. MongoDB: add a `description` to every property in `$jsonSchema`.
 
-Put explanatory comments above non-obvious constraints, indexes, and `ON DELETE` choices. If migrations are also requested, add up/down scripts as extra files (separate files per engine when targeting both); they do not replace the schema script(s).
+Put explanatory prose comments above non-obvious constraints, indexes, and reference columns whose `ON DELETE` the service implements. If migrations are also requested, add up/down scripts as extra files (separate files per engine when targeting both); they do not replace the schema script(s).
 
 ## 2. Design document (`database-design.md`)
 
@@ -46,7 +49,7 @@ erDiagram
 ```
 
 ## Relationship overview
-- [Each relationship in one line: tables, cardinality, and the foreign key, including join tables for N:M]
+- [Each relationship in one line: tables, cardinality, the reference column, and the `ON DELETE` the service enforces, including join tables for N:M]
 
 ## Tables
 
@@ -58,11 +61,11 @@ erDiagram
   |---|---|---|---|
   | ... | ... | ... | ... |
 
-  When targeting both engines, use split type cells such as `timestamptz` (PostgreSQL) / `DATETIME(6)` (MySQL).
+  When targeting both engines, use split type cells such as `timestamptz` (PostgreSQL) / `TIMESTAMP` (MySQL).
 
 - **Keys:** [Primary key, unique keys, and natural keys]
 - **Relationships:**
-  - [Cardinality and the related table, the FK columns, and ON DELETE]
+  - [Cardinality and the related table, the reference columns, the `ON DELETE` the service enforces, and a note that the script has no FK constraint]
 - **Indexes:** [Each index and the query it serves; for MySQL, state the generated-column or composite substitute for any partial index used in PostgreSQL]
 - **Notes:** [Soft delete, tenancy, RLS or MySQL tenancy enforcement, or other caveats that belong to this table]
 
@@ -75,7 +78,7 @@ erDiagram
 ## Design decisions
 - [Key type, why, and the PostgreSQL / MySQL form]
 - [Each deliberate denormalization, and the query it serves]
-- [ON DELETE choices that are not obvious]
+- [ON DELETE choices that are not obvious, and where the service enforces them]
 - [Soft delete vs hard delete, and where]
 
 ## Engine differences
