@@ -201,6 +201,7 @@ Refer to the setup guides for how each tool loads skills from this repository:
 | ⚡ **GitHub Copilot** | [Configuration Guide](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
 | 🧩 **CodeBuddy** | [Configuration Guide](.docs/CodeBuddy中使用skill配置.md) |
 | 🧠 **DSH + Superpowers** | [Requirements tutorial](.docs/dsh中使用superpowers技能.md) |
+| 🧠 **Cursor + Superpowers** | [Requirements tutorial](.docs/如何在cursor中使用Superpowers技能进行项目的需求分析.md) |
 
 > 📝 More notes in `.docs/` (including `plans/` and `specs/`). Point the tool directly at the skill directory in this repository — do not copy skills into tool folders to create duplicates.
 

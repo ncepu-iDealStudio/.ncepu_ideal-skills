@@ -201,6 +201,7 @@ ncepu_ideal-skills/
 | ⚡ **GitHub Copilot** | [配置指南](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
 | 🧩 **CodeBuddy** | [配置指南](.docs/CodeBuddy中使用skill配置.md) |
 | 🧠 **DSH + Superpowers** | [需求分析教程](.docs/dsh中使用superpowers技能.md) |
+| 🧠 **Cursor + Superpowers** | [需求分析教程](.docs/如何在cursor中使用Superpowers技能进行项目的需求分析.md) |
 
 > 📝 更多说明见 `.docs/`（含 `plans/` 与 `specs/` 设计文档）。加载时直接指向本仓库对应技能目录，不再复制到工具目录形成副本。
 
