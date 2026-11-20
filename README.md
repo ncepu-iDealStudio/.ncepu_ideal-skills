@@ -246,7 +246,6 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 ---
 
 ### 1️⃣8️⃣ security-audit
-
 审计**已有代码**的安全问题：越权、注入、XSS、SSRF、认证与 JWT、密钥、反序列化、上传与路径、依赖和日志。先跑本地候选扫描，再按清单判定，输出固定格式的报告。
 
 - 改编自 [developer-agent-skills/security-audit](https://github.com/reddygopalkrishna/developer-agent-skills/blob/main/skills/security-audit/SKILL.md)（MIT），见目录内 `NOTICE`
@@ -255,6 +254,16 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 - 报告不写攻击步骤和密钥原文
 
 📖 **详细说明**：[查看文档](security/security-audit/README.md)
+
+---
+
+### 1️⃣9️⃣ supervisor-skills（科研技能集）
+
+收录自 [HKUSTDial/Supervisor-Skills](https://github.com/HKUSTDial/Supervisor-Skills)，把顶会科研与审稿经验蒸馏成 12 个可执行 AI 技能，覆盖 Idea 评估、综述级文献调研、论文正文写作与润色、配图设计、投稿前审核与 Rebuttal 全流程。
+
+- 12 个技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
+- ⚠️ **许可不同**：整体为 CC BY-NC-SA 4.0（非商业 + 相同方式共享），**不受本仓库 MIT 许可覆盖**，商用前请阅读 [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md)
+- 中文导读：[README.zh-CN.md](research/supervisor-skills/README.zh-CN.md)
 
 ---
 
@@ -317,6 +326,11 @@ ncepu_ideal-skills/
 │       ├── SKILL.md
 │       ├── references/
 │       └── scripts/
+├── 📁 research/                                    # 🔬 科研技能集（CC BY-NC-SA 4.0，非本仓库 MIT）
+│   └── supervisor-skills/                          # 12 个科研全流程技能（HKUSTDial）
+│       ├── README.zh-CN.md                         # 本仓库中文导读
+│       ├── references/PROVENANCE.md                # 署名与许可声明
+│       ├── idea-evaluator/, deep-research/, ...    # 12 个技能目录（含 drawio-reconstruction 脚本/案例）
 ├── 📁 requirements-to-vue_vben_admin/              # 🧩 需求转 vben 后台管理技能
 │   ├── README.md
 │   ├── SKILL.md
