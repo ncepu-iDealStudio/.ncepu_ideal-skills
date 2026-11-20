@@ -209,20 +209,20 @@ Refer to the setup guides for how each tool loads skills from this repository:
 
 ### 2️⃣ Typical workflows
 
-**A. From business requirements to a runnable backend**
+#### A. From business requirements to a runnable backend
 
-```
+```text
 it-requirement-analysis (PRD / acceptance criteria)
    → brainstorming (technical design spec)
    → database-schema-designer (data model + MySQL DDL)
    → sql-to-* skills (generate FastAPI / Flask / Gin / Spring Boot scaffold)
 ```
 
-**B. From a prototype to a frontend project**
+#### B. From a prototype to a frontend project
 
 Hand prototype HTML, design screenshots, or a PRD page list to a `prototype-to-*` skill to generate a uni-app x / Flutter / Nuxt / Taro / iOS / Android / vben admin project with mock data ready to preview; later switch the data-access seam to a real backend.
 
-**C. Conventions and reviews**
+#### C. Conventions and reviews
 
 - Before coding: `modern-web-guidance` (Web UI), `frontend-design` (visual), `java-*` / `go-*` (engineering conventions)
 - After coding: `security-audit`, `go-security-audit`, `spring-security` for security review and hardening

@@ -1,6 +1,7 @@
 # 🎯 ncepu_ideal-skills
 
-> 企业级技能（Skills）集合仓库 | 单纯收集、整理、分类存放与优化改进各种技能，按领域分门别类
+> 由华北电力大学iDeal工作室开发管理并维护
+> 企业级技能（Skills）集合仓库 | 这是一个收集、整理、分类存放的仓库，包含工作室自己创建的与软件开发生命周期相关的技能仓库，按领域分门别类存放：
 
 ![License](https://img.shields.io/badge/license-多协议-blue)
 ![Go](https://img.shields.io/badge/Go-1.21%2B-00ADD8)
@@ -20,7 +21,7 @@
 
 ## ✨ 仓库定位
 
-本仓库**只做一件事**：收集、整理、分类存放并持续优化技能。它不承载技能测试，也不为各个 AI 工具维护技能安装副本。
+本仓库**只做一件事**：收集、整理、分类存放并持续优化各种技能。它不承载技能在AI工具中的测试与验证，技能测试可以由用户自行，参照帮助文档在独立项目中进行。
 
 - 📁 **按领域分类**：技能按用途归入 `requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`research/`、`others/` 等目录，每个技能一个独立目录（`SKILL.md` + 资源）
 - 🧪 **测试外置**：本仓库不含测试目录与样例产物；技能的验证与回归测试在**独立项目**中进行
@@ -209,20 +210,20 @@ ncepu_ideal-skills/
 
 ### 2️⃣ 典型使用链路
 
-**A. 从业务需求到可运行后端**
+#### A. 从业务需求到可运行后端
 
-```
+```text
 it-requirement-analysis（PRD / 验收标准）
    → brainstorming（技术方案与设计规格）
    → database-schema-designer（数据库设计 + MySQL DDL）
    → sql-to-* 技能（生成 FastAPI / Flask / Gin / Spring Boot 脚手架）
 ```
 
-**B. 从原型到前端工程**
+#### B. 从原型到前端工程
 
 把原型 HTML 代码、设计图截图或 PRD 页面清单交给 `prototype-to-*` 技能，生成 uni-app x / Flutter / Nuxt / Taro / iOS / Android / vben 后台工程，内置 mock 数据可直接预览，后续改数据访问接缝对接真实后端。
 
-**C. 代码规范与评审**
+#### C. 代码规范与评审
 
 - 写代码前：`modern-web-guidance`（Web UI）、`frontend-design`（视觉）、`java-*` / `go-*`（工程规范）
 - 写完代码：`security-audit`、`go-security-audit`、`spring-security` 等做安全评审与加固
