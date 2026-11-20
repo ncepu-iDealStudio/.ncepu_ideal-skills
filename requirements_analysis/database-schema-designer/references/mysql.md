@@ -75,7 +75,7 @@ UUIDv7 embeds the creation time; do not use it where exposing that time is a pro
 | Money | `DECIMAL(12,2)` or integer minor units (`amount_cents BIGINT`) | `FLOAT`, `DOUBLE` |
 | Booleans | `TINYINT(1) NOT NULL DEFAULT 0`, or `BOOLEAN` (an alias for `TINYINT(1)`) | Nullable booleans (three states by accident) |
 | Labels (`type`, `kind`, `role`) | `VARCHAR` + `CHECK (type IN (...))`, or a lookup table | `ENUM` for lists that will change; altering an enum can rebuild the table on older versions |
-| Status and flag columns (`status`, `is_deleted`, `audit_state`) | `TINYINT UNSIGNED NOT NULL` holding an integer code, with the map in the comment (`COMMENT '状态：0=禁用；1=启用'`) and `CHECK (status IN (0, 1))` | String statuses (`VARCHAR` holding `'enabled'`), `ENUM`, and codes with no comment, so nobody knows what `2` means |
+| Status and flag columns (`status`, `is_deleted`, `audit_state`) | `TINYINT UNSIGNED NOT NULL DEFAULT 1` holding an integer code, with the map in the comment (`COMMENT '状态：0=禁用；1=启用'`) and `CHECK (status IN (0, 1))` | String statuses (`VARCHAR` holding `'enabled'`), `ENUM`, and codes with no comment, so nobody knows what `2` means |
 | Flexible attributes | `JSON` | JSON for fields you filter or join on; storing JSON as `TEXT` |
 | Case-insensitive text | `_0900_ai_ci` collation, or a unique functional index on `LOWER(email)` | Relying on the app to lowercase |
 | IP addresses | `VARBINARY(16)` or `VARCHAR(45)` | A string format you cannot compare consistently |
@@ -84,7 +84,8 @@ Declare tables `ENGINE=InnoDB`. Do not leave the engine implicit in scripts that
 
 ## Constraints
 
-- `NOT NULL` on every column that must have a value. Nullable should be a decision.
+- **Nullable is the default; `NOT NULL` needs a reason.** Keep `NOT NULL` only when the product cannot represent the row without the value (a name, an owner, a join key) or when a `DEFAULT` fills it for the insert (`status TINYINT UNSIGNED NOT NULL DEFAULT 1`). Optional text, settings, secondary timestamps, and fields a later feature fills in stay nullable. Every extra `NOT NULL` without a default turns an insert into a full form and makes staged or partial writes fail.
+- A nullable column inside a `UNIQUE` key is fine: InnoDB allows many `NULL` values there, and `NULL` never collides with another `NULL`.
 - `UNIQUE` for natural keys; in multi-tenant tables, scope it: `UNIQUE (org_id, slug)`.
 - `CHECK` is enforced from 8.0.16. Name checks explicitly: `CONSTRAINT task_status_check CHECK (status IN (0, 1, 2))`.
 - Status codes are a contract between the script, the API, and the UI. Write the map once in the column comment, mirror it in `CHECK (status IN (0, 1))`, and keep it identical in `database-design.md`. Keep `0` for the default or unknown state, never renumber a code that has shipped, and retire a code by adding a new one and marking the old one deprecated in the comment.
@@ -136,7 +137,7 @@ On tables with real traffic:
 - Names: singular table names, `<table>_id` primary keys, foreign key columns named after the referenced primary key.
 - Types: `TIMESTAMP` in UTC, `VARCHAR` with real limits, `DECIMAL` or integer cents, `JSON` only for variable attributes, `ENGINE=InnoDB`, `utf8mb4`.
 - Status and flag columns are `TINYINT UNSIGNED` codes with the map in the comment and a `CHECK` on the domain; every `created_at` / `updated_at` is `TIMESTAMP`, not `DATETIME`.
-- Constraints: `NOT NULL`, `UNIQUE`, `CHECK`; no `REFERENCES` / `FOREIGN KEY` unless the user asked for them. Reference columns match the parent type (including `UNSIGNED`), are indexed, and their `ON DELETE` intent is in `database-design.md`.
+- Constraints: `UNIQUE`, `CHECK`, and `NOT NULL` only where the business requires the value or a `DEFAULT` covers the insert; no `REFERENCES` / `FOREIGN KEY` unless the user asked for them. Reference columns match the parent type (including `UNSIGNED`), are indexed, and their `ON DELETE` intent is in `database-design.md`.
 - Indexes: one per key query, every reference column indexed, no duplicates of PK or unique indexes, no `WHERE` clauses on indexes.
 - `updated_at` maintained by `ON UPDATE CURRENT_TIMESTAMP` or a trigger, not only a default on insert.
 - Tenancy enforced in the app or with views; `org_id` present in unique keys and leading index columns.

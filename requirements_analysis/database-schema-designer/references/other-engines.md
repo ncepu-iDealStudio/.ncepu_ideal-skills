@@ -10,6 +10,7 @@ This file covers only SQLite and MongoDB. SQLite still follows the relational wo
 - No foreign key constraints by default, same as the other engines: declare the reference columns, index them, and enforce the delete behavior in the service. `PRAGMA foreign_keys = ON;` matters only if the user later asks for real FK constraints.
 - `INTEGER PRIMARY KEY` is an alias for the rowid and the fastest key.
 - Same naming rules as the other engines: singular table names, a `<table>_id` primary key, and foreign key columns named after the referenced primary key.
+- `NOT NULL` follows the same rule as the other engines: only fields the row cannot exist without, or fields with a `DEFAULT`; everything optional stays nullable.
 - `status` / `is_deleted` are `INTEGER` codes (SQLite has no `TINYINT`), with the map in the `--` comment and `CHECK (status IN (0, 1))`.
 - Store timestamps as ISO 8601 `TEXT` in UTC or as Unix epoch `INTEGER`; pick one and be consistent.
 - Partial and expression indexes are supported.
@@ -23,6 +24,7 @@ This file covers only SQLite and MongoDB. SQLite still follows the relational wo
 - Embed when data is read together, owned by the parent, and bounded (order line items). Reference when data is shared, updated independently, or grows without limit (comments on a popular post).
 - Documents are capped at 16 MB; unbounded arrays are the usual way to hit it.
 - Enforce shape with `$jsonSchema` validators on the collection (see [schema-templates.md](schema-templates.md)). Give the collection and every property a `description` in the user's language; that is the MongoDB equivalent of table and column comments.
+- `required` lists only the fields a document cannot exist without. Give the rest a default in the write path instead of making them mandatory, for the same reason a strict `NOT NULL` on every column makes inserts hard.
 - Status and flag fields are integers with the code map in the `description` (`状态：0=禁用；1=启用`), and every instant is a UTC `date`; do not store status as a string.
 - Compound index order follows the ESR rule: equality fields, then sort fields, then range fields.
 - Multi-document transactions exist but cost more; a schema that needs them for common writes is often better modeled with embedding.

@@ -29,7 +29,7 @@ Current major version: PostgreSQL 18. Features marked (18) need 18 or later; say
 - `COMMENT ON` replaces the previous value, so re-running the script is safe. Escape a single quote by doubling it (`''`); keep the text on one line.
 - Optional but useful: `COMMENT ON CONSTRAINT` for an unusual rule, `COMMENT ON INDEX` for an index whose purpose is not obvious from its columns.
 - Comments live in `pg_description` and show up in `psql \d+`; they also feed GUI tools and backend generators. Keep the wording consistent with the `Meaning` column in `database-design.md`.
-- A comment does not enforce anything. Rules still need `NOT NULL`, `CHECK`, `UNIQUE`, or a foreign key.
+- A comment does not enforce anything. Rules still need `NOT NULL`, `CHECK`, or `UNIQUE`.
 
 ```sql
 CREATE TABLE city (
@@ -70,7 +70,7 @@ UUIDv7 embeds the creation time; do not use it where exposing that time is a pro
 | Money | `numeric(12,2)` or integer minor units (`amount_cents bigint`) | `real`, `double precision`, `money` |
 | Booleans | `boolean NOT NULL DEFAULT false` | Nullable booleans (three states by accident) |
 | Labels (`type`, `kind`, `role`) | `text` + `CHECK (type IN (...))`, or a lookup table | `ENUM` types for lists that will change |
-| Status and flag columns (`status`, `is_deleted`, `audit_state`) | `smallint NOT NULL` holding an integer code (PostgreSQL has no `tinyint`), with the map in the column comment (`'状态：0=禁用；1=启用'`) and `CHECK (status IN (0, 1))` | String statuses, `ENUM`, and codes with no comment |
+| Status and flag columns (`status`, `is_deleted`, `audit_state`) | `smallint NOT NULL DEFAULT 1` holding an integer code (PostgreSQL has no `tinyint`), with the map in the column comment (`'状态：0=禁用；1=启用'`) and `CHECK (status IN (0, 1))` | String statuses, `ENUM`, and codes with no comment |
 | Flexible attributes | `jsonb` (never `json`) | JSON for fields you filter or join on |
 | Case-insensitive text | Unique index on `lower(email)`, or `citext` | Relying on the app to lowercase |
 | IP addresses | `inet` | Text |
@@ -78,7 +78,8 @@ UUIDv7 embeds the creation time; do not use it where exposing that time is a pro
 
 ## Constraints
 
-- `NOT NULL` on every column that must have a value. Nullable should be a decision.
+- **Nullable is the default; `NOT NULL` needs a reason.** Keep `NOT NULL` only when the product cannot represent the row without the value (a name, an owner, a join key) or when a `DEFAULT` fills it for the insert (`status smallint NOT NULL DEFAULT 1`). Optional text, settings, secondary timestamps, and fields a later feature fills in stay nullable. Every extra `NOT NULL` without a default turns an insert into a full form and makes staged or partial writes fail.
+- A nullable column inside a `UNIQUE` key is fine: PostgreSQL allows many `NULL` values there, and `NULL` never collides with another `NULL`.
 - `UNIQUE` for natural keys; in multi-tenant tables, scope it: `UNIQUE (org_id, slug)`.
 - `CHECK` for ranges and allowed values: `CHECK (quantity > 0)`.
 - Status codes are a contract between the script, the API, and the UI. Write the map in the column comment, mirror it in `CHECK (status IN (0, 1))`, and keep it identical in `database-design.md`. Keep `0` for the default or unknown state, never renumber a code that has shipped, and retire a code by adding a new one and marking the old one deprecated in the comment.
@@ -138,7 +139,7 @@ On tables with real traffic:
 - Names: singular table names, `<table>_id` primary keys, foreign key columns named after the referenced primary key.
 - Types: `timestamptz`, `text`, `numeric` or integer cents, `jsonb` only for variable attributes.
 - Status and flag columns are `smallint` codes with the map in the comment and a `CHECK` on the domain; every `created_at` / `updated_at` is `timestamptz`.
-- Constraints: `NOT NULL`, `UNIQUE`, `CHECK`; no `REFERENCES` unless the user asked for foreign keys, and then with an explicit `ON DELETE`.
+- Constraints: `UNIQUE`, `CHECK`, and `NOT NULL` only where the business requires the value or a `DEFAULT` covers the insert; no `REFERENCES` unless the user asked for foreign keys, and then with an explicit `ON DELETE`.
 - Indexes: one per key query, every reference column indexed, no duplicates of PK or unique indexes.
 - `updated_at` maintained by a trigger or the ORM.
 - Tenancy and RLS in place where clients can reach the database.

@@ -5,6 +5,7 @@ Two complete worked examples of the same domain: PostgreSQL 18 and MySQL 8.4 (In
 - PostgreSQL 17 or earlier: replace `uuidv7()` with `gen_random_uuid()` or an app-generated UUIDv7.
 - MySQL: generate UUIDv7 in the app and store `UUID_TO_BIN(uuid, 0)`. There is no built-in `uuidv7()`.
 - Neither script declares a foreign key constraint. Reference columns keep the parent's name and type and are indexed; the intended `ON DELETE` behavior lives in `database-design.md` and is enforced by the service.
+- `NOT NULL` marks only columns a row cannot exist without, or columns with a `DEFAULT`; every optional field is nullable. Do not copy a strict `NOT NULL` onto every attribute.
 
 ## Contents
 - Worked example: multi-tenant project tracker (PostgreSQL 18)
