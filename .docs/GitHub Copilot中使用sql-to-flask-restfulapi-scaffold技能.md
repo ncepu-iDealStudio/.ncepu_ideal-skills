@@ -13,7 +13,7 @@
 1. 已安装 VS Code。
 2. 已安装并登录 GitHub Copilot 插件。
 3. 已打开本仓库工作区。
-4. 已准备 SQL 文件（例如：`test/api_security_demo-20260717.sql`）。
+4. 已准备 SQL 文件（包含 `CREATE TABLE` 的 `.sql` 文件，路径由你指定）。
 
 ## 3. 核心资源说明
 
@@ -35,7 +35,7 @@
 
 ```text
 请严格按照 sql-to/sql-to-flask-restfulapi-scaffold/SKILL.md 与 resources 下的配置和规范，
-读取 test/api_security_demo-20260717.sql，
+读取你准备好的 SQL 文件（例如 `./schema.sql`），
 生成 Flask + Flask-RESTful 分层脚手架代码。
 要求：
 1) 使用 SQL 主键作为路由主键；
@@ -79,7 +79,7 @@
 
 ```bash
 python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/validate_template_context.py sql-to/sql-to-flask-restfulapi-scaffold/resources/config/template_context_example.json
-python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py test/api_security_demo-20260717.sql
+python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/preview_generation_plan.py ./schema.sql
 python sql-to/sql-to-flask-restfulapi-scaffold/resources/tools/render_preview_bundle.py
 ```
 

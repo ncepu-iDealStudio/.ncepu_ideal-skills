@@ -62,10 +62,12 @@ description: "在任何创造性工作之前必须使用此技能——创建功
 
 ## 2. 本仓库里有哪些 superpowers 技能
 
-仓库同时装了两套来源：
+仓库同时收录了两类技能：
 
-- **`.agents/skills/` 与 `.codebuddy/skills/`**：superpowers-zh 中文本地化版，20 个技能
-- **`.dsh/skills/`**：面向 DSH 的原生目录，装 `common-website-design`、`it-requirement-analysis`、`prd-html`、`diagnosing-superpowers`
+- **`.agents/skills/` 与 `.codebuddy/skills/`**：superpowers-zh 中文本地化版，20 个通用工作流技能
+- **按领域分类的技能**：`requirements_analysis/`（含 `it-requirement-analysis`、`brainstorming`）、`design/`（含 `common-website-design`、`modern-web-guidance`）、`prototype-to/` 等目录
+
+> 本仓库不再维护 `.dsh/`、`.cursor/`、`.workbuddy/` 等工具专用副本；在 DSH 中使用时，把需要的技能从对应分类目录安装到 DSH 的技能搜索路径即可（见第 1 节）。
 
 ### 2.1 常用技能速查
 

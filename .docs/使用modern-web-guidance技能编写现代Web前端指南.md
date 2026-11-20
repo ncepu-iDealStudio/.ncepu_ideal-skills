@@ -6,8 +6,8 @@
 >
 > 移植自 [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) v1.0.0，
 > 由 Chrome / Edge / Firefox / MDN 团队维护。本文是**使用说明**，技能本体见
-> [`modern-web-guidance/`](../modern-web-guidance/README.md)，工具契约见
-> [`local_search_contract.md`](../modern-web-guidance/resources/specifications/local_search_contract.md)。
+> [`modern-web-guidance/`](../design/modern-web-guidance/README.md)，工具契约见
+> [`local_search_contract.md`](../design/modern-web-guidance/resources/specifications/local_search_contract.md)。
 
 ---
 
@@ -57,10 +57,10 @@
 
 ```bash
 # 例：装到 Claude Code 全局目录
-cp -r ncepu_ideal-skills/modern-web-guidance ~/.claude/skills/
+cp -r ncepu_ideal-skills/design/modern-web-guidance ~/.claude/skills/
 
 # 例：装到当前项目的 DSH 项目级目录
-mkdir -p .dsh/skills && cp -r /path/to/ncepu_ideal-skills/modern-web-guidance .dsh/skills/
+mkdir -p .dsh/skills && cp -r /path/to/ncepu_ideal-skills/design/modern-web-guidance .dsh/skills/
 ```
 
 > 💡 指南、索引、工具都在这个目录里（约 2.7 MB / 216 个文件），**整个目录一起复制**，
@@ -370,7 +370,7 @@ const dialog = document.getElementById('confirm');
 | 用 React/Vue/Tailwind 还有用吗？ | 有。只要落到标准 HTML/CSS/DOM 就触发，按第 7 节保留现代特性。 |
 | 更新/改了 `guides/` 后要做什么？ | 重跑 `python3 resources/tools/build_index.py`，再抽样验证。 |
 | 支持 `legacy-scan` / Chrome 扩展包吗？ | 本次不移植（前者依赖上游未开源规则库，后者是独立技能包）。 |
-| 许可？ | 文档 CC-BY 4.0、代码 Apache-2.0，署名见 [`ATTRIBUTION.md`](../modern-web-guidance/ATTRIBUTION.md)。 |
+| 许可？ | 文档 CC-BY 4.0、代码 Apache-2.0，署名见 [`ATTRIBUTION.md`](../design/modern-web-guidance/ATTRIBUTION.md)。 |
 
 ---
 
@@ -412,11 +412,10 @@ python3 resources/tools/mwg.py search "light dismiss dialog"   # 抽样验证
 
 | 技能 | 何时查阅 | 说明 |
 | --- | --- | --- |
-| [prototype-to-web(Nuxt UI Starter)](../prototype-to/prototype-to-web(Nuxt%20UI%20Starter)/README.md) | 对话框、表格、表单、暗色、滚动、焦点、图片优先级，映射到 Nuxt UI | 该技能 README 第 11 节 |
-| [requirements-to-vue_vben_admin](../requirements-to-vue_vben_admin/README.md) | 同上，映射到 VxeGrid / Vben 表单 / Ant Design Vue | 该技能 README 第 10 节 |
-| [common-website-design](../.dsh/skills/common-website-design/README.md) | 写静态 HTML 的语义、焦点、对话框、滚动、动效 | `.dsh` 与 `.workbuddy` 两份说明相同 |
-| [prd-html-skill](../.cursor/skills/prd-html-skill/README.md) | 逐页写可点原型的对话框、表单、表格 | `.cursor` 与 `.dsh` 两份说明相同 |
-| [md-prd-to-html-prototype](../md-prd-to-html-prototype/README.md) | 单文件原型里的弹窗、表单、表格；行为写入内联脚本 | 说明见该技能 README。只允许既有的 Tailwind CDN，不为指南再增加外链 |
+| [prototype-to-web(Nuxt UI Starter)](<../prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>) | 对话框、表格、表单、暗色、滚动、焦点、图片优先级，映射到 Nuxt UI | 该技能 README 第 11 节 |
+| [requirements-to-vue_vben_admin](../prototype-to/requirements-to-vue_vben_admin/README.md) | 同上，映射到 VxeGrid / Vben 表单 / Ant Design Vue | 该技能 README 第 10 节 |
+| [common-website-design](../design/common-website-design/README.md) | 写静态 HTML 的语义、焦点、对话框、滚动、动效 | 见该技能 README |
+| [md-prd-to-html-prototype](../design/md-prd-to-html-prototype/README.md) | 单文件原型里的弹窗、表单、表格；行为写入内联脚本 | 说明见该技能 README。只允许既有的 Tailwind CDN，不为指南再增加外链 |
 | [prototype-to-taro-app](../prototype-to/prototype-to-taro-app/README.md) | 仅 H5 | 该技能 README 第 11 节；CodeBuddy 指南见 [在 CodeBuddy 中使用](在Codebuddy插件中使用prototype-to-taro-app技能指南.md) |
 | [prototype-to-app-uniappx](../prototype-to/prototype-to-app-uniappx/README.md) | 仅 H5；App 端约束优先 | 该技能 README 第 11 节；WorkBuddy 指南见 [原型转应用](workbuddy中使用原型转应用技能.md) |
 | [dsh-plugin-starter](../dsh-plugin-starter/README.md) | 仅 dual-face 设置页 | 该技能 README 第 11 节；插件指南见 [开发 DSH 插件](使用dsh-plugin-starter技能开发DSH插件.md) |
@@ -425,8 +424,8 @@ python3 resources/tools/mwg.py search "light dismiss dialog"   # 抽样验证
 
 ## 相关文件
 
-- 技能本体：[`modern-web-guidance/README.md`](../modern-web-guidance/README.md)
-- 路由器：[`modern-web-guidance/SKILL.md`](../modern-web-guidance/SKILL.md)
-- 工具契约：[`local_search_contract.md`](../modern-web-guidance/resources/specifications/local_search_contract.md)
-- 来源与许可：[`ATTRIBUTION.md`](../modern-web-guidance/ATTRIBUTION.md)
+- 技能本体：[`modern-web-guidance/README.md`](../design/modern-web-guidance/README.md)
+- 路由器：[`modern-web-guidance/SKILL.md`](../design/modern-web-guidance/SKILL.md)
+- 工具契约：[`local_search_contract.md`](../design/modern-web-guidance/resources/specifications/local_search_contract.md)
+- 来源与许可：[`ATTRIBUTION.md`](../design/modern-web-guidance/ATTRIBUTION.md)
 - 各工具配置 skill 目录：[Claude](claude中使用skill配置.md) · [CodeBuddy](CodeBuddy中使用skill配置.md) · [Trea](Trea中使用skill配置.md) · [DSH](dsh中使用superpowers技能.md)
