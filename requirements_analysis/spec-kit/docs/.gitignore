@@ -1,0 +1,10 @@
+# DocFX build output
+_site/
+obj/
+.docfx/
+_generated/
+community/presets/
+
+# Temporary files
+*.tmp
+*.log
