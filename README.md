@@ -1,8 +1,10 @@
 # 🎯 ncepu_ideal-skills
 
-> 企业级项目技能（Skills）集合仓库 | 基于资源驱动设计，从 SQL 生成后端脚手架、从原型生成前端应用
+> 企业级项目技能（Skills）集合仓库 | 覆盖代码生成、设计需求、工程规范与安全审计，以资源驱动设计为核心
 
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-多协议-blue)
+![Go](https://img.shields.io/badge/Go-1.21%2B-00ADD8)
+![Java](https://img.shields.io/badge/Java-17%2B-007396)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-v0.100%2B-orange)
 ![Flask](https://img.shields.io/badge/Flask-v2.0%2B-purple)
@@ -20,250 +22,113 @@
 
 - 🔄 **资源驱动架构** - 模板 + 配置 + 规范，完全由资源文件驱动代码生成
 - 🚀 **一键生成脚手架** - 后端从 SQL 表结构、前端从原型设计自动生成完整项目代码
-- 🎨 **多技术栈支持** - FastAPI / Flask / Gin / Spring Boot / uni-app x / Flutter / iOS / Android
+- 🎨 **多技术栈支持** - Go / Java / FastAPI / Flask / Gin / Spring Boot / uni-app x / Flutter / iOS / Android
 - 📦 **增量生成** - 支持首次全量生成和后续增量更新
-- 🔒 **安全内置** - 自动软删除/硬删除、敏感数据脱敏、输入验证
+- 🔒 **安全内置** - 软删除/硬删除、敏感数据脱敏、输入验证，以及独立的安全审计技能
 - 🧩 **开箱即用** - 生成的前端工程内置 mock 数据，无需后端即可运行预览
+- 📚 **参考型技能** - 现代 Web 指南、Java / Go 工程规范等技能在动手前注入专家知识，不接管你的目录结构
 
 ---
 
 ## 🎯 当前技能清单
 
-### 1️⃣ sql-to-fastapi-restfulapi-scaffold
+按目录分组。主体技能共 **33 个**，另有 4 个 IDE 专用技能副本与 20 个 superpowers-zh 通用技能。
 
-从 SQL `CREATE TABLE` 语句生成完整的 FastAPI RESTful API 项目脚手架
+### 🏭 SQL → 后端脚手架（`sql-to/`，4 个）
 
-📖 **详细说明**：[查看文档](sql-to/sql-to-fastapi-restfulapi-scaffold/README.md)
+| 技能 | 输入 → 输出 |
+| --- | --- |
+| [`sql-to-fastapi-restfulapi-scaffold`](sql-to/sql-to-fastapi-restfulapi-scaffold/README.md) | SQL `CREATE TABLE` → FastAPI 分层脚手架（Model / Schema / Repository / Service / Resource + 测试骨架） |
+| [`sql-to-flask-restfulapi-scaffold`](sql-to/sql-to-flask-restfulapi-scaffold/README.md) | MySQL DDL → Flask + Flask-RESTful 接口项目脚手架 |
+| [`sql-to-springboot-restfulapi-scaffold`](sql-to/sql-to-springboot-restfulapi-scaffold/README.md) | SQL `CREATE TABLE` → Spring Boot 分层脚手架，并导出 `docs/openapi.json` / `docs/api.md` |
+| [`sql-to-gin-restfulapi-scaffold`](sql-to/sql-to-gin-restfulapi-scaffold/README.md) | MySQL DDL → Gin + GORM 分层脚手架，含一键回归流水线 |
 
----
-
-### 2️⃣ sql-to-flask-restfulapi-scaffold
-
-从 MySQL DDL 脚本生成 Flask + Flask-RESTful 风格的企业级接口项目脚手架
-
-📖 **详细说明**：[查看文档](sql-to/sql-to-flask-restfulapi-scaffold/README.md)
-
----
-
-### 3️⃣ sql-to-springboot-restfulapi-scaffold
-
-从 SQL `CREATE TABLE` 语句生成完整的 Spring Boot RESTful API 项目脚手架
-
-📖 **详细说明**：[查看文档](sql-to/sql-to-springboot-restfulapi-scaffold/README.md)
+> 表结构未定先用 [`database-schema-designer`](design/database-schema-designer/README.md) 出 MySQL 脚本；这些脚手架技能不执行 DDL。
 
 ---
 
-### 4️⃣ sql-to-gin-restfulapi-scaffold
+### 🎨 设计与需求（`design/`，5 个）
 
-从 MySQL DDL 脚本生成 Gin + GORM 风格的企业级接口项目脚手架
+| 技能 | 说明 | 文档 |
+| --- | --- | --- |
+| `database-schema-designer` | 自然语言或已有库结构 → 分引擎 DDL（PostgreSQL / MySQL 为主，SQLite / MongoDB 补充）+ `database-design.md`；改编自 OneWave AI（MIT） | [README](design/database-schema-designer/README.md) |
+| `frontend-design` | 前端视觉设计指导：审美方向、排版、避免模板化默认样式，与具体框架无关 | [SKILL.md](design/frontend-design/SKILL.md) |
+| `huashu-design` | 花叔 Design：一句话产出高保真 HTML 原型、幻灯片、动画、可视化与专家评审；先出三方向初稿供选择（MIT） | [README](design/huashu-design/README.md) |
+| `md-prd-to-html-prototype` | 读取本地 Markdown PRD → 单文件 HTML 低保真原型；字段以文档为准，信息不足先提问 | [README](design/md-prd-to-html-prototype/README.md) |
+| `modern-web-guidance` | 参考型：编写 Web 前端前检索随仓库自带的 209 份现代平台指南，离线自包含、中文驱动 | [README](design/modern-web-guidance/README.md) |
 
-状态：✅ 已具备一键回归能力（含 context 生成、模板渲染、路由合并、快照校验）
-
-快速命令：
-
-```bash
-python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
-```
-
-📖 **详细说明**：[查看文档](sql-to/sql-to-gin-restfulapi-scaffold/README.md)
+> `modern-web-guidance` 的指南为上游英文原文（CC-BY 4.0 / 代码 Apache-2.0），署名见 [ATTRIBUTION.md](design/modern-web-guidance/ATTRIBUTION.md)。Web UI 技能可在各自目录、分层与组件库不变的前提下叠加它。
 
 ---
 
-### 5️⃣ common-website-design
+### 📱 原型 → 应用工程（`prototype-to/`，7 个）
 
-通用网站设计原型生成技能：把自然语言网站需求转成**框架无关的静态 HTML 设计原型**（多页面 HTML + 统一样式 + `site-manifest.json`），可后续拆解为 Vue / Hugo / Hexo / EJS 模板。本技能自身不生成任何框架项目代码。
+| 技能 | 说明 | 文档 |
+| --- | --- | --- |
+| `prototype-to-app-uniappx` | 原型 → uni-app x 蒸汽模式（TS）工程，`.uvue` 页面 + services 分层 + mock 数据 | [README](prototype-to/prototype-to-app-uniappx/README.md) |
+| `prototype-to-flutter-app` | 原型 → Flutter 工程，features 分层 + Repository + `ChangeNotifier`，零重型依赖 | [README](prototype-to/prototype-to-flutter-app/README.md) |
+| `prototype-to-web(Nuxt UI Starter)` | 原型 → Nuxt UI Starter 工程，内置页面与组件分层 | [README](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>) |
+| `prototype-to-taro-app` | 原型 → Taro 4 多端工程，Vue3 / React 双分支由用户确认 | [README](prototype-to/prototype-to-taro-app/README.md) |
+| `prototype-to-ios-native-app(AwesomeSwift)` | 原型 → SwiftUI 原生 iOS 工程（Swift 5.10 / XcodeGen / MVVM + Combine） | [README](<prototype-to/prototype-to-ios-native-app(AwesomeSwift)/README.md>) |
+| `prototype-to-android-native-app(Fragmject)` | 原型 → Jetpack Compose 原生 Android 工程（Kotlin 2.1 / 单 Activity MVI / Hilt） | [README](<prototype-to/prototype-to-android-native-app(Fragmject)/README.md>) |
+| `requirements-to-vue_vben_admin` | 后台管理需求 → vue-vben-admin（vben5）可运行脚手架，含 CRUD 页面 / 看板 / mock 数据 | [README](prototype-to/requirements-to-vue_vben_admin/README.md) |
 
-- 三个正交维度：8 种页面原型 × 内容模型 × 9 个内置设计包（候选确认制）
-- 内置验证器 `scripts/validate.py`（Python 标准库，零依赖）
-- 成品示例：[test/page-design-showcase](test/page-design-showcase/README.md)
-- 安装位置：`.workbuddy/skills/common-website-design/`、`.dsh/skills/common-website-design/`
-- 写语义 HTML、焦点、对话框、滚动或动效时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；页面原型和设计包仍以本技能为准
-
----
-
-### 6️⃣ it-requirement-analysis
-
-IT 需求分析专家技能：把业务诉求转化为可落地、可验收、可开发的 IT 系统标准，输出 PRD、用户故事、功能/非功能需求、风险依赖与验收标准。AI 应用优先、渐进式输出、选择题式交互。
-
-- 安装位置：`.cursor/skills/it-requirement-analysis/`、`.dsh/skills/it-requirement-analysis/`、`.workbuddy/skills/it-requirement-analysis/`
+> 各技能均内置数据访问接缝：切真实后端只改一个开关（`useMock` / `AppContainer` 装配），页面代码不动。H5 界面可按需叠加 [`modern-web-guidance`](design/modern-web-guidance/README.md)，小程序与原生端不套用。
 
 ---
 
-### 7️⃣ prd-html-skill
+### ☕ Java 工程（`java/`，5 个）
 
-PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HTML 交付，把 PRD / 需求文档 / 页面清单转成可交互的多页面原型，并支持打包成单文件离线 HTML。
-
-- 安装位置：`.cursor/skills/prd-html-skill/`、`.dsh/skills/prd-html-skill/`
-- 写对话框、表单、表格时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；生成顺序和 spec 三件套不变
-
----
-
-### 8️⃣ md-prd-to-html-prototype
-
-读取本地 Markdown 格式 PRD，提取角色、页面、字段与交互逻辑，输出**单文件 HTML 低保真原型**。页面和字段以文档为准；文档没写清就先问。
-
-- 本体：`md-prd-to-html-prototype/`。修改只改这一处，不向插件目录拷贝副本
-- 只允许 Tailwind 这一处 CDN，其余 CSS/JS 写在同一个 HTML 里
-- 写弹窗、表单、表格时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)，不为它再增加外链
-- 📖 说明：[md-prd-to-html-prototype/README.md](md-prd-to-html-prototype/README.md)
+| 技能 | 说明 | 文档 |
+| --- | --- | --- |
+| `create-spring-boot-java-project` | 从 start.spring.io 脚手架新 Spring Boot 项目（Maven / Gradle），带配置、PostgreSQL、日志、安全、测试与 Docker 默认值 | [SKILL.md](java/create-spring-boot-java-project/SKILL.md) |
+| `java-development` | 无框架日常 Java 开发：Maven / Gradle、JDK 版本习惯用法（records / sealed / 虚拟线程）、日志、空值、并发、静态分析与打包 | [SKILL.md](java/java-development/SKILL.md) |
+| `java-springboot` | 在已有 Spring Boot 3/4 项目中写和评审业务代码：Controller / 校验 / ProblemDetail / JPA / RestClient / 缓存 / 调度 | [SKILL.md](java/java-springboot/SKILL.md) |
+| `java-upgrade` | 升级 Java 项目到更高 JDK（11→17→21→25），按当前版本加载对应指南并采用新语言特性 | [SKILL.md](java/java-upgrade/SKILL.md) |
+| `openapi-to-application-java-spring-boot` | OpenAPI 3 规约 → Spring Boot 应用：openapi-generator 产出接口与 DTO，再实现 Controller / Service / 持久化 / 安全 / 测试 | [SKILL.md](java/openapi-to-application-java-spring-boot/SKILL.md) |
 
 ---
 
-### 9️⃣ prototype-to-app-uniappx
+### 🐹 Go 工程（`go/`，4 个）
 
-从**原型**（HTML/CSS 代码、设计图截图、PRD 页面清单）生成**可运行的 uni-app x 工程**：用 mock 数据还原页面布局、视觉与交互，产出可直接在 HBuilder 运行的多端工程。
-
-- 默认输出**蒸汽模式（TS）**，同时说明 uts 写法的切换
-- 强制规避 uni-app x 与 uni-app 的差异坑（`.uvue`、flex 默认竖向、文字须在 `<text>` 内、`manifest.json` 需 `"uni-app-x": {}`）
-- 分层：页面 / 组件 / `services/api`（唯一数据接缝）/ `services/mock`
-- 校验脚本 10 项，示例产物 `resources/demo_output/skill-swap-demo/`
-- 仅 H5 界面按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；App 与小程序约束优先
-
-📖 **详细说明**：[查看文档](prototype-to/prototype-to-app-uniappx/README.md)
+| 技能 | 说明 | 文档 |
+| --- | --- | --- |
+| `go-api-design` | HTTP/REST API 设计：handler、ServeMux 路由、中间件、校验、分页、幂等、健康检查、错误响应与优雅关闭 | [SKILL.md](go/go-api-design/SKILL.md) |
+| `golang-grpc` | gRPC 使用规范：protobuf 组织、拦截器、状态码、TLS/mTLS、bufconn 测试与流式 RPC | [SKILL.md](go/golang-grpc/SKILL.md) |
+| `golang-project-layout` | Go 项目布局：cmd / internal / pkg、模块与包命名、go.work workspace、多 main 包 CLI | [SKILL.md](go/golang-project-layout/SKILL.md) |
+| `golang-testing` | Go 测试实践：表驱动、testify、并行、fuzz、fixtures、goleak、快照、覆盖率与集成测试 | [SKILL.md](go/golang-testing/SKILL.md) |
 
 ---
 
-### 🔟 prototype-to-flutter-app
+### 🔒 安全（`security/`，6 个）
 
-从**原型**生成符合 Flutter 官方架构指南与最佳实践的**开箱即用工程**：分层目录、路由、主题、mock 数据驱动的页面还原，`flutter pub get && flutter run` 即可看到效果。
+| 技能 | 说明 | 文档 |
+| --- | --- | --- |
+| `fastapi-api-security-authentication` | 给已有 FastAPI CRUD 项目补白名单、Bearer JWT 与角色/对象权限；不满足前置条件会停下来询问 | [SKILL.md](security/fastapi-api-security-authentication/SKILL.md) |
+| `go-security-audit` | Go 应用安全评审：输入校验、SQL/命令注入、SSRF、路径穿越、认证、密钥、加密与 OWASP Top 10（只读报告） | [SKILL.md](security/go-security-audit/SKILL.md) |
+| `golang-continuous-integration` | Go 项目 CI/CD：GitHub Actions 的 test / lint / SAST / 覆盖率 / 依赖扫描任务，Dependabot、Renovate、GoReleaser | [SKILL.md](security/golang-continuous-integration/SKILL.md) |
+| `security-audit` | 审计已有代码：越权、注入、XSS、SSRF、认证与 JWT、密钥、反序列化、上传与路径、依赖和日志 | [README](security/security-audit/README.md) |
+| `spring-boot-testing` | Spring Boot 测试技术选型：测试切片、Testcontainers `@ServiceConnection`、Failsafe、MockitoBean、JUnit / AssertJ | [SKILL.md](security/spring-boot-testing/SKILL.md) |
+| `spring-security` | Spring Security 6/7 配置与评审：SecurityFilterChain lambda DSL、方法安全、OAuth2 资源服务器、CSRF/CORS、MockMvc 安全测试 | [SKILL.md](security/spring-security/SKILL.md) |
 
-- 按功能切分目录（`features/`），UI 层 / 数据层分离，Repository 模式
-- 状态管理用官方推荐的 `ChangeNotifier` + `ListenableBuilder`，**零重型依赖**（仅 `http`）
-- 强制规避硬编码颜色、`features` 层直连 HTTP 等反模式
-- 校验脚本 11 项，示例产物 `resources/demo_output/skill_swap_app/`
-
-📖 **详细说明**：[查看文档](prototype-to/prototype-to-flutter-app/README.md)
-
----
-
-### 1️⃣1️⃣ requirements-to-vue_vben_admin
-
-把**后台管理需求描述**转换成基于 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin)（vben5）的**可运行后台管理脚手架**：自动划分功能模块、生成路由菜单、CRUD 页面、API 层与图表看板，内置 mock 数据可直接运行。
-
-- 输入一段中文需求（如"系统管理模块包括：用户管理、角色管理、权限管理"）即可
-- 自动判定页面类型：`crud` / `dashboard`（图表看板）/ `tree`（权限菜单）/ `form`
-- 覆盖 vben5 的三个易错点：`ant-design-vue` 与 `antdv-next` 之别、`VbenTableAction` 导入来源、路由 glob 自动收集
-- 校验脚本 14 项，示例产物 `resources/demo_output/demo-admin/`（3 模块 8 页面）
-- 已在**真实 vben 仓库**中生成并验证：0 错误 0 警告
-- 写表格、表单、对话框时，按需叠加 [modern-web-guidance](modern-web-guidance/README.md)，映射到 vben 已有组件
-
-📖 **详细说明**：[查看文档](requirements-to-vue_vben_admin/README.md)
+> `security-audit` 候选扫描：`python security/security-audit/scripts/scan_sinks.py <项目根>`，命中不等于结论。报告不写攻击步骤与密钥原文。改编自 [developer-agent-skills/security-audit](https://github.com/reddygopalkrishna/developer-agent-skills/blob/main/skills/security-audit/SKILL.md)（MIT），见目录内 `NOTICE`。
 
 ---
 
-### 1️⃣2️⃣ prototype-to-taro-app
+### 🧰 独立技能与通用技能
 
-从**原型**生成符合 Taro 规范的**多端工程**（微信/支付宝小程序、H5、RN），一套代码多端运行。
+| 技能 | 说明 | 文档 |
+| --- | --- | --- |
+| `dsh-plugin-starter` | 从一句话需求或插件原型生成 DSH 插件起步项目，四类插件 + 内置《开发者指南》 | [README](dsh-plugin-starter/README.md) |
+| `common-website-design` | 自然语言网站需求 → 框架无关的静态 HTML 设计原型（多页面 + 统一样式 + `site-manifest.json`） | [README](.dsh/skills/common-website-design/README.md) |
+| `it-requirement-analysis` | 业务诉求 → 可落地、可验收的 PRD、用户故事、功能/非功能需求与风险依赖 | 安装位置见下方目录树 |
+| `prd-html-skill` | PRD / 需求文档 / 页面清单 → 可交互多页面 HTML 原型，支持单文件离线打包 | [README](.cursor/skills/prd-html-skill/README.md) |
+| `supervisor-skills` | 12 个科研全流程技能（Idea 评估、文献调研、论文写作、投稿审核与 Rebuttal 等） | [中文导读](research/supervisor-skills/README.zh-CN.md) |
 
-- **支持两种技术栈，由用户确认后选用**：
-  - Vue3 分支：Taro 4 + Vue 3 + TS + Vant + Pinia
-  - React 分支：Taro 4 + React 18 + TS + Dva + Immer
-- 内置登录、401 跳登录、多环境请求封装、分页列表、下拉刷新、空态/加载态
-- 解析工具强制要求 `--framework` 参数，不设默认框架
-- 校验脚本 12 项；两个分支各有示例产物 `resources/demo_output/skill-swap-{vue3,react}/`
-
-> 说明：参考仓库 `RealCoolSnow/taro-vue3-ts` 已 404，Vue3 分支按 Taro 官方规范自建；
-> `elf-taro` 为 Taro3.0-rc + React16，本技能把其架构思路适配到 Taro 4 + React 18。
-
-- 仅 H5 按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；小程序和 React Native 不套用
-- 📘 使用指南：[.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md](.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
-
-📖 **详细说明**：[查看文档](prototype-to/prototype-to-taro-app/README.md)
-
----
-
-### 1️⃣3️⃣ prototype-to-ios-native-app
-
-从**原型**（HTML/CSS 代码、设计图截图、PRD 页面清单）生成**能用 Xcode 直接 Run** 的**原生 iOS 工程**，范式对齐开源项目 [AwesomeSwift](https://github.com/JoeyBling/AwesomeSwift)。
-
-- 技术基线：Swift 5.10 + SwiftUI（iOS 17.0+）+ MVVM & Combine + SwiftData + Alamofire + Kingfisher，SPM 依赖管理
-- 不手写 `.xcodeproj`：用 XcodeGen 从 `project.yml` 生成工程，开箱即用且可版本管理
-- 内置列表/详情/表单/个人中心四个页面范本，新页面**复制改造**对应范本
-- 数据访问层留接缝：切真实后端只改 `AppContainer` 装配，页面代码不动
-- 校验脚本 22 项（不需要 macOS / Xcode），示例产物 `resources/demo_output/skill-swap-ios/`
-
-📖 **详细说明**：[查看文档](<prototype-to/prototype-to-ios-native-app(AwesomeSwift)/README.md>)
-
----
-
-### 1️⃣4️⃣ prototype-to-android-native-app
-
-从**原型**生成**可直接用 Android Studio 打开并运行**的**原生 Android 工程**，范式对齐开源项目 [Fragmject](https://github.com/miaowmiaow/fragmject)。
-
-- 技术基线：Kotlin 2.1 / AGP 8.7.3 / JDK 17，Jetpack Compose + Material3（BOM 2024.12.01）
-- 单 Activity + MVI（`UiState` / `Event` / `StateFlow`），Hilt（KSP）注入、Navigation Compose 路由
-- 本地存储 Room + DataStore，网络 Retrofit + OkHttp + kotlinx.serialization，图片 Coil
-- 内置四个页面范本；`Navigation3` 仍在实验期，默认用 Navigation Compose，用户要求时才切换
-- 校验脚本 21 项，示例产物 `resources/demo_output/skill-swap-android/`
-
-📖 **详细说明**：[查看文档](<prototype-to/prototype-to-android-native-app(Fragmject)/README.md>)
-
----
-
-### 1️⃣5️⃣ dsh-plugin-starter
-
-从**一句话需求或插件原型**生成**可直接用 VSCode 打开开发**的 **DSH（DeepSeek Harness）插件起步项目**，并在工程里内置一份面向初学者的《开发者指南》。
-
-- 支持四类插件：`tool-only`（工具型，无界面）/ `route-only`（路由型，无界面）/ `dual-face`（双面型，设置页界面）/ `interceptor`（工具拦截器）
-- 生成即对齐 DSH 插件规范：`dsh.bundle.patch` 装配声明、`dsh.client` 双面声明、tsdown 双目标构建（`lib/index.mjs` + `lib/client.js`）、包名四处一致
-- 内置 `DEVELOPMENT.md`：改代码 → 构建 → 装进 DSH → 调试 → 打包发布的完整闭环，含按类型的扩展代码与「症状 → 根因」调试表
-- 零依赖工具链：`scaffold_plugin.py`（spec → 工程）、`validate_plugin.py`（18 项静态自检）
-- 示例产物：`resources/demo_output/dsh-plugin-notebook/`（双面型：路由 + 设置页 + 笔记增删查）
-- 仅 dual-face 设置页按需叠加 [modern-web-guidance](modern-web-guidance/README.md)；工具型、路由型、拦截器不调用
-- 📘 使用指南：[.docs/使用dsh-plugin-starter技能开发DSH插件.md](.docs/使用dsh-plugin-starter技能开发DSH插件.md)
-
-📖 **详细说明**：[查看文档](dsh-plugin-starter/README.md)
-
----
-
-### 1️⃣6️⃣ modern-web-guidance
-
-**参考型技能**：在 AI 编写/修改 Web 前端界面代码前，先从随仓库自带的 **209 份现代 Web 平台指南**里检索并取回专家指南，让产出优先使用浏览器原生 API、平台级性能与无障碍能力，按 Baseline 做轻量回退，远离遗留写法。移植自 [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance)，改为**离线自包含 + 中文驱动**。
-
-- 覆盖 17 类主题：对话框/抽屉/表格/表单/暗色/容器查询/视图过渡/性能（LCP·INP·CLS）/安全与 Passkeys/无障碍/Web Components/内置 AI 等
-- 零依赖本地检索：`mwg.py search / retrieve / list / categories` + `build_index.py` 重建索引，完全离线、无遥测（替代上游需联网的 `npx modern-web-guidance`）
-- 中文 `SKILL.md` 定义触发条件与「检索 → 取回 → 按指南实现 → 披露」工作流；指南内 npx 交叉引用统一映射为本地工具
-- 指南为上游英文原文逐字副本（CC-BY 4.0 / 代码 Apache-2.0），署名与来源见 [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
-- 检索契约：[resources/specifications/local_search_contract.md](modern-web-guidance/resources/specifications/local_search_contract.md)
-- 可单独使用。写浏览器界面时，也可与 [Nuxt UI Starter](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>)、vben 后台、静态 HTML 原型、Taro / uni-app x 的 H5、DSH 双面设置页叠加。对方技能仍决定目录、分层和组件库
-- 📘 使用指南：[.docs/使用modern-web-guidance技能编写现代Web前端指南.md](.docs/使用modern-web-guidance技能编写现代Web前端指南.md)（第 14 节为叠加对照）
-
-📖 **详细说明**：[查看文档](modern-web-guidance/README.md)
-
----
-
-### 1️⃣7️⃣ database-schema-designer
-
-从**自然语言或已有库结构**设计数据库模型：PostgreSQL 与 MySQL 各用自己的写法，也可同时出两份脚本；SQLite 与 MongoDB 为补充。一句话需求先用少量选项把会改变表结构的产品决定问清，默认最多 4 轮；已有详细规格说明书时只确认缺口。
-
-- 新建库交付可执行脚本和 `database-design.md`；已有库先读现有定义，交付差异和迁移，不另起一套全量脚本
-- PostgreSQL 18 专有语法先核对版本；Supabase 不默认当成 18
-- 要接着用本仓库的 SQL 脚手架生成后端时，引擎选 MySQL，把 `schema.mysql.sql` 交给对应技能
-- 改编自 OneWave AI 的同名技能（MIT），见目录内 `NOTICE`
-
-📖 **详细说明**：[查看文档](database-schema-designer/README.md)
-
----
-
-### 1️⃣8️⃣ security-audit
-审计**已有代码**的安全问题：越权、注入、XSS、SSRF、认证与 JWT、密钥、反序列化、上传与路径、依赖和日志。先跑本地候选扫描，再按清单判定，输出固定格式的报告。
-
-- 改编自 [developer-agent-skills/security-audit](https://github.com/reddygopalkrishna/developer-agent-skills/blob/main/skills/security-audit/SKILL.md)（MIT），见目录内 `NOTICE`
-- 候选扫描：`python security/security-audit/scripts/scan_sinks.py <项目根>`。命中不是结论
-- 本仓库四套后端脚手架有单独落点。FastAPI **补登录和对象权限**仍用 `fastapi-api-security-authentication`，本技能只指出缺口
-- 报告不写攻击步骤和密钥原文
-
-📖 **详细说明**：[查看文档](security/security-audit/README.md)
-
----
-
-### 1️⃣9️⃣ supervisor-skills（科研技能集）
-
-收录自 [HKUSTDial/Supervisor-Skills](https://github.com/HKUSTDial/Supervisor-Skills)，把顶会科研与审稿经验蒸馏成 12 个可执行 AI 技能，覆盖 Idea 评估、综述级文献调研、论文正文写作与润色、配图设计、投稿前审核与 Rebuttal 全流程。
-
-- 12 个技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
-- ⚠️ **许可不同**：整体为 CC BY-NC-SA 4.0（非商业 + 相同方式共享），**不受本仓库 MIT 许可覆盖**，商用前请阅读 [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md)
-- 中文导读：[README.zh-CN.md](research/supervisor-skills/README.zh-CN.md)
+- `common-website-design` 安装在 `.workbuddy/skills/`、`.dsh/skills/`；`it-requirement-analysis` 安装在 `.cursor/skills/`、`.dsh/skills/`、`.workbuddy/skills/`；`prd-html-skill` 安装在 `.cursor/skills/`、`.dsh/skills/`
+- 12 个科研技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
+- ⚠️ `supervisor-skills` 整体为 **CC BY-NC-SA 4.0**（非商业 + 相同方式共享），**不受本仓库 MIT 许可覆盖**，商用前请阅读 [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md)
+- `.codebuddy/skills/` 与 `.agents/skills/` 各有 20 个 superpowers-zh 通用技能（brainstorming、TDD、systematic-debugging、writing-plans 等），供 CodeBuddy / Agent 工作流使用
 
 ---
 
@@ -271,102 +136,59 @@ PRD 驱动的 HTML 交互原型方案（spec 驱动简化版）：MD 规划 + HT
 
 ```text
 ncepu_ideal-skills/
-├── 📄 README.md                                    # 项目说明
-├── 📄 README.en.md                                 # 英文说明
-├── 📄 CODEBUDDY.md                                 # CodeBuddy 技能说明
-├── 📄 .gitignore
-├── 📁 .docs/                                       # 配置指南与设计方法
-│   ├── Trea中使用skill配置.md
-│   ├── claude中使用skill配置.md
-│   ├── CodeBuddy中使用skill配置.md
-│   ├── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
-│   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
-│   ├── dsh中使用superpowers技能.md
-│   ├── workbuddy中使用原型转应用技能.md
-│   ├── 在Codebuddy插件中使用prototype-to-taro-app技能指南.md
-│   ├── 使用dsh-plugin-starter技能开发DSH插件.md
-│   ├── 使用modern-web-guidance技能编写现代Web前端指南.md
-│   └── images/                                     # 配置截图
-├── 📁 sql-to/                                      # 🏭 SQL → 后端脚手架（4 个技能）
-│   ├── sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI 项目生成技能
-│   │   ├── README.md
-│   │   ├── SKILL.md
-│   │   ├── docs/                                   # 本技能的 IDE 配置说明
-│   │   └── resources/
-│   │       ├── config/
-│   │       ├── specifications/
-│   │       ├── templates/
-│   │       └── tools/                              # check_skill_consistency.py（自洽校验）
-│   ├── sql-to-flask-restfulapi-scaffold/           # 🐍 Flask 接口项目生成技能
-│   │   ├── README.md
-│   │   ├── SKILL.md
-│   │   └── resources/                              # config / specifications / templates / tools / static / demo_output
-│   ├── sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot 项目生成技能
-│   │   ├── README.md
-│   │   ├── SKILL.md
-│   │   └── resources/                              # config / specifications / templates
-│   └── sql-to-gin-restfulapi-scaffold/             # 🌀 Gin 接口项目生成技能
-│       ├── README.md
-│       ├── SKILL.md
-│       └── resources/                              # config / specifications / templates / tools / static / demo_output
-├── 📁 prototype-to/                                # 🎨 原型 → 应用工程（6 个技能）
-│   │   每个技能含 README.md、SKILL.md 与 resources/（config / specifications / templates / tools / demo_output）
-│   ├── prototype-to-app-uniappx/                   # 📱 原型转 uni-app x 工程技能
-│   ├── prototype-to-flutter-app/                   # 🐦 原型转 Flutter 工程技能
-│   ├── prototype-to-web(Nuxt UI Starter)/          # 🌐 原型转 Nuxt UI Starter 工程技能
-│   ├── prototype-to-taro-app/                      # 📦 原型转 Taro 多端工程技能
-│   ├── prototype-to-ios-native-app(AwesomeSwift)/  # 🍎 原型转原生 iOS 工程技能（SwiftUI）
-│   └── prototype-to-android-native-app(Fragmject)/ # 🤖 原型转原生 Android 工程技能（Compose）
-├── 📁 security/                                    # 🔒 安全（2 个技能）
-│   ├── fastapi-api-security-authentication/        # Bearer JWT + 角色/对象权限
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   └── scripts/
-│   └── security-audit/                             # 代码安全审计（清单 + 候选扫描）
-│       ├── SKILL.md
-│       ├── references/
-│       └── scripts/
-├── 📁 research/                                    # 🔬 科研技能集（CC BY-NC-SA 4.0，非本仓库 MIT）
-│   └── supervisor-skills/                          # 12 个科研全流程技能（HKUSTDial）
+├── 📄 README.md / README.en.md / CODEBUDDY.md
+├── 📁 .docs/                                       # 各 IDE 配置指南 + 设计方法 + plans/ + specs/ + images/
+├── 📁 sql-to/                                      # 🏭 SQL → 后端脚手架（4 个技能，均含 README + SKILL + resources/）
+│   ├── sql-to-fastapi-restfulapi-scaffold/         # ⚡ 另含 docs/
+│   ├── sql-to-flask-restfulapi-scaffold/           # 🐍
+│   ├── sql-to-springboot-restfulapi-scaffold/      # ☕
+│   └── sql-to-gin-restfulapi-scaffold/             # 🌀
+├── 📁 design/                                      # 🎨 设计 / 需求 / 数据库（5 个技能）
+│   ├── database-schema-designer/                   # README + SKILL + NOTICE + LICENSE + references/
+│   ├── frontend-design/                            # SKILL.md
+│   ├── huashu-design/                              # README(.en) + SKILL + assets/ demos/ references/ scripts/
+│   ├── md-prd-to-html-prototype/                   # README + SKILL + references/ resources/ scripts/
+│   └── modern-web-guidance/                        # README + SKILL + ATTRIBUTION + resources/（209 份指南）
+├── 📁 prototype-to/                                # 📱 原型 → 应用工程（7 个技能，均含 resources/）
+│   ├── prototype-to-app-uniappx/
+│   ├── prototype-to-flutter-app/
+│   ├── prototype-to-web(Nuxt UI Starter)/
+│   ├── prototype-to-taro-app/
+│   ├── prototype-to-ios-native-app(AwesomeSwift)/
+│   ├── prototype-to-android-native-app(Fragmject)/
+│   └── requirements-to-vue_vben_admin/
+├── 📁 go/                                          # 🐹 Go 工程规范（4 个技能，SKILL + references/ 等）
+│   ├── go-api-design/
+│   ├── golang-grpc/
+│   ├── golang-project-layout/
+│   └── golang-testing/
+├── 📁 java/                                        # ☕ Java 工程规范（5 个技能，SKILL + references/ 等）
+│   ├── create-spring-boot-java-project/
+│   ├── java-development/
+│   ├── java-springboot/
+│   ├── java-upgrade/
+│   └── openapi-to-application-java-spring-boot/
+├── 📁 security/                                    # 🔒 安全（6 个技能）
+│   ├── fastapi-api-security-authentication/        # SKILL + references/ + scripts/
+│   ├── go-security-audit/                          # SKILL + references/
+│   ├── golang-continuous-integration/              # SKILL + assets/ evals/ references/
+│   ├── security-audit/                             # README + SKILL + NOTICE + references/ + scripts/
+│   ├── spring-boot-testing/                        # SKILL + references/
+│   └── spring-security/                            # SKILL + references/
+├── 📁 research/
+│   └── supervisor-skills/                          # 🔬 12 个科研技能（CC BY-NC-SA 4.0）
 │       ├── README.zh-CN.md                         # 本仓库中文导读
 │       ├── references/PROVENANCE.md                # 署名与许可声明
-│       ├── idea-evaluator/, deep-research/, ...    # 12 个技能目录（含 drawio-reconstruction 脚本/案例）
-├── 📁 requirements-to-vue_vben_admin/              # 🧩 需求转 vben 后台管理技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/                                  # config / specifications / templates / tools / demo_output
-├── 📁 database-schema-designer/                    # 🗄️ 数据库模型设计技能
-│   ├── README.md
-│   ├── SKILL.md
-│   ├── NOTICE
-│   └── references/                                 # 访谈、PostgreSQL、MySQL、输出格式、示例
-├── 📁 modern-web-guidance/                          # 🌐 现代 Web 平台指南技能（参考型，离线自包含）
-│   ├── README.md
-│   ├── SKILL.md                                     # 中文路由器：触发 + 4 步工作流
-│   ├── ATTRIBUTION.md                               # 上游署名 + 双许可声明
-│   └── resources/
-│       ├── guides/                                  # 209 份指南原文（17 类，CC-BY 4.0）
-│       ├── guides_index.json                       # 派生检索索引
-│       ├── specifications/                          # 本地检索工具契约
-│       └── tools/                                   # build_index.py / mwg.py（零依赖）
+│       └── idea-evaluator/, deep-research/, ...    # 12 个技能目录
 ├── 📁 dsh-plugin-starter/                          # 🧩 DSH 插件起步项目生成技能
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/                                  # config / specifications / templates / tools / demo_output
-├── 📁 .codebuddy/skills/                           # 🧠 通用技能（CodeBuddy，20 个 superpowers-zh）
-├── 📁 .agents/skills/                              # 🧠 通用技能（Agent Skills，20 个 superpowers-zh）
-├── 📁 .workbuddy/skills/                           # common-website-design、it-requirement-analysis、md-prd-to-html-prototype、diagnosing-superpowers、prototype-to-app-uniappx、prototype-to-flutter-app
-├── 📁 .cursor/skills/                              # it-requirement-analysis、prd-html-skill
-├── 📁 .dsh/skills/                                 # common-website-design、it-requirement-analysis、prd-html-skill、diagnosing-superpowers
-└── 📁 test/                                        # 🧪 技能生成示例与样例数据
-    ├── api_security_demo-20260717.sql
-    ├── sql-to-fastapi-example/
-    ├── sql-to-flask-example/
-    ├── sql-to-gin-example/
-    ├── sql-to-springboot-example/
-    └── page-design-showcase/
-        ├── gallery/
-        └── sites/
+├── 📁 test/                                        # 🧪 技能生成示例与样例数据
+│   ├── api_security_demo-20260717.sql
+│   └── sql-to-{fastapi,flask,gin,springboot}-example/, page-design-showcase/
+├── 📁 .codebuddy/skills/ · .agents/skills/         # 🧠 各 20 个 superpowers-zh 通用技能
+├── 📁 .workbuddy/skills/                           # common-website-design / it-requirement-analysis / md-prd-to-html-prototype / diagnosing-superpowers
+├── 📁 .cursor/skills/                              # it-requirement-analysis / prd-html-skill
+├── 📁 .dsh/skills/                                 # common-website-design / diagnosing-superpowers / it-requirement-analysis / prd-html-skill
+└── 📁 .superpowers/sdd/                            # SDD 工作流资源
 ```
 
 ---
@@ -388,13 +210,13 @@ ncepu_ideal-skills/
 | 🧩 **DSH 插件开发** | [dsh-plugin-starter 使用指南](.docs/使用dsh-plugin-starter技能开发DSH插件.md) |
 | 🌐 **现代 Web 前端指南** | [modern-web-guidance 使用指南](.docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
 
-> 📝 **提示**：详细配置说明请参考 `.docs/` 目录
+> 📝 **提示**：详细配置说明请参考 `.docs/` 目录（另有 `plans/` 与 `specs/` 设计文档）。
 
 ---
 
 ### 2️⃣ 使用技能
 
-本仓库技能分三类，输入方式不同。
+本仓库技能分四类，输入方式不同。
 
 #### A. 后端：从 SQL 生成接口脚手架
 
@@ -415,16 +237,16 @@ CREATE TABLE student (
 
 | ⚡ 技能 | 📥 输入 | 📤 生成内容 |
 | -------- | -------- | ----------- |
-| **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + 项目骨架 |
+| **FastAPI** | SQL CREATE TABLE | Model / Schema / Repository / Service / Resource + 测试骨架 |
 | **Flask** | MySQL DDL | Model / Controller / Service / Resource + 项目骨架 |
 | **Gin** | MySQL DDL | Model / DAO / Service / Resource + 项目骨架 |
 | **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + 项目骨架 |
 
-表结构还没定时，先用 [database-schema-designer](database-schema-designer/README.md) 出 MySQL 脚本，再把 `schema.mysql.sql` 交给上表里的技能。那些技能不执行 DDL。PostgreSQL 脚本不要直接交给它们。
+表结构还没定时，先用 [database-schema-designer](design/database-schema-designer/README.md) 出 MySQL 脚本，再把 `schema.mysql.sql` 交给上表里的技能。那些技能不执行 DDL。PostgreSQL 脚本不要直接交给它们。
 
 #### B. 前端：从原型生成应用工程
 
-将**原型 HTML 代码**、**设计图截图**或 **PRD 页面清单**交给 AI，生成可运行的移动端工程。
+将**原型 HTML 代码**、**设计图截图**或 **PRD 页面清单**交给 AI，生成可运行的工程。
 
 **📥 示例输入**：
 
@@ -438,16 +260,19 @@ CREATE TABLE student (
 
 | ⚡ 技能 | 📥 输入 | 📤 生成内容 |
 | -------- | -------- | ----------- |
-| **uni-app x** | 原型代码 / 图片 / PRD | `.uvue` 页面 + 组件 + services 分层 + mock 数据，可在 HBuilder 直接运行的多端工程 |
-| **Flutter** | 原型代码 / 图片 / PRD | features 分层 + Repository + mock 数据，`flutter pub get && flutter run` 即可运行的工程 |
-| **iOS 原生** | 原型代码 / 图片 / PRD | SwiftUI 四页范本 + MVVM & Combine + SwiftData + mock 数据，`xcodegen generate` 后 Xcode 直接 Run |
-| **Android 原生** | 原型代码 / 图片 / PRD | Compose 四页范本 + 单 Activity MVI + Hilt + Room + mock 数据，Android Studio 打开即运行 |
+| **uni-app x** | 原型代码 / 图片 / PRD | `.uvue` 页面 + 组件 + services 分层 + mock 数据，可在 HBuilder 直接运行 |
+| **Flutter** | 原型代码 / 图片 / PRD | features 分层 + Repository + mock 数据，`flutter pub get && flutter run` 即可运行 |
+| **Nuxt UI Starter** | 原型代码 / 图片 / PRD | Nuxt 页面与组件工程，内置 mock 数据 |
+| **Taro** | 原型代码 / 图片 / PRD | Taro 4 多端工程，Vue3 / React 双分支 |
+| **iOS 原生** | 原型代码 / 图片 / PRD | SwiftUI 四页范本 + MVVM & Combine + SwiftData，`xcodegen generate` 后 Xcode 直接 Run |
+| **Android 原生** | 原型代码 / 图片 / PRD | Compose 四页范本 + 单 Activity MVI + Hilt + Room，Android Studio 打开即运行 |
+| **vben 后台** | 后台需求描述 | vue-vben-admin 路由菜单 / CRUD 页面 / 看板 / mock 数据 |
 
 > 💡 上述技能都会生成**数据访问层接缝**：切换到真实后端只需改一个开关（`useMock` / `AppContainer` 装配），页面代码无需改动。
 
-#### C. 参考型：编写 Web 前端界面前检索现代指南
+#### C. 参考型：编写代码前检索专家指南
 
-`modern-web-guidance` 不「生成工程」，而是**在动手前注入专家指南**。把 Web UI 任务直接交给 AI，技能会触发检索工作流。
+`modern-web-guidance` 不「生成工程」，而是**在动手前注入专家指南**；Java / Go / 安全技能则提供各自领域的工程规范与评审清单。
 
 **📥 示例输入**：
 
@@ -457,22 +282,32 @@ CREATE TABLE student (
 
 **📤 产出**：符合现代 Web 规范的实现代码 + 回复末尾 `### Modern Web Guidance` 披露用到的指南。
 
-可单独使用。下列技能在写到浏览器界面时也会先检索它，它们自己的目录、分层和组件库不变：
+`modern-web-guidance` 可单独使用，也可在下列技能写浏览器界面时叠加（它们自己的目录、分层和组件库不变）：
 
-- [prototype-to-web(Nuxt UI Starter)](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>)、[requirements-to-vue_vben_admin](requirements-to-vue_vben_admin/README.md)：映射到各自的 UI 组件
-- [common-website-design](.dsh/skills/common-website-design/README.md)、[prd-html-skill](.cursor/skills/prd-html-skill/README.md)、[md-prd-to-html-prototype](md-prd-to-html-prototype/README.md)：直接落进 HTML
+- [prototype-to-web(Nuxt UI Starter)](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>)、[requirements-to-vue_vben_admin](prototype-to/requirements-to-vue_vben_admin/README.md)：映射到各自的 UI 组件
+- [common-website-design](.dsh/skills/common-website-design/README.md)、[prd-html-skill](.cursor/skills/prd-html-skill/README.md)、[md-prd-to-html-prototype](design/md-prd-to-html-prototype/README.md)：直接落进 HTML
 - [prototype-to-taro-app](prototype-to/prototype-to-taro-app/README.md)、[prototype-to-app-uniappx](prototype-to/prototype-to-app-uniappx/README.md)：仅 H5
 - [dsh-plugin-starter](dsh-plugin-starter/README.md)：仅双面型设置页
 
 小程序、App、Flutter、iOS、Android 和后端脚手架不套用。对照见使用指南第 14 节。
 
 ```sh
-# 也可直接当本地命令行工具用（在 modern-web-guidance/ 目录下）
+# 也可直接当本地命令行工具用（在 design/modern-web-guidance/ 目录下）
 python3 resources/tools/mwg.py search "light dismiss dialog"
 python3 resources/tools/mwg.py retrieve "light-dismiss-a-dialog,dialog"
 ```
 
 > 🌐 指南随仓库自带、完全离线、无遥测；检索前如更新过 `guides/`，先跑 `python3 resources/tools/build_index.py`。
+
+#### D. 工程规范：Java / Go 与安全
+
+这些技能不生成脚手架，而是在**写代码、评审或升级**时给出约定与清单：
+
+- Java：新建项目用 `create-spring-boot-java-project`，已有项目写业务用 `java-springboot`，日常语法与构建用 `java-development`，版本迁移用 `java-upgrade`，按 OpenAPI 规约实现用 `openapi-to-application-java-spring-boot`
+- Go：`golang-project-layout` 定目录，`go-api-design` 定 HTTP 接口，`golang-grpc` 定 RPC，`golang-testing` 定测试；CI 与依赖扫描见 `golang-continuous-integration`
+- 安全：`security-audit` 审已有代码，`fastapi-api-security-authentication` 补 FastAPI 登录与权限，`spring-security` / `spring-boot-testing` 覆盖 Spring 安全与测试，`go-security-audit` 只读评审 Go 服务
+
+---
 
 ## 🗺️ 未来规划
 
@@ -490,13 +325,13 @@ python3 resources/tools/mwg.py retrieve "light-dismiss-a-dialog,dialog"
 **💡 建议流程**：
 
 1. 🍴 Fork 本仓库并新建分支
-2. 📁 在独立目录中实现新 Skill（包含 `SKILL.md`、`README.md`、`resources/`）
+2. 📁 在对应分类目录（`sql-to/`、`design/`、`prototype-to/`、`go/`、`java/`、`security/`、`research/`）中新建独立技能目录，包含 `SKILL.md`、`README.md`、`resources/`
 3. 🧪 补充对应示例到 `test/`
-4. 📝 更新根 README 的技能清单
+4. 📝 更新根 README 的技能清单与仓库结构
 5. 🔄 发起 Pull Request
 
 ---
 
 ## 📄 许可证
 
-当前仓库未声明许可证文件。建议补充 `LICENSE` 后再对外分发。
+仓库根目录未声明统一许可证文件；各技能自带其许可（`database-schema-designer`、`security-audit`、`huashu-design` 等为 MIT，`modern-web-guidance` 见 `ATTRIBUTION.md`）。`research/supervisor-skills` 为 **CC BY-NC-SA 4.0**，不受 MIT 覆盖。对外分发前请核对每个技能的许可声明。

@@ -1,14 +1,18 @@
 # 🎯 ncepu_ideal-skills
 
-> Enterprise Project Skills Collection | Resource-driven design: backend scaffolds from SQL, frontend apps from prototypes
+> Enterprise Project Skills Collection | Code generation, design, engineering conventions, and security audits — driven by resources
 
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-Multiple-blue)
+![Go](https://img.shields.io/badge/Go-1.21%2B-00ADD8)
+![Java](https://img.shields.io/badge/Java-17%2B-007396)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-v0.100%2B-orange)
 ![Flask](https://img.shields.io/badge/Flask-v2.0%2B-purple)
 ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-2.7%2B-green)
 ![uni-app x](https://img.shields.io/badge/uni--app%20x-vapor-2B6DE5)
 ![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B)
+![iOS](https://img.shields.io/badge/iOS-SwiftUI-000000)
+![Android](https://img.shields.io/badge/Android-Compose-3DDC84)
 
 [中文](./README.md) | 📝 English
 
@@ -18,279 +22,175 @@
 
 - 🔄 **Resource-driven Architecture** - Templates + Configurations + Standards, completely driven by resource files
 - 🚀 **One-click Scaffolding** - Complete project code from SQL schemas (backend) or prototypes (frontend)
-- 🎨 **Multi-stack Support** - FastAPI / Flask / Gin / Spring Boot / uni-app x / Flutter
+- 🎨 **Multi-stack Support** - Go / Java / FastAPI / Flask / Gin / Spring Boot / uni-app x / Flutter / iOS / Android
 - 📦 **Incremental Generation** - Full initial generation + incremental updates
-- 🔒 **Built-in Security** - Auto soft-delete/hard-delete, sensitive data masking, input validation
+- 🔒 **Built-in Security** - Soft/hard delete, sensitive data masking, input validation, plus dedicated audit skills
 - 🧩 **Runs Out of the Box** - Generated frontend projects ship with mock data, no backend needed to preview
+- 📚 **Reference Skills** - Modern Web guides and Java / Go engineering conventions inject expert knowledge without taking over your layout
 
 ---
 
 ## 🎯 Current Skills
 
-### 1️⃣ sql-to-fastapi-restfulapi-scaffold
+Grouped by directory. **33 primary skills**, plus 4 IDE-specific copies and 20 superpowers-zh general skills.
 
-Generate complete FastAPI RESTful API project scaffolding from SQL `CREATE TABLE` statements
+### 🏭 SQL → Backend Scaffolds (`sql-to/`, 4)
 
-📖 **Details**：[View Documentation](sql-to/sql-to-fastapi-restfulapi-scaffold/README.md)
+| Skill | Input → Output |
+| --- | --- |
+| [`sql-to-fastapi-restfulapi-scaffold`](sql-to/sql-to-fastapi-restfulapi-scaffold/README.md) | SQL `CREATE TABLE` → layered FastAPI scaffold (Model / Schema / Repository / Service / Resource + test skeleton) |
+| [`sql-to-flask-restfulapi-scaffold`](sql-to/sql-to-flask-restfulapi-scaffold/README.md) | MySQL DDL → Flask + Flask-RESTful API scaffold |
+| [`sql-to-springboot-restfulapi-scaffold`](sql-to/sql-to-springboot-restfulapi-scaffold/README.md) | SQL `CREATE TABLE` → layered Spring Boot scaffold, exports `docs/openapi.json` / `docs/api.md` |
+| [`sql-to-gin-restfulapi-scaffold`](sql-to/sql-to-gin-restfulapi-scaffold/README.md) | MySQL DDL → layered Gin + GORM scaffold, includes a one-command regression pipeline |
 
----
-
-### 2️⃣ sql-to-flask-restfulapi-scaffold
-
-Generate Flask + Flask-RESTful enterprise API project scaffolding from MySQL DDL scripts
-
-📖 **Details**：[View Documentation](sql-to/sql-to-flask-restfulapi-scaffold/README.md)
-
----
-
-### 3️⃣ sql-to-springboot-restfulapi-scaffold
-
-Generate complete Spring Boot RESTful API project scaffolding from SQL `CREATE TABLE` statements
-
-📖 **Details**：[View Documentation](sql-to/sql-to-springboot-restfulapi-scaffold/README.md)
+> If the tables are not designed yet, use [`database-schema-designer`](design/database-schema-designer/README.md) to produce a MySQL script first. These scaffold skills do not run DDL.
 
 ---
 
-### 4️⃣ sql-to-gin-restfulapi-scaffold
+### 🎨 Design & Requirements (`design/`, 5)
 
-Generate Gin + GORM enterprise API project scaffolding from MySQL DDL scripts
+| Skill | Purpose | Documentation |
+| --- | --- | --- |
+| `database-schema-designer` | Natural language or an existing schema → engine-correct DDL (PostgreSQL / MySQL first, SQLite / MongoDB secondary) + `database-design.md`; adapted from OneWave AI (MIT) | [README](design/database-schema-designer/README.md) |
+| `frontend-design` | Visual design guidance: aesthetic direction, typography, avoiding templated defaults; framework-agnostic | [SKILL.md](design/frontend-design/SKILL.md) |
+| `huashu-design` | One prompt → high-fidelity HTML prototypes, slides, animation, visualization, and design reviews; three directions first (MIT) | [README](design/huashu-design/README.md) |
+| `md-prd-to-html-prototype` | Local Markdown PRD → single-file low-fidelity HTML prototype; fields come from the document, gaps are asked first | [README](design/md-prd-to-html-prototype/README.md) |
+| `modern-web-guidance` | Reference skill: retrieve from 209 bundled modern Web guides before writing UI; offline, self-contained, Chinese-driven | [README](design/modern-web-guidance/README.md) |
 
-Status: ✅ Production-ready workflow with one-command regression (context generation, template rendering, router merge, snapshot checks)
-
-Quick command:
-
-```bash
-python sql-to/sql-to-gin-restfulapi-scaffold/resources/tools/run_regression_pipeline.py
-```
-
-📖 **Details**：[View Documentation](sql-to/sql-to-gin-restfulapi-scaffold/README.md)
+> The guides are verbatim upstream English copies (CC-BY 4.0 / code Apache-2.0); credit in [ATTRIBUTION.md](design/modern-web-guidance/ATTRIBUTION.md). Web UI skills can overlay it while keeping their own layout, layers, and components.
 
 ---
 
-### 5️⃣ common-website-design
+### 📱 Prototype → App Projects (`prototype-to/`, 7)
 
-Turn a natural-language website brief into a framework-agnostic static HTML design prototype (multi-page HTML, shared styles, and `site-manifest.json`). It does not generate Vue, Hugo, Hexo, or EJS project code.
+| Skill | Purpose | Documentation |
+| --- | --- | --- |
+| `prototype-to-app-uniappx` | Prototype → uni-app x vapor-mode (TS) project with `.uvue` pages, layered services, and mock data | [README](prototype-to/prototype-to-app-uniappx/README.md) |
+| `prototype-to-flutter-app` | Prototype → Flutter project with feature-first layers, Repository, and `ChangeNotifier`; no heavy dependencies | [README](prototype-to/prototype-to-flutter-app/README.md) |
+| `prototype-to-web(Nuxt UI Starter)` | Prototype → Nuxt UI Starter project with pages, components, and mock data | [README](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>) |
+| `prototype-to-taro-app` | Prototype → Taro 4 multi-platform project, Vue3 / React branches confirmed by the user | [README](prototype-to/prototype-to-taro-app/README.md) |
+| `prototype-to-ios-native-app(AwesomeSwift)` | Prototype → native SwiftUI iOS project (Swift 5.10 / XcodeGen / MVVM + Combine) | [README](<prototype-to/prototype-to-ios-native-app(AwesomeSwift)/README.md>) |
+| `prototype-to-android-native-app(Fragmject)` | Prototype → native Jetpack Compose Android project (Kotlin 2.1 / single-Activity MVI / Hilt) | [README](<prototype-to/prototype-to-android-native-app(Fragmject)/README.md>) |
+| `requirements-to-vue_vben_admin` | Admin requirements → runnable vue-vben-admin (vben5) scaffold with CRUD pages, dashboards, and mock data | [README](prototype-to/requirements-to-vue_vben_admin/README.md) |
 
-- Installed at `.workbuddy/skills/common-website-design/` and `.dsh/skills/common-website-design/`
-- When writing semantic HTML, focus, dialogs, scrolling, or motion, it may also consult [modern-web-guidance](modern-web-guidance/README.md). Page archetypes and design packs stay authoritative.
-- Sample output: [test/page-design-showcase](test/page-design-showcase/README.md)
-
----
-
-### 6️⃣ it-requirement-analysis
-
-Turn a business request into an implementable IT specification: PRD, user stories, functional and non-functional requirements, risks, and acceptance criteria.
-
-- Installed at `.cursor/skills/it-requirement-analysis/`, `.dsh/skills/it-requirement-analysis/`, and `.workbuddy/skills/it-requirement-analysis/`
+> Every skill creates a data-access seam: switching to a real backend only flips one flag (`useMock` / `AppContainer` wiring). H5 UI may overlay [`modern-web-guidance`](design/modern-web-guidance/README.md); mini programs and native apps do not.
 
 ---
 
-### 7️⃣ prd-html-skill
+### ☕ Java Engineering (`java/`, 5)
 
-Turn a PRD, requirement note, or page list into a clickable multi-page HTML prototype, including a single-file offline HTML bundle.
-
-- Installed at `.cursor/skills/prd-html-skill/` and `.dsh/skills/prd-html-skill/`
-- When writing dialogs, forms, or tables, it may also consult [modern-web-guidance](modern-web-guidance/README.md). Generation order and the spec trio stay unchanged.
-
----
-
-### 8️⃣ md-prd-to-html-prototype
-
-Read a local Markdown PRD and emit a single-file low-fidelity HTML prototype. Pages and fields come from the document; missing ones are asked before generation.
-
-- Source: `md-prd-to-html-prototype/`. Edit that directory only; do not copy it into plugin skill folders.
-- Tailwind is the only allowed CDN. All other CSS and JS stay in that HTML file.
-- When writing dialogs, forms, or tables, it may also consult [modern-web-guidance](modern-web-guidance/README.md) without adding another external asset.
-- 📖 Details: [md-prd-to-html-prototype/README.md](md-prd-to-html-prototype/README.md)
+| Skill | Purpose | Documentation |
+| --- | --- | --- |
+| `create-spring-boot-java-project` | Scaffold a new Spring Boot project from start.spring.io (Maven / Gradle) with sensible config, PostgreSQL, logging, security, testing, and Docker defaults | [SKILL.md](java/create-spring-boot-java-project/SKILL.md) |
+| `java-development` | Framework-free daily Java: Maven / Gradle, JDK-version idioms (records / sealed / virtual threads), logging, null handling, concurrency, static analysis, packaging | [SKILL.md](java/java-development/SKILL.md) |
+| `java-springboot` | Write and review application code in an existing Spring Boot 3/4 project: controllers, validation, ProblemDetail, JPA, RestClient, caching, scheduling | [SKILL.md](java/java-springboot/SKILL.md) |
+| `java-upgrade` | Upgrade a Java project to a newer JDK (11→17→21→25), loading only the matching per-version guide | [SKILL.md](java/java-upgrade/SKILL.md) |
+| `openapi-to-application-java-spring-boot` | OpenAPI 3 spec → Spring Boot app: openapi-generator produces interfaces and DTOs, then implement controllers, services, persistence, security, and tests | [SKILL.md](java/openapi-to-application-java-spring-boot/SKILL.md) |
 
 ---
 
-### 9️⃣ prototype-to-app-uniappx
+### 🐹 Go Engineering (`go/`, 4)
 
-Turn **prototypes** (HTML/CSS code, design screenshots, or a PRD page list) into a **runnable uni-app x project**: mock data drives layout, visuals and interactions, and the output opens directly in HBuilder.
-
-- Defaults to **Vapor mode (TS)**; UTS migration notes included
-- Encodes uni-app x vs uni-app pitfalls (`.uvue` pages, column-default flex, text must live inside `<text>`, `"uni-app-x": {}` in manifest)
-- Layers: pages / components / `services/api` (the only data seam) / `services/mock`
-- 10 validation checks; sample output at `resources/demo_output/skill-swap-demo/`
-- Consults [modern-web-guidance](modern-web-guidance/README.md) for H5 browser UI only. App and mini-program constraints stay in force.
-
-📖 **Details**: [Documentation](prototype-to/prototype-to-app-uniappx/README.md)
+| Skill | Purpose | Documentation |
+| --- | --- | --- |
+| `go-api-design` | HTTP/REST API design: handlers, ServeMux routing, middleware, validation, pagination, idempotency, health checks, error responses, graceful shutdown | [SKILL.md](go/go-api-design/SKILL.md) |
+| `golang-grpc` | gRPC conventions: protobuf organization, interceptors, status codes, TLS/mTLS, bufconn tests, streaming RPCs | [SKILL.md](go/golang-grpc/SKILL.md) |
+| `golang-project-layout` | Go layout: cmd / internal / pkg, module and package naming, go.work workspaces, multi-main CLI tools | [SKILL.md](go/golang-project-layout/SKILL.md) |
+| `golang-testing` | Go testing: table-driven tests, testify, parallel tests, fuzzing, fixtures, goleak, snapshots, coverage, integration tests | [SKILL.md](go/golang-testing/SKILL.md) |
 
 ---
 
-### 🔟 prototype-to-flutter-app
+### 🔒 Security (`security/`, 6)
 
-Turn **prototypes** into an **out-of-the-box Flutter project** following Flutter's official app architecture guidance: layered directories, routing, theming, mock-driven page restoration. `flutter pub get && flutter run` just works.
+| Skill | Purpose | Documentation |
+| --- | --- | --- |
+| `fastapi-api-security-authentication` | Add allowlists, Bearer JWT, and role/object permissions to an existing FastAPI CRUD project; stops to ask when prerequisites fail | [SKILL.md](security/fastapi-api-security-authentication/SKILL.md) |
+| `go-security-audit` | Read-only Go security review: input validation, SQL/command injection, SSRF, path traversal, auth, secrets, crypto, OWASP Top 10 | [SKILL.md](security/go-security-audit/SKILL.md) |
+| `golang-continuous-integration` | Go CI/CD: GitHub Actions test / lint / SAST / coverage / dependency-scan jobs, Dependabot, Renovate, GoReleaser | [SKILL.md](security/golang-continuous-integration/SKILL.md) |
+| `security-audit` | Audit existing code for broken access control, injection, XSS, SSRF, authentication and JWTs, secrets, deserialization, uploads, dependencies, and logs | [README](security/security-audit/README.md) |
+| `spring-boot-testing` | Spring Boot test technique selection: slices, Testcontainers `@ServiceConnection`, Failsafe, MockitoBean, JUnit / AssertJ | [SKILL.md](security/spring-boot-testing/SKILL.md) |
+| `spring-security` | Configure and review Spring Security 6/7: SecurityFilterChain lambda DSL, method security, OAuth2 resource server, CSRF/CORS, MockMvc security tests | [SKILL.md](security/spring-security/SKILL.md) |
 
-- Feature-first layout (`features/`), UI and data layers separated, Repository pattern
-- State via the official `ChangeNotifier` + `ListenableBuilder`, **zero heavy dependencies** (only `http`)
-- Guards against anti-patterns: hardcoded colors, direct HTTP calls from `features`
-- 11 validation checks; sample output at `resources/demo_output/skill_swap_app/`
-
-📖 **Details**: [Documentation](prototype-to/prototype-to-flutter-app/README.md)
-
----
-
-### 1️⃣1️⃣ requirements-to-vue_vben_admin
-
-Turn a **backend admin requirements description** into a **runnable admin scaffold** based on [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin) (vben5): auto module splitting, route/menu generation, CRUD pages, API layer and chart dashboards, with mock data ready to run.
-
-- Input a paragraph of Chinese requirements (e.g. "系统管理模块包括：用户管理、角色管理、权限管理")
-- Auto-classifies page type: `crud` / `dashboard` / `tree` / `form`
-- Encodes three vben5 pitfalls: `ant-design-vue` vs `antdv-next`, `VbenTableAction` import source, route glob auto-collection
-- 14 validation checks; sample output at `resources/demo_output/demo-admin/` (3 modules, 8 pages)
-- Verified inside the **real vben repository**: 0 errors, 0 warnings
-- When writing tables, forms, or dialogs, it may also consult [modern-web-guidance](modern-web-guidance/README.md) and map the advice onto existing vben components.
-
-📖 **Details**: [Documentation](requirements-to-vue_vben_admin/README.md)
+> `security-audit` candidate scan: `python security/security-audit/scripts/scan_sinks.py <project-root>` — a hit is not a conclusion. Reports never include attack steps or raw secrets. Adapted from [developer-agent-skills/security-audit](https://github.com/reddygopalkrishna/developer-agent-skills/blob/main/skills/security-audit/SKILL.md) (MIT); see `NOTICE`.
 
 ---
 
-### 1️⃣2️⃣ prototype-to-taro-app
+### 🧰 Standalone & General Skills
 
-Turn **prototypes** into a **multi-platform Taro project** (WeChat/Alipay mini program, H5, RN) from a single codebase.
+| Skill | Purpose | Documentation |
+| --- | --- | --- |
+| `dsh-plugin-starter` | Turn a one-line brief or prototype into a DSH plugin starter project for four plugin types, with a built-in developer guide | [README](dsh-plugin-starter/README.md) |
+| `common-website-design` | Natural-language website brief → framework-agnostic static HTML design prototype (multi-page HTML + shared styles + `site-manifest.json`) | [README](.dsh/skills/common-website-design/README.md) |
+| `it-requirement-analysis` | Business request → implementable PRD, user stories, functional and non-functional requirements, risks, and acceptance criteria | See directories below |
+| `prd-html-skill` | PRD / requirement note / page list → clickable multi-page HTML prototype, including a single-file offline bundle | [README](.cursor/skills/prd-html-skill/README.md) |
+| `supervisor-skills` | 12 research skills covering idea evaluation, literature review, paper writing, pre-submission review, and rebuttal | [Chinese guide](research/supervisor-skills/README.zh-CN.md) |
 
-- **Two tech stacks, chosen by the user**:
-  - Vue3: Taro 4 + Vue 3 + TS + Vant + Pinia
-  - React: Taro 4 + React 18 + TS + Dva + Immer
-- Built in: login, 401 redirect, multi-env request wrapper, paged lists, pull-to-refresh, empty/loading states
-- The parser enforces a `--framework` flag; there is no default framework
-- 12 validation checks; sample outputs at `resources/demo_output/skill-swap-{vue3,react}/`
-
-> Note: the referenced `RealCoolSnow/taro-vue3-ts` repo is now 404, so the Vue3 branch is built
-> from official Taro conventions; `elf-taro` targets Taro3.0-rc + React16, whose architecture is
-> adapted here to Taro 4 + React 18.
-
-- Consults [modern-web-guidance](modern-web-guidance/README.md) for H5 only. Mini programs and React Native keep Taro components.
-- 📘 Usage guide: [Using prototype-to-taro-app in CodeBuddy](.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md)
-
-📖 **Details**: [Documentation](prototype-to/prototype-to-taro-app/README.md)
-
----
-
-### 1️⃣3️⃣ modern-web-guidance
-
-A **reference skill**: before an AI writes or modifies Web frontend UI code, it searches and retrieves
-from **209 modern Web platform guides** shipped with this repo, steering output toward native browser
-APIs, platform-level performance and accessibility, with lightweight Baseline-aware fallbacks.
-Ported from [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance)
-and reworked to be **offline, self-contained, and Chinese-driven**.
-
-- 17 guide categories: dialogs/drawers/tables/forms/dark mode/container queries/view transitions/performance (LCP, INP, CLS)/security & Passkeys/accessibility/Web Components/built-in AI, etc.
-- Zero-dependency local search: `mwg.py search / retrieve / list / categories` + `build_index.py` — fully offline, no telemetry (replaces upstream's network-dependent `npx modern-web-guidance`)
-- Chinese `SKILL.md` defines triggers and the "search → retrieve → implement per guide → disclose" workflow
-- Guides are verbatim upstream English copies (CC-BY 4.0 / code Apache-2.0); see [ATTRIBUTION.md](modern-web-guidance/ATTRIBUTION.md)
-- Usable on its own. It can also run alongside Nuxt UI Starter, vben admin, the static HTML prototype skills, Taro / uni-app x H5, and DSH dual-face settings pages. Those skills still own directories, layers, and component libraries.
-- 📘 Usage guide: [Using modern-web-guidance for modern Web frontend](.docs/使用modern-web-guidance技能编写现代Web前端指南.md) (section 14 is the overlay map)
-
-📖 **Details**: [Documentation](modern-web-guidance/README.md)
-
----
-
-### 1️⃣4️⃣ database-schema-designer
-
-Design a database schema from a natural-language description or an existing schema. PostgreSQL and MySQL each get their own dialect; SQLite and MongoDB are secondary. A one-line request is refined with a few numbered product decisions (default 4 rounds). A detailed specification is read first, and only schema-changing gaps are confirmed.
-
-- A new schema ships an executable script plus `database-design.md`. An existing schema ships a difference list and migrations.
-- PostgreSQL 18-only syntax is used only after the major version is known. Supabase is not assumed to be 18.
-- To continue into this repo's SQL scaffolds, target MySQL and pass `schema.mysql.sql`. Those skills do not run DDL.
-- Adapted from OneWave AI's skill of the same name (MIT); see `NOTICE`.
-
-📖 **Details**: [Documentation](database-schema-designer/README.md)
-
----
-
-### 1️⃣5️⃣ security-audit
-
-Audit existing code for broken access control, injection, XSS, SSRF, authentication and JWTs, secrets, deserialization, uploads, and dependencies. A local candidate scan feeds a fixed report. It does not implement FastAPI login or object permissions — that is `fastapi-api-security-authentication`.
-
-- Adapted from [developer-agent-skills/security-audit](https://github.com/reddygopalkrishna/developer-agent-skills/blob/main/skills/security-audit/SKILL.md) (MIT); see `NOTICE`
-- Candidate scan: `python security/security-audit/scripts/scan_sinks.py <project-root>`
-
-📖 **Details**: [Documentation](security/security-audit/README.md)
+- `common-website-design` is installed in `.workbuddy/skills/` and `.dsh/skills/`; `it-requirement-analysis` in `.cursor/skills/`, `.dsh/skills/`, and `.workbuddy/skills/`; `prd-html-skill` in `.cursor/skills/` and `.dsh/skills/`
+- The 12 research skills must be **installed as one group** (they reference each other); most are pure prompts, while `drawio-reconstruction` additionally needs Python scripts and the draw.io CLI
+- ⚠️ `supervisor-skills` is **CC BY-NC-SA 4.0** (non-commercial, share-alike) and **not covered by this repository's MIT terms**. Read [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md) before commercial use
+- `.codebuddy/skills/` and `.agents/skills/` each contain 20 superpowers-zh general skills (brainstorming, TDD, systematic-debugging, writing-plans, etc.) for CodeBuddy / Agent workflows
 
 ---
 
 ## 🏗️ Repository Structure
 
-```
+```text
 ncepu_ideal-skills/
-├── 📄 README.md                                    # Project documentation
-├── 📄 README.en.md                                 # English documentation
-├── 📄 CODEBUDDY.md                                 # CodeBuddy skill notes
-├── 📄 .gitignore
-├── 📁 .docs/                                       # Guides and design notes
-│   ├── Trea中使用skill配置.md
-│   ├── claude中使用skill配置.md
-│   ├── CodeBuddy中使用skill配置.md
-│   ├── GitHub Copilot中使用sql-to-flask-restfulapi-scaffold技能.md
-│   ├── 生成企业级脚手架项目的混合SKILL设计方法.md
-│   ├── dsh中使用superpowers技能.md
-│   ├── workbuddy中使用原型转应用技能.md
-│   ├── 在Codebuddy插件中使用prototype-to-taro-app技能指南.md
-│   ├── 使用dsh-plugin-starter技能开发DSH插件.md
-│   ├── 使用modern-web-guidance技能编写现代Web前端指南.md
-│   └── images/                                     # Setup screenshots
-├── 📁 sql-to/                                      # 🏭 SQL -> backend scaffolds (4 skills)
-│   ├── sql-to-fastapi-restfulapi-scaffold/         # ⚡ FastAPI skill (README + SKILL + docs/ + resources/)
-│   ├── sql-to-flask-restfulapi-scaffold/           # 🐍 Flask skill (README + SKILL + resources/)
-│   ├── sql-to-springboot-restfulapi-scaffold/      # ☕ Spring Boot skill (README + SKILL + resources/)
-│   └── sql-to-gin-restfulapi-scaffold/             # 🌀 Gin skill (README + SKILL + resources/)
-├── 📁 prototype-to/                                # 🎨 Prototype -> app projects (6 skills)
-│   │   Each skill ships README.md, SKILL.md, and resources/{config,specifications,templates,tools,demo_output}
-│   ├── prototype-to-app-uniappx/                   # 📱 prototype -> uni-app x
-│   ├── prototype-to-flutter-app/                   # 🐦 prototype -> Flutter
-│   ├── prototype-to-web(Nuxt UI Starter)/          # 🌐 prototype -> Nuxt UI Starter
-│   ├── prototype-to-taro-app/                      # 📦 prototype -> Taro multi-platform
-│   ├── prototype-to-ios-native-app(AwesomeSwift)/  # 🍎 prototype -> native iOS (SwiftUI)
-│   └── prototype-to-android-native-app(Fragmject)/ # 🤖 prototype -> native Android (Compose)
-├── 📁 security/                                    # 🔒 Security (2 skills)
-│   ├── fastapi-api-security-authentication/        # Bearer JWT + role/object permissions
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   └── scripts/
-│   └── security-audit/                             # Code audit (checklist + candidate scan)
-│       ├── SKILL.md
-│       ├── references/
-│       └── scripts/
-├── 📁 requirements-to-vue_vben_admin/              # 🧩 requirements -> vben admin skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/                                  # config / specifications / templates / tools / demo_output
-├── 📁 database-schema-designer/                    # database schema design skill
-│   ├── README.md
-│   ├── SKILL.md
-│   ├── NOTICE
-│   └── references/
-├── 📁 modern-web-guidance/                          # 🌐 modern Web platform guides (reference, offline)
-│   ├── README.md
-│   ├── SKILL.md                                     # Chinese router: triggers + 4-step workflow
-│   ├── ATTRIBUTION.md                               # Upstream credit + dual license
-│   └── resources/
-│       ├── guides/                                  # 209 verbatim guides (17 categories, CC-BY 4.0)
-│       ├── guides_index.json                       # Derived search index
-│       ├── specifications/                          # Local search tool contract
-│       └── tools/                                   # build_index.py / mwg.py (zero-dep)
+├── 📄 README.md / README.en.md / CODEBUDDY.md
+├── 📁 .docs/                                       # IDE setup guides + design notes + plans/ specs/ images/
+├── 📁 sql-to/                                      # 🏭 SQL -> backend scaffolds (4 skills, README + SKILL + resources/)
+│   ├── sql-to-fastapi-restfulapi-scaffold/         # ⚡ also docs/
+│   ├── sql-to-flask-restfulapi-scaffold/           # 🐍
+│   ├── sql-to-springboot-restfulapi-scaffold/      # ☕
+│   └── sql-to-gin-restfulapi-scaffold/             # 🌀
+├── 📁 design/                                      # 🎨 Design / requirements / database (5 skills)
+│   ├── database-schema-designer/                   # README + SKILL + NOTICE + LICENSE + references/
+│   ├── frontend-design/                            # SKILL.md
+│   ├── huashu-design/                              # README(.en) + SKILL + assets/ demos/ references/ scripts/
+│   ├── md-prd-to-html-prototype/                   # README + SKILL + references/ resources/ scripts/
+│   └── modern-web-guidance/                        # README + SKILL + ATTRIBUTION + resources/ (209 guides)
+├── 📁 prototype-to/                                # 📱 Prototype -> app projects (7 skills, all with resources/)
+│   ├── prototype-to-app-uniappx/
+│   ├── prototype-to-flutter-app/
+│   ├── prototype-to-web(Nuxt UI Starter)/
+│   ├── prototype-to-taro-app/
+│   ├── prototype-to-ios-native-app(AwesomeSwift)/
+│   ├── prototype-to-android-native-app(Fragmject)/
+│   └── requirements-to-vue_vben_admin/
+├── 📁 go/                                          # 🐹 Go engineering conventions (4 skills, SKILL + references/)
+│   ├── go-api-design/
+│   ├── golang-grpc/
+│   ├── golang-project-layout/
+│   └── golang-testing/
+├── 📁 java/                                        # ☕ Java engineering conventions (5 skills, SKILL + references/)
+│   ├── create-spring-boot-java-project/
+│   ├── java-development/
+│   ├── java-springboot/
+│   ├── java-upgrade/
+│   └── openapi-to-application-java-spring-boot/
+├── 📁 security/                                    # 🔒 Security (6 skills)
+│   ├── fastapi-api-security-authentication/        # SKILL + references/ + scripts/
+│   ├── go-security-audit/                          # SKILL + references/
+│   ├── golang-continuous-integration/              # SKILL + assets/ evals/ references/
+│   ├── security-audit/                             # README + SKILL + NOTICE + references/ + scripts/
+│   ├── spring-boot-testing/                        # SKILL + references/
+│   └── spring-security/                            # SKILL + references/
+├── 📁 research/
+│   └── supervisor-skills/                          # 🔬 12 research skills (CC BY-NC-SA 4.0)
+│       ├── README.zh-CN.md                         # Chinese guide in this repo
+│       ├── references/PROVENANCE.md                # Credit and license notice
+│       └── idea-evaluator/, deep-research/, ...    # 12 skill directories
 ├── 📁 dsh-plugin-starter/                          # 🧩 DSH plugin starter skill
-│   ├── README.md
-│   ├── SKILL.md
-│   └── resources/                                  # config / specifications / templates / tools / demo_output
-├── 📁 .codebuddy/skills/                           # 20 superpowers-zh skills
-├── 📁 .agents/skills/                              # 20 superpowers-zh skills
-├── 📁 .workbuddy/skills/                           # common-website-design, it-requirement-analysis, md-prd-to-html-prototype, diagnosing-superpowers, prototype-to-app-uniappx, prototype-to-flutter-app
-├── 📁 .cursor/skills/                              # it-requirement-analysis, prd-html-skill
-├── 📁 .dsh/skills/                                 # common-website-design, it-requirement-analysis, prd-html-skill, diagnosing-superpowers
-└── 📁 test/                                        # Generated samples and fixture SQL
-    ├── api_security_demo-20260717.sql
-    ├── sql-to-fastapi-example/
-    ├── sql-to-flask-example/
-    ├── sql-to-gin-example/
-    ├── sql-to-springboot-example/
-    └── page-design-showcase/
-        ├── gallery/
-        └── sites/
+├── 📁 test/                                        # 🧪 Generated samples and fixture data
+│   ├── api_security_demo-20260717.sql
+│   └── sql-to-{fastapi,flask,gin,springboot}-example/, page-design-showcase/
+├── 📁 .codebuddy/skills/ · .agents/skills/         # 🧠 20 superpowers-zh general skills each
+├── 📁 .workbuddy/skills/                           # common-website-design / it-requirement-analysis / md-prd-to-html-prototype / diagnosing-superpowers
+├── 📁 .cursor/skills/                              # it-requirement-analysis / prd-html-skill
+├── 📁 .dsh/skills/                                 # common-website-design / diagnosing-superpowers / it-requirement-analysis / prd-html-skill
+└── 📁 .superpowers/sdd/                            # SDD workflow resources
 ```
+
 ---
 
 ## 🚀 Quick Start
@@ -310,13 +210,13 @@ ncepu_ideal-skills/
 | 🧩 **DSH plugins** | [dsh-plugin-starter Usage Guide](.docs/使用dsh-plugin-starter技能开发DSH插件.md) |
 | 🌐 **Modern Web Guidance** | [modern-web-guidance Usage Guide](.docs/使用modern-web-guidance技能编写现代Web前端指南.md) |
 
-> 📝 **Note**: Please refer to the `.docs/` directory for detailed configuration guides
+> 📝 **Note**: See `.docs/` for detailed guides (also `plans/` and `specs/` design documents).
 
 ---
 
 ### 2️⃣ Use the Skill
 
-Skills fall into three categories with different inputs.
+Skills fall into four categories with different inputs.
 
 #### A. Backend: generate API scaffolding from SQL
 
@@ -337,16 +237,16 @@ CREATE TABLE student (
 
 | ⚡ Skill | 📥 Input | 📤 Output |
 | -------- | -------- | ----------- |
-| **FastAPI** | SQL CREATE TABLE | Model / Schema / Resource / Service + Project Skeleton |
-| **Flask** | MySQL DDL | Model / Controller / Service / Resource + Project Skeleton |
-| **Gin** | MySQL DDL | Model / DAO / Service / Resource + Project Skeleton |
-| **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + Project Skeleton |
+| **FastAPI** | SQL CREATE TABLE | Model / Schema / Repository / Service / Resource + test skeleton |
+| **Flask** | MySQL DDL | Model / Controller / Service / Resource + project skeleton |
+| **Gin** | MySQL DDL | Model / DAO / Service / Resource + project skeleton |
+| **Spring Boot** | SQL CREATE TABLE | Entity / Repository / DTO / Service / Controller + project skeleton |
 
-If the tables are not designed yet, use [database-schema-designer](database-schema-designer/README.md) to produce a MySQL script, then pass `schema.mysql.sql` to one of the skills above. Those skills do not run DDL. Do not pass a PostgreSQL script to them.
+If the tables are not designed yet, use [database-schema-designer](design/database-schema-designer/README.md) to produce a MySQL script, then pass `schema.mysql.sql` to one of the skills above. Those skills do not run DDL. Do not pass a PostgreSQL script to them.
 
-#### B. Frontend: generate an app project from a prototype
+#### B. Frontend: generate a project from a prototype
 
-Hand the AI a **prototype HTML code**, **design screenshot**, or **PRD page list** to produce a runnable mobile project.
+Hand the AI a **prototype HTML code**, **design screenshot**, or **PRD page list** to produce a runnable project.
 
 **📥 Example Input**：
 
@@ -360,15 +260,19 @@ restoring layout and interactions with mock data. I'll wire up the backend later
 
 | ⚡ Skill | 📥 Input | 📤 Output |
 | -------- | -------- | ----------- |
-| **uni-app x** | prototype code / image / PRD | `.uvue` pages + components + `services` layers + mock data; multi-platform project runnable in HBuilder |
-| **Flutter** | prototype code / image / PRD | `features` layers + Repository + mock data; runs via `flutter pub get && flutter run` |
+| **uni-app x** | prototype code / image / PRD | `.uvue` pages + components + services layers + mock data, runnable in HBuilder |
+| **Flutter** | prototype code / image / PRD | feature layers + Repository + mock data; `flutter pub get && flutter run` |
+| **Nuxt UI Starter** | prototype code / image / PRD | Nuxt pages and components with mock data |
+| **Taro** | prototype code / image / PRD | Taro 4 multi-platform project, Vue3 / React branches |
+| **iOS native** | prototype code / image / PRD | SwiftUI four-page templates + MVVM & Combine + SwiftData; run in Xcode after `xcodegen generate` |
+| **Android native** | prototype code / image / PRD | Compose four-page templates + single-Activity MVI + Hilt + Room; open in Android Studio |
+| **vben admin** | admin requirements | vue-vben-admin routes / CRUD pages / dashboards / mock data |
 
-> 💡 Both frontend skills generate a **data-access seam**: switching to the real backend only requires flipping a `useMock` flag — page code stays unchanged.
+> 💡 Each skill generates a **data-access seam**: switching to the real backend only requires flipping one flag (`useMock` / `AppContainer` wiring) — page code stays unchanged.
 
-#### C. Reference: retrieve modern guidance before writing Web UI code
+#### C. Reference: retrieve expert guidance before writing code
 
-`modern-web-guidance` does not scaffold a project — it injects expert guides **before** implementation.
-Simply give the AI a Web UI task and the skill triggers the search workflow.
+`modern-web-guidance` does not scaffold a project — it injects expert guides **before** implementation. The Java / Go / security skills provide engineering conventions and review checklists for their domains.
 
 **📥 Example Input**：
 
@@ -379,29 +283,39 @@ supports Esc to dismiss, and prevents the page behind from scrolling.
 
 **📤 Output**: spec-compliant implementation code + a `### Modern Web Guidance` disclosure section.
 
-It also runs alongside these skills when they write browser UI. Their own directories, layers, and component libraries stay in charge:
+`modern-web-guidance` works standalone and can also be overlaid when these skills write browser UI. Their own directories, layers, and component libraries stay in charge:
 
-- Nuxt UI Starter and vue-vben-admin: map the advice onto their existing UI components
-- common-website-design, prd-html-skill, and md-prd-to-html-prototype: write the behavior into HTML
-- prototype-to-taro-app and prototype-to-app-uniappx: H5 only
-- dsh-plugin-starter: dual-face settings pages only
+- [prototype-to-web(Nuxt UI Starter)](<prototype-to/prototype-to-web(Nuxt UI Starter)/README.md>) and [requirements-to-vue_vben_admin](prototype-to/requirements-to-vue_vben_admin/README.md): map the advice onto their existing UI components
+- [common-website-design](.dsh/skills/common-website-design/README.md), [prd-html-skill](.cursor/skills/prd-html-skill/README.md), and [md-prd-to-html-prototype](design/md-prd-to-html-prototype/README.md): write the behavior into HTML
+- [prototype-to-taro-app](prototype-to/prototype-to-taro-app/README.md) and [prototype-to-app-uniappx](prototype-to/prototype-to-app-uniappx/README.md): H5 only
+- [dsh-plugin-starter](dsh-plugin-starter/README.md): dual-face settings pages only
 
 Mini programs, native apps, Flutter, iOS, Android, and backend scaffolds do not use it. The map is section 14 of the usage guide.
 
 ```sh
-# Also usable as a standalone local CLI (from the modern-web-guidance/ directory)
+# Also usable as a standalone local CLI (from the design/modern-web-guidance/ directory)
 python3 resources/tools/mwg.py search "light dismiss dialog"
 python3 resources/tools/mwg.py retrieve "light-dismiss-a-dialog,dialog"
 ```
 
 > 🌐 Guides ship with the repo: fully offline, no telemetry. After updating `guides/`, run `python3 resources/tools/build_index.py` first.
 
+#### D. Engineering conventions: Java, Go, and security
+
+These skills do not scaffold projects; they provide conventions and checklists when you **write, review, or upgrade** code:
+
+- Java: scaffold with `create-spring-boot-java-project`, write features with `java-springboot`, handle language/build details with `java-development`, migrate versions with `java-upgrade`, implement from OpenAPI with `openapi-to-application-java-spring-boot`
+- Go: `golang-project-layout` for directories, `go-api-design` for HTTP APIs, `golang-grpc` for RPC, `golang-testing` for tests; CI and dependency scanning in `golang-continuous-integration`
+- Security: `security-audit` for existing code, `fastapi-api-security-authentication` for FastAPI login and permissions, `spring-security` / `spring-boot-testing` for Spring, `go-security-audit` for read-only Go reviews
+
+---
+
 ## 🗺️ Roadmap
 
 - [ ] 🔮 Add more enterprise full-stack skills (scaffolding, governance, engineering, etc.)
 - [ ] 🧪 Improve validation samples and regression tests
 - [ ] 📋 Standardize naming/versioning/documentation conventions for all skills
-- [ ] 🎯 Add compile-time regression for the Flutter / uni-app x skills against real SDKs
+- [ ] 🎯 Add compile-time regression for the Flutter / uni-app x / iOS / Android skills against real SDKs
 
 ---
 
@@ -412,13 +326,13 @@ Contributions are welcome, especially new Skills or improvements to existing one
 **💡 Recommended Workflow**：
 
 1. 🍴 Fork this repository and create a feature branch
-2. 📁 Implement new Skill in an isolated folder (`SKILL.md`, `README.md`, `resources/`)
+2. 📁 Implement the new Skill in its own directory under the matching category (`sql-to/`, `design/`, `prototype-to/`, `go/`, `java/`, `security/`, `research/`), including `SKILL.md`, `README.md`, `resources/`
 3. 🧪 Add a runnable sample under `test/`
-4. 📝 Update root README skill list
+4. 📝 Update the root README skill list and repository structure
 5. 🔄 Submit a Pull Request
 
 ---
 
 ## 📄 License
 
-No license file is currently declared. Add a `LICENSE` before external distribution.
+There is no single repository-wide LICENSE file at the root; individual skills carry their own licenses (`database-schema-designer`, `security-audit`, `huashu-design`, etc. are MIT; `modern-web-guidance` see `ATTRIBUTION.md`). `research/supervisor-skills` is **CC BY-NC-SA 4.0** and not covered by MIT. Check each skill's license before redistribution.
