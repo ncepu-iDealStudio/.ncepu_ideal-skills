@@ -22,7 +22,7 @@
 
 This repository does **one thing**: collect, organize, categorize, and improve skills. It does not host skill testing, nor does it maintain installed skill copies for individual AI tools.
 
-- 📁 **Categorized by domain**: skills live in `requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `research/`, one directory per skill (`SKILL.md` + resources)
+- 📁 **Categorized by domain**: skills live in `requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `research/`, `others/`, one directory per skill (`SKILL.md` + resources)
 - 🧪 **Testing is external**: no test directories or sample artifacts here; skill validation and regression run in a **separate project**
 - 🔁 **No tool copies**: no skill copies under `.workbuddy/`, `.cursor/`, `.dsh/`, avoiding drift between duplicates
 - 🧩 **Multi-stack**: requirements analysis, database design, backend scaffolds, prototype-to-app, Go / Java conventions, security audits, and research
@@ -31,9 +31,9 @@ This repository does **one thing**: collect, organize, categorize, and improve s
 
 ## 🎯 Skill List
 
-Grouped by directory: **33 skills** across 8 domain directories, plus 20 general workflow skills and 1 research skill collection.
+Grouped by directory: **35 skills** (`requirements_analysis` 3, `design` 5, `sql-to` 4, `prototype-to` 7, `java` 5, `go` 4, `security` 6, `others` 1), plus the `requirements_analysis/spec-kit` toolkit, 20 general workflow skills, and 1 research skill collection.
 
-### 📋 Requirements Analysis & Design (`requirements_analysis/`, 3)
+### 📋 Requirements Analysis & Design (`requirements_analysis/`, 3 skills)
 
 | Skill | Purpose | Documentation |
 | --- | --- | --- |
@@ -41,7 +41,7 @@ Grouped by directory: **33 skills** across 8 domain directories, plus 20 general
 | `it-requirement-analysis` | Business request → PRD, user stories, acceptance criteria, AI solution proposals, feature lists, and implementation plans; choice-based, progressive output | [SKILL.md](requirements_analysis/it-requirement-analysis/SKILL.md) |
 | `database-schema-designer` | Natural language or existing schema → engine-correct DDL (PostgreSQL / MySQL first) + `database-design.md` | [README](requirements_analysis/database-schema-designer/README.md) |
 
-> These three form the requirements-side pipeline: `it-requirement-analysis` (business needs) → `brainstorming` (technical design spec) → `database-schema-designer` (data model).
+> These three form the requirements-side pipeline: `it-requirement-analysis` (business needs) → `brainstorming` (technical design spec) → `database-schema-designer` (data model). The same directory also holds the upstream toolkit `spec-kit/` (spec-driven pipeline, not a skill written in this repo). See [使用说明.md](requirements_analysis/使用说明.md).
 
 ---
 
@@ -126,12 +126,12 @@ Grouped by directory: **33 skills** across 8 domain directories, plus 20 general
 
 | Skill | Purpose | Documentation |
 | --- | --- | --- |
-| `dsh-plugin-starter` | One-line brief or prototype → DSH plugin starter project for four plugin types, with a developer guide | [README](dsh-plugin-starter/README.md) |
+| `dsh-plugin-starter` (`others/`) | One-line brief or prototype → DSH plugin starter project for four plugin types, with a developer guide | [README](others/dsh-plugin-starter/README.md) |
 | `supervisor-skills` (`research/`) | 12 research skills (idea evaluation, literature review, paper writing, pre-submission review, rebuttal) | [Chinese guide](research/supervisor-skills/README.zh-CN.md) |
+| `superpowers-zh` (`requirements_analysis/`) | 20 general workflow skills (brainstorming, writing-plans, executing-plans, subagent-driven-development, systematic-debugging, TDD, etc.), ready to install into any Skill-capable AI tool | Directory: `requirements_analysis/superpowers-zh/` |
 
 - The 12 research skills must be **installed as one group** (they reference each other); most are pure prompts, while `drawio-reconstruction` also needs Python scripts and the draw.io CLI
 - ⚠️ `supervisor-skills` is **CC BY-NC-SA 4.0** (non-commercial, share-alike) and **not covered by MIT**. Read [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md) before commercial use
-- `.codebuddy/skills/` and `.agents/skills/` provide 20 general workflow skills (brainstorming, writing-plans, executing-plans, subagent-driven-development, systematic-debugging, etc.) for AI tools that support Skills
 
 ---
 
@@ -141,10 +141,14 @@ Grouped by directory: **33 skills** across 8 domain directories, plus 20 general
 ncepu_ideal-skills/
 ├── 📄 README.md / README.en.md / CODEBUDDY.md
 ├── 📁 .docs/                                       # Setup guides + design notes + plans/ specs/ images/
-├── 📁 requirements_analysis/                       # 📋 Requirements analysis & design (3 skills)
+├── 📁 requirements_analysis/                       # 📋 Requirements analysis & design (3 skills + spec-kit + superpowers-zh)
 │   ├── brainstorming/                              # SKILL + spec-review prompt + scripts + visual-companion
 │   ├── it-requirement-analysis/                    # SKILL + references/ (PRD / user stories / process)
-│   └── database-schema-designer/                   # README + SKILL + NOTICE + LICENSE + references/
+│   ├── database-schema-designer/                   # README + SKILL + NOTICE + LICENSE + references/
+│   ├── spec-kit/                                   # GitHub Spec Kit toolkit (not authored here)
+│   ├── superpowers-zh/                             # 🧠 20 general workflow skills (single source of truth)
+│   ├── 使用说明.md
+│   └── 关于开源需求分析技能.md
 ├── 📁 design/                                      # 🎨 Design & frontend (5 skills)
 │   ├── common-website-design/                      # README + SKILL + PLAN + designs/ references/ scripts/
 │   ├── frontend-design/                            # SKILL.md
@@ -176,12 +180,11 @@ ncepu_ideal-skills/
 │   └── spring-boot-testing/ / spring-security/
 ├── 📁 research/
 │   └── supervisor-skills/                          # 🔬 12 research skills (CC BY-NC-SA 4.0)
-├── 📁 dsh-plugin-starter/                          # 🧩 DSH plugin starter skill
-├── 📁 .codebuddy/skills/ · .agents/skills/         # 🧠 20 general workflow skills each
-└── 📁 .superpowers/sdd/                            # SDD task workspace (used by subagent-driven-development, not a skill)
+├── 📁 others/
+│   └── dsh-plugin-starter/                         # 🧩 DSH plugin starter skill
 ```
 
-> Note: this repository contains **no** `test/` sample directory and no `.workbuddy/`, `.cursor/`, or `.dsh/` skill copies. Those tests and installed copies have been moved out; validation happens in a separate project.
+> Note: this repository contains **no** `test/` sample directory and no `.codebuddy/`, `.agents/`, `.workbuddy/`, `.cursor/`, or `.dsh/` tool-specific skill copies. Those tests and installed copies have been moved out; validation happens in a separate project. The general workflow skills live solely in `requirements_analysis/superpowers-zh/` and are installed into each tool as needed.
 
 ---
 
@@ -197,6 +200,7 @@ Refer to the setup guides for how each tool loads skills from this repository:
 | 💻 **Claude Code** | [Configuration Guide](.docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [Configuration Guide](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
 | 🧩 **CodeBuddy** | [Configuration Guide](.docs/CodeBuddy中使用skill配置.md) |
+| 🧠 **DSH + Superpowers** | [Requirements tutorial](.docs/dsh中使用superpowers技能.md) |
 
 > 📝 More notes in `.docs/` (including `plans/` and `specs/`). Point the tool directly at the skill directory in this repository — do not copy skills into tool folders to create duplicates.
 
@@ -240,7 +244,7 @@ Contributions are welcome, especially new Skills or improvements to existing one
 **💡 Recommended Workflow**：
 
 1. 🍴 Fork this repository and create a feature branch
-2. 📁 Add the new skill under the matching category (`requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `research/`), including `SKILL.md`, `README.md`, and needed resources
+2. 📁 Add the new skill under the matching category (`requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `research/`, `others/`), including `SKILL.md`, `README.md`, and needed resources
 3. 📝 Update the root README skill list and repository structure
 4. 🔄 Submit a Pull Request
 5. 🧪 Run skill tests and regression in a separate testing project — do not add test directories or sample artifacts to this repository

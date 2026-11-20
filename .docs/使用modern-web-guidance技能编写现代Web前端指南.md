@@ -418,7 +418,7 @@ python3 resources/tools/mwg.py search "light dismiss dialog"   # 抽样验证
 | [md-prd-to-html-prototype](../design/md-prd-to-html-prototype/README.md) | 单文件原型里的弹窗、表单、表格；行为写入内联脚本 | 说明见该技能 README。只允许既有的 Tailwind CDN，不为指南再增加外链 |
 | [prototype-to-taro-app](../prototype-to/prototype-to-taro-app/README.md) | 仅 H5 | 该技能 README 第 11 节；CodeBuddy 指南见 [在 CodeBuddy 中使用](在Codebuddy插件中使用prototype-to-taro-app技能指南.md) |
 | [prototype-to-app-uniappx](../prototype-to/prototype-to-app-uniappx/README.md) | 仅 H5；App 端约束优先 | 该技能 README 第 11 节；WorkBuddy 指南见 [原型转应用](workbuddy中使用原型转应用技能.md) |
-| [dsh-plugin-starter](../dsh-plugin-starter/README.md) | 仅 dual-face 设置页 | 该技能 README 第 11 节；插件指南见 [开发 DSH 插件](使用dsh-plugin-starter技能开发DSH插件.md) |
+| [dsh-plugin-starter](../others/dsh-plugin-starter/README.md) | 仅 dual-face 设置页 | 该技能 README 第 11 节；插件指南见 [开发 DSH 插件](使用dsh-plugin-starter技能开发DSH插件.md) |
 
 后端脚手架、Flutter、iOS、Android 不叠加。没有上述界面任务时，不要调用本技能。
 

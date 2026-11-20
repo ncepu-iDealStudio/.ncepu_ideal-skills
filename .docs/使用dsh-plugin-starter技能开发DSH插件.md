@@ -46,7 +46,7 @@
 
 ```bash
 # 例：装到 DSH 用户级
-cp -r ncepu_ideal-skills/dsh-plugin-starter ~/.dsh/skills/dsh-plugin-starter
+cp -r ncepu_ideal-skills/others/dsh-plugin-starter ~/.dsh/skills/dsh-plugin-starter
 ```
 
 ### 2.2 怎么触发
@@ -108,14 +108,14 @@ cp -r ncepu_ideal-skills/dsh-plugin-starter ~/.dsh/skills/dsh-plugin-starter
 技能会落一份 spec 再调生成器。你也可以手动跑（spec 格式见第 7 节）：
 
 ```bash
-python dsh-plugin-starter/resources/tools/scaffold_plugin.py \
+python others/dsh-plugin-starter/resources/tools/scaffold_plugin.py \
   --spec my-plugin.json --out ./dsh-notebook
 ```
 
 或者完全不写 spec：
 
 ```bash
-python dsh-plugin-starter/resources/tools/scaffold_plugin.py \
+python others/dsh-plugin-starter/resources/tools/scaffold_plugin.py \
   --type dual-face \
   --name @me/dsh-notebook \
   --route /notebook \
@@ -377,7 +377,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 | `capability.routePrefix` | 路由/双面必填 | 形如 `/notebook`，无尾斜杠 |
 | `capability.parameters` | 可选 | 支持 `string` / `number` / `boolean` / `string[]` |
 
-完整字段表：`dsh-plugin-starter/resources/specifications/scaffold_spec_reference.md`。
+完整字段表：`others/dsh-plugin-starter/resources/specifications/scaffold_spec_reference.md`。
 
 ---
 
@@ -395,7 +395,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 > **你**：我想在 DSH 设置页里加个「笔记本」，能添加、查看、删除，数据先存内存就行。
 
 技能判定：`dual-face`。生成路由 `/notebook`（`ping`/`list`/`add`/`remove` 骨架）+ 设置页区块。
-参考成品：[`resources/demo_output/dsh-plugin-notebook`](../dsh-plugin-starter/resources/demo_output/dsh-plugin-notebook/README.md)（就是按这个需求做的）。
+参考成品：[`resources/demo_output/dsh-plugin-notebook`](../others/dsh-plugin-starter/resources/demo_output/dsh-plugin-notebook/README.md)（就是按这个需求做的）。
 
 ### 8.3 拦截器型：bash 命令白名单
 
@@ -461,7 +461,7 @@ DSH_HOME="$PWD/.dsh-home" npx dsh --profile headless --patch ./dev.patch.yml "�
 
 ## 12. 附录：资源索引
 
-| 内容 | 路径（相对 `dsh-plugin-starter/`） |
+| 内容 | 路径（相对 `others/dsh-plugin-starter/`） |
 | --- | --- |
 | 技能主文件（六步工作流、硬约束、坑位表） | `SKILL.md` |
 | 技能说明 | `README.md`（第 11 节：与 modern-web-guidance 叠加） |

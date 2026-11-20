@@ -22,7 +22,7 @@
 
 本仓库**只做一件事**：收集、整理、分类存放并持续优化技能。它不承载技能测试，也不为各个 AI 工具维护技能安装副本。
 
-- 📁 **按领域分类**：技能按用途归入 `requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`research/` 等目录，每个技能一个独立目录（`SKILL.md` + 资源）
+- 📁 **按领域分类**：技能按用途归入 `requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`research/`、`others/` 等目录，每个技能一个独立目录（`SKILL.md` + 资源）
 - 🧪 **测试外置**：本仓库不含测试目录与样例产物；技能的验证与回归测试在**独立项目**中进行
 - 🔁 **无工具副本**：不再向 `.workbuddy/`、`.cursor/`、`.dsh/` 等 AI 工具目录拷贝技能副本，避免多份副本不同步
 - 🧩 **多技术栈**：覆盖需求分析、数据库设计、后端脚手架、前端原型转工程、Go / Java 工程规范、安全审计与科研等场景
@@ -31,9 +31,9 @@
 
 ## 🎯 技能清单
 
-按目录分组，共 **33 个技能**（分布在 8 个业务目录），另有 20 个通用工作流技能与 1 组科研技能集。
+按目录分组，共 **35 个技能**（`requirements_analysis` 3、`design` 5、`sql-to` 4、`prototype-to` 7、`java` 5、`go` 4、`security` 6、`others` 1），另有 `requirements_analysis/spec-kit` 工具包、20 个通用工作流技能，以及 1 组科研技能集。
 
-### 📋 需求分析与设计（`requirements_analysis/`，3 个）
+### 📋 需求分析与设计（`requirements_analysis/`，3 个技能）
 
 | 技能 | 说明 | 文档 |
 | --- | --- | --- |
@@ -41,7 +41,7 @@
 | `it-requirement-analysis` | 业务诉求 → PRD、用户故事、验收标准、AI 方案建议、功能清单与实施计划；选择题式交互、渐进式输出 | [SKILL.md](requirements_analysis/it-requirement-analysis/SKILL.md) |
 | `database-schema-designer` | 自然语言或已有库结构 → 分引擎 DDL（PostgreSQL / MySQL 为主）+ `database-design.md` | [README](requirements_analysis/database-schema-designer/README.md) |
 
-> 这三个技能串起来就是需求侧主流程：`it-requirement-analysis`（业务需求）→ `brainstorming`（技术设计规格）→ `database-schema-designer`（数据模型设计）。
+> 这三个技能串起来就是需求侧主流程：`it-requirement-analysis`（业务需求）→ `brainstorming`（技术设计规格）→ `database-schema-designer`（数据模型设计）。同目录还有开源工具包 `spec-kit/`（规格驱动流水线，不是本仓库自写技能）。用法见 [使用说明](requirements_analysis/使用说明.md)。
 
 ---
 
@@ -126,12 +126,12 @@
 
 | 技能 | 说明 | 文档 |
 | --- | --- | --- |
-| `dsh-plugin-starter` | 一句话需求或插件原型 → DSH 插件起步项目，四类插件 + 内置开发者指南 | [README](dsh-plugin-starter/README.md) |
+| `dsh-plugin-starter`（`others/`） | 一句话需求或插件原型 → DSH 插件起步项目，四类插件 + 内置开发者指南 | [README](others/dsh-plugin-starter/README.md) |
 | `supervisor-skills`（`research/`） | 12 个科研全流程技能（Idea 评估、文献调研、论文写作、投稿审核、Rebuttal） | [中文导读](research/supervisor-skills/README.zh-CN.md) |
+| `superpowers-zh`（`requirements_analysis/`） | 20 个通用工作流技能（brainstorming、writing-plans、executing-plans、subagent-driven-development、systematic-debugging、TDD 等），供支持 Skill 的 AI 工具加载使用 | 目录：`requirements_analysis/superpowers-zh/` |
 
 - 12 个科研技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
 - ⚠️ `supervisor-skills` 整体为 **CC BY-NC-SA 4.0**（非商业 + 相同方式共享），**不受 MIT 覆盖**，商用前请阅读 [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md)
-- `.codebuddy/skills/` 与 `.agents/skills/` 提供 20 个通用工作流技能（brainstorming、writing-plans、executing-plans、subagent-driven-development、systematic-debugging 等），供支持 Skill 的 AI 工具直接加载使用
 
 ---
 
@@ -141,10 +141,14 @@
 ncepu_ideal-skills/
 ├── 📄 README.md / README.en.md / CODEBUDDY.md
 ├── 📁 .docs/                                       # 配置指南 + 设计方法 + plans/ specs/ images/
-├── 📁 requirements_analysis/                       # 📋 需求分析与设计（3 个技能）
+├── 📁 requirements_analysis/                       # 📋 需求分析与设计（3 个技能 + spec-kit + superpowers-zh）
 │   ├── brainstorming/                              # SKILL + 规格评审提示 + 脚本 + visual-companion
 │   ├── it-requirement-analysis/                    # SKILL + references/（PRD / 用户故事 / 流程分析）
-│   └── database-schema-designer/                   # README + SKILL + NOTICE + LICENSE + references/
+│   ├── database-schema-designer/                   # README + SKILL + NOTICE + LICENSE + references/
+│   ├── spec-kit/                                   # GitHub Spec Kit 工具包（非本仓库自写技能）
+│   ├── superpowers-zh/                             # 🧠 20 个通用工作流技能（唯一本体）
+│   ├── 使用说明.md
+│   └── 关于开源需求分析技能.md
 ├── 📁 design/                                      # 🎨 设计与前端（5 个技能）
 │   ├── common-website-design/                      # README + SKILL + PLAN + designs/ references/ scripts/
 │   ├── frontend-design/                            # SKILL.md
@@ -176,12 +180,11 @@ ncepu_ideal-skills/
 │   └── spring-boot-testing/ / spring-security/
 ├── 📁 research/
 │   └── supervisor-skills/                          # 🔬 12 个科研技能（CC BY-NC-SA 4.0）
-├── 📁 dsh-plugin-starter/                          # 🧩 DSH 插件起步项目生成技能
-├── 📁 .codebuddy/skills/ · .agents/skills/         # 🧠 各 20 个通用工作流技能
-└── 📁 .superpowers/sdd/                            # SDD 任务工作区（供 subagent-driven-development 使用，非技能）
+├── 📁 others/
+│   └── dsh-plugin-starter/                         # 🧩 DSH 插件起步项目生成技能
 ```
 
-> 说明：仓库中**不含** `test/` 样例目录，也不含 `.workbuddy/`、`.cursor/`、`.dsh/` 技能副本。这些测试与安装副本已移出本仓库，验证工作在独立项目中进行。
+> 说明：仓库中**不含** `test/` 样例目录，也不含 `.codebuddy/`、`.agents/`、`.workbuddy/`、`.cursor/`、`.dsh/` 等工具专用技能副本。这些测试与安装副本已移出本仓库，验证工作在独立项目中进行。通用工作流技能以 `requirements_analysis/superpowers-zh/` 为唯一本体，按需安装到具体工具。
 
 ---
 
@@ -197,6 +200,7 @@ ncepu_ideal-skills/
 | 💻 **Claude Code** | [配置指南](.docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [配置指南](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
 | 🧩 **CodeBuddy** | [配置指南](.docs/CodeBuddy中使用skill配置.md) |
+| 🧠 **DSH + Superpowers** | [需求分析教程](.docs/dsh中使用superpowers技能.md) |
 
 > 📝 更多说明见 `.docs/`（含 `plans/` 与 `specs/` 设计文档）。加载时直接指向本仓库对应技能目录，不再复制到工具目录形成副本。
 
@@ -240,7 +244,7 @@ it-requirement-analysis（PRD / 验收标准）
 **💡 建议流程**：
 
 1. 🍴 Fork 本仓库并新建分支
-2. 📁 在对应分类目录（`requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`research/`）中新建技能目录，包含 `SKILL.md`、`README.md` 及必要资源
+2. 📁 在对应分类目录（`requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`research/`、`others/`）中新建技能目录，包含 `SKILL.md`、`README.md` 及必要资源
 3. 📝 更新根 README 的技能清单与仓库结构
 4. 🔄 发起 Pull Request
 5. 🧪 技能测试与回归请在独立测试项目中进行，不要在本仓库添加测试目录或样例产物
