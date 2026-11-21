@@ -9,7 +9,7 @@ from config import settings
 from utils.logger import get_logger, log_security_event
 from utils.custom_exceptions import BaseAPIException
 from schemas.response import ErrorResponse, ValidationErrorDetail, ValidationErrorResponse
-from utils.response_code import ResponseCode
+from utils.response_code import RET, get_message, HTTP_STATUS_TO_BIZ_CODE
 
 logger = get_logger(__name__)
 
@@ -27,13 +27,13 @@ def setup_exception_handlers(app: FastAPI) -> None:
             },
         )
         body = ErrorResponse(
-            code=exc.response_code.code,
-            message=exc.detail or exc.response_code.message,
+            code=exc.code,
+            message=exc.detail or get_message(exc.code, exc.lang),
             success=False,
             data=None,
         )
         return JSONResponse(
-            status_code=exc.response_code.status_code,
+            status_code=exc.status_code,
             content=body.model_dump(),
         )
 
@@ -51,23 +51,23 @@ def setup_exception_handlers(app: FastAPI) -> None:
             )
         logger.warning("Validation error path=%s", request.url.path)
         body = ValidationErrorResponse(
-            data=errors, code=422, message="数据验证失败", success=False
+            data=errors, code=RET.PARAMERR, message="数据验证失败", success=False
         )
         return JSONResponse(status_code=422, content=body.model_dump())
 
     @app.exception_handler(StarletteHTTPException)
     async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         if exc.status_code == 404:
-            response_code = ResponseCode.NOT_FOUND
+            code = RET.URLNOTFOUND
         elif exc.status_code == 405:
-            response_code = ResponseCode.METHOD_NOT_ALLOWED
+            code = RET.REQERR
         elif exc.status_code >= 500:
-            response_code = ResponseCode.INTERNAL_SERVER_ERROR
+            code = RET.INTERNALERR
         else:
-            response_code = ResponseCode.BAD_REQUEST
+            code = HTTP_STATUS_TO_BIZ_CODE.get(exc.status_code, RET.PARAMERR)
         body = ErrorResponse(
-            code=response_code.code,
-            message=str(exc.detail) if exc.detail else response_code.message,
+            code=code,
+            message=str(exc.detail) if exc.detail else get_message(code),
             success=False,
             data=None,
         )
@@ -86,7 +86,7 @@ def setup_exception_handlers(app: FastAPI) -> None:
         )
         detail = str(exc) if settings.debug else "服务器内部错误"
         body = ErrorResponse(
-            code=ResponseCode.INTERNAL_SERVER_ERROR.code,
+            code=RET.INTERNALERR,
             message=detail,
             success=False,
             data=None,

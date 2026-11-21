@@ -51,7 +51,13 @@
         {
           "module": "core.permissions",
           "file": "core/permissions.py",
-          "exports": ["get_current_active_user", "require_admin"],
+          "exports": [
+            "CurrentUser",
+            "get_current_active_user",
+            "require_roles",
+            "require_permission",
+            "require_admin"
+          ],
           "used_by": []
         }
       ],
@@ -81,7 +87,7 @@
       "path": "utils",
       "policy": "skip_if_exists",
       "template_dir": "resources/templates/project_structure/utils",
-      "description": "通用工具包；不耦合业务 Model；业务权限放 core/permissions.py",
+      "description": "通用工具包；不耦合业务 Model；通用认证 / 授权依赖放 core/permissions.py",
       "required_modules": [
         {
           "module": "utils.custom_exceptions",
@@ -101,8 +107,9 @@
         {
           "module": "utils.response_code",
           "file": "utils/response_code.py",
-          "exports": ["ResponseCode"],
-          "used_by": ["schema", "resource", "app", "utils.custom_exceptions", "middleware"]
+          "exports": ["RET", "BusinessCode", "BizCode", "get_message"],
+          "used_by": ["schema", "resource", "app", "utils.custom_exceptions", "middleware"],
+          "note": "只含通用/HTTP 服务级响应码；业务码由生成目标项目时按 SQL 业务追加到 BusinessCode，并同步补 error_map_CN / error_map_EN"
         },
         {
           "module": "utils.logger",
@@ -263,13 +270,23 @@
       ]
     }
   },
+  "root_files": [
+    {
+      "path": ".gitignore",
+      "template": "resources/templates/project_structure/.gitignore",
+      "policy": "skip_if_exists",
+      "description": "目标项目 Git 忽略规则（Python 产物 / 虚拟环境 / 本地配置 / 测试缓存 / 运行时数据）"
+    }
+  ],
   "canonical_imports": {
     "base_exception": "from utils.custom_exceptions import BaseAPIException",
     "not_found": "from utils.custom_exceptions import NotFoundException",
     "validation": "from utils.custom_exceptions import ValidationException",
     "business": "from utils.custom_exceptions import BusinessException",
     "handle_exceptions": "from utils.custom_exceptions import handle_service_exceptions",
-    "response_code": "from utils.response_code import ResponseCode",
+    "response_code": "from utils.response_code import RET",
+    "business_code": "from utils.response_code import BusinessCode",
+    "response_message": "from utils.response_code import get_message",
     "logger": "from utils.logger import get_logger",
     "setup_logging": "from utils.logger import setup_logging",
     "mask_phone": "from utils.masking import mask_phone",

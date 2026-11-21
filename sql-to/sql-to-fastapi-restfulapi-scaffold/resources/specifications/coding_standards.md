@@ -320,7 +320,7 @@ class {{ClassName}}Service:
 - 命中后：Schema `StatusUpdate` + Service `update_status` + Resource `PATCH /{pk}/status`
 - Repository 仅 `create/delete/update/get`（增删改查顺序），不暴露 `update_status`
 - 软删除字段走 DELETE，不走本规则
-- 示例：`sso_user.status` → `PATCH /sso-user/{pk}/status`
+- 示例：`{{table_name}}.status` → `PATCH /{{route_prefix}}/{pk}/status`
 
 ### 8.4 错误处理
 
@@ -328,11 +328,13 @@ class {{ClassName}}Service:
 
 ```python
 from utils.custom_exceptions import NotFoundException, ValidationException, BusinessException
-from utils.response_code import ResponseCode
+from utils.response_code import RET, BusinessCode
 
 raise NotFoundException("{{table_comment}}不存在")
 raise ValidationException("请求参数错误")
-raise BusinessException(ResponseCode.BAD_REQUEST, detail="业务校验失败")
+raise BusinessException(RET.DATAERR, detail="业务校验失败")
+# 有业务码时：先把常量登记到 BusinessCode，并补 error_map_CN / error_map_EN
+raise BusinessException(BusinessCode.DEMO_NOT_FOUND, detail="业务对象不存在")
 ```
 
 Resource 统一：
@@ -351,6 +353,7 @@ from utils.custom_exceptions import handle_service_exceptions
 |------|------|
 | 策略 | 默认 `brownfield_prefer_existing`：目标已有 `utils/` 则整包跳过 |
 | 日志 | `from utils.logger import get_logger`（不是 loguru） |
+| 响应码 | `from utils.response_code import RET, BusinessCode, get_message`；只预置通用/HTTP 服务级码，业务码按需追加 |
 | 脱敏 | `from utils.masking import mask_phone, mask_email` |
 | ID | `from utils.ids import new_business_id` |
 | 禁止 | 按表生成 utils 模块；utils 内引用 models/service |
@@ -412,7 +415,7 @@ REDIS_HOST=redis docker compose -f docker/docker-compose.yml --profile redis up 
 **默认不启用鉴权**：本脚手架生成的 CRUD 接口默认开箱即用、无需登录。
 
 **需要鉴权时（由业务自决，不强制）**：
-- `core/permissions` 已提供 `get_current_active_user` / `require_admin` / `require_teacher` / `require_student` 等依赖
+- `core/permissions` 已提供 `get_current_active_user` / `require_roles(...)` / `require_permission(...)` / `require_admin` 等通用依赖（角色与权限来自 JWT 载荷，不绑定具体业务表或角色枚举）
 - 统一在 router 挂载（推荐）：`APIRouter(..., dependencies=[Depends(get_current_active_user)])`；或单个路由参数 `current_user = Depends(get_current_active_user)`
 - 执行操作时记录 `current_user.user_id`（可选）
 
@@ -465,18 +468,16 @@ REDIS_HOST=redis docker compose -f docker/docker-compose.yml --profile redis up 
 示例：
 
 ```sql
-CREATE TABLE student (
-    student_id VARCHAR(20) PRIMARY KEY COMMENT '学生ID',
-    user_id VARCHAR(22) COMMENT '用户ID',
-    class_id VARCHAR(10) COMMENT '班级ID',
-    name VARCHAR(100) NOT NULL COMMENT '学生姓名',
-    phone VARCHAR(20) COMMENT '手机号',
+CREATE TABLE sample_item (
+    item_id BIGINT PRIMARY KEY COMMENT '主键',
+    category_id BIGINT COMMENT '分类ID',
+    name VARCHAR(100) NOT NULL COMMENT '名称',
+    phone VARCHAR(20) COMMENT '联系电话',
     email VARCHAR(100) UNIQUE COMMENT '邮箱',
-    age INT DEFAULT 0 COMMENT '年龄',
+    sort_no INT DEFAULT 0 COMMENT '排序号',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    FOREIGN KEY (user_id) REFERENCES sso_user(user_id),
-    FOREIGN KEY (class_id) REFERENCES sys_class(class_id)
-) COMMENT='学生表';
+    FOREIGN KEY (category_id) REFERENCES sample_category(category_id)
+) COMMENT='示例业务表';
 ```
 
 ## 13. 测试规范

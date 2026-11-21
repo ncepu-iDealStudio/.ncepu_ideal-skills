@@ -149,7 +149,7 @@ def get_token_payload(
         user = {
             "user_id": payload.get("sub", ""),
             "username": payload.get("username", ""),
-            "user_type": payload.get("user_type", 0),
+            "roles": payload.get("roles", []),
             "permissions": payload.get("permissions", []),
         }
         if not user["user_id"]:
@@ -175,5 +175,5 @@ def get_token_payload(
         ) from exc
 
 
-# 兼容旧名（仅 JWT 载荷，不含 SsoUser；业务路由请改用 core.permissions）
+# 兼容旧名（仅 JWT 载荷；业务路由请改用 core.permissions.get_current_user）
 get_current_user = get_token_payload

@@ -18,8 +18,8 @@ class BaseModel(Base):
     def to_dict(self, exclude_fields=None):
         """转换为字典格式（键使用 Python 属性名，与 ORM 映射一致）
 
-        注意：column.key 是映射后的 Python 属性名（如 student_id），
-        column.name 才是数据库列名（如 studentID）。使用 key 才能保证
+        注意：column.key 是映射后的 Python 属性名（如 item_id），
+        column.name 才是数据库列名（如 itemID）。使用 key 才能保证
         getattr 取到正确属性，且与响应层字段命名一致。
         """
         exclude_fields = exclude_fields or []

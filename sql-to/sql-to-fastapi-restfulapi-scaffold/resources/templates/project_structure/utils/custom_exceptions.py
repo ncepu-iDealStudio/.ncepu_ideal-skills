@@ -1,118 +1,229 @@
-"""自定义异常模块"""
+"""自定义异常模块（与具体业务解耦）
+
+约定：
+- 只依赖通用响应码 `utils.response_code.RET` 与 `get_message`，不含任何业务码。
+- 需要业务错误码时，先把常量追加到 `utils.response_code.BusinessCode`（并补中英文文案），
+  再用 `BusinessException(code=BusinessCode.XXX, detail="...")` 抛出。
+- 异常同时携带响应码（body.code）与 HTTP 状态码（status_code），由 `app.exceptions` 统一渲染。
+"""
 
 from typing import Optional, Any
-from utils.response_code import ResponseCode
+
+from utils.response_code import RET, get_message
 
 
 class BaseAPIException(Exception):
-    """API基础异常类"""
-    
+    """API 基础异常：响应码 + HTTP 状态码 + 提示 + 数据。"""
+
     def __init__(
         self,
-        response_code: ResponseCode,
+        code: int = RET.INTERNALERR,
+        status_code: int = 500,
         detail: Optional[str] = None,
-        data: Optional[Any] = None
+        data: Optional[Any] = None,
+        lang: str = "CN",
     ):
-        self.response_code = response_code
-        self.detail = detail or response_code.message
+        self.code = code
+        self.status_code = status_code
+        self.lang = lang
+        self.detail = detail or get_message(code, lang)
         self.data = data
         super().__init__(self.detail)
 
 
 class AuthenticationException(BaseAPIException):
     """认证异常"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.UNAUTHORIZED, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.SESSIONERR,
+            status_code=401,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class AuthorizationException(BaseAPIException):
     """授权异常"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.PERMISSION_DENIED, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.ROLEERR,
+            status_code=403,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class ValidationException(BaseAPIException):
     """验证异常"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.VALIDATION_ERROR, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.PARAMERR,
+            status_code=422,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class NotFoundException(BaseAPIException):
     """资源不存在异常"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.NOT_FOUND, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.URLNOTFOUND,
+            status_code=404,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class ConflictException(BaseAPIException):
     """资源冲突异常"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.CONFLICT, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.DATAEXIST,
+            status_code=409,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class RateLimitException(BaseAPIException):
     """速率限制异常"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.TOO_MANY_REQUESTS, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.REQERR,
+            status_code=429,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class BusinessException(BaseAPIException):
-    """业务异常"""
-    
+    """业务异常
+
+    code 默认 `RET.DATAERR`；业务码请使用 `BusinessCode` 中登记的常量。
+    """
+
     def __init__(
         self,
-        response_code: ResponseCode,
+        code: int = RET.DATAERR,
         detail: Optional[str] = None,
-        data: Optional[Any] = None
+        data: Optional[Any] = None,
+        status_code: int = 400,
+        lang: str = "CN",
     ):
-        super().__init__(response_code, detail, data)
+        super().__init__(
+            code=code,
+            status_code=status_code,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class DatabaseException(BaseAPIException):
     """数据库异常"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.DATABASE_ERROR, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.DBERR,
+            status_code=500,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
 class ResourceNotOwnedException(BaseAPIException):
     """资源不属于当前用户异常 - 防止对象级别授权失效"""
-    
-    def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.RESOURCE_NOT_OWNED, detail, data)
+
+    def __init__(
+        self,
+        detail: Optional[str] = None,
+        data: Optional[Any] = None,
+        lang: str = "CN",
+    ):
+        super().__init__(
+            code=RET.ROLEERR,
+            status_code=403,
+            detail=detail,
+            data=data,
+            lang=lang,
+        )
 
 
-# ================ 扩展业务异常类型 ================
+# ================ 通用身份 / 数据异常 ================
 
 class UserException(BaseAPIException):
-    """用户相关异常基类"""
+    """身份相关异常基类"""
     pass
 
 
 class UserNotFoundException(UserException):
     """用户不存在异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.USER_NOT_FOUND, detail, data)
+        super().__init__(code=RET.USERERR, status_code=404, detail=detail, data=data)
 
 
 class InvalidPasswordException(UserException):
     """密码错误异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.INVALID_PASSWORD, detail, data)
+        super().__init__(code=RET.PWDERR, status_code=400, detail=detail, data=data)
 
 
 class UserDisabledException(UserException):
     """用户已禁用异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.USER_DISABLED, detail, data)
+        super().__init__(code=RET.USERERR, status_code=403, detail=detail, data=data)
 
 
 class TokenException(BaseAPIException):
@@ -122,16 +233,16 @@ class TokenException(BaseAPIException):
 
 class TokenExpiredException(TokenException):
     """令牌过期异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.TOKEN_EXPIRED, detail, data)
+        super().__init__(code=RET.SESSIONERR, status_code=401, detail=detail, data=data)
 
 
 class InvalidTokenException(TokenException):
     """无效令牌异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.INVALID_TOKEN, detail, data)
+        super().__init__(code=RET.SESSIONERR, status_code=401, detail=detail, data=data)
 
 
 class DataException(BaseAPIException):
@@ -141,23 +252,23 @@ class DataException(BaseAPIException):
 
 class DataNotFoundException(DataException):
     """数据不存在异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.DATA_NOT_FOUND, detail, data)
+        super().__init__(code=RET.URLNOTFOUND, status_code=404, detail=detail, data=data)
 
 
 class DataAlreadyExistsException(DataException):
     """数据已存在异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.DATA_ALREADY_EXISTS, detail, data)
+        super().__init__(code=RET.DATAEXIST, status_code=409, detail=detail, data=data)
 
 
 class DataValidationException(DataException):
     """数据验证异常"""
-    
+
     def __init__(self, detail: Optional[str] = None, data: Optional[Any] = None):
-        super().__init__(ResponseCode.DATA_VALIDATION_ERROR, detail, data)
+        super().__init__(code=RET.PARAMERR, status_code=422, detail=detail, data=data)
 
 
 # ================ 异常快捷创建函数 ================
@@ -200,7 +311,7 @@ def raise_not_found(message: str = "资源不存在"):
 
 def raise_bad_request(message: str = "请求参数错误"):
     """抛出请求错误异常"""
-    raise BusinessException(ResponseCode.BAD_REQUEST, detail=message)
+    raise BusinessException(RET.PARAMERR, detail=message, status_code=400)
 
 
 def raise_forbidden(message: str = "权限不足"):
@@ -237,10 +348,11 @@ def handle_exceptions(
                     logging.error(f"函数 {func.__name__} 发生未处理异常: {str(e)}")
                 # 将未知异常转换为业务异常
                 raise BusinessException(
-                    ResponseCode.INTERNAL_SERVER_ERROR,
-                    detail=default_message
+                    code=RET.INTERNALERR,
+                    detail=default_message,
+                    status_code=500,
                 )
-        
+
         @wraps(func)
         def sync_wrapper(*args, **kwargs):
             try:
@@ -251,16 +363,17 @@ def handle_exceptions(
                 if log_errors:
                     logging.error(f"函数 {func.__name__} 发生未处理异常: {str(e)}")
                 raise BusinessException(
-                    ResponseCode.INTERNAL_SERVER_ERROR,
-                    detail=default_message
+                    code=RET.INTERNALERR,
+                    detail=default_message,
+                    status_code=500,
                 )
-        
+
         import inspect
         if inspect.iscoroutinefunction(func):
             return async_wrapper
         else:
             return sync_wrapper
-    
+
     return decorator
 
 
@@ -268,7 +381,7 @@ def handle_service_exceptions(func):
     """服务层异常处理装饰器"""
     from functools import wraps
     import inspect
-    
+
     @wraps(func)
     async def async_wrapper(*args, **kwargs):
         try:
@@ -277,10 +390,11 @@ def handle_service_exceptions(func):
             raise
         except Exception as e:
             raise BusinessException(
-                ResponseCode.INTERNAL_SERVER_ERROR,
-                detail=f"服务异常: {str(e)}"
+                code=RET.INTERNALERR,
+                detail=f"服务异常: {str(e)}",
+                status_code=500,
             )
-    
+
     @wraps(func)
     def sync_wrapper(*args, **kwargs):
         try:
@@ -289,10 +403,11 @@ def handle_service_exceptions(func):
             raise
         except Exception as e:
             raise BusinessException(
-                ResponseCode.INTERNAL_SERVER_ERROR,
-                detail=f"服务异常: {str(e)}"
+                code=RET.INTERNALERR,
+                detail=f"服务异常: {str(e)}",
+                status_code=500,
             )
-    
+
     if inspect.iscoroutinefunction(func):
         return async_wrapper
     else:

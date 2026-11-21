@@ -57,8 +57,10 @@ resources/
 │   │   ├── start.py        # 应用入口
 │   │   ├── .env.example
 │   │   ├── .env.docker     # Docker Compose 环境覆盖
+│   │   ├── .gitkeep
 │   │   ├── pyproject.toml  # uv / PEP 621 主依赖清单
-│   │   ├── .python-version # uv Python 版本
+│   │   ├── .python-version # uv Python 版本（占位符，生成时取最新稳定版）
+│   │   ├── .gitignore      # 目标项目 Git 忽略规则
 │   │   └── requirements.txt # pip 兼容清单
 │   ├── layers/             # 各层代码模板
 │   │   ├── model/
@@ -98,7 +100,7 @@ resources/
 - `middleware/` - **基线中间件包**（`security_headers` / `rate_limiter` / `audit_middleware`；`app/middleware.py` 配置开关注册，默认关闭）
 - `core/__init__.py` - 核心模块
 - `core/database.py` - 数据库连接
-- `core/permissions.py` - 业务认证 / 授权 Depends
+- `core/permissions.py` - 通用认证 / 授权 Depends（JWT 角色与权限，不绑定业务表或角色枚举）
 - `core/security.py` - 密码 / JWT 薄封装（实现在 utils）
 - `core/cache.py` / `core/queue.py` - 缓存与进程内队列
 - `service/dependencies.py` - 服务依赖工厂（Resource 注入 get_*_service）
@@ -106,14 +108,15 @@ resources/
 - `models/__init__.py` - 模型包（导出 Base / BaseModel）
 - `schemas/__init__.py` - Schema包
 - `schemas/response.py` - 统一响应模型（success/code/data/meta）
-- `utils/` - **基线工具包**（见 `project_baseline.json`；含 `logger` / `custom_exceptions` / `validators` / `masking` / `ids` / `auth` / `security` / `response_code` / `audit` 等；不要 `loguru.py`）
+- `utils/` - **基线工具包**（见 `project_baseline.json`；含 `logger` / `custom_exceptions` / `validators` / `masking` / `ids` / `auth` / `security` / `response_code` / `audit` 等；不要 `loguru.py`；`response_code` 只含通用/HTTP 服务级码）
 - `docker/` - **基线 Docker**（`Dockerfile` + `docker-compose.yml`：app + MySQL，Redis 为 `--profile redis` 可选项）
 - `deploy/` - **基线进阶运维**（Nginx / MySQL·Redis 调优 / Prometheus·Grafana / Logstash / Supervisor / 部署脚本）
 - `api/__init__.py` - API包（导出 api_router + register_routers）
 - `api/v1/__init__.py` - API v1路由注册（导出 v1_router）
 - `start.py` - 应用启动脚本
 - `pyproject.toml` - **uv / PEP 621 依赖与工具配置（主清单，必须生成）**
-- `.python-version` - uv 使用的 Python 版本钉选
+- `.python-version` - Python 版本钉选（模板占位符 `{{python_version}}`，生成时替换为本机最新稳定版，**不要固定 3.12**）
+- `.gitignore` - Git 忽略规则（Python 产物 / 虚拟环境 / 本地 `.env` / 测试缓存 / 运行时数据）
 - `requirements.txt` - 与企业起步对齐的 pip 兼容清单
 - `.env.example` - 环境变量模板（对齐 config_unified 字段名）
 - `.env.docker` - Docker Compose 可选环境覆盖
@@ -197,7 +200,8 @@ resources/
 | `middleware/` | 已有 `__init__.py` + `security_headers.py` | **整包跳过**，绝不覆盖 |
 | `docker/` | 已有 `Dockerfile` + `docker-compose.yml` | **整包跳过**，绝不覆盖 |
 | `deploy/` | 已有 `nginx.conf` 等 | **整包跳过**，绝不覆盖 |
-| 空项目 | 无上述文件 | 从 `project_structure/` **完整复制**对应目录，并复制根目录 `.env.docker` |
+| `.gitignore` | 已有文件 | 已存在则跳过；空项目从模板复制 |
+| 空项目 | 无上述文件 | 从 `project_structure/` **完整复制**对应目录，并复制根目录 `.env.docker`、`.gitignore` |
 | mode=`brownfield_fill_missing` | — | 已存在文件不覆盖；仅补清单中缺失的文件 |
 
 **utils 强制**：
@@ -311,17 +315,34 @@ uv run uvicorn start:app --reload               # /docs 核对 Schema 与端点
 2. Service：`update_status(...)`（业务入口；内部调用 `repo.update` 传入字段字典；**Repository 不暴露 `update_status`**）
 3. Resource：`PATCH /{pk}/status` → `service.update_status`
 
-示例（`sso_user.status`）：`PATCH /sso-user/{user_id}/status`，Body `{"status": 0}`。
+示例（表 `sample_item.status`）：`PATCH /sample-item/{item_id}/status`，Body `{"status": 0}`。
 
 > 软删除字段**不是**状态接口；账号类型等业务枚举字段按 exclude 名单处理。
+
+### 步骤 3.2: 响应码（强制）
+
+`utils/response_code.py` 是基线文件，**只保留通用 / HTTP 服务级响应码**，不预置任何具体业务码：
+
+| 符号 | 用途 |
+|------|------|
+| `RET` | 通用 / HTTP 类响应码（成功、参数、登录、权限、限流、数据库、内部错误等） |
+| `error_map_CN` / `error_map_EN` | 同一响应码的中英文文案 |
+| `get_message(code, lang)` | 按语言取文案（`lang="CN"` / `"EN"`） |
+| `BusinessCode` / `BizCode` | 业务响应码扩展位（模板默认空） |
+
+- **默认不生成业务码**。模板里出现具体业务码（企业文件、发票、知识库等）即视为错误，必须删除。
+- **SQL 或需求中出现业务错误码时**：在 `BusinessCode` 中按 `4xxx`（客户端）/ `5xxx`（服务端）集中追加常量，并同步补 `error_map_CN`、`error_map_EN`，再在 Service 用 `BusinessException(BusinessCode.XXX, detail=...)` 抛出。
+- 业务代码禁止散落魔法数字；取文案统一走 `get_message(code, lang)`。
+- 响应体仍为 `success / code / message / data`；业务码只影响 `body.code`，HTTP 状态码由异常类固定（如 `NotFoundException` → 404）。
 
 ### 步骤 4: 生成代码
 
 **重要**：使用 `resources/templates/project_structure/` 下的模板生成项目骨架时，必须完整准确地复制模板文件内容，**不能遗漏任何内容**。
 
 生成项目骨架时应复制以下文件：
-- `pyproject.toml` - **uv 主依赖清单**，替换 `{{project_name}}` / `{{project_description}}`；规则见 `resources/config/package_manager.json`
-- `.python-version` - Python 版本钉选（供 uv 使用）
+- `pyproject.toml` - **uv 主依赖清单**，替换 `{{project_name}}` / `{{project_description}}` / `{{python_version}}`；规则见 `resources/config/package_manager.json`
+- `.python-version` - Python 版本钉选（供 uv 使用）。模板内容是 `{{python_version}}` 占位符：生成时执行 `uv python list`（或 `uv python find`）取**最新稳定版**替换，`pyproject.toml` 的 `requires-python` 用同一版本；**禁止固定写 3.12**
+- `.gitignore` - 从 `project_structure/.gitignore` 原样复制（已存在则跳过）
 - `requirements.txt` - 与 `pyproject.toml` 运行时依赖保持一致的兼容清单
 - `.env.example` - 环境变量模板，**必须包含所有配置项**
 - `start.py` - 应用启动脚本（含 `main()`）
@@ -354,8 +375,8 @@ uv run uvicorn start:app --reload               # /docs 核对 Schema 与端点
 ### 步骤 6: 生成 README.md
 
 在生成完所有文件后，AI 应读取生成的项目结构，动态生成一份详细的 README.md 文档，包含：
-- 项目简介和技术栈（注明使用 **uv** 管理依赖）
-- 完整的项目结构说明（含 `pyproject.toml`、`.python-version`）
+- 项目简介和技术栈（注明使用 **uv** 管理依赖，并写明生成时选用的最新稳定版 Python）
+- 完整的项目结构说明（含 `pyproject.toml`、`.python-version`、`.gitignore`）
 - 所有生成的 API 接口说明（包含请求/响应示例）
 - 配置说明
 - 快速开始步骤（**优先** `uv sync` / `uv run ...`；可选附 pip 兼容步骤）
@@ -460,6 +481,7 @@ fastapi_project/
 ├── start.py
 ├── pyproject.toml
 ├── .python-version
+├── .gitignore
 ├── requirements.txt
 ├── .env.example
 └── .env.docker
@@ -723,6 +745,7 @@ tests/
 ├── start.py
 ├── pyproject.toml
 ├── .python-version
+├── .gitignore
 ├── requirements.txt
 ├── .env.example
 └── .env.docker
@@ -828,8 +851,8 @@ tests/
 8. **异步**：使用 `AsyncSession` + `select()`
 9. **中文文档**：文档字符串、注释、API 文档使用中文
 10. **安全性**：端点含异常处理；**默认不启用接口鉴权（开箱即用、无需 Token）**，如需鉴权可接入 `core.permissions`；状态字段不走通用 PUT；骨架含安全头/限流/审计中间件（默认关，配置开启）
-11. **包管理默认 uv**：首次骨架必须生成 `pyproject.toml` + `.python-version`；README 与收尾步骤优先 `uv sync` / `uv run`；`requirements.txt` 仅兼容
-12. **基线包**：遵守 `project_baseline.json`；含 utils、middleware、**docker（起步栈）**、**deploy（进阶运维）**、`.env.docker`
+11. **包管理默认 uv**：首次骨架必须生成 `pyproject.toml` + `.python-version` + `.gitignore`；Python 版本取生成时本机最新稳定版（`uv python list`），模板占位符 `{{python_version}}` 必须替换，**禁止固定 3.12**；README 与收尾步骤优先 `uv sync` / `uv run`；`requirements.txt` 仅兼容
+12. **基线包**：遵守 `project_baseline.json`；含 utils、middleware、**docker（起步栈）**、**deploy（进阶运维）**、`.env.docker`、`.gitignore`
 13. **🔴 资源名必须单数（最高优先级）**：文件夹 `api/v1/{resource_singular}/` 中的 `resource_singular` 等于表名原样。路由前缀使用 `route_prefix`（下划线改连字符）。两者都禁止复数。
    以下为错误 ↔ 正确对照（务必避免左侧）：
 
@@ -847,3 +870,5 @@ tests/
 17. **🔴 状态位 / 软删 / 主键变化三件套同步**：`StatusUpdate` ↔ `update_status` ↔ `PATCH`、软删过滤、主键参数类型，漏一处即 500 或 ImportError
 18. **🔴 新表注册必须幂等且成套**：`api/v1/{resource_singular}/__init__.py` + `api/v1/__init__.py` + `service/dependencies.py`；追加前去重，同 SQL 连跑两次零 diff
 19. **🔴 技能不执行 DDL**：不连库、不改 `database/`、不接 Alembic、不删数据；只给 MySQL `ddl_hint` 建议与发布顺序（加列先 DDL、删列先发代码）
+20. **🔴 响应码保持通用**：`utils/response_code.py` 只保留 `RET`（通用/HTTP 服务级）与中英文 `error_map_CN` / `error_map_EN`；`BusinessCode` 默认空。SQL/需求有业务码时才追加常量并补中英文文案，禁止预置具体业务码
+21. **🔴 代码不得绑定具体业务**：`core/permissions.py` 只用 JWT 的 `roles` / `permissions` 通用声明，不内置学生/教师/管理员等角色枚举；骨架代码里不出现具体业务实体（如企业文件、发票、知识库）示例

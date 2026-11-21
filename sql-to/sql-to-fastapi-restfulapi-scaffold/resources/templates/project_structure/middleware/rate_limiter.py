@@ -17,7 +17,7 @@ from starlette.responses import Response
 
 from config import settings
 from utils.logger import log_security_event
-from utils.response_code import ResponseCode
+from utils.response_code import RET, get_message
 
 
 class _TokenBucket:
@@ -112,8 +112,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             )
             payload = {
                 "success": False,
-                "code": ResponseCode.TOO_MANY_REQUESTS.code,
-                "message": ResponseCode.TOO_MANY_REQUESTS.message,
+                "code": RET.REQERR,
+                "message": get_message(RET.REQERR),
                 "data": None,
             }
             return JSONResponse(

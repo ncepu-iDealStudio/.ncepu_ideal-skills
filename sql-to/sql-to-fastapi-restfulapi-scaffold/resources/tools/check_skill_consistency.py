@@ -141,12 +141,41 @@ def check_incremental(errors: list[str]) -> None:
                 errors.append(f"{path.relative_to(SKILL_ROOT)} 未引用增量内容: {needle}")
 
 
+def check_baseline_files(errors: list[str]) -> None:
+    """校验骨架必带文件、Python 版本占位符与响应码基线。"""
+    for relative in (".gitignore", "utils/response_code.py", "core/permissions.py"):
+        if not (STRUCTURE / relative).is_file():
+            errors.append(f"缺少骨架基线文件: {relative}")
+
+    python_version_file = STRUCTURE / ".python-version"
+    if python_version_file.is_file():
+        content = python_version_file.read_text(encoding="utf-8").strip()
+        if not (content.startswith("{{") and content.endswith("}}")):
+            errors.append(".python-version 必须使用 {{python_version}} 占位符，不能硬编码版本号")
+
+    gitignore = STRUCTURE / ".gitignore"
+    if gitignore.is_file():
+        gitignore_text = gitignore.read_text(encoding="utf-8")
+        for needle in ("__pycache__/", ".venv/", ".env"):
+            if needle not in gitignore_text:
+                errors.append(f".gitignore 缺少必要规则: {needle}")
+
+    response_code_file = STRUCTURE / "utils" / "response_code.py"
+    if response_code_file.is_file():
+        text = response_code_file.read_text(encoding="utf-8")
+        for needle in ("class RET", "class BusinessCode", "def get_message"):
+            if needle not in text:
+                errors.append(f"utils/response_code.py 缺少 {needle}")
+
+
 def main() -> int:
     errors: list[str] = []
 
     for relative in OBSOLETE:
         if (STRUCTURE / relative).exists():
             errors.append(f"淘汰文件仍在骨架中: {relative}")
+
+    check_baseline_files(errors)
 
     for path in STRUCTURE.rglob("*.py"):
         text = path.read_text(encoding="utf-8")

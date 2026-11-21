@@ -4,13 +4,14 @@
 # 占位符（生成时替换）：
 #   {{project_name}}         — 项目名（PEP 503：建议用连字符，如 fastapi_project_starter）
 #   {{project_description}}  — 项目描述
+#   {{python_version}}       — 生成时探测到的最新稳定版 CPython（如 3.13 / 3.14），不要固定写 3.12
 
 [project]
 name = "{{project_name}}"
 version = "1.0.0"
 description = "{{project_description}}"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">={{python_version}}"
 dependencies = [
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.23.0",

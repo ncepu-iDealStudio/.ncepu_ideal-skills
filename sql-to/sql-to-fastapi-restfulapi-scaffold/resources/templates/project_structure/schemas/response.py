@@ -12,7 +12,7 @@ from typing import Any, Optional, Generic, TypeVar, List
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-from utils.response_code import ResponseCode
+from utils.response_code import RET, get_message
 
 T = TypeVar('T')
 
@@ -21,7 +21,7 @@ class BaseResponse(BaseModel, Generic[T]):
     """基础响应模型"""
 
     success: bool = Field(default=False, description="操作是否成功")
-    code: int = Field(default=200, description="响应码")
+    code: int = Field(default=RET.OK, description="响应码（RET / BusinessCode）")
     message: str = Field(default="", description="响应消息")
     data: Optional[T] = Field(default=None, description="响应数据")
     timestamp: str = Field(
@@ -34,14 +34,14 @@ class SuccessResponse(BaseResponse[T]):
     """成功响应模型"""
 
     success: bool = True
-    code: int = 200
+    code: int = RET.OK
 
 
 class ErrorResponse(BaseResponse[None]):
     """错误响应模型"""
 
     success: bool = False
-    code: int = 500
+    code: int = RET.INTERNALERR
 
 
 class PaginationMeta(BaseModel):
@@ -77,16 +77,20 @@ class ValidationErrorResponse(BaseResponse[List[ValidationErrorDetail]]):
 
 # ================ 便捷响应构造函数 ================
 
-def success_response(data: Any = None, message: str = "操作成功", code: int = 200) -> SuccessResponse:
+def success_response(data: Any = None, message: str = "操作成功", code: int = RET.OK) -> SuccessResponse:
     """创建成功响应"""
     return SuccessResponse(data=data, message=message, code=code)
 
 
-def error_response(response_code: ResponseCode, detail: str = None) -> ErrorResponse:
-    """创建错误响应"""
+def error_response(
+    code: int = RET.INTERNALERR,
+    detail: str = None,
+    lang: str = "CN",
+) -> ErrorResponse:
+    """创建错误响应（code 使用 RET / BusinessCode 常量）"""
     return ErrorResponse(
-        code=response_code.code,
-        message=detail or response_code.message,
+        code=code,
+        message=detail or get_message(code, lang),
         success=False,
         data=None,
     )
@@ -114,34 +118,34 @@ def paginated_response(
 
 def validation_error_response(errors: List[ValidationErrorDetail]) -> ValidationErrorResponse:
     """创建验证错误响应"""
-    return ValidationErrorResponse(data=errors, code=422, message="数据验证失败", success=False)
+    return ValidationErrorResponse(data=errors, code=RET.PARAMERR, message="数据验证失败", success=False)
 
 
 # ================ 常用业务响应 ================
 
 def user_not_found_response(detail: str = None) -> ErrorResponse:
     """用户不存在响应"""
-    return error_response(ResponseCode.USER_NOT_FOUND, detail)
+    return error_response(RET.USERERR, detail)
 
 
 def permission_denied_response(detail: str = None) -> ErrorResponse:
     """权限不足响应"""
-    return error_response(ResponseCode.PERMISSION_DENIED, detail)
+    return error_response(RET.ROLEERR, detail)
 
 
 def token_expired_response(detail: str = None) -> ErrorResponse:
     """令牌过期响应"""
-    return error_response(ResponseCode.TOKEN_EXPIRED, detail)
+    return error_response(RET.SESSIONERR, detail)
 
 
 def data_not_found_response(detail: str = None) -> ErrorResponse:
     """数据不存在响应"""
-    return error_response(ResponseCode.DATA_NOT_FOUND, detail)
+    return error_response(RET.URLNOTFOUND, detail)
 
 
 def unauthorized_response(detail: str = None) -> ErrorResponse:
     """未授权访问响应"""
-    return error_response(ResponseCode.UNAUTHORIZED, detail)
+    return error_response(RET.SESSIONERR, detail)
 
 
 # ================ 响应装饰器 ================
@@ -161,7 +165,7 @@ def response_wrapper(success_message: str = "操作成功"):
                     return result
                 return success_response(data=result, message=success_message)
             except Exception as e:
-                return error_response(ResponseCode.INTERNAL_SERVER_ERROR, str(e))
+                return error_response(RET.INTERNALERR, str(e))
 
         @wraps(func)
         def sync_wrapper(*args, **kwargs):
@@ -171,7 +175,7 @@ def response_wrapper(success_message: str = "操作成功"):
                     return result
                 return success_response(data=result, message=success_message)
             except Exception as e:
-                return error_response(ResponseCode.INTERNAL_SERVER_ERROR, str(e))
+                return error_response(RET.INTERNALERR, str(e))
 
         import inspect
         if inspect.iscoroutinefunction(func):

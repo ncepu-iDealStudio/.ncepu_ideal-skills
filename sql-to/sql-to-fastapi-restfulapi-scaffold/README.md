@@ -20,6 +20,9 @@
 - ✅ 异步 SQLAlchemy（AsyncSession）
 - ✅ 中文文档字符串和注释
 - ✅ 目标项目默认用 **uv** 管理依赖与启动（`pyproject.toml` + `uv sync` / `uv run`）
+- ✅ 目标项目自带 `.gitignore`；Python 版本取生成时本机最新稳定版，不硬编码 3.12
+- ✅ `utils/response_code.py` 只含通用/HTTP 服务级响应码（中英文文案）；业务码按 SQL 需要再追加
+- ✅ 骨架代码不绑定具体业务：`core/permissions.py` 只使用 JWT 的通用 `roles` / `permissions`
 - ✅ **已有项目新增表**：按表增量补齐 7 类文件，并幂等追加路由/依赖注册
 - ✅ **已有项目表结构修改**：字段级差异分析（加列/删列/改类型/改约束/改主键/状态位/软删变化），按影响面分层重生成
 - ✅ **手写代码保护**：`Service` / 测试 / `README` 绝不整文件覆盖，改为人工待办清单
@@ -71,7 +74,8 @@ sql-to-fastapi-restfulapi-scaffold/
 │       │       └── integration/
 │       └── project_structure/
 │           ├── pyproject.toml      # uv 主依赖清单
-│           ├── .python-version
+│           ├── .python-version     # 占位符，生成时取最新稳定版
+│           ├── .gitignore          # 目标项目 Git 忽略规则
 │           ├── requirements.txt    # pip 兼容
 │           ├── start.py
 │           ├── .env.example
@@ -99,7 +103,7 @@ sql-to-fastapi-restfulapi-scaffold/
 目标项目若已有常用工具、中间件或部署目录，技能通过 `resources/config/project_baseline.json` 声明：
 
 - 默认 `brownfield_prefer_existing`：检测到对应目录已存在 → **整包跳过**
-- 空项目从 `project_structure/` 写入：`utils/`、`middleware/`、`docker/`、`deploy/`、`.env.docker`
+- 空项目从 `project_structure/` 写入：`utils/`、`middleware/`、`docker/`、`deploy/`、`.env.docker`、`.gitignore`
 - **docker**：`Dockerfile` + `docker-compose.yml`（app + MySQL；`--profile redis` 可选）
 - **deploy**：进阶运维素材，**不**进入默认 compose 必跑栈
 - 层代码 import 必须以 `canonical_imports` 为准
@@ -228,6 +232,7 @@ fastapi_project/
 ├── start.py
 ├── pyproject.toml
 ├── .python-version
+├── .gitignore
 ├── requirements.txt
 ├── .env.example
 └── .env.docker

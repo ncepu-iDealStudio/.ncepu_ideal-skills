@@ -16,7 +16,12 @@
     ".python-version": {
       "required": true,
       "template": "resources/templates/project_structure/.python-version",
-      "notes": ["供 uv 选择 Python 版本；可按环境改为 3.10/3.11/3.12"]
+      "notes": [
+        "模板内容为占位符 {{python_version}}，生成时必须替换",
+        "生成时优先取本机可用的最新稳定版 CPython：uv python list（或 uv python find）后选版本号最高者，不要固定写 3.12",
+        "pyproject.toml 的 requires-python 使用同一版本（>={{python_version}}），保持两处一致",
+        "用户明确要求兼容旧版本时才降级，并在 README 的 Assumptions 中说明"
+      ]
     },
     "requirements.txt": {
       "required": true,
