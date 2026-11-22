@@ -65,6 +65,13 @@ SQL_TABLE = re.compile(
     re.I,
 )
 SQL_COL = re.compile(r"`?([A-Za-z_]\w*)`?\s+(?:VARCHAR|CHAR|TEXT|TINYTEXT|MEDIUMTEXT|LONGTEXT|BLOB)", re.I)
+SEED_NAME = re.compile(r"(seed|bootstrap|init[_-]?admin|create[_-]?admin)", re.I)
+ADMIN_ENV = re.compile(
+    r"^[ \t]*(INITIAL_ADMIN_USERNAME|INITIAL_ADMIN_PASSWORD|"
+    r"ADMIN_USERNAME|ADMIN_INITIAL_PASSWORD)\s*=",
+    re.M,
+)
+INSERT_INTO = re.compile(r"INSERT\s+INTO\s+`?([A-Za-z_]\w*)`?", re.I)
 
 
 def _norm(name: str) -> str:
@@ -272,6 +279,52 @@ def scan_role_signals(root: Path, account_tables: list[dict]) -> list[dict]:
     return signals
 
 
+def scan_initial_admin(root: Path, account_tables: list[dict]) -> dict:
+    """Collect evidence for an initial-admin seed/bootstrap entry point.
+
+    Only lists evidence; whether it is enough is decided by the skill gate.
+    """
+    account_names = {str(item.get("table", "")).lower() for item in account_tables}
+    candidates: list[dict] = []
+
+    for folder in ("scripts", "database", "sql", "migrations", "alembic", "deploy"):
+        base = root / folder
+        if not base.is_dir():
+            continue
+        for path in base.rglob("*"):
+            if not path.is_file() or "__pycache__" in path.parts:
+                continue
+            if path.suffix.lower() not in {".py", ".sql"}:
+                continue
+            text = _read(path)
+            evidence = None
+            if SEED_NAME.search(path.stem):
+                evidence = "文件名含 seed/bootstrap/admin 初始化"
+            elif re.search(
+                r"INITIAL_ADMIN|ADMIN_USERNAME|ADMIN_INITIAL_PASSWORD", text
+            ):
+                evidence = "引用 INITIAL_ADMIN / ADMIN_USERNAME"
+            else:
+                for table in INSERT_INTO.findall(text):
+                    if table.lower() in account_names:
+                        evidence = f"包含 INSERT INTO {table}"
+                        break
+            if evidence:
+                candidates.append(
+                    {
+                        "file": str(path.relative_to(root)).replace("\\", "/"),
+                        "evidence": evidence,
+                    }
+                )
+
+    env_keys: list[str] = []
+    env_example = root / ".env.example"
+    if env_example.is_file():
+        env_keys = sorted({m.group(1) for m in ADMIN_ENV.finditer(_read(env_example))})
+
+    return {"seed_candidates": candidates, "env_keys": env_keys}
+
+
 def build_report(root: Path) -> dict:
     models = scan_models(root)
     sql = scan_sql(root)
@@ -289,11 +342,14 @@ def build_report(root: Path) -> dict:
         "login_service": login_service,
         "login_http": login_http,
         "role_signals": scan_role_signals(root, tables),
+        "initial_admin": scan_initial_admin(root, tables),
         "token_hints": scan_token_hints(root),
         "notes": [
             "本报告只列证据，是否通过门禁由 SKILL 规则判定。",
             "有 JWT 工具不等于已有登录接口。",
             "Bearer test-token 测试夹具不等于令牌鉴权合格。",
+            "有账号表与登录接口不等于系统可用：还需要可登录的初始管理员"
+            "（种子脚本 / 初始化 SQL / 迁移）；只有 fixture 或启动时自动 INSERT 不算合格入口。",
         ],
     }
 

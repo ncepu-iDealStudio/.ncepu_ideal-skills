@@ -149,6 +149,33 @@ class ToolTests(unittest.TestCase):
         self.assertEqual(report["login_http"][0]["path_hint"], "/sso-user/login")
         self.assertTrue(any("security.py" in f for f in report["token_hints"]["files_with_jwt_or_bearer"]))
 
+    def test_preflight_detects_initial_admin_seed(self):
+        scripts = self.root / "scripts"
+        scripts.mkdir()
+        (scripts / "seed_admin.py").write_text(
+            "from utils.security import SecurityUtil\n", encoding="utf-8"
+        )
+        (self.root / ".env.example").write_text(
+            "INITIAL_ADMIN_USERNAME=\nINITIAL_ADMIN_PASSWORD=\n", encoding="utf-8"
+        )
+        out = self.root / "preflight.json"
+        result = self.run_tool("preflight_auth.py", self.root, "-o", out)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(out.read_text(encoding="utf-8"))
+        files = [item["file"] for item in report["initial_admin"]["seed_candidates"]]
+        self.assertIn("scripts/seed_admin.py", files)
+        self.assertIn("INITIAL_ADMIN_USERNAME", report["initial_admin"]["env_keys"])
+        self.assertIn("INITIAL_ADMIN_PASSWORD", report["initial_admin"]["env_keys"])
+
+    def test_preflight_reports_missing_initial_admin(self):
+        (self.root / "service").mkdir()
+        out = self.root / "preflight.json"
+        result = self.run_tool("preflight_auth.py", self.root, "-o", out)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(out.read_text(encoding="utf-8"))
+        self.assertEqual(report["initial_admin"]["seed_candidates"], [])
+        self.assertEqual(report["initial_admin"]["env_keys"], [])
+
     def test_protected_rules_cannot_use_placeholder_values(self):
         inv = self.write_json("inv.json", {"routes": [{"method": "GET", "path": "/x"}]})
         for placeholder in ("待定", "未决", " TODO ", "tBd", " 未确认 ", " UnKnOwN "):
