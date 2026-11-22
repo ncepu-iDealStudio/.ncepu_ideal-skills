@@ -31,7 +31,7 @@ This repository does **one thing**: collect, organize, categorize, and improve s
 
 ## 🎯 Skill List
 
-Grouped by directory: **35 skills** (`requirements_analysis` 3, `design` 5, `sql-to` 4, `prototype-to` 7, `java` 5, `go` 4, `security` 6, `others` 1), plus the `requirements_analysis/spec-kit` toolkit, 20 general workflow skills, and 1 research skill collection.
+Grouped by directory: **36 skills** (`requirements_analysis` 3, `design` 5, `sql-to` 4, `prototype-to` 7, `java` 5, `go` 4, `security` 6, `research` 1, `others` 1), plus the `requirements_analysis/spec-kit` toolkit, 20 general workflow skills, and 1 research skill collection (`supervisor-skills`).
 
 ### 📋 Requirements Analysis & Design (`requirements_analysis/`, 3 skills)
 
@@ -128,10 +128,12 @@ Grouped by directory: **35 skills** (`requirements_analysis` 3, `design` 5, `sql
 | --- | --- | --- |
 | `dsh-plugin-starter` (`others/`) | One-line brief or prototype → DSH plugin starter project for four plugin types, with a developer guide | [README](others/dsh-plugin-starter/README.md) |
 | `supervisor-skills` (`research/`) | 12 research skills (idea evaluation, literature review, paper writing, pre-submission review, rebuttal) | [Chinese guide](research/supervisor-skills/README.zh-CN.md) |
+| `research-weave` (`research/`) | Paper prospecting: decide which papers deserve deep reading; Scout / Map / Update modes produce reading recommendations, a traceable evidence ledger, and search records | [SKILL.md](research/research-weave/SKILL.md) |
 | `superpowers-zh` (`requirements_analysis/`) | 20 general workflow skills (brainstorming, writing-plans, executing-plans, subagent-driven-development, systematic-debugging, TDD, etc.), ready to install into any Skill-capable AI tool | Directory: `requirements_analysis/superpowers-zh/` |
 
 - The 12 research skills must be **installed as one group** (they reference each other); most are pure prompts, while `drawio-reconstruction` also needs Python scripts and the draw.io CLI
 - ⚠️ `supervisor-skills` is **CC BY-NC-SA 4.0** (non-commercial, share-alike) and **not covered by MIT**. Read [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md) before commercial use
+- `research-weave` is **MIT** licensed and self-contained (validation script uses only the Python standard library); it complements `supervisor-skills/deep-research`
 
 ---
 
@@ -179,6 +181,7 @@ ncepu_ideal-skills/
 │   ├── golang-continuous-integration/ / security-audit/
 │   └── spring-boot-testing/ / spring-security/
 ├── 📁 research/
+│   ├── research-weave/                             # 🧵 Paper prospecting skill (MIT, SKILL + references/ + scripts/)
 │   └── supervisor-skills/                          # 🔬 12 research skills (CC BY-NC-SA 4.0)
 ├── 📁 others/
 │   └── dsh-plugin-starter/                         # 🧩 DSH plugin starter skill
