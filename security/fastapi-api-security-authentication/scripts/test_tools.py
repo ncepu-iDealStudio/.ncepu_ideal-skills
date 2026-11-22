@@ -293,6 +293,95 @@ class ToolTests(unittest.TestCase):
         self.assertIn(("TokenResponse", ("refresh_token",)), classes)
         self.assertIn(("LoginRequest", ("device_name",)), classes)
 
+    def test_preflight_detects_authorization_profiles(self):
+        models = self.root / "models"
+        models.mkdir()
+        (models / "app_user.py").write_text(
+            "class AppUser:\n"
+            "    __tablename__ = 'app_user'\n"
+            "    username = Column('username', String(50))\n"
+            "    password_hash = Column('password_hash', String(255))\n",
+            encoding="utf-8",
+        )
+        (models / "document.py").write_text(
+            "class Document:\n"
+            "    __tablename__ = 'document'\n"
+            "    document_id = Column('document_id', BigInteger, primary_key=True)\n"
+            "    owner_user_id = Column('owner_user_id', BigInteger)\n"
+            "    tenant_id = Column('tenant_id', BigInteger)\n"
+            "    status = Column('status', Integer)\n",
+            encoding="utf-8",
+        )
+        (models / "resource_grant.py").write_text(
+            "class ResourceGrant:\n"
+            "    __tablename__ = 'resource_grant'\n"
+            "    resource_grant_id = Column('resource_grant_id', BigInteger)\n"
+            "    grantee_user_id = Column('grantee_user_id', BigInteger)\n"
+            "    can_view = Column('can_view', Boolean)\n"
+            "    can_edit = Column('can_edit', Boolean)\n",
+            encoding="utf-8",
+        )
+        (models / "field_policy.py").write_text(
+            "class FieldPolicy:\n"
+            "    __tablename__ = 'field_policy'\n"
+            "    field_policy_id = Column('field_policy_id', BigInteger)\n"
+            "    field_code = Column('field_code', String(64))\n"
+            "    access_mode = Column('access_mode', Integer)\n"
+            "    mask_pattern = Column('mask_pattern', String(100))\n",
+            encoding="utf-8",
+        )
+        (models / "access_request.py").write_text(
+            "class AccessRequest:\n"
+            "    __tablename__ = 'access_request'\n"
+            "    access_request_id = Column('access_request_id', BigInteger)\n"
+            "    applicant_user_id = Column('applicant_user_id', BigInteger)\n"
+            "    status = Column('status', Integer)\n",
+            encoding="utf-8",
+        )
+        out = self.root / "preflight.json"
+        result = self.run_tool("preflight_auth.py", self.root, "-o", out)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(out.read_text(encoding="utf-8"))
+
+        ids = {item["id"] for item in report["authorization_profiles"]}
+        for expected in (
+            "object_ownership",
+            "tenant_isolation",
+            "acl_grant",
+            "field_level",
+            "approval_temp_grant",
+        ):
+            self.assertIn(expected, ids)
+        self.assertNotIn("sod", ids)
+
+        by_table = {row["table"]: row for row in report["scope_fields"]}
+        self.assertIn("owner_user_id", by_table["document"]["ownership"])
+        self.assertIn("tenant_id", by_table["document"]["tenant"])
+        self.assertIn("status", by_table["document"]["role_status"])
+
+    def test_preflight_detects_sql_authorization_profiles(self):
+        database = self.root / "database"
+        database.mkdir()
+        (database / "schema.sql").write_text(
+            "CREATE TABLE org_unit (\n"
+            "  org_unit_id BIGINT UNSIGNED NOT NULL,\n"
+            "  parent_org_unit_id BIGINT UNSIGNED NULL,\n"
+            "  org_type TINYINT UNSIGNED NOT NULL\n"
+            ");\n"
+            "CREATE TABLE document (\n"
+            "  document_id BIGINT UNSIGNED NOT NULL,\n"
+            "  org_unit_id BIGINT UNSIGNED NOT NULL,\n"
+            "  status TINYINT UNSIGNED NOT NULL\n"
+            ");\n",
+            encoding="utf-8",
+        )
+        out = self.root / "preflight.json"
+        result = self.run_tool("preflight_auth.py", self.root, "-o", out)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(out.read_text(encoding="utf-8"))
+        ids = {item["id"] for item in report["authorization_profiles"]}
+        self.assertIn("org_scope", ids)
+
     def test_endpoint_surface_valid_plan(self):
         inv = self.write_json("inv.json", {"routes": [{"method": "GET", "path": "/x"}]})
         plan = self.write_json("surface.json", {"routes": [

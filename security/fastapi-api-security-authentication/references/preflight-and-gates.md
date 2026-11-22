@@ -192,4 +192,42 @@ python "<skill目录>/scripts/preflight_auth.py" "<目标项目根>" -o auth-pre
 
 ## 7. 与后续步骤的衔接
 
-门禁与白名单完成后，才进入 `middleware/` 装饰器、对象权限和测试。可选脚本 `route_inventory.py`、`check_policy_coverage.py`、`http_auth_probe.py` 不能代替门禁停问，也不能代替查库的越权测试。
+门禁与白名单完成后，才进入 `middleware/` 装饰器、对象权限和测试。可选脚本 `route_inventory.py`、`check_policy_coverage.py`、`http_auth_probe.py` 不能代替门禁停问，也不能代替查库的越权测试。门禁 6 的数据权限模型识别见下一节，未确认前不进入数据权限实现。
+
+## 8. 数据权限模型识别（门禁 6）
+
+门禁 5 通过后执行。预检脚本会把表/字段证据汇总到 `authorization_profiles` 与 `scope_fields`，模型规格见[数据权限模型识别与落地](authorization-models.md)。
+
+### 8.1 读取与确认
+
+1. 运行 `preflight_auth.py`，读取 `authorization_profiles`：每项包含 `id`、`confidence`、`evidence`、`required_controls`、`acceptance_cases`。
+2. 逐项标记：`confirmed` / `evidence_inferred` / `not_applicable`。标记为 `confirmed` 或 `evidence_inferred` 的模型都必须实现控制点并在权限说明中记录。
+3. 读取 `scope_fields`：确认每张表的 ownership/tenant/org/project/role_status 字段哪些由服务端赋值、哪些允许客户端传但必须校验。
+4. 同一资源命中多个模型时，按[组合优先级](authorization-models.md#五组合与优先级)求值。
+
+### 8.2 必须停问的情形
+
+出现以下情况先停问，不能自行假定：
+
+- 归属字段语义不明（`user_id` / `owner_id` 可能是创建者、审核者、收件人或转移目标）；
+- 检测到租户/组织/项目字段，但需求的可见范围、跨范围返回语义（403/404）未说明；
+- 检测到 ACL/分享/审批/密级/ABAC 表，但动作矩阵、审批人数、MFA 要求或显式拒绝优先级未说明；
+- 检测到 `field_policy` / `abac_policy` / `platform_config` 等策略表，但默认值、优先级或配置键含义未说明；
+- 检测到服务账号/API Key/委托结构，但范围、有效期或是否可再委托未说明。
+
+话术示例：
+
+```text
+检查结果：检测到数据权限模型（列出模型与证据，如 owner_user_id、tenant_id、resource_grant、field_policy）。
+但这些字段/表的业务语义尚不明确：<列出待确认点>。
+在补充前，我不会据此放宽或扩大访问；未确认部分按更小权限处理并写进权限说明。
+请补充：主体来源、可读写范围、动作矩阵、跨范围返回语义（403/404）、审批/MFA 要求。
+```
+
+### 8.3 确认后的动作
+
+- 在 `docs/auth-policy.md` 为每个模型写：触发证据、主体来源、数据范围、动作矩阵、响应语义、测试用例、未覆盖项。
+- 创建时由服务端绑定范围字段；Update 排除归属/租户/组织/项目/角色/状态等无权字段。
+- 列表在分页和计数前过滤；写操作先读原对象再判断；被拒写操作查库确认无副作用。
+- 按[测试与验收](testing-and-acceptance.md)第六节为每个模型补正向 + 拒绝断言。
+- 检测到但本轮无法实现的模型，必须在报告与权限说明中列为缺口，不能宣称已覆盖。

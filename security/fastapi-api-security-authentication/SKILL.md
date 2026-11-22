@@ -1,13 +1,13 @@
 ---
 name: fastapi-api-security-authentication
-description: "给已有 FastAPI CRUD 项目补白名单、Bearer/Cookie JWT 与角色/对象权限，补齐会话与刷新令牌生命周期、密码重置，并生成可登录的初始管理员种子数据（读取 .env）。先检查账号表与登录接口、令牌与生命周期完整性、角色设计和初始管理员入口，不满足则停下来询问；通过后再设常规白名单并加固。用于未授权访问、水平越权、垂直越权防护。"
+description: "给已有 FastAPI CRUD 项目补白名单、Bearer/Cookie JWT 与角色/对象权限，补齐会话与刷新令牌生命周期、密码重置，并生成可登录的初始管理员种子数据（读取 .env）。先检查账号表与登录接口、令牌与生命周期完整性、角色设计和初始管理员入口，不满足则停下来询问；通过后再设常规白名单并加固。覆盖对象归属、租户、组织范围、项目关系、ACL/分享、密级、ABAC、字段级、审批/临时授权、高危/MFA/Break-glass、职责分离、审计决策、服务账号/委托、场景库与鉴权行为配置，并逐模型给出可复跑验收。用于未授权访问、水平越权、垂直越权与数据权限防护。"
 ---
 
 # FastAPI 接口鉴权加固
 
 ## 目标和范围
 
-加固现有接口：阻止未授权访问；阻止同权限用户操作无权访问的他人数据（水平越权）；阻止低权限用户执行高权限操作（垂直越权）。优先适配 `sql-to-fastapi-restfulapi-scaffold` 生成的项目，保留现有启动方式及 Resource → Service → Repository → Model 分层；原脚手架 Skill 只读。**接口按业务需要保留**：脚手架生成但无业务动作、或会破坏审计/会话/令牌语义的通用 CRUD，必须删除或收窄为业务动作，不能以「管理员专属」为由保留（见[接口面最小化](references/endpoint-minimization.md)）。只做实现和验证上述目标所需的改动，不扩展为通用安全平台。
+加固现有接口：阻止未授权访问；阻止同权限用户操作无权访问的他人数据（水平越权）；阻止低权限用户执行高权限操作（垂直越权）；补齐租户、组织、项目关系、ACL/分享、密级、ABAC、字段级、审批/临时授权、高危操作、职责分离、审计决策、服务账号与行为配置等数据权限。优先适配 `sql-to-fastapi-restfulapi-scaffold` 生成的项目，保留现有启动方式及 Resource → Service → Repository → Model 分层；原脚手架 Skill 只读。**接口按业务需要保留**：脚手架生成但无业务动作、或会破坏审计/会话/令牌语义的通用 CRUD，必须删除或收窄为业务动作，不能以「管理员专属」为由保留（见[接口面最小化](references/endpoint-minimization.md)）。只做实现和验证上述目标所需的改动，不扩展为通用安全平台。
 
 使用项目已有的 `middleware/`（若目录名不同则沿用现有约定）组织白名单、令牌认证和鉴权装饰器。受保护业务接口必须显式使用该目录定义的鉴权装饰器；`@router.get` 或异常处理装饰器不算。对象查询、归属判断和列表过滤在 Service；Resource 不直接调用 Repository。实现细节见[权限与结构规范](references/policy-and-architecture.md)。
 
@@ -88,6 +88,24 @@ python "<skill目录>/scripts/preflight_auth.py" "<目标项目根>" -o auth-pre
 - 删除可能影响仓库外调用方、或资源语义不明：停止并询问，不擅自删除。
 - 实施后必须用 `scripts/check_endpoint_surface.py` 对账「最终实际路由」与处置表；被删端点应返回 404/405，且不在 OpenAPI 与 README 中。
 
+### 门禁 6：数据权限模型识别
+
+门禁 5 通过后、写入型加固前执行。读取预检报告 `authorization_profiles` 与 `scope_fields`（由 `preflight_auth.py` 汇总），按[数据权限模型识别与落地](references/authorization-models.md)逐项确认：
+
+| 检测到 | 必做 |
+| --- | --- |
+| `object_ownership` / `tenant_isolation` / `org_scope` / `project_rebac` | 明确主体来源、可见范围、列表过滤位置、创建绑定与 Update 排除字段 |
+| `acl_grant` / `share_lifecycle` | 明确授权/分享的令牌、密码、次数、有效期、状态机与审计 |
+| `classification` / `abac_policy` | 明确等级/策略来源、显式拒绝优先级、MFA/审批义务、管理员是否受限 |
+| `field_level` | 明确字段策略表、可见/只读/脱敏/隐藏四态、列表/详情/导出一致性 |
+| `approval_temp_grant` / `high_risk_break_glass` | 明确审批人资格、自批禁止、双人审批、临时授权有效期与执行前复核 |
+| `sod` / `audit_decision` / `service_account` / `scenario_library` / `behavior_config` | 明确冲突检测、只读审计、API Key 范围、期望决策比对、配置校验 |
+
+- 每个检测到的模型都要在 `docs/auth-policy.md` 写出：触发证据、主体来源、数据范围、动作矩阵、响应语义、测试用例。证据不足的标记「证据推断」并按更小权限处理；与用户规则冲突时先停问。
+- 同一资源命中多个模型时，按[组合优先级](references/authorization-models.md#五组合与优先级)求值，任一拒绝即拒绝。
+- 未识别到任何模型时，仍按默认策略做对象归属与字段最小化，不能默认全员放行。
+- 门禁 6 未完成，不得进入数据权限实现。
+
 ### 常规白名单（门禁通过后、实现加固前）
 
 分析实际注册路由，按常规方式列出精确到 **HTTP 方法 + 路径** 的公开白名单，禁止前缀模糊匹配。默认公开仅限：
@@ -100,14 +118,14 @@ python "<skill目录>/scripts/preflight_auth.py" "<目标项目根>" -o auth-pre
 
 ## 工作步骤
 
-1. 确认目标项目路径、启动方式、SQL/模型与测试位置。可用计划功能跟踪，不另建状态系统。跑预检脚本，完成门禁 1 → 2（含 2B）→ 3 → 4 → 5（含必要停问）。
+1. 确认目标项目路径、启动方式、SQL/模型与测试位置。可用计划功能跟踪，不另建状态系统。跑预检脚本，完成门禁 1 → 2（含 2B）→ 3 → 4 → 5 → 6（含必要停问）。读取 `authorization_profiles` 时，逐项确认或标记「证据不足/不适用」，不能跳过检测到的模型。
 2. 盘点实际注册路由（含隐藏路由），按上一节设定常规白名单；逐条输出 keep/remove 处置表并说明业务语义（格式见[接口面最小化](references/endpoint-minimization.md)与[路由库存](references/policy-format.md)）；可选 `route_inventory.py` / `auth-policy.json`。
-3. **先按处置表删除 `remove` 项**：Resource 路由 → 仅被它使用的 Schema/Service/Repository 方法与测试；共享代码不删。再在 `middleware/` 实现并注册统一认证、白名单与鉴权装饰器，逐个接入受保护业务接口。主体和角色以服务端数据为准；Service 检查归属、创建目标及可改字段，列表在分页和计数前过滤。无凭证或令牌无效 401，角色不足 403。**自助入口与管理接口二选一**：提供 `/auth/me` 时，资源管理接口（含本人）一律用 `Depends(require_permission(...))` 声明式控制，禁止 `require_authenticated` + Service 手写权限判断。**改密必须是独立接口并校验旧口令；本人资料更新与管理端 Update Schema 都不得含 password**。**JWT 只放 `sub`（+`exp`/`iat`）**，角色权限每次请求实时加载；登录失败统一文案并做等时校验，限流按账号+来源。**越权响应 HTTP 状态、`body.code`、文案必须一致**（水平越权 403 + `RET.ROLEERR` + 「无权访问该资源」；旧口令错误 400 + `RET.PWDERR`；禁止用 404/「不存在」或 ROLEERR 冒充）。详见[认证与授权设计](references/policy-and-architecture.md)第四节的 1–7 条。**按门禁 2B 判定实现生命周期**：access + refresh（库内只存摘要）、刷新轮换与重放检测、会话状态/绝对与空闲过期校验、登出/强制下线、改密与重置后吊销旧会话、重置令牌一次性；Cookie 模式补 HttpOnly/Secure/SameSite/Path 与 CSRF。**Cookie 模式按 [Cookie 认证模板](references/templates/cookie-auth.md)实现**：登录 `Set-Cookie` 下发刷新令牌且响应体不含 `refresh_token`，刷新接口只从 Cookie 读取，登出清除 Cookie；设备名称从请求头取，请求 Schema 拒绝 `device_name` / `refresh_token`。**同步落地初始管理员种子脚本**：`scripts/seed_admin.py` 读取 `.env` 的 `INITIAL_ADMIN_*`，用项目统一哈希写入账号与管理员角色，幂等、不打印口令、不在启动时自动执行；`.env.example` 只保留空占位。
-4. 按[测试与验收](references/testing-and-acceptance.md)选代表性接口：真实登录、合法操作、未授权、水平与垂直越权；必须覆盖「按选定方案的自助入口」「资料更新不需要口令且拒绝 password 字段」「改密缺旧口令/旧口令错误被拒且哈希不变」「越权响应三元组一致」「列表含本人且为全量」「JWT 载荷最小」「唯一冲突 409」；查库确认被拒写入无副作用。**按门禁 2B 的级别补生命周期断言**：刷新轮换后旧 refresh 失效、refresh 重放被拒并吊销会话、登出/强制下线后 access 与 refresh 均 401、绝对/空闲过期 401、账号禁用即时 401、改密/重置后旧会话失效、重置令牌一次性与过期拒绝。**Cookie 模式补充**：`Set-Cookie` 含 HttpOnly/SameSite/Path/生产 Secure，登录响应体无 `refresh_token`；仅凭 Cookie 可刷新且 `Set-Cookie` 轮换；仅 body、无 Cookie 的刷新 401/422；body 带 `refresh_token` / `device_name` 被 422；登出清空 Cookie；会话设备名来自 `User-Agent` / `X-Device-Name`。核对全部业务路由已挂保护，不要求补全所有业务测试。原 `Bearer test-token` 用例改为真实登录。
-5. 写入型测试默认只打已确认的独立测试库，并核验实际连接的实例/库/归属。无安全测试库则停止写入并报告。不得输出密码、密钥、完整令牌、刷新令牌明文、重置令牌明文或连接串。**交付必须包含路由处置表（keep/remove 与实际删除清单）、`scripts/seed_admin.py`（或既有初始化入口的可复现说明与命令）、`.env.example` 的 `INITIAL_ADMIN_USERNAME` / `INITIAL_ADMIN_PASSWORD` 空占位、`docs/auth-policy.md`（白名单/权限码/角色/对象/字段/来源/初始管理员创建与轮换/会话与令牌生命周期级别及实际实现范围/已删除端点及理由），并同步 README 为「业务接口需要登录」；测试 fixture 创建的角色、权限、绑定与账号必须成对清理，且 fixture 不能替代种子脚本**。汇报门禁结论（含门禁 2B 级别与门禁 5 删除清单）、白名单、角色来源、初始管理员账号标识（不含口令）、生命周期实现与未实现项、改动、启动与测试命令、结果及受阻范围。
+3. **先按处置表删除 `remove` 项**：Resource 路由 → 仅被它使用的 Schema/Service/Repository 方法与测试；共享代码不删。再在 `middleware/` 实现并注册统一认证、白名单与鉴权装饰器，逐个接入受保护业务接口。主体和角色以服务端数据为准；Service 检查归属、创建目标及可改字段，列表在分页和计数前过滤。无凭证或令牌无效 401，角色不足 403。**按门禁 6 落地数据权限**：逐个检测到的模型实现范围过滤、归属/关系/ACL/密级/策略判断、字段投影与决策审计；创建由服务端绑定范围字段，Update 排除归属/租户/组织/项目/角色/状态等无权字段；同一资源多模型按组合优先级求值（见[数据权限模型识别与落地](references/authorization-models.md)）。**自助入口与管理接口二选一**：提供 `/auth/me` 时，资源管理接口（含本人）一律用 `Depends(require_permission(...))` 声明式控制，禁止 `require_authenticated` + Service 手写权限判断。**改密必须是独立接口并校验旧口令；本人资料更新与管理端 Update Schema 都不得含 password**。**JWT 只放 `sub`（+`exp`/`iat`）**，角色权限每次请求实时加载；登录失败统一文案并做等时校验，限流按账号+来源。**越权响应 HTTP 状态、`body.code`、文案必须一致**（水平越权 403 + `RET.ROLEERR` + 「无权访问该资源」；旧口令错误 400 + `RET.PWDERR`；禁止用 404/「不存在」或 ROLEERR 冒充）。详见[认证与授权设计](references/policy-and-architecture.md)第四节的 1–7 条。**按门禁 2B 判定实现生命周期**：access + refresh（库内只存摘要）、刷新轮换与重放检测、会话状态/绝对与空闲过期校验、登出/强制下线、改密与重置后吊销旧会话、重置令牌一次性；Cookie 模式补 HttpOnly/Secure/SameSite/Path 与 CSRF。**Cookie 模式按 [Cookie 认证模板](references/templates/cookie-auth.md)实现**：登录 `Set-Cookie` 下发刷新令牌且响应体不含 `refresh_token`，刷新接口只从 Cookie 读取，登出清除 Cookie；设备名称从请求头取，请求 Schema 拒绝 `device_name` / `refresh_token`。**同步落地初始管理员种子脚本**：`scripts/seed_admin.py` 读取 `.env` 的 `INITIAL_ADMIN_*`，用项目统一哈希写入账号与管理员角色，幂等、不打印口令、不在启动时自动执行；`.env.example` 只保留空占位。
+4. 按[测试与验收](references/testing-and-acceptance.md)选代表性接口：真实登录、合法操作、未授权、水平与垂直越权；必须覆盖「按选定方案的自助入口」「资料更新不需要口令且拒绝 password 字段」「改密缺旧口令/旧口令错误被拒且哈希不变」「越权响应三元组一致」「列表含本人且为全量」「JWT 载荷最小」「唯一冲突 409」；查库确认被拒写入无副作用。**按门禁 6 的检测结果补数据权限断言**：租户/组织/项目/归属越权、ACL/分享生命周期、密级与 MFA/审批义务、ABAC 显式拒绝优先、字段隐藏/脱敏/只读/导出、审批自批与双人审批、高危重复执行、SoD 冲突、审计只读与决策原因、API Key 范围/过期；每个模型至少一组正向 + 拒绝，列表单独断言计数。**按门禁 2B 的级别补生命周期断言**：刷新轮换后旧 refresh 失效、refresh 重放被拒并吊销会话、登出/强制下线后 access 与 refresh 均 401、绝对/空闲过期 401、账号禁用即时 401、改密/重置后旧会话失效、重置令牌一次性与过期拒绝。**Cookie 模式补充**：`Set-Cookie` 含 HttpOnly/SameSite/Path/生产 Secure，登录响应体无 `refresh_token`；仅凭 Cookie 可刷新且 `Set-Cookie` 轮换；仅 body、无 Cookie 的刷新 401/422；body 带 `refresh_token` / `device_name` 被 422；登出清空 Cookie；会话设备名来自 `User-Agent` / `X-Device-Name`。核对全部业务路由已挂保护，不要求补全所有业务测试。原 `Bearer test-token` 用例改为真实登录。
+5. 写入型测试默认只打已确认的独立测试库，并核验实际连接的实例/库/归属。无安全测试库则停止写入并报告。不得输出密码、密钥、完整令牌、刷新令牌明文、重置令牌明文或连接串。**交付必须包含路由处置表（keep/remove 与实际删除清单）、`scripts/seed_admin.py`（或既有初始化入口的可复现说明与命令）、`.env.example` 的 `INITIAL_ADMIN_USERNAME` / `INITIAL_ADMIN_PASSWORD` 空占位、`docs/auth-policy.md`（白名单/权限码/角色/对象/字段/来源/各数据权限模型的触发证据与动作矩阵/响应语义/未覆盖项/初始管理员创建与轮换/会话与令牌生命周期级别及实际实现范围/已删除端点及理由），并同步 README 为「业务接口需要登录」；测试 fixture 创建的角色、权限、绑定与账号必须成对清理，且 fixture 不能替代种子脚本**。汇报门禁结论（含门禁 2B 级别、门禁 5 删除清单、门禁 6 检测到的模型与覆盖情况）、白名单、角色来源、初始管理员账号标识（不含口令）、生命周期实现与未实现项、数据权限覆盖矩阵与缺口、改动、启动与测试命令、结果及受阻范围。
 
 风险备忘录与 HTTP 探测脚本按需使用，不能代替门禁和正反测试。
 
 ## 验收
 
-不能把登录成功、路由清单或全员 403 当作完成。六项同时成立：全部保留的业务接口已接入保护；代表性接口有合法成功与三类拒绝的真实证据；测试与运行步骤可复现；**系统内存在由种子脚本创建、可真实登录的管理员（重复执行脚本幂等）**；**门禁 2B 判定所需的会话/刷新/吊销/重置生命周期已实现并有真实断言，或已在报告与权限说明中明确标注「鉴权体系不完整」**；**接口面已按门禁 5 最小化：无业务动作的通用 CRUD 已删除、审计/会话/重置类资源无多余写接口、处置表与最终路由对账通过**。默认 `user`/`admin` 可以完成本轮，不得写成已还原真实产品全部业务规则。
+不能把登录成功、路由清单或全员 403 当作完成。七项同时成立：全部保留的业务接口已接入保护；代表性接口有合法成功与三类拒绝的真实证据；测试与运行步骤可复现；**系统内存在由种子脚本创建、可真实登录的管理员（重复执行脚本幂等）**；**门禁 2B 判定所需的会话/刷新/吊销/重置生命周期已实现并有真实断言，或已在报告与权限说明中明确标注「鉴权体系不完整」**；**接口面已按门禁 5 最小化：无业务动作的通用 CRUD 已删除、审计/会话/重置类资源无多余写接口、处置表与最终路由对账通过**；**门禁 6 检测到的每个数据权限模型都有触发证据、控制点与正向/拒绝断言，未覆盖项已列明，不存在客户端可控的范围字段**。默认 `user`/`admin` 可以完成本轮，不得写成已还原真实产品全部业务规则。
