@@ -129,10 +129,12 @@
 | --- | --- | --- |
 | `dsh-plugin-starter`（`others/`） | 一句话需求或插件原型 → DSH 插件起步项目，四类插件 + 内置开发者指南 | [README](others/dsh-plugin-starter/README.md) |
 | `supervisor-skills`（`research/`） | 12 个科研全流程技能（Idea 评估、文献调研、论文写作、投稿审核、Rebuttal） | [中文导读](research/supervisor-skills/README.zh-CN.md) |
+| `research-weave`（`research/`） | 论文淘金：决定哪些论文值得精读，Scout/Map/Update 三模式产出阅读建议、可追溯证据账本与检索记录 | [SKILL.md](research/research-weave/SKILL.md) |
 | `superpowers-zh`（`requirements_analysis/`） | 20 个通用工作流技能（brainstorming、writing-plans、executing-plans、subagent-driven-development、systematic-debugging、TDD 等），供支持 Skill 的 AI 工具加载使用 | 目录：`requirements_analysis/superpowers-zh/` |
 
 - 12 个科研技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
 - ⚠️ `supervisor-skills` 整体为 **CC BY-NC-SA 4.0**（非商业 + 相同方式共享），**不受 MIT 覆盖**，商用前请阅读 [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md)
+- `research-weave` 为 **MIT** 许可，技能自包含（校验脚本仅依赖 Python 标准库），与 `supervisor-skills/deep-research` 定位互补
 
 ---
 
@@ -180,6 +182,7 @@ ncepu_ideal-skills/
 │   ├── golang-continuous-integration/ / security-audit/
 │   └── spring-boot-testing/ / spring-security/
 ├── 📁 research/
+│   ├── research-weave/                             # 🧵 论文淘金技能（MIT，SKILL + references/ + scripts/）
 │   └── supervisor-skills/                          # 🔬 12 个科研技能（CC BY-NC-SA 4.0）
 ├── 📁 others/
 │   └── dsh-plugin-starter/                         # 🧩 DSH 插件起步项目生成技能
