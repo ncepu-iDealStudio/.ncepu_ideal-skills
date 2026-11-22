@@ -72,6 +72,48 @@ ADMIN_ENV = re.compile(
     re.M,
 )
 INSERT_INTO = re.compile(r"INSERT\s+INTO\s+`?([A-Za-z_]\w*)`?", re.I)
+SESSION_STRONG = re.compile(
+    r"(refresh|session|revok|jti|idle_expires|device|token_version|last_active)",
+    re.I,
+)
+SESSION_WEAK = re.compile(r"(expires_at|expires)", re.I)
+RESET_STRONG = re.compile(r"(reset_token|password_reset|verification_token|otp)", re.I)
+USED_MARK = re.compile(r"(used_at|consumed_at)", re.I)
+TOKEN_HASH = re.compile(r"token_hash", re.I)
+NON_RESET_TOKEN = re.compile(r"(refresh|access|session)", re.I)
+COOKIE_HINT = re.compile(
+    r"(set_cookie|delete_cookie|httponly|samesite|Cookie\()", re.I
+)
+SET_COOKIE = re.compile(r"(set_cookie|delete_cookie)", re.I)
+COOKIE_PARAM = re.compile(r"\bCookie\s*\(", re.I)
+CREDENTIAL_BODY_FIELDS = ("refresh_token", "device_name")
+REFRESH_ROUTE = re.compile(r"(refresh|renew)", re.I)
+LOGOUT_ROUTE = re.compile(r"(logout|signout|sign_out|revoke)", re.I)
+RESET_ROUTE = re.compile(
+    r"(password/reset|forgot|reset_password|reset-password)", re.I
+)
+LIFECYCLE_FN = re.compile(
+    r"^\s*(?:async\s+)?def\s+"
+    r"(refresh|rotate|logout|revoke|reset_password|forgot_password)\s*\(",
+    re.I | re.M,
+)
+SQL_KEYWORDS = frozenset(
+    {
+        "PRIMARY",
+        "UNIQUE",
+        "KEY",
+        "CONSTRAINT",
+        "INDEX",
+        "FOREIGN",
+        "CHECK",
+        "ENGINE",
+        "DEFAULT",
+        "CHARSET",
+        "COLLATE",
+        "COMMENT",
+        "AUTO_INCREMENT",
+    }
+)
 
 
 def _norm(name: str) -> str:
@@ -325,6 +367,191 @@ def scan_initial_admin(root: Path, account_tables: list[dict]) -> dict:
     return {"seed_candidates": candidates, "env_keys": env_keys}
 
 
+def _collect_model_tables(root: Path) -> list[dict]:
+    """List every model table with its column names (no password filter)."""
+    rows: list[dict] = []
+    for path in _iter_files(root, "models", ".py"):
+        if path.name in {"base.py", "__init__.py"}:
+            continue
+        text = _read(path)
+        table_m = TABLENAME.search(text)
+        table = table_m.group(1) if table_m else path.stem
+        cols = []
+        for match in COL_PY.finditer(text):
+            attr, db_name = match.group(1), match.group(2)
+            cols.append(db_name or attr)
+        if cols:
+            rows.append(
+                {
+                    "table": table,
+                    "file": str(path.relative_to(root)).replace("\\", "/"),
+                    "fields": cols,
+                }
+            )
+    return rows
+
+
+def _collect_sql_tables(root: Path) -> list[dict]:
+    """List every SQL table with its column names (no password filter)."""
+    rows: list[dict] = []
+    files = []
+    for folder in (root / "sql", root / "database"):
+        if folder.is_dir():
+            files.extend(folder.rglob("*.sql"))
+    for path in files:
+        text = _read(path)
+        current = None
+        acc: dict[str, list[str]] = {}
+        for line in text.splitlines():
+            tm = SQL_TABLE.search(line)
+            if tm:
+                current = tm.group(1)
+                acc.setdefault(current, [])
+                continue
+            if current:
+                for col in re.findall(r"`?([A-Za-z_]\w*)`?\s+(?:[A-Za-z]+)", line):
+                    if col.upper() not in SQL_KEYWORDS:
+                        acc[current].append(col)
+        rel = str(path.relative_to(root)).replace("\\", "/")
+        for table, cols in acc.items():
+            rows.append({"table": table, "file": rel, "fields": cols})
+    return rows
+
+
+def _schema_body_fields(text: str) -> list[dict]:
+    """List schema classes that declare refresh_token / device_name fields."""
+    hits: list[dict] = []
+    pattern = re.compile(
+        r"^class\s+(\w+)[^\n]*:\s*\n((?:[ \t]+[^\n]*\n|\s*\n)*)", re.M
+    )
+    for match in pattern.finditer(text):
+        block = match.group(2)
+        fields = [
+            field
+            for field in CREDENTIAL_BODY_FIELDS
+            if re.search(rf"^[ \t]+{field}\s*:", block, re.M)
+        ]
+        if fields:
+            hits.append({"class": match.group(1), "fields": fields})
+    return hits
+
+
+def scan_token_lifecycle(root: Path) -> dict:
+    """Collect session / refresh / reset / cookie evidence (no pass/fail decision)."""
+    tables = _collect_model_tables(root) + _collect_sql_tables(root)
+    session_tables: list[dict] = []
+    reset_tables: list[dict] = []
+
+    for row in tables:
+        fields = row.get("fields") or []
+        has_token = any("token" in f.lower() for f in fields)
+        strong = {f for f in fields if RESET_STRONG.search(f)}
+        weak = {
+            f
+            for f in fields
+            if USED_MARK.search(f)
+            or (TOKEN_HASH.search(f) and not NON_RESET_TOKEN.search(f))
+        }
+        if strong:
+            reset_hits = sorted(strong | weak)
+        elif has_token:
+            reset_hits = sorted(weak)
+        else:
+            reset_hits = []
+        if reset_hits:
+            reset_tables.append(
+                {"table": row["table"], "file": row["file"], "fields": reset_hits}
+            )
+            continue
+
+        strong = [f for f in fields if SESSION_STRONG.search(f)]
+        weak = [f for f in fields if SESSION_WEAK.search(f)]
+        if strong:
+            session_tables.append(
+                {
+                    "table": row["table"],
+                    "file": row["file"],
+                    "fields": sorted(set(strong + weak)),
+                }
+            )
+        elif weak:
+            session_tables.append(
+                {"table": row["table"], "file": row["file"], "fields": weak}
+            )
+
+    refresh_endpoints: list[dict] = []
+    logout_endpoints: list[dict] = []
+    reset_endpoints: list[dict] = []
+    cookie_files: set[str] = set()
+    set_cookie_files: set[str] = set()
+    cookie_param_files: set[str] = set()
+    seen = set()
+
+    for folder in ("api", "app"):
+        for path in _iter_files(root, folder, ".py"):
+            text = _read(path)
+            rel = str(path.relative_to(root)).replace("\\", "/")
+            if COOKIE_HINT.search(text):
+                cookie_files.add(rel)
+            if SET_COOKIE.search(text):
+                set_cookie_files.add(rel)
+            if COOKIE_PARAM.search(text):
+                cookie_param_files.add(rel)
+            prefix_m = re.search(
+                r"""APIRouter\(\s*prefix\s*=\s*['"]([^'"]+)['"]""", text
+            )
+            prefix = prefix_m.group(1) if prefix_m else ""
+            for match in re.finditer(
+                r"""@(?:router|app)\.(post|get|put|patch)\(\s*['"]([^'"]*)['"]""",
+                text,
+                re.I,
+            ):
+                method, path_part = match.group(1).upper(), match.group(2)
+                full = _join_path(prefix, path_part)
+                key = (rel, method, full)
+                if key in seen:
+                    continue
+                seen.add(key)
+                row = {"file": rel, "method": method, "path_hint": full}
+                if REFRESH_ROUTE.search(full):
+                    refresh_endpoints.append(row)
+                elif LOGOUT_ROUTE.search(full):
+                    logout_endpoints.append(row)
+                elif RESET_ROUTE.search(full):
+                    reset_endpoints.append(row)
+
+    service_methods: list[dict] = []
+    for path in _iter_files(root, "service", ".py"):
+        text = _read(path)
+        rel = str(path.relative_to(root)).replace("\\", "/")
+        for match in LIFECYCLE_FN.finditer(text):
+            service_methods.append({"file": rel, "function": match.group(1)})
+
+    for path in _iter_files(root, "core", ".py"):
+        text = _read(path)
+        if COOKIE_HINT.search(text):
+            cookie_files.add(str(path.relative_to(root)).replace("\\", "/"))
+
+    credential_body_fields: list[dict] = []
+    for path in _iter_files(root, "schemas", ".py"):
+        rel = str(path.relative_to(root)).replace("\\", "/")
+        for hit in _schema_body_fields(_read(path)):
+            credential_body_fields.append({"file": rel, **hit})
+
+    return {
+        "session_tables": session_tables,
+        "reset_token_tables": reset_tables,
+        "refresh_endpoints": refresh_endpoints,
+        "logout_endpoints": logout_endpoints,
+        "reset_endpoints": reset_endpoints,
+        "cookie_files": sorted(cookie_files),
+        "set_cookie_files": sorted(set_cookie_files),
+        "cookie_param_files": sorted(cookie_param_files),
+        "credential_body_fields": credential_body_fields,
+        "service_methods": service_methods,
+    }
+
+
 def build_report(root: Path) -> dict:
     models = scan_models(root)
     sql = scan_sql(root)
@@ -343,6 +570,7 @@ def build_report(root: Path) -> dict:
         "login_http": login_http,
         "role_signals": scan_role_signals(root, tables),
         "initial_admin": scan_initial_admin(root, tables),
+        "token_lifecycle": scan_token_lifecycle(root),
         "token_hints": scan_token_hints(root),
         "notes": [
             "本报告只列证据，是否通过门禁由 SKILL 规则判定。",
@@ -350,6 +578,11 @@ def build_report(root: Path) -> dict:
             "Bearer test-token 测试夹具不等于令牌鉴权合格。",
             "有账号表与登录接口不等于系统可用：还需要可登录的初始管理员"
             "（种子脚本 / 初始化 SQL / 迁移）；只有 fixture 或启动时自动 INSERT 不算合格入口。",
+            "有会话/刷新/重置结构但只有访问令牌，属于鉴权体系不完整；"
+            "判定级别与实现要求见 references/token-lifecycle.md。",
+            "Cookie 模式：刷新令牌应由 Set-Cookie 下发、刷新接口只从 Cookie 读取；"
+            "Schema 中出现 refresh_token/device_name 需人工判定：请求体不应有，"
+            "响应体不应有 refresh_token（device_name 可在响应中用于展示）。",
         ],
     }
 

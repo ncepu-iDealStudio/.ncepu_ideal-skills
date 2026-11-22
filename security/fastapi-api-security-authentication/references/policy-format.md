@@ -57,3 +57,31 @@ python "<skill目录>/scripts/check_policy_coverage.py" route-inventory.json aut
 ```
 
 工具检查清单格式、缺项、重复项与额外规则，并以非零退出码报告问题。它不会验证策略合理、字段陈述是否准确、代码是否生效，也不会实际发送接口请求。必须以真实正反测试及数据库状态验证鉴权。
+
+## 4. 接口处置表（最小接口面）
+
+用于门禁 5。对**最终实际注册路由**逐条声明保留或删除，并写业务理由；规则见[接口面最小化](endpoint-minimization.md)。
+
+```json
+{
+  "routes": [
+    {"method": "GET", "path": "/api/v1/account/{id}", "action": "keep",
+     "reason": "查看账号详情，权限码 account:read"},
+    {"method": "DELETE", "path": "/api/v1/account/{id}", "action": "remove",
+     "reason": "账号改用禁用状态，不做硬删除"},
+    {"method": "DELETE", "path": "/api/v1/audit-log/{id}", "action": "remove",
+     "reason": "审计记录只读"}
+  ]
+}
+```
+
+- `action` 只能是 `keep` 或 `remove`；`reason` 必须非空且不能是待定占位。
+- `keep` 必须存在于最终库存；`remove` 必须不存在。
+- 需要收窄行为的端点仍标 `keep`，在 `reason` 里写明收窄后的业务动作。
+
+```powershell
+python "<skill目录>/scripts/route_inventory.py" openapi.json -o route-inventory.json
+python "<skill目录>/scripts/check_endpoint_surface.py" route-inventory.json endpoint-surface.json
+```
+
+工具只验证「处置表与最终路由一致」，不验证删除是否破坏业务；被删端点仍需用真实请求确认 404/405。

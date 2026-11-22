@@ -176,6 +176,159 @@ class ToolTests(unittest.TestCase):
         self.assertEqual(report["initial_admin"]["seed_candidates"], [])
         self.assertEqual(report["initial_admin"]["env_keys"], [])
 
+    def test_preflight_detects_token_lifecycle(self):
+        models = self.root / "models"
+        models.mkdir()
+        (models / "app_user.py").write_text(
+            "class AppUser:\n"
+            "    __tablename__ = 'app_user'\n"
+            "    username = Column('username', String(50))\n"
+            "    password_hash = Column('password_hash', String(255))\n",
+            encoding="utf-8",
+        )
+        (models / "session_record.py").write_text(
+            "class SessionRecord:\n"
+            "    __tablename__ = 'session_record'\n"
+            "    refresh_token_hash = Column('refresh_token_hash', String(64))\n"
+            "    revoked_at = Column('revoked_at', DateTime)\n"
+            "    idle_expires_at = Column('idle_expires_at', DateTime)\n"
+            "    device_name = Column('device_name', String(100))\n",
+            encoding="utf-8",
+        )
+        (models / "reset_record.py").write_text(
+            "class ResetRecord:\n"
+            "    __tablename__ = 'reset_record'\n"
+            "    token_hash = Column('token_hash', String(64))\n"
+            "    used_at = Column('used_at', DateTime)\n"
+            "    expires_at = Column('expires_at', DateTime)\n",
+            encoding="utf-8",
+        )
+        api = self.root / "api"
+        api.mkdir()
+        (api / "auth.py").write_text(
+            "router = APIRouter(prefix='/auth')\n"
+            "@router.post('/refresh')\n"
+            "async def refresh():\n    return {}\n"
+            "@router.post('/logout')\n"
+            "async def logout():\n    return {}\n"
+            "@router.post('/password/reset')\n"
+            "async def reset():\n    return {}\n",
+            encoding="utf-8",
+        )
+        (api / "cookie.py").write_text(
+            "def attach(response):\n"
+            "    response.set_cookie('r', 'x', httponly=True, samesite='lax')\n",
+            encoding="utf-8",
+        )
+        out = self.root / "preflight.json"
+        result = self.run_tool("preflight_auth.py", self.root, "-o", out)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        life = json.loads(out.read_text(encoding="utf-8"))["token_lifecycle"]
+
+        session_tables = [item["table"] for item in life["session_tables"]]
+        reset_tables = [item["table"] for item in life["reset_token_tables"]]
+        self.assertIn("session_record", session_tables)
+        self.assertIn("reset_record", reset_tables)
+        self.assertNotIn("app_user", session_tables)
+
+        self.assertIn("/auth/refresh", [r["path_hint"] for r in life["refresh_endpoints"]])
+        self.assertIn("/auth/logout", [r["path_hint"] for r in life["logout_endpoints"]])
+        self.assertIn(
+            "/auth/password/reset", [r["path_hint"] for r in life["reset_endpoints"]]
+        )
+        self.assertIn("api/cookie.py", life["cookie_files"])
+
+    def test_preflight_reports_missing_lifecycle(self):
+        models = self.root / "models"
+        models.mkdir()
+        (models / "app_user.py").write_text(
+            "class AppUser:\n"
+            "    __tablename__ = 'app_user'\n"
+            "    username = Column('username', String(50))\n"
+            "    password_hash = Column('password_hash', String(255))\n",
+            encoding="utf-8",
+        )
+        out = self.root / "preflight.json"
+        result = self.run_tool("preflight_auth.py", self.root, "-o", out)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        life = json.loads(out.read_text(encoding="utf-8"))["token_lifecycle"]
+        self.assertEqual(life["session_tables"], [])
+        self.assertEqual(life["reset_token_tables"], [])
+        self.assertEqual(life["refresh_endpoints"], [])
+
+    def test_preflight_reports_cookie_contract_signals(self):
+        schemas = self.root / "schemas"
+        schemas.mkdir()
+        (schemas / "auth.py").write_text(
+            "class TokenResponse(BaseModel):\n"
+            "    access_token: str\n"
+            "    refresh_token: str\n"
+            "\n"
+            "class LoginRequest(BaseModel):\n"
+            "    username: str\n"
+            "    device_name: str | None = None\n",
+            encoding="utf-8",
+        )
+        api = self.root / "api"
+        api.mkdir()
+        (api / "auth.py").write_text(
+            "def login(response):\n"
+            "    response.set_cookie('refresh_token', 'x', httponly=True)\n"
+            "\n"
+            "async def refresh(refresh_token: str = Cookie(default=None)):\n"
+            "    return {}\n",
+            encoding="utf-8",
+        )
+        out = self.root / "preflight.json"
+        result = self.run_tool("preflight_auth.py", self.root, "-o", out)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        life = json.loads(out.read_text(encoding="utf-8"))["token_lifecycle"]
+
+        self.assertIn("api/auth.py", life["set_cookie_files"])
+        self.assertIn("api/auth.py", life["cookie_param_files"])
+        classes = {
+            (item["class"], tuple(item["fields"]))
+            for item in life["credential_body_fields"]
+        }
+        self.assertIn(("TokenResponse", ("refresh_token",)), classes)
+        self.assertIn(("LoginRequest", ("device_name",)), classes)
+
+    def test_endpoint_surface_valid_plan(self):
+        inv = self.write_json("inv.json", {"routes": [{"method": "GET", "path": "/x"}]})
+        plan = self.write_json("surface.json", {"routes": [
+            {"method": "GET", "path": "/x", "action": "keep", "reason": "查看详情"},
+            {"method": "DELETE", "path": "/x", "action": "remove", "reason": "改用状态禁用"},
+        ]})
+        result = self.run_tool("check_endpoint_surface.py", inv, plan)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("保留 1 个", result.stdout)
+
+    def test_endpoint_surface_detects_leftover_removed_route(self):
+        inv = self.write_json("inv.json", {"routes": [
+            {"method": "GET", "path": "/x"}, {"method": "DELETE", "path": "/x"}
+        ]})
+        plan = self.write_json("surface.json", {"routes": [
+            {"method": "GET", "path": "/x", "action": "keep", "reason": "查看详情"},
+            {"method": "DELETE", "path": "/x", "action": "remove", "reason": "审计不可删除"},
+        ]})
+        result = self.run_tool("check_endpoint_surface.py", inv, plan)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("仍注册", result.stderr)
+
+    def test_endpoint_surface_detects_missing_and_placeholder(self):
+        inv = self.write_json("inv.json", {"routes": [
+            {"method": "GET", "path": "/x"}, {"method": "POST", "path": "/y"}
+        ]})
+        plan = self.write_json("surface.json", {"routes": [
+            {"method": "GET", "path": "/x", "action": "keep", "reason": "查看详情"},
+            {"method": "GET", "path": "/z", "action": "keep", "reason": "待定"},
+        ]})
+        result = self.run_tool("check_endpoint_surface.py", inv, plan)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("缺少处置", result.stderr)
+        self.assertIn("未注册", result.stderr)
+        self.assertIn("reason", result.stderr)
+
     def test_protected_rules_cannot_use_placeholder_values(self):
         inv = self.write_json("inv.json", {"routes": [{"method": "GET", "path": "/x"}]})
         for placeholder in ("待定", "未决", " TODO ", "tBd", " 未确认 ", " UnKnOwN "):
