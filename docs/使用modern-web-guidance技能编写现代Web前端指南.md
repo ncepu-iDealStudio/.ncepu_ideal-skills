@@ -130,6 +130,7 @@ python3 resources/tools/mwg.py search "light dismiss dialog"
 - **中文可直接搜**：工具内置中文→英文同义词映射（`暗色`、`抽屉`、`通行密钥`、`滚动条`…）。
 
 按返回的 `title` / `summary` 判断：
+
 - **命中** → 直接进第 2 步 `retrieve`，**不要**再 `list`；
 - **结果为空/不相关** → 用具体名词（`dialog`/`modal`/`popover`/`table`/`form`）**改写一次**再搜；
 - 仍不中 → 用 `list` 浏览主题，或判定该主题未被覆盖，**不强取无关指南**。

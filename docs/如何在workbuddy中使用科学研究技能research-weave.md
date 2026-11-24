@@ -103,11 +103,11 @@ research-weave/
 
 如果 WorkBuddy 没识别到技能，一般有两种做法：
 
-**做法 A：直接在包含 `.workbuddy/skills/` 的项目里打开**
+### 做法 A：直接在包含 `.workbuddy/skills/` 的项目里打开
 
 这是最省事的。
 
-**做法 B：把技能复制到你的研究项目里**
+### 做法 B：把技能复制到你的研究项目里
 
 ```powershell
 New-Item -ItemType Directory -Force .workbuddy\skills
@@ -497,4 +497,3 @@ python research\research-weave\scripts\check_evidence.py 你的输出目录\evid
 | 冲突分析说明 | `research/research-weave/references/contradictions.md` |
 | 结构检查脚本 | `research/research-weave/scripts/check_evidence.py` |
 | WorkBuddy 相关示例文档 | `.docs/workbuddy中使用原型转应用技能.md` |
-

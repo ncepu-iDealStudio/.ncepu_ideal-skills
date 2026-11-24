@@ -95,11 +95,11 @@ git init
 1. 在 Cursor 里打开 **Agent** 对话。
 2. 输入并发送：
 
-```text
-/add-plugin superpowers
-```
+   ```text
+   /add-plugin superpowers
+   ```
 
-也可以打开插件市场，搜索 `superpowers`，安装同名插件。
+   也可以打开插件市场，搜索 `superpowers`，安装同名插件。
 
 3. 安装完成后，**新开一轮 Agent 对话**。刚才那一轮对话不会自动带上刚装好的技能。
 
