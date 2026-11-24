@@ -31,7 +31,7 @@ This repository does **one thing**: collect, organize, categorize, and improve s
 
 ## 🎯 Skill List
 
-Grouped by directory: **36 skills** (`requirements_analysis` 3, `design` 5, `sql-to` 4, `prototype-to` 7, `java` 5, `go` 4, `security` 6, `research` 1, `others` 1), plus the `requirements_analysis/spec-kit` toolkit, 20 general workflow skills, and 1 research skill collection (`supervisor-skills`).
+Grouped by directory: **38 skills** (`requirements_analysis` 3, `design` 5, `sql-to` 4, `prototype-to` 7, `java` 5, `go` 4, `security` 6, `research` 3, `ppt` 1, `others` 1), plus the `requirements_analysis/spec-kit` toolkit, 20 general workflow skills, and 1 research skill collection (`supervisor-skills`).
 
 ### 📋 Requirements Analysis & Design (`requirements_analysis/`, 3 skills)
 

@@ -32,7 +32,7 @@
 
 ## 🎯 技能清单
 
-按目录分组，共 **36 个技能**（`requirements_analysis` 3、`design` 5、`sql-to` 4、`prototype-to` 7、`java` 5、`go` 4、`security` 6、`research` 1、`others` 1），另有 `requirements_analysis/spec-kit` 工具包、20 个通用工作流技能，以及 1 组科研技能集（`supervisor-skills`）。
+按目录分组，共 **38 个技能**（`requirements_analysis` 3、`design` 5、`sql-to` 4、`prototype-to` 7、`java` 5、`go` 4、`security` 6、`research` 3、`ppt` 1、`others` 1），另有 `requirements_analysis/spec-kit` 工具包、20 个通用工作流技能，以及 1 组科研技能集（`supervisor-skills`）。
 
 ### 📋 需求分析与设计（`requirements_analysis/`，3 个技能）
 
