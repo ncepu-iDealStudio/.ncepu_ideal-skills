@@ -210,7 +210,8 @@ ncepu_ideal-skills/
 | 🚀 **Trae IDE** | [配置指南](.docs/Trea中使用skill配置.md) |
 | 💻 **Claude Code** | [配置指南](.docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [配置指南](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
-| 🧩 **CodeBuddy** | [配置指南](.docs/CodeBuddy中使用skill配置.md) |
+| 🧩 **CodeBuddy** | [配置指南](.docs/CodeBuddy中使用skill配置.md) · [Taro 技能指南](.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md) |
+| 🛠️ **WorkBuddy** | [科研技能集指南](.docs/如何在workbuddy中使用科研技能集supervisor-skills.md) · [research-weave 指南](.docs/如何在workbuddy中使用科学研究技能research-weave.md) |
 | 🧠 **DSH + Superpowers** | [需求分析教程](.docs/dsh中使用superpowers技能.md) |
 | 🧠 **Cursor + Superpowers** | [需求分析教程](.docs/如何在cursor中使用Superpowers技能进行项目的需求分析.md) |
 

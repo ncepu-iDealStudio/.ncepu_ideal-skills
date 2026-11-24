@@ -127,13 +127,17 @@ Grouped by directory: **38 skills** (`requirements_analysis` 3, `design` 5, `sql
 | Skill | Purpose | Documentation |
 | --- | --- | --- |
 | `dsh-plugin-starter` (`others/`) | One-line brief or prototype → DSH plugin starter project for four plugin types, with a developer guide | [README](others/dsh-plugin-starter/README.md) |
+| `gorden-ppt-skill` (`ppt/`) | 21 built-in Chinese PPTX templates + non-destructive text-only editing with python-pptx: work reports, job reviews, teaching slides, business proposals, data visualization | [SKILL.md](ppt/gorden-ppt-skill/SKILL.md) |
 | `supervisor-skills` (`research/`) | 12 research skills (idea evaluation, literature review, paper writing, pre-submission review, rebuttal) | [Chinese guide](research/supervisor-skills/README.zh-CN.md) |
 | `research-weave` (`research/`) | Paper prospecting: decide which papers deserve deep reading; Scout / Map / Update modes produce reading recommendations, a traceable evidence ledger, and search records | [SKILL.md](research/research-weave/SKILL.md) |
+| `best-paper-writing` (`research/`) | Award-paper-style writing: abstract / intro / method / experiments / figures distilled from 60 CVPR / ICCV / NeurIPS papers, with a built-in draft checker | [SKILL.md](research/best-paper-writing/skills/bestpaper-writing/SKILL.md) · [upstream README](research/best-paper-writing/README.md) |
 | `superpowers-zh` (`requirements_analysis/`) | 20 general workflow skills (brainstorming, writing-plans, executing-plans, subagent-driven-development, systematic-debugging, TDD, etc.), ready to install into any Skill-capable AI tool | Directory: `requirements_analysis/superpowers-zh/` |
 
 - The 12 research skills must be **installed as one group** (they reference each other); most are pure prompts, while `drawio-reconstruction` also needs Python scripts and the draw.io CLI
 - ⚠️ `supervisor-skills` is **CC BY-NC-SA 4.0** (non-commercial, share-alike) and **not covered by MIT**. Read [`references/PROVENANCE.md`](research/supervisor-skills/references/PROVENANCE.md) before commercial use
 - `research-weave` is **MIT** licensed and self-contained (validation script uses only the Python standard library); it complements `supervisor-skills/deep-research`
+- `best-paper-writing` is mainly **CC BY 4.0** (attribution required, commercial use allowed); short excerpted sentences in its exemplars are **not** licensed for copying into new papers, and the base skill is MIT. See [`references/PROVENANCE.md`](research/best-paper-writing/references/PROVENANCE.md)
+- ⚠️ `gorden-ppt-skill` code is **MIT**, but the visual assets in `templates/` are **non-commercial and must not be redistributed** (copyright stays with the original template authors) — personal study and research only, **no commercial use**. Adapted for WorkBuddy (optional auto-update, Windows/dependency notes); see [`references/PROVENANCE.md`](ppt/gorden-ppt-skill/references/PROVENANCE.md)
 
 ---
 
@@ -181,8 +185,11 @@ ncepu_ideal-skills/
 │   ├── golang-continuous-integration/ / security-audit/
 │   └── spring-boot-testing/ / spring-security/
 ├── 📁 research/
+│   ├── best-paper-writing/                         # 🏆 Award-paper-style writing (CC BY 4.0, CVPR templates & corpus)
 │   ├── research-weave/                             # 🧵 Paper prospecting skill (MIT, SKILL + references/ + scripts/)
 │   └── supervisor-skills/                          # 🔬 12 research skills (CC BY-NC-SA 4.0)
+├── 📁 ppt/                                         # 📊 PPT generation (1 skill)
+│   └── gorden-ppt-skill/                           # 🎨 21 Chinese-template PPT generation (code MIT / templates non-commercial)
 ├── 📁 others/
 │   └── dsh-plugin-starter/                         # 🧩 DSH plugin starter skill
 ```
@@ -202,7 +209,8 @@ Refer to the setup guides for how each tool loads skills from this repository:
 | 🚀 **Trae IDE** | [Configuration Guide](.docs/Trea中使用skill配置.md) |
 | 💻 **Claude Code** | [Configuration Guide](.docs/claude中使用skill配置.md) |
 | ⚡ **GitHub Copilot** | [Configuration Guide](.docs/GitHub%20Copilot中使用sql-to-flask-restfulapi-scaffold技能.md) |
-| 🧩 **CodeBuddy** | [Configuration Guide](.docs/CodeBuddy中使用skill配置.md) |
+| 🧩 **CodeBuddy** | [Configuration Guide](.docs/CodeBuddy中使用skill配置.md) · [Taro skill guide](.docs/在Codebuddy插件中使用prototype-to-taro-app技能指南.md) |
+| 🛠️ **WorkBuddy** | [Research skills guide](.docs/如何在workbuddy中使用科研技能集supervisor-skills.md) · [research-weave guide](.docs/如何在workbuddy中使用科学研究技能research-weave.md) |
 | 🧠 **DSH + Superpowers** | [Requirements tutorial](.docs/dsh中使用superpowers技能.md) |
 | 🧠 **Cursor + Superpowers** | [Requirements tutorial](.docs/如何在cursor中使用Superpowers技能进行项目的需求分析.md) |
 
