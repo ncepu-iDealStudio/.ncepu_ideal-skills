@@ -1,16 +1,14 @@
 ---
 name: experiment-plan
-description: 'Turn a refined research proposal or method idea into a detailed, claim-driven experiment roadmap. Use after `research-refine`, or when the user asks for a detailed experiment plan, ablation matrix, evaluation protocol, run order, compute budget, or paper-ready validation that supports the core problem, novelty, simplicity, and any LLM / VLM / Diffusion / RL-based contribution.'
-allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch
+description: >-
+  Turn a research proposal or method idea into a claim-driven experiment plan, ablation matrix, evaluation protocol, run order, or compute budget. Use for 实验设计、消融实验、评测协议 or 算力预算. Plans experiments; does not execute them.
 ---
 
 # Experiment Plan: Claim-Driven, Paper-Oriented Validation
 
-Refine and concretize: **$ARGUMENTS**
-
 ## Overview
 
-Use this skill after the method is stable enough that the next question becomes: **what exact experiments should we run, in what order, to defend the paper?** If the user wants the full chain in one request, prefer `/research-refine-pipeline`.
+Use this skill after the method is stable enough to design experiments. Accept a proposal, pasted notes, or project files explicitly identified by the user. No upstream skill, web access, or shell is required. Do not run experiments or install software.
 
 The goal is not to generate a giant benchmark wishlist. The goal is to turn a proposal into a **claim -> evidence -> run order** roadmap that supports four things:
 
@@ -21,7 +19,7 @@ The goal is not to generate a giant benchmark wishlist. The goal is to turn a pr
 
 ## Constants
 
-- **OUTPUT_DIR = `refine-logs/`** — Default destination for experiment planning artifacts.
+- **OUTPUT_DIR = `refine-logs/`** — Default project-relative destination only when the user requests files.
 - **MAX_PRIMARY_CLAIMS = 2** — Prefer one dominant claim plus one supporting claim.
 - **MAX_CORE_BLOCKS = 5** — Keep the must-run experimental story compact.
 - **MAX_BASELINE_FAMILIES = 3** — Prefer a few strong baselines over many weak ones.
@@ -31,11 +29,7 @@ The goal is not to generate a giant benchmark wishlist. The goal is to turn a pr
 
 ### Phase 0: Load the Proposal Context
 
-Read the most relevant existing files first if they exist:
-
-- `refine-logs/FINAL_PROPOSAL.md`
-- `refine-logs/REVIEW_SUMMARY.md`
-- `refine-logs/REFINEMENT_REPORT.md`
+Start with the current request. If the user refers to prior refinement artifacts, use the supplied files or look for `FINAL_PROPOSAL.md`, `REVIEW_SUMMARY.md`, and `REFINEMENT_REPORT.md` in the agreed project output directory.
 
 Extract:
 
@@ -120,9 +114,9 @@ For each milestone, estimate:
 
 Separate **must-run** from **nice-to-have** experiments.
 
-### Phase 5: Write the Outputs
+### Phase 5: Deliver the Outputs
 
-#### Step 5.1: Write `refine-logs/EXPERIMENT_PLAN.md`
+#### Step 5.1: Experiment plan (suggested file: `refine-logs/EXPERIMENT_PLAN.md`)
 
 Use this structure:
 
@@ -183,7 +177,7 @@ Use this structure:
 - [ ] Nice-to-have runs are separated from must-run runs
 ```
 
-#### Step 5.2: Write `refine-logs/EXPERIMENT_TRACKER.md`
+#### Step 5.2: Run tracker (suggested file: `refine-logs/EXPERIMENT_TRACKER.md`)
 
 Use this structure:
 
@@ -220,14 +214,11 @@ Tracker file: refine-logs/EXPERIMENT_TRACKER.md
 
 ## Output Protocols
 
-> Follow these shared protocols for all output files:
-> - **[Output Versioning Protocol](../shared-references/output-versioning.md)** — write timestamped file first, then copy to fixed name
-> - **[Output Manifest Protocol](../shared-references/output-manifest.md)** — log every output to MANIFEST.md
-> - **[Output Language Protocol](../shared-references/output-language.md)** — respect the project's language setting
+- Deliver the plan and compact tracker inline by default, including when writes are unavailable. In that case, omit the file claims from the summary.
+- On a file request, use the requested project path or the default above; treat the paths in the templates as examples. Do not overwrite existing outputs without permission. Write a differently named version or deliver inline if blocked.
+- Match the user’s language. Mark unknown budget, data, or success thresholds as pending confirmation. No manifest or other skill is required.
 
 ## Key Rules
-
-- **Large file handling**: If the Write tool fails due to file size, immediately retry using Bash (`cat << 'EOF' > file`) to write in chunks. Do NOT ask the user for permission — just do it silently.
 
 - **Every experiment must defend a claim.** If it does not change a reviewer belief, cut it.
 - **Prefer a compact paper story.** Design the main table first, then add only the ablations that defend it.
@@ -238,12 +229,6 @@ Tracker file: refine-logs/EXPERIMENT_TRACKER.md
 - **Reuse proposal constraints.** Do not invent unrealistic budgets or data assumptions.
 - **Do not fabricate results.** Plan evidence; do not claim evidence.
 
-## Composing with Other Skills
+## Optional handoff
 
-```
-/research-refine-pipeline -> one-shot method + experiment planning
-/research-refine   -> method and claim refinement
-/experiment-plan   -> detailed experiment roadmap
-/run-experiment    -> execute the runs
-/auto-review-loop  -> react to results and iterate on the paper
-```
+The plan and tracker can be passed to a separate execution workflow once the user approves the claims, protocol, and budget.

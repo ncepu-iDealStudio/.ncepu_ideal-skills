@@ -1,22 +1,12 @@
 ---
 name: check-citations
-description: Verify academic citations against CrossRef, Semantic Scholar, and OpenAlex. Detects AI-hallucinated references, chimeric citations, and suspicious patterns.
-version: 1.0.0
-metadata:
-  openclaw:
-    requires:
-      bins:
-        - python3
-    install:
-      - kind: uv
-        package: requests
-    emoji: "\U0001F50D"
-    homepage: https://github.com/PHY041/claude-skill-citation-checker
+description: >-
+  Check BibTeX citation metadata against Crossref, Semantic Scholar, and OpenAlex. Use for 核查参考文献、检查 BibTeX、验证 DOI or 排查编造引用. Distinguishes unavailable sources from completed searches without a match.
 ---
 
 # check-citations
 
-Verify academic citations against CrossRef, Semantic Scholar, and OpenAlex. Detects AI-hallucinated references, chimeric citations (real title + wrong authors), and suspicious patterns before submission.
+Check citation metadata before submission; flags are leads for manual review, not proof that a reference was fabricated. Run the script from the installed skill directory or use its absolute path. Do not send confidential titles or identifiers to external APIs without authorization. If shell or network access is unavailable, offer an offline formatting review and label it as such.
 
 ## When to Use
 
@@ -74,7 +64,8 @@ Each citation is checked against three independent databases:
 **Verification logic:**
 - Found in 2+ sources with matching title → **verified** (high confidence)
 - Found in 1 source only → **suspicious** (manual check recommended)
-- Found in 0 sources → **not_found** (likely hallucinated)
+- All three searches completed, no match → **not_found** (not proof of fabrication)
+- No matches and at least one lookup failed → **unverified** (retry or check manually); `source_errors` identifies failures even when another source matched
 
 ### Chimeric Detection
 
@@ -93,16 +84,13 @@ When a citation's title matches a real paper but the authors don't overlap at al
 | Code | Meaning |
 |------|---------|
 | 0 | All citations verified |
-| 1 | One or more citations not found |
-| 2 | Suspicious citations only (no hard failures) |
+| 1 | At least one citation not found, or invalid input path |
+| 2 | Suspicious citations, with no `not_found` or `unverified` |
+| 3 | At least one incomplete verification, with no `not_found` |
 
 ## Dependencies
 
-```bash
-pip install requests
-```
-
-No API keys required — uses free tiers of all three databases.
+Python 3.9+ and outbound HTTPS; no third-party Python packages. On Windows, use `python` or `py -3`. The script uses public endpoints, subject to provider availability and rate limits. `--json` keeps diagnostic messages off stdout.
 
 ## Accuracy (Tested)
 
@@ -114,7 +102,7 @@ No API keys required — uses free tiers of all three databases.
 | **False positive rate** | **10%** | 1 miss: unpublished tech report without DOI |
 | **False negative rate** | **0%** | No fake paper was ever verified |
 
-The core guarantee: **fake papers are never marked as real.**
+These are upstream results on a small historical sample; they do not guarantee correctness for other citations.
 
 ## Limitations
 
@@ -130,27 +118,12 @@ The core guarantee: **fake papers are never marked as real.**
 ```bash
 #!/bin/bash
 # .git/hooks/pre-commit
-python scripts/citation_checker.py references.bib --json > /tmp/cite_check.json
-NOT_FOUND=$(python3 -c "import json; d=json.load(open('/tmp/cite_check.json')); print(d['summary']['not_found'])")
-if [ "$NOT_FOUND" -gt "0" ]; then
-    echo "BLOCKED: $NOT_FOUND unfound citations. Run 'python scripts/citation_checker.py references.bib --verbose' to investigate."
-    exit 1
-fi
+python3 scripts/citation_checker.py references.bib
 ```
 
 ### GitHub Actions
 
 ```yaml
 - name: Check citations
-  run: |
-    pip install requests
-    python scripts/citation_checker.py references.bib --json > citation_report.json
-    python -c "
-    import json, sys
-    r = json.load(open('citation_report.json'))
-    if r['summary']['not_found'] > 0:
-        print(f'FAIL: {r[\"summary\"][\"not_found\"]} citations not found')
-        sys.exit(1)
-    print(f'PASS: {r[\"summary\"][\"verified\"]} verified, {r[\"summary\"][\"suspicious\"]} suspicious')
-    "
+  run: python scripts/citation_checker.py references.bib --json > citation_report.json
 ```

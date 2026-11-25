@@ -12,7 +12,7 @@
 
 | 本地目录 | 许可 | 来源 | 独立性 |
 |----------|------|------|--------|
-| `paper-reader/` | Agentero MIT | 一方技能（已适配） | ✅ 基本独立。**中文**论文精读：固定结构讲义式笔记（贡献/方法/实验/局限）写入 `NOTES.md`，含 LaTeX 公式格式约束与配图提取（pdftoppm 可选） |
+| `paper-reader/` | Agentero MIT | 一方技能（已适配） | ✅ 独立使用。**中文**论文精读：默认在对话交付讲义式笔记（贡献/方法/实验/局限），可按需保存；配图提取可选 |
 | `research-paper-writing/` | MIT（Master-cai） | 一方技能（致谢 Master-cai） | ✅ 完全自包含。英文论文写作：Abstract/Intro/Related Work/Method/Experiments/Conclusion 分节规范 + 37 个示例文件（introduction 六种写法、method 三要素等） |
 | `AGENTS.md` | Agentero MIT | 上游 `templates/vault/AGENTS.md` | Vault 级 Agent 约定（paper-reader 引用的阅读流程来源，含 `papers/` 目录约定） |
 | `README.md` | Agentero MIT | 上游 `templates/vault/.agents/skills/README.md` | 内置技能清单与版本升级机制说明（已加编辑注记） |
@@ -55,7 +55,7 @@
 | `research-paper-writing` | **无绑定**，自包含 | ✅ 可直接用（MIT，与 best-paper-writing 基础技能同源但内容不同） |
 | `paper-reader` | 已解除 CLI 绑定（见改造记录） | ✅ 可独立用：核心精读流程自包含；仅配图提取的 `pdftoppm`（poppler 工具）为可选依赖，无该工具时跳过配图或用其他方式转换 |
 
-`paper-reader` 在 WorkBuddy 或其他 Agent Harness 中使用：给 Agent 提供论文 PDF（及可选的 LaTeX 源码），产出写入 `{paper}/NOTES.md`；引用路径按 `papers/<id>/` 或你的实际目录约定。
+后续 Harness 适配：`paper-reader` 不再依赖 Vault 布局，接受本地 PDF、链接或粘贴文本。默认在对话交付；按需保存时，配图和 PDF 链接统一相对笔记目录。若无法读取全文或提取配图，显式标明覆盖范围并使用可验证的页码或图号。
 
 ## 版本机制（上游约定，已随 README 收录）
 

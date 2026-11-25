@@ -9,7 +9,7 @@
 ## 许可
 
 - 上游整体许可：**CC BY-SA 4.0**（署名-相同方式共享），版权方 CoPaper.AI
-- 本目录各技能文件**逐字保留上游原文，未做任何改动**；分发时必须保留根目录 `LICENSE`（CC BY-SA 4.0 原文）
+- 首次收录保留上游原文；后续本地改造见下文。分发时须保留合集 `LICENSE`（CC BY-SA 4.0 原文）、上游来源与改动声明，并核对各组件的上游许可。
 - ⚠️ **相同方式共享（Share-Alike）提示**：后续对本目录内技能的修改、衍生版本也须以 **CC BY-SA 4.0** 授权，不能改用 MIT 闭源发布
 
 ## 收录范围（选择性收录，非整库）
@@ -37,14 +37,11 @@
 | 缺失项 | 引用方 | 说明 |
 |--------|--------|------|
 | `idea-creator` 技能 | idea-discovery（管线末段衔接） | 小规模试验执行技能，需单独收录或删改衔接 |
-| `research-refine` 技能 | experiment-plan（前置环节） | 描述中写明"Use after research-refine"，需适配前置条件 |
 | `openalex` CLI 本体 | openalex | 技能只是 CLI 使用指南，命令行工具需另行安装 |
 | R + bibliometrix 包 | bibliometrix-guide | 运行环境需自备 R 与 bibliometrix；部分文献数据库需订阅 |
 | `mcp__codex__codex` MCP | idea-discovery（allowed-tools + reviewer 后端） | Codex 专用 MCP 工具，其他平台需替换评议后端（见 shared-references/reviewer-backends.md） |
-| `requests` 包 | check-citations（frontmatter install 声明） | 实测脚本仅用标准库即可运行（urllib），requests 声明可能针对旧版或测试 |
 
-## 本机验证记录（2026-11-25，Python 3.13）
+## Harness 适配记录
 
-- `check-citations/scripts/citation_checker.py --help`：正常运行，纯标准库
-- 端到端实测：构造 1 真（Attention Is All You Need）+ 1 假（编造论文）bib 文件，脚本跨 CrossRef/Semantic Scholar/OpenAlex 实际联网验证——真论文 ✓ 通过，假论文 ✗ 正确标记为 LIKELY HALLUCINATED
-- 相对链接检查：全目录 11 个相对链接全部可解析，0 失效
+- `experiment-plan` 移除上游命令、宿主专用工具声明和包外参考协议的硬依赖；接受用户直接提供的方案，默认不写文件、不执行实验。
+- `check-citations` 原实现实际硬依赖 `requests`；现改为标准库。无匹配且存在服务失败时返回 `unverified`，并在 JSON 中记录 `source_errors`。以离线测试覆盖超时、限流、成功但无匹配和 JSON 输出。

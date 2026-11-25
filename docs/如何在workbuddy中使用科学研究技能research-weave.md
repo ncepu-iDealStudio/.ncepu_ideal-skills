@@ -70,22 +70,9 @@
 
 ---
 
-## 4. 在 WorkBuddy 中，先把技能放在哪里
+## 4. 在 WorkBuddy 中安装技能
 
-WorkBuddy 会从项目目录里的 `.workbuddy/skills/` 加载技能。
-
-如果你是在本仓库环境里使用，推荐把 `research-weave` 放到这里：
-
-```text
-ncepu_ideal-skills/
-└── .workbuddy/
-    └── skills/
-        └── research-weave/
-            ├── SKILL.md
-            ├── LICENSE
-            ├── references/
-            └── scripts/
-```
+在「技能 → 添加技能 → 上传技能」导入完整的 `research-weave` 子目录对应的本地技能包，保留 `SKILL.md`、`LICENSE`、`references/` 和 `scripts/`。若需要压缩包，只打包这一个技能。上传默认跨项目可见；仅在当前项目使用时，按当前客户端的[官方技能说明](https://intl.cloud.tencent.com/zh/document/product/1316/84503)安装到项目级目录。本仓库不维护 WorkBuddy 专用副本。
 
 `research-weave` 目录里最重要的是这些内容：
 
@@ -101,26 +88,7 @@ research-weave/
     └── check_evidence.py           # 检查输出结构是否合法
 ```
 
-如果 WorkBuddy 没识别到技能，一般有两种做法：
-
-### 做法 A：直接在包含 `.workbuddy/skills/` 的项目里打开
-
-这是最省事的。
-
-### 做法 B：把技能复制到你的研究项目里
-
-```powershell
-New-Item -ItemType Directory -Force .workbuddy\skills
-Copy-Item -Recurse path\to\ncepu_ideal-skills\research\research-weave .workbuddy\skills\research-weave
-```
-
-然后在 WorkBuddy 中问一句：
-
-```text
-请列出当前可用的技能，看看有没有 research-weave。
-```
-
-如果它能识别出 `research-weave`，说明技能已经可用。
+在技能管理中确认 `research-weave` 已启用，再发送「请用 research-weave，仅根据我提供的两段摘要给出阅读顺序」。检查客户端实际加载记录，不把模型口头列出技能名当成已加载的证据。
 
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: research-weave
-description: Find and prioritize research papers for a concrete research question; reconstruct intellectual lineages, connect claims into an evidence network, and investigate conflicting findings. Use when a researcher needs to decide what to read, what prior work actually establishes, or where their project sits among competing explanations. Not for a bare bibliography, a single-paper summary, or a definitive novelty audit.
+description: >-
+  Prioritize papers, trace research lineages, map claims to evidence, and compare conflicting findings for a concrete question. Use for 先读哪几篇论文、梳理研究脉络、比较文献证据 or 更新证据图谱. Not for a bare bibliography, a single-paper summary, or a comprehensive literature review or novelty verdict.
 license: MIT
 metadata:
   version: "1.1"
@@ -54,10 +55,12 @@ For a saved Scout ledger, read only [scout-format.md](references/scout-format.md
 
 For Map/Update or rich proposition/relationship records, read [output-contract.md](references/output-contract.md). Match the user's language. Keep saved runs outside the installed skill and preserve prior runs. A small request may remain inline.
 
-Run saved ledgers through:
+If Python 3 and shell access are available, validate saved ledgers. Use the host-provided skill directory (not the project working directory) and the actual saved ledger path:
 
-```bash
-python3 <skill-dir>/scripts/check_evidence.py <output-dir>/evidence.json
+```powershell
+python "$SkillDir\scripts\check_evidence.py" "$OutputDir\evidence.json"
 ```
+
+On macOS/Linux, use `python3` and forward slashes with the equivalent paths. Use the available Python 3 launcher (`py -3` on Windows is another option). If the checker cannot run, review the ledger against its schema and mark it as not machine-validated.
 
 Resolve structural errors and inspect cautions. The checker validates declared data, not source meaning, logical entailment, actual independence or coverage. Reopen primary locations behind the main conclusion, top reading priorities and claimed conflicts; check at least one deferred near-match. Report unresolved semantic questions rather than forcing a zero-caution badge.

@@ -24,10 +24,7 @@ Usage:
     # Verbose mode (show API responses)
     python citation_checker.py references.bib --verbose
 
-Dependencies:
-    pip install requests
-
-No API keys required — uses free tiers of CrossRef, Semantic Scholar, and OpenAlex.
+Requires Python 3.9+ (standard library only) and access to the public API endpoints.
 """
 
 import re
@@ -35,15 +32,12 @@ import sys
 import json
 import time
 import urllib.parse
+from http.client import HTTPException
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional
-
-try:
-    import requests
-except ImportError:
-    print("Error: pip install requests")
-    sys.exit(1)
 
 
 # ---------------------------------------------------------------------------
@@ -67,7 +61,7 @@ class BibEntry:
 @dataclass
 class VerificationResult:
     entry: BibEntry
-    status: str  # "verified", "suspicious", "not_found", "error"
+    status: str  # "verified", "suspicious", "not_found", "unverified"
     confidence: float  # 0.0 - 1.0
     sources_checked: list[str] = field(default_factory=list)
     sources_found: list[str] = field(default_factory=list)
@@ -75,6 +69,7 @@ class VerificationResult:
     best_match_similarity: float = 0.0
     notes: list[str] = field(default_factory=list)
     red_flags: list[str] = field(default_factory=list)
+    source_errors: dict[str, str] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -234,157 +229,93 @@ HEADERS = {
 }
 
 
-def check_crossref(entry: BibEntry, verbose: bool = False) -> Optional[dict]:
-    """Search CrossRef for a matching paper. Covers 140M+ DOI-registered works."""
-    try:
-        # If DOI is provided, verify directly
-        if entry.doi:
-            url = f"https://api.crossref.org/works/{entry.doi}"
-            resp = requests.get(url, headers=HEADERS, timeout=10)
-            if resp.status_code == 200:
-                data = resp.json()["message"]
-                title = data.get("title", [""])[0]
-                authors_raw = data.get("author", [])
-                authors = ", ".join(
-                    f"{a.get('given', '')} {a.get('family', '')}"
-                    for a in authors_raw
-                )
+def fetch_json(url: str, timeout: int, retry_429: bool = False) -> dict:
+    request = Request(url, headers={**HEADERS, "Accept": "application/json"})
+    while True:
+        try:
+            with urlopen(request, timeout=timeout) as response:
+                data = json.load(response)
+            if not isinstance(data, dict):
+                raise ValueError("Expected a JSON object")
+            return data
+        except HTTPError as exc:
+            exc.close()
+            if exc.code != 429 or not retry_429:
+                raise
+            retry_429 = False
+            time.sleep(5)
+
+
+def title_candidates(title: str) -> list[str]:
+    _, _, subtitle = title.partition(":")
+    return [title, subtitle.strip()] if len(subtitle.split()) >= 4 else [title]
+
+
+def crossref_match(data: dict, similarity: float = 1.0, doi: str = "") -> dict:
+    return {
+        "title": (data.get("title") or [""])[0],
+        "authors": ", ".join(f"{a.get('given', '')} {a.get('family', '')}" for a in data.get("author", [])),
+        "doi": doi or data.get("DOI", ""),
+        "year": str(data.get("published-print", data.get("published-online", {})).get("date-parts", [[""]])[0][0]),
+        "similarity": similarity,
+    }
+
+
+def check_crossref(entry: BibEntry) -> Optional[dict]:
+    if entry.doi:
+        doi = urllib.parse.quote(entry.doi, safe="/")
+        try:
+            data = fetch_json(f"https://api.crossref.org/works/{doi}", timeout=10)
+        except HTTPError as exc:
+            if exc.code != 404:
+                raise
+        else:
+            return crossref_match(data["message"], doi=entry.doi)
+
+    for title in title_candidates(entry.title):
+        query = urllib.parse.urlencode({"query.title": title, "rows": 5})
+        data = fetch_json(f"https://api.crossref.org/works?{query}", timeout=15)
+        for item in data["message"]["items"]:
+            similarity = title_similarity(entry.title, (item.get("title") or [""])[0])
+            if similarity > 0.6:
+                return crossref_match(item, similarity)
+    return None
+
+
+def check_semantic_scholar(entry: BibEntry) -> Optional[dict]:
+    query = urllib.parse.urlencode({"query": entry.title, "limit": 3, "fields": "title,authors,year,externalIds"})
+    data = fetch_json(f"https://api.semanticscholar.org/graph/v1/paper/search?{query}", timeout=15, retry_429=True)
+    for paper in [] if data.get("total") == 0 else data["data"]:
+        title = paper.get("title", "")
+        similarity = title_similarity(entry.title, title)
+        if similarity > 0.6:
+            ids = paper.get("externalIds") or {}
+            return {
+                "title": title,
+                "authors": ", ".join(a.get("name", "") for a in paper.get("authors", [])),
+                "doi": ids.get("DOI", ""),
+                "arxiv": ids.get("ArXiv", ""),
+                "year": str(paper.get("year", "")),
+                "similarity": similarity,
+            }
+    return None
+
+
+def check_openalex(entry: BibEntry) -> Optional[dict]:
+    for title in title_candidates(entry.title):
+        query = urllib.parse.urlencode({"filter": f"title.search:{title}", "per_page": 5})
+        data = fetch_json(f"https://api.openalex.org/works?{query}", timeout=15)
+        for work in data["results"]:
+            found_title = work.get("title", "")
+            similarity = title_similarity(entry.title, found_title)
+            if similarity > 0.6:
                 return {
-                    "source": "CrossRef",
-                    "title": title,
-                    "authors": authors,
-                    "doi": entry.doi,
-                    "year": str(
-                        data.get("published-print", data.get("published-online", {}))
-                        .get("date-parts", [[""]])[0][0]
-                    ),
+                    "title": found_title,
+                    "authors": ", ".join(a.get("author", {}).get("display_name", "") for a in work.get("authorships", [])),
+                    "doi": (work.get("doi") or "").replace("https://doi.org/", ""),
+                    "year": str(work.get("publication_year", "")),
+                    "similarity": similarity,
                 }
-
-        # Title search — try full title, then subtitle if colon present
-        search_titles = [entry.title]
-        if ":" in entry.title:
-            subtitle = entry.title.split(":", 1)[1].strip()
-            if len(subtitle.split()) >= 4:
-                search_titles.append(subtitle)
-
-        for search_title in search_titles:
-            query = urllib.parse.quote(search_title)
-            url = f"https://api.crossref.org/works?query.title={query}&rows=5"
-            resp = requests.get(url, headers=HEADERS, timeout=15)
-            if resp.status_code == 200:
-                items = resp.json().get("message", {}).get("items", [])
-                for item in items:
-                    found_title = item.get("title", [""])[0]
-                    sim = title_similarity(entry.title, found_title)
-                    if sim > 0.6:
-                        authors_raw = item.get("author", [])
-                        authors = ", ".join(
-                            f"{a.get('given', '')} {a.get('family', '')}"
-                            for a in authors_raw
-                        )
-                        return {
-                            "source": "CrossRef",
-                            "title": found_title,
-                            "authors": authors,
-                            "doi": item.get("DOI", ""),
-                            "year": str(
-                                item.get("published-print", item.get("published-online", {}))
-                                .get("date-parts", [[""]])[0][0]
-                            ),
-                            "similarity": sim,
-                        }
-    except Exception as e:
-        if verbose:
-            print(f"  CrossRef error for '{entry.key}': {e}")
-    return None
-
-
-def check_semantic_scholar(
-    entry: BibEntry, verbose: bool = False
-) -> Optional[dict]:
-    """Search Semantic Scholar. Covers 200M+ papers with author disambiguation."""
-    query = urllib.parse.quote(entry.title)
-    url = f"https://api.semanticscholar.org/graph/v1/paper/search?query={query}&limit=3&fields=title,authors,year,externalIds"
-
-    for attempt in range(2):
-        try:
-            resp = requests.get(url, headers=HEADERS, timeout=15)
-            if resp.status_code == 200:
-                papers = resp.json().get("data", [])
-                for paper in papers:
-                    found_title = paper.get("title", "")
-                    sim = title_similarity(entry.title, found_title)
-                    if sim > 0.6:
-                        authors = ", ".join(
-                            a.get("name", "") for a in paper.get("authors", [])
-                        )
-                        ext_ids = paper.get("externalIds", {})
-                        return {
-                            "source": "Semantic Scholar",
-                            "title": found_title,
-                            "authors": authors,
-                            "doi": ext_ids.get("DOI", ""),
-                            "arxiv": ext_ids.get("ArXiv", ""),
-                            "year": str(paper.get("year", "")),
-                            "similarity": sim,
-                        }
-                return None  # Got 200 but no match
-            elif resp.status_code == 429:
-                wait = 5 if attempt == 0 else 10
-                if verbose:
-                    print(f"  Semantic Scholar rate limited, waiting {wait}s (attempt {attempt + 1})...")
-                time.sleep(wait)
-                continue
-            else:
-                return None
-        except Exception as e:
-            if verbose:
-                print(f"  Semantic Scholar error for '{entry.key}': {e}")
-            return None
-    return None
-
-
-def check_openalex(entry: BibEntry, verbose: bool = False) -> Optional[dict]:
-    """Search OpenAlex. Fully open, broadest coverage (240M+ works)."""
-    # Try full title, then subtitle if colon present
-    search_titles = [entry.title]
-    if ":" in entry.title:
-        subtitle = entry.title.split(":", 1)[1].strip()
-        if len(subtitle.split()) >= 4:
-            search_titles.append(subtitle)
-
-    for search_title in search_titles:
-        try:
-            query = urllib.parse.quote(search_title)
-            url = f"https://api.openalex.org/works?filter=title.search:{query}&per_page=5"
-            resp = requests.get(
-                url,
-                headers={**HEADERS, "Accept": "application/json"},
-                timeout=15,
-            )
-            if resp.status_code == 200:
-                results = resp.json().get("results", [])
-                for work in results:
-                    found_title = work.get("title", "")
-                    sim = title_similarity(entry.title, found_title)
-                    if sim > 0.6:
-                        authors = ", ".join(
-                            a.get("author", {}).get("display_name", "")
-                            for a in work.get("authorships", [])
-                        )
-                        return {
-                            "source": "OpenAlex",
-                            "title": found_title,
-                            "authors": authors,
-                            "doi": (work.get("doi") or "").replace(
-                                "https://doi.org/", ""
-                            ),
-                            "year": str(work.get("publication_year", "")),
-                            "similarity": sim,
-                        }
-        except Exception as e:
-            if verbose:
-                print(f"  OpenAlex error for '{entry.key}': {e}")
     return None
 
 
@@ -459,9 +390,17 @@ def verify_entry(entry: BibEntry, verbose: bool = False) -> VerificationResult:
     for source_name, checker in checkers:
         result.sources_checked.append(source_name)
         if verbose:
-            print(f"  Checking {source_name} for '{entry.key}'...")
+            print(f"  Checking {source_name} for '{entry.key}'...", file=sys.stderr)
 
-        match = checker(entry, verbose=verbose)
+        try:
+            match = checker(entry)
+        except (OSError, HTTPException, ValueError, KeyError, TypeError, AttributeError, IndexError) as exc:
+            reason = f"HTTP {exc.code}" if isinstance(exc, HTTPError) else type(exc).__name__
+            result.source_errors[source_name] = reason
+            if verbose:
+                print(f"  {source_name} lookup failed: {reason}", file=sys.stderr)
+            match = None
+
         if match:
             result.sources_found.append(source_name)
             matches.append(match)
@@ -505,10 +444,11 @@ def verify_entry(entry: BibEntry, verbose: bool = False) -> VerificationResult:
         result.confidence = 0.4 + (result.best_match_similarity * 0.2)
         result.notes.append("Found in only 1 source — verify manually")
 
+    elif result.source_errors:
+        result.status = "unverified"
+        result.notes.append("Lookup incomplete — retry unavailable sources or verify manually")
     else:
-        result.status = "not_found"
-        result.confidence = 0.0
-        result.notes.append("NOT FOUND in any database — likely hallucinated")
+        result.notes.append("No match in the queried databases — verify manually")
 
     # Red flags reduce confidence
     if result.red_flags:
@@ -518,24 +458,24 @@ def verify_entry(entry: BibEntry, verbose: bool = False) -> VerificationResult:
 
 
 def verify_all(
-    entries: list[BibEntry], verbose: bool = False
+    entries: list[BibEntry], verbose: bool = False, *, progress: bool = True
 ) -> list[VerificationResult]:
     """Verify all entries with progress reporting."""
     results = []
     total = len(entries)
 
     for i, entry in enumerate(entries, 1):
-        if not verbose:
+        if progress and not verbose:
             print(f"  [{i}/{total}] Checking: {entry.key}", end="", flush=True)
 
         result = verify_entry(entry, verbose=verbose)
 
-        if not verbose:
+        if progress and not verbose:
             status_icon = {
                 "verified": " ✓",
                 "suspicious": " ?",
                 "not_found": " ✗",
-                "error": " !",
+                "unverified": " !",
             }
             print(status_icon.get(result.status, " ?"))
 
@@ -556,6 +496,7 @@ def print_report(results: list[VerificationResult]) -> None:
     verified = [r for r in results if r.status == "verified"]
     suspicious = [r for r in results if r.status == "suspicious"]
     not_found = [r for r in results if r.status == "not_found"]
+    unverified = [r for r in results if r.status == "unverified"]
     with_flags = [r for r in results if r.red_flags]
 
     print("\n" + "=" * 65)
@@ -564,13 +505,19 @@ def print_report(results: list[VerificationResult]) -> None:
 
     print(f"\n  Total citations: {len(results)}")
     print(f"  Verified (2+ sources): {len(verified)}")
-    print(f"  Suspicious (1 source):  {len(suspicious)}")
+    print(f"  Suspicious:            {len(suspicious)}")
     print(f"  NOT FOUND (0 sources):  {len(not_found)}")
+    print(f"  UNVERIFIED:            {len(unverified)}")
+
+    for r in results:
+        if r.source_errors:
+            errors = ", ".join(f"{name}: {reason}" for name, reason in r.source_errors.items())
+            print(f"    [{r.entry.key}] Source failures: {errors}")
     print(f"  With red flags:         {len(with_flags)}")
 
     if not_found:
         print(f"\n  {'='*60}")
-        print("  CITATIONS NOT FOUND — LIKELY HALLUCINATED")
+        print("  CITATIONS NOT FOUND — VERIFY MANUALLY")
         print(f"  {'='*60}")
         for r in not_found:
             print(f"\n  [{r.entry.key}] {r.entry.file_path}:{r.entry.line_number}")
@@ -583,7 +530,7 @@ def print_report(results: list[VerificationResult]) -> None:
 
     if suspicious:
         print(f"\n  {'-'*60}")
-        print("  SUSPICIOUS — FOUND IN ONLY 1 SOURCE (verify manually)")
+        print("  SUSPICIOUS — VERIFY MATCHES MANUALLY")
         print(f"  {'-'*60}")
         for r in suspicious:
             print(f"\n  [{r.entry.key}] confidence={r.confidence:.0%}")
@@ -612,14 +559,16 @@ def print_report(results: list[VerificationResult]) -> None:
     if not_found:
         print(
             f"  RESULT: {len(not_found)} UNFOUND CITATION(S) — "
-            "remove or replace before submission"
+            "verify manually before submission"
         )
-    elif suspicious:
+    if unverified:
+        print(f"  RESULT: {len(unverified)} UNVERIFIED — retry unavailable sources or check manually")
+    if suspicious:
         print(
             f"  RESULT: {len(suspicious)} SUSPICIOUS — "
             "manually verify these citations"
         )
-    else:
+    if not (not_found or suspicious or unverified):
         print("  RESULT: All citations verified in 2+ sources")
     print("=" * 65 + "\n")
 
@@ -632,6 +581,7 @@ def json_report(results: list[VerificationResult]) -> str:
             "verified": sum(1 for r in results if r.status == "verified"),
             "suspicious": sum(1 for r in results if r.status == "suspicious"),
             "not_found": sum(1 for r in results if r.status == "not_found"),
+            "unverified": sum(1 for r in results if r.status == "unverified"),
         },
         "citations": [],
     }
@@ -643,6 +593,7 @@ def json_report(results: list[VerificationResult]) -> str:
                 "status": r.status,
                 "confidence": round(r.confidence, 2),
                 "sources_found": r.sources_found,
+                "source_errors": r.source_errors,
                 "best_match_title": r.best_match_title,
                 "best_match_similarity": round(r.best_match_similarity, 2),
                 "red_flags": r.red_flags,
@@ -692,14 +643,14 @@ def main():
             print(f"Parsed {len(entries)} entries from {bib_file}")
 
     if not all_entries:
-        print("No BibTeX entries found")
+        print(json_report([]) if args.json else "No BibTeX entries found")
         sys.exit(0)
 
     if not args.json:
         print(f"\nVerifying {len(all_entries)} citations across 3 databases...\n")
 
     # Verify
-    results = verify_all(all_entries, verbose=args.verbose)
+    results = verify_all(all_entries, verbose=args.verbose, progress=not args.json)
 
     # Report
     if args.json:
@@ -707,13 +658,10 @@ def main():
     else:
         print_report(results)
 
-    # Exit code: 1 if any not_found, 2 if suspicious only, 0 if all verified
-    not_found = sum(1 for r in results if r.status == "not_found")
-    suspicious = sum(1 for r in results if r.status == "suspicious")
-    if not_found:
-        sys.exit(1)
-    elif suspicious:
-        sys.exit(2)
+    statuses = {r.status for r in results}
+    for status, code in (("not_found", 1), ("unverified", 3), ("suspicious", 2)):
+        if status in statuses:
+            sys.exit(code)
     sys.exit(0)
 
 

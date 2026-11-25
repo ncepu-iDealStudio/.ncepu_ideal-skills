@@ -143,8 +143,8 @@
 - `best-paper-writing` 主体为 **CC BY 4.0**（需署名，可商用），exemplars 中的论文短句引用**不在许可范围内、严禁复制进新论文**，基础技能部分为 MIT；详见 [`references/PROVENANCE.md`](research/best-paper-writing/references/PROVENANCE.md)
 - ⚠️ `gorden-ppt-skill` 代码为 **MIT**，但 `templates/` 模板视觉资产**非商业 + 上游禁止二次分发**（版权归原模板作者），仅限个人学习研究，**严禁商用**；已为 WorkBuddy 做环境适配（自动更新改可选、Windows/依赖注记）；详见 [`references/PROVENANCE.md`](ppt/gorden-ppt-skill/references/PROVENANCE.md)
 - `last30days` 为 **MIT** 许可；自带 Python 调研引擎（需 Python 3.12+），多数据源凭据**可选**（首次使用有 setup wizard 引导，亦有 keyless 模式）；调研境外平台需网络可达；详见 [`references/PROVENANCE.md`](info-research/last30days/references/PROVENANCE.md)
-- `auto-empirical-research` 为 **CC BY-SA 4.0**（署名 + 相同方式共享，可商用但衍生版本须同许可），从上游 78 合集 / 1151 条目中**选择性收录 6 项**适合计算机科研的技能；部分技能引用上游未收录组件（`idea-creator`、`research-refine`、`openalex` CLI、R 环境等），独立使用前需适配；详见 [`references/PROVENANCE.md`](research/auto-empirical-research/references/PROVENANCE.md)
-- `agentero-skills` 为 **MIT**（源自 Agentero 应用）；已做独立化改造：`paper-reader` 中文精读技能**已去除 Agentero CLI 绑定**可直接用（pdftoppm 配图提取为可选依赖），`research-paper-writing` 自包含可直接用；另 3 个强绑定应用的技能已删除，2 个同源技能与 `supervisor-skills` 重复未收录；改造明细见 [`references/PROVENANCE.md`](research/agentero-skills/references/PROVENANCE.md)
+- `auto-empirical-research` 合集为 **CC BY-SA 4.0**，选择性收录 6 项科研技能。`experiment-plan` 和 `check-citations` 支持单独安装；`idea-discovery` 仍依赖未收录的上游组件，`openalex` 和 `bibliometrix-guide` 有外部运行要求。见[科研技能安装指南](research/README.md)和[来源与许可](research/auto-empirical-research/references/PROVENANCE.md)。
+- `agentero-skills` 为 **MIT**（源自 Agentero 应用）。`paper-reader` 不依赖 Agentero CLI 或 Vault，默认在对话交付，配图提取可选；`research-paper-writing` 可独立使用。见[改造说明](research/agentero-skills/references/PROVENANCE.md)。
 
 ---
 

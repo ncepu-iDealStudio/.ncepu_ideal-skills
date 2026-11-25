@@ -14,9 +14,16 @@ Usage:
     python tests/test_citation_checker.py --verbose
 """
 
+import json
 import sys
 import time
+import unittest
+from contextlib import redirect_stderr, redirect_stdout
+from io import BytesIO, StringIO
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
+from urllib.error import HTTPError
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -27,6 +34,58 @@ from scripts.citation_checker import (
     author_overlap,
     detect_red_flags,
 )
+
+
+class LookupAvailabilityTests(unittest.TestCase):
+    def setUp(self):
+        self.entry = BibEntry("example", "article", "Example paper", "Doe, Jane", "2024")
+        sleep = patch("scripts.citation_checker.time.sleep")
+        sleep.start()
+        self.addCleanup(sleep.stop)
+
+    def test_successful_searches_without_matches(self):
+        responses = [BytesIO(b'{"message":{"items":[]}}'), BytesIO(b'{"total":0}'), BytesIO(b'{"results":[]}')]
+        with patch("scripts.citation_checker.urlopen", side_effect=responses):
+            result = verify_entry(self.entry)
+        self.assertEqual(result.status, "not_found")
+
+    def test_doi_404_falls_back_to_title_and_can_still_verify(self):
+        self.entry.doi = "10.1234/example"
+        responses = [
+            HTTPError("", 404, "Not Found", None, None),
+            BytesIO(b'{"message":{"items":[{"title":["Example paper"],"author":[{"family":"Doe"}]}]}}'),
+            BytesIO(b'{"data":[{"title":"Example paper","authors":[{"name":"Jane Doe"}]}]}'),
+            BytesIO(b'{"results":[]}'),
+        ]
+        with patch("scripts.citation_checker.urlopen", side_effect=responses):
+            result = verify_entry(self.entry)
+        self.assertEqual(result.status, "verified")
+        self.assertEqual(result.sources_found, ["CrossRef", "Semantic Scholar"])
+
+    def test_timeout_and_rate_limit_do_not_imply_missing_citation(self):
+        limited = HTTPError("", 429, "Too Many Requests", None, None)
+        responses = [TimeoutError(), limited, limited, BytesIO(b'{"results":[]}')]
+        with patch("scripts.citation_checker.urlopen", side_effect=responses):
+            result = verify_entry(self.entry)
+        self.assertEqual(result.status, "unverified")
+        self.assertEqual(result.source_errors, {"CrossRef": "TimeoutError", "Semantic Scholar": "HTTP 429"})
+
+    def test_json_mode_reports_incomplete_verification_with_distinct_exit_code(self):
+        from scripts.citation_checker import main
+
+        with TemporaryDirectory() as tmp:
+            bib = Path(tmp) / "sample.bib"
+            bib.write_text('@article{sample,\n  title={Example paper},\n  author={Doe, Jane},\n  year={2024}\n}\n', encoding="utf-8")
+            for flags in ([], ["--verbose"]):
+                with self.subTest(flags=flags):
+                    out = StringIO()
+                    unavailable = HTTPError("", 503, "Unavailable", None, None)
+                    with patch.object(sys, "argv", ["citation_checker", str(bib), "--json", *flags]), \
+                         patch("scripts.citation_checker.urlopen", side_effect=unavailable), \
+                         redirect_stdout(out), redirect_stderr(StringIO()), self.assertRaises(SystemExit) as exit_info:
+                        main()
+                    self.assertEqual(exit_info.exception.code, 3)
+                    self.assertEqual(json.loads(out.getvalue())["summary"]["unverified"], 1)
 
 
 # ============================================================

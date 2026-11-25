@@ -7,7 +7,7 @@
 | 技能包 | 子技能数 | 定位 | 许可证 |
 |---|---|---|---|
 | supervisor-skills | 12 | 科研"导师"系列：选题评估、写作、润色、审稿、答辩 | CC BY 4.0 / CC BY-NC-SA 4.0 |
-| auto-empirical-research | 6 | 实证研究自动化：找 idea、查文献、设计实验、验证引用 | CC BY-NC-SA 4.0 |
+| auto-empirical-research | 6 | 实证研究自动化：找 idea、查文献、设计实验、验证引用 | CC BY-SA 4.0（合集；另查各上游资源） |
 | research-weave | 1 | 文献证据网络：追溯学术谱系、梳理研究脉络 | MIT |
 | best-paper-writing | 1 | 顶会最佳论文风格写作（60 篇获奖论文蒸馏） | CC BY 4.0 |
 | agentero-skills | 2 | 论文精读讲解 + ML 论文写作示例库 | MIT |
@@ -66,15 +66,44 @@
 
 来源：[poco-ai/Agentero](https://github.com/poco-ai/Agentero)（上游为 Tauri 桌面应用，本仓库已剥离应用绑定、改造为可独立使用）
 
-- **paper-reader**：中文精读讲解科研论文——提炼核心贡献、深入解释方法、分析实验与局限，并在 NOTES.md 中写入讲义式中文笔记。**读不懂论文或需要中文精读笔记时使用**。
+- **paper-reader**：中文精读单篇科研论文。支持本地 PDF、链接或粘贴文本，默认在对话中交付讲义，按需保存笔记。**读不懂论文或需要中文精读笔记时使用**。
 - **research-paper-writing**：面向 ML/CV/NLP 论文的写作质量提升，附 37 个真实获奖论文的写作示例库（Abstract/Introduction/Related Work/Method/Experiments 各节的模板与范例）。**写作某一节不知道怎么组织时查阅对应示例**。
 
 ## 使用说明
 
-1. **加载方式**：每个技能以 `SKILL.md` 为入口（含 YAML frontmatter 的 name/description/license）。在支持 Agent Skills 规范的平台（WorkBuddy、Claude Code 等）中，将技能目录放入技能路径即可被自动发现与触发；也可在对话中直接让 AI 阅读对应 `SKILL.md` 后按其流程执行。
+1. **安装单位**：安装包含 `SKILL.md` 的整棵子目录，保留其中的 `references/`、`scripts/`、`assets/` 等资源。入口的 YAML 至少有 `name` 和 `description`；不要把合集外壳当成技能，也不要只复制入口文件。分发或分享前，按对应来源说明附上合集或技能级许可与署名。
+   - **WorkBuddy**：在「技能 → 添加技能 → 上传技能」导入本地包，启用后点名验证。若客户端要求压缩包，一个技能一个包，保留技能名目录。项目级路径以当前客户端的[官方技能说明](https://intl.cloud.tencent.com/zh/document/product/1316/84503)为准。
+   - **DSH**：将各技能并列放进研究项目的 `.dsh/skills/` 或 `.agents/skills/`。例如 `.dsh/skills/research-weave/SKILL.md`。DSH 不递归发现嵌套技能；出现同名目录先检查现有版本，不覆盖。参见 [DSH 技能文档](https://deepseek-harness.github.io/deepseek-harness/reference/subsystems/skills)。
+   - 若宿主没有技能注册功能，可以点名让助手读取对应入口并按文档执行；这不等同于自动发现。
 2. **补充资料**：多数技能在 `references/` 子目录存放详细方法论与示例，AI 会在需要时按 SKILL.md 的指引加载，无需人工预读。
 3. **许可合规**：本目录收录技能多数为 CC 系列（署名/非商业/相同方式共享）或 MIT 许可，使用前请阅读各技能包内的 `LICENSE` 与 `references/PROVENANCE.md`（含来源署名与本地改造记录）。**CC BY-NC-SA 类技能禁止商业用途**。
 4. **改造说明**：部分技能（agentero-skills、check-citations 等）经过本地适配改造，详情见各技能包 `references/PROVENANCE.md` 中的改造记录表。
+
+## 首批单技能验收
+
+例如，从独立研究项目根目录在 PowerShell 安装 `research-weave` 到 DSH（把 `$repo` 改成实际源码目录）：
+
+```powershell
+$repo = 'C:\src\ncepu_ideal-skills'
+$src = Join-Path $repo 'research\research-weave'
+$root = '.dsh\skills'
+$target = Join-Path $root 'research-weave'
+if (!(Test-Path -LiteralPath (Join-Path $src 'SKILL.md'))) { throw '未找到技能入口' }
+if (Test-Path -LiteralPath $target) { throw "技能已存在，不覆盖：$target" }
+New-Item -ItemType Directory -Path $root -Force | Out-Null
+Copy-Item -LiteralPath $src -Destination $target -Recurse -ErrorAction Stop
+```
+
+在独立研究项目里，每次只安装下表中的一个技能。先确认技能目录或加载记录，再点名执行；另开会话去掉英文技能名，验证自然语言能否选中。不要把普通对话输出当成技能已加载的证据。
+
+| 安装源 | 点名后的测试请求 | 验收结果 |
+|---|---|---|
+| [research-weave](./research-weave/SKILL.md) | 只用我提供的两段摘要，建议先读哪篇 | Scout 阅读顺序；标明仅有摘要，不声称已联网或读到全文 |
+| [paper-reader](./agentero-skills/paper-reader/SKILL.md) | 用中文精读这篇本地 PDF，不要保存 | 对话交付；按实际可读范围引用，不生成笔记文件 |
+| [experiment-plan](./auto-empirical-research/experiment-plan/SKILL.md) | 只用这段方案设计消融实验，预算未定 | 产出主张、对照、指标与运行顺序；预算待确认，无需其他技能，也不执行实验 |
+| [check-citations](./auto-empirical-research/check-citations/SKILL.md) | 核查这份公开、测试用的 `.bib`，并观察断网表现（仅在隔离测试环境） | 无需第三方 Python 包；服务不可用不判定为伪造；JSON 可直接解析 |
+
+`idea-discovery` 尚依赖未收录的上游技能及包外资料，不纳入首批单装。文字起草、综述和润色按需增加对应技能即可。
 
 ## 推荐使用路径
 
