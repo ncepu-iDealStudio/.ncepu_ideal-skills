@@ -86,3 +86,6 @@ bin-release/
 !.env.docker
 !**/.env.example
 !**/.env.docker
+
+# WorkBuddy 本地工作日志（不入版本控制）
+.workbuddy/

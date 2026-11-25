@@ -23,7 +23,7 @@
 
 本仓库**只做一件事**：收集、整理、分类存放并持续优化各种技能。它不承载技能在AI工具中的测试与验证，技能测试可以由用户自行，参照帮助文档在独立项目中进行。
 
-- 📁 **按领域分类**：技能按用途归入 `requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`ppt/`、`research/`、`others/` 等目录，每个技能一个独立目录（`SKILL.md` + 资源）
+- 📁 **按领域分类**：技能按用途归入 `requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`ppt/`、`research/`、`info-research/`、`others/` 等目录，每个技能一个独立目录（`SKILL.md` + 资源）
 - 🧪 **测试外置**：本仓库不含测试目录与样例产物；技能的验证与回归测试在**独立项目**中进行
 - 🔁 **无工具副本**：不再向 `.workbuddy/`、`.cursor/`、`.dsh/` 等 AI 工具目录拷贝技能副本，避免多份副本不同步
 - 🧩 **多技术栈**：覆盖需求分析、数据库设计、后端脚手架、前端原型转工程、Go / Java 工程规范、安全审计与科研等场景
@@ -32,7 +32,7 @@
 
 ## 🎯 技能清单
 
-按目录分组，共 **38 个技能**（`requirements_analysis` 3、`design` 5、`sql-to` 4、`prototype-to` 7、`java` 5、`go` 4、`security` 6、`research` 3、`ppt` 1、`others` 1），另有 `requirements_analysis/spec-kit` 工具包、20 个通用工作流技能，以及 1 组科研技能集（`supervisor-skills`）。
+按目录分组，共 **38 个技能**（`requirements_analysis` 3、`design` 5、`sql-to` 4、`prototype-to` 7、`java` 5、`go` 4、`security` 6、`research` 3、`ppt` 1、`others` 1），另有 `requirements_analysis/spec-kit` 工具包、20 个通用工作流技能、1 组科研技能集（`supervisor-skills`）与 1 组计算机科研实证精选集（`auto-empirical-research`，6 项技能）。
 
 ### 📋 需求分析与设计（`requirements_analysis/`，3 个技能）
 
@@ -128,10 +128,13 @@
 | 技能 | 说明 | 文档 |
 | --- | --- | --- |
 | `dsh-plugin-starter`（`others/`） | 一句话需求或插件原型 → DSH 插件起步项目，四类插件 + 内置开发者指南 | [README](others/dsh-plugin-starter/README.md) |
+| `last30days`（`info-research/`） | 全网信息调研：拉取 Reddit/X/YouTube/HN/Polymarket/小红书等最近 30 天帖文与互动，综合生成带引用的调研报告 | [SKILL.md](info-research/last30days/SKILL.md) |
 | `gorden-ppt-skill`（`ppt/`） | 21 套中文 PPTX 模板 + python-pptx 非破坏性纯文字编辑：工作汇报、述职竞聘、教学课件、商务提案、数据可视化等成品 PPT | [SKILL.md](ppt/gorden-ppt-skill/SKILL.md) |
 | `supervisor-skills`（`research/`） | 12 个科研全流程技能（Idea 评估、文献调研、论文写作、投稿审核、Rebuttal） | [中文导读](research/supervisor-skills/README.zh-CN.md) |
 | `research-weave`（`research/`） | 论文淘金：决定哪些论文值得精读，Scout/Map/Update 三模式产出阅读建议、可追溯证据账本与检索记录 | [SKILL.md](research/research-weave/SKILL.md) |
 | `best-paper-writing`（`research/`） | 最佳论文风格写作：60 篇 CVPR/ICCV/NeurIPS 获奖论文提炼的摘要/引言/方法/实验/配图写作技能，自带草稿检查器 | [SKILL.md](research/best-paper-writing/skills/bestpaper-writing/SKILL.md) · [上游 README](research/best-paper-writing/README.md) |
+| `auto-empirical-research`（`research/`） | 计算机科研实证精选 6 项：idea-discovery（找 idea 全流程）、experiment-plan（主张倒推实验）、dblp-api / openalex / bibliometrix-guide（文献检索与计量）、check-citations（引用真实性核查，自带脚本） | [PROVENANCE](research/auto-empirical-research/references/PROVENANCE.md) |
+| `agentero-skills`（`research/`） | Agentero 工作台技能精选 2 项（已独立化改造）：中文论文精读 `paper-reader`（讲义式 NOTES.md 笔记，已去 CLI 绑定）、英文论文写作规范 `research-paper-writing`（含 37 个写作示例） | [PROVENANCE](research/agentero-skills/references/PROVENANCE.md) |
 | `superpowers-zh`（`requirements_analysis/`） | 20 个通用工作流技能（brainstorming、writing-plans、executing-plans、subagent-driven-development、systematic-debugging、TDD 等），供支持 Skill 的 AI 工具加载使用 | 目录：`requirements_analysis/superpowers-zh/` |
 
 - 12 个科研技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
@@ -139,6 +142,9 @@
 - `research-weave` 为 **MIT** 许可，技能自包含（校验脚本仅依赖 Python 标准库），与 `supervisor-skills/deep-research` 定位互补
 - `best-paper-writing` 主体为 **CC BY 4.0**（需署名，可商用），exemplars 中的论文短句引用**不在许可范围内、严禁复制进新论文**，基础技能部分为 MIT；详见 [`references/PROVENANCE.md`](research/best-paper-writing/references/PROVENANCE.md)
 - ⚠️ `gorden-ppt-skill` 代码为 **MIT**，但 `templates/` 模板视觉资产**非商业 + 上游禁止二次分发**（版权归原模板作者），仅限个人学习研究，**严禁商用**；已为 WorkBuddy 做环境适配（自动更新改可选、Windows/依赖注记）；详见 [`references/PROVENANCE.md`](ppt/gorden-ppt-skill/references/PROVENANCE.md)
+- `last30days` 为 **MIT** 许可；自带 Python 调研引擎（需 Python 3.12+），多数据源凭据**可选**（首次使用有 setup wizard 引导，亦有 keyless 模式）；调研境外平台需网络可达；详见 [`references/PROVENANCE.md`](info-research/last30days/references/PROVENANCE.md)
+- `auto-empirical-research` 为 **CC BY-SA 4.0**（署名 + 相同方式共享，可商用但衍生版本须同许可），从上游 78 合集 / 1151 条目中**选择性收录 6 项**适合计算机科研的技能；部分技能引用上游未收录组件（`idea-creator`、`research-refine`、`openalex` CLI、R 环境等），独立使用前需适配；详见 [`references/PROVENANCE.md`](research/auto-empirical-research/references/PROVENANCE.md)
+- `agentero-skills` 为 **MIT**（源自 Agentero 应用）；已做独立化改造：`paper-reader` 中文精读技能**已去除 Agentero CLI 绑定**可直接用（pdftoppm 配图提取为可选依赖），`research-paper-writing` 自包含可直接用；另 3 个强绑定应用的技能已删除，2 个同源技能与 `supervisor-skills` 重复未收录；改造明细见 [`references/PROVENANCE.md`](research/agentero-skills/references/PROVENANCE.md)
 
 ---
 
@@ -147,7 +153,7 @@
 ```text
 ncepu_ideal-skills/
 ├── 📄 README.md / README.en.md / CODEBUDDY.md
-├── 📁 .docs/                                       # 配置指南 + 设计方法 + plans/ specs/ images/
+├── 📁 docs/                                        # 配置指南 + 设计方法 + plans/ specs/ images/
 ├── 📁 requirements_analysis/                       # 📋 需求分析与设计（3 个技能 + spec-kit + superpowers-zh）
 │   ├── brainstorming/                              # SKILL + 规格评审提示 + 脚本 + visual-companion
 │   ├── it-requirement-analysis/                    # SKILL + references/（PRD / 用户故事 / 流程分析）
@@ -187,8 +193,12 @@ ncepu_ideal-skills/
 │   └── spring-boot-testing/ / spring-security/
 ├── 📁 research/
 │   ├── best-paper-writing/                         # 🏆 最佳论文风格写作（CC BY 4.0，含 CVPR 模板与语料）
+│   ├── agentero-skills/                            # 🖥️ Agentero 技能精选 2 项（MIT：中文精读/写作规范，已独立化改造）
+│   ├── auto-empirical-research/                    # 🧪 实证科研精选 6 技能（CC BY-SA 4.0：idea/实验/文献计量/引用核查）
 │   ├── research-weave/                             # 🧵 论文淘金技能（MIT，SKILL + references/ + scripts/）
 │   └── supervisor-skills/                          # 🔬 12 个科研技能（CC BY-NC-SA 4.0）
+├── 📁 info-research/                               # 📰 全网信息调研（1 个技能）
+│   └── last30days/                                 # 🗞️ 最近 30 天全网舆情调研（MIT，自带 Python 引擎）
 ├── 📁 ppt/                                         # 📊 PPT 生成（1 个技能）
 │   └── gorden-ppt-skill/                           # 🎨 21 套中文模板 PPT 生成（代码 MIT / 模板非商业）
 ├── 📁 others/
