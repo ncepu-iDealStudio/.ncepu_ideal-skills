@@ -1,9 +1,13 @@
 ---
 name: drawio-reconstruction
-description: "Reconstructs reference images into high-fidelity, editable Draw.io files with rendered previews: native Draw.io elements carry text and structure, SVG covers simple icons that match the reference, and cropped or transparent PNGs preserve complex visuals. Use when the user wants a diagram image, research figure, architecture diagram, slide, UI screenshot, or image folder turned into `.drawio` XML; batch requests use a manifest with bounded parallelism when available and a full-fidelity serial fallback otherwise."
+description: "Reconstructs reference images into high-fidelity, editable Draw.io files with rendered previews: native Draw.io elements carry text and structure, SVG covers simple icons that match the reference, and cropped or transparent PNGs preserve complex visuals. Use when the user wants a diagram image, research figure, architecture diagram, slide, UI screenshot, or image folder turned into `.drawio` XML; batch requests use a manifest with bounded parallelism when available and a full-fidelity serial fallback otherwise. 中文场景：将参考图重建为可编辑 Draw.io。"
 ---
 
 # Draw.io Reconstruction
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 Use this skill for high-quality reconstruction of diagram images into `.drawio` files.
 

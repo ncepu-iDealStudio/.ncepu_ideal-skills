@@ -8,6 +8,7 @@ description: >-
   questions in an evidence-first report. Use when the user asks for a
   literature review, a survey of a field, research landscape mapping, or a
   deep dive into what is known about a topic.
+  中文场景：系统性文献调研、领域综述、综合研究证据。
 license: CC-BY-NC-SA-4.0
 ---
 
@@ -187,12 +188,9 @@ purpose; do not import this convention into paper drafting.
 
 ## Output language
 
-The report follows the language of the user's request: a question asked in
-Chinese gets a Chinese survey, English gets English. (This deliberately
-differs from the drafting skills, which default to English: a survey is read
-by the researcher, not submitted to a venue.) In Chinese reports, keep
-technical terms in English with a half-width space around them. An explicit
-language request always wins.
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
+
+When relevant to scope, search Chinese and English terms and disclose language coverage limits. Do not claim searches you did not run.
 
 ## Delivery
 

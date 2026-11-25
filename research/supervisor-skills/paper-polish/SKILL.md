@@ -8,6 +8,7 @@ description: >-
   scientific meaning. Use when the user asks to polish a draft, fix awkward
   wording, remove AI flavor, translate a Chinese manuscript into publishable
   English, or tone down overclaiming.
+  中文场景：学术语言润色、中文润色、论文翻译。
 license: CC-BY-NC-SA-4.0
 ---
 
@@ -176,9 +177,13 @@ The remedy, still without inventing facts: vary sentence length, carry weight
 with exact facts rather than adjectives, and state real trade-offs and
 limitations plainly. Life comes from precision and honesty.
 
+## Polishing Chinese prose
+
+For a Chinese deliverable, improve sentence structure, logical connectors, terminology and punctuation using Chinese academic conventions. Keep English grammar and banned-word checks scoped to English passages. Preserve the strength and scope of the original claims.
+
 ## Rewriting Chinese drafts into English
 
-When the source is Chinese, or English with heavy Chinese-English residue, do
+When the target is English and the source is Chinese or English with heavy Chinese-English residue, do
 not translate line by line.
 
 - **Extract the meaning first, then write the sentence.** Restate each
@@ -261,7 +266,4 @@ Pointing out the problem honestly helps the author more than polishing it away.
 
 ## Output language
 
-Follow an explicit language request first. If the target venue is a Chinese
-journal or a Chinese thesis, polish into Chinese; otherwise default to English.
-Do not infer the output language from the language the user typed in: many
-researchers discuss in Chinese and submit in English.
+For manuscript prose, use the explicitly requested language, then the target venue or thesis requirements, then the language of the draft being revised; default to English for a new draft. Use the task request language for explanations unless specified otherwise. Provide both languages only if requested. Keep citation keys, identifiers, and machine-readable fields unchanged.

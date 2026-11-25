@@ -1,8 +1,12 @@
 ---
 name: research-paper-writing
-description: Improve academic paper writing quality for ML/CV/NLP-style papers with clear section structure, paragraph flow, and reviewer-facing presentation. Use when drafting or revising Abstract, Introduction, Related Work, Method, Experiments, or Conclusion; polishing figures/tables; checking claim-support alignment; or performing self-review before submission.
+description: Improve academic paper writing quality for ML/CV/NLP-style papers with clear section structure, paragraph flow, and reviewer-facing presentation. Use when drafting or revising Abstract, Introduction, Related Work, Method, Experiments, or Conclusion; polishing figures/tables; checking claim-support alignment; or performing self-review before submission. 中文场景：论文章节结构、段落组织、论证改写。
 ---
 # Research Paper Writing
+
+## Output language
+
+For manuscript prose, use the explicitly requested language, then the target venue or thesis requirements, then the language of the draft being revised; default to English for a new draft. Use the task request language for explanations unless specified otherwise. Provide both languages only if requested. Keep citation keys, identifiers, and machine-readable fields unchanged.
 
 ## Overview
 

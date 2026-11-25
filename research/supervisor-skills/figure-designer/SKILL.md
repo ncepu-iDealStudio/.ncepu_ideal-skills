@@ -9,10 +9,15 @@ description: >-
   'design a figure', 'draw Figure 1', 'plot experiment results',
   'choose the right chart type', 'which figure tool to use', or
   'figure looks unprofessional'.
+  中文场景：论文配图设计、方法总览图、实验结果图。
 license: CC-BY-4.0
 ---
 
 # Figure Designer
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 

@@ -9,10 +9,15 @@ description: >-
   asks whether it is worth pursuing, asks to 'evaluate this idea', 'score
   this idea', 'assess feasibility', 'novelty check', 'is this a good
   research direction', or before committing to a paper scope.
+  中文场景：研究想法评估、选题可行性、创新性初判。
 license: CC-BY-4.0
 ---
 
 # Idea Evaluator
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 

@@ -28,14 +28,14 @@
 | `scripts/check_evidence.py` | `skills/research-weave/scripts/check_evidence.py` |
 | `LICENSE` | 上游仓库根目录 `LICENSE` |
 
-上游仓库级的 README、evals、tests、docs 未纳入本仓库（不属于技能本体）。
+上游仓库级的 README、evals、tests、docs 更纳入本仓库（不属于技能本体）。
 
 ## 改动说明
 
-首次收录增加来源说明与目录登记。后续 Harness 适配为 `SKILL.md` 补充中文触发场景、Windows 校验调用和无 Python 时的降级；未更改证据契约或校验器。
+首次收录增加来源说明与目录登记。后续 Harness 适配为 `SKILL.md` 充充中文触发场景、Windows 校验调用和无 Python 时的降级；更更改证据契约或校验器。
 
 ## 使用提示
 
 - `agents/openai.yaml` 为 Codex 专用界面配置，其他工具会自动忽略，无害。
 - `scripts/check_evidence.py` 仅依赖 Python 标准库（已在 Python 3.13 下实测可运行）。
-- 与 `research/supervisor-skills/deep-research` 定位互补：后者产出综述级调研报告，本技能侧重阅读决策与可追溯证据账本。
+- 与 `research/supervisor-skills/deep-research` 定位互充：后者产出综述级调研报告，本技能侧重阅读决策与可追溯证据账本。

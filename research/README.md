@@ -66,7 +66,7 @@
 
 来源：[poco-ai/Agentero](https://github.com/poco-ai/Agentero)（上游为 Tauri 桌面应用，本仓库已剥离应用绑定、改造为可独立使用）
 
-- **paper-reader**：中文精读单篇科研论文。支持本地 PDF、链接或粘贴文本，默认在对话中交付讲义，按需保存笔记。**读不懂论文或需要中文精读笔记时使用**。
+- **paper-reader**：中英文精读单篇科研论文。支持本地 PDF、链接或粘贴文本，默认在对话中交付讲义，按需保存笔记。**读不懂论文或需要精读笔记时使用**。
 - **research-paper-writing**：面向 ML/CV/NLP 论文的写作质量提升，附 37 个真实获奖论文的写作示例库（Abstract/Introduction/Related Work/Method/Experiments 各节的模板与范例）。**写作某一节不知道怎么组织时查阅对应示例**。
 
 ## 使用说明
@@ -78,6 +78,14 @@
 2. **补充资料**：多数技能在 `references/` 子目录存放详细方法论与示例，AI 会在需要时按 SKILL.md 的指引加载，无需人工预读。
 3. **许可合规**：本目录收录技能多数为 CC 系列（署名/非商业/相同方式共享）或 MIT 许可，使用前请阅读各技能包内的 `LICENSE` 与 `references/PROVENANCE.md`（含来源署名与本地改造记录）。**CC BY-NC-SA 类技能禁止商业用途**。
 4. **改造说明**：部分技能（agentero-skills、check-citations 等）经过本地适配改造，详情见各技能包 `references/PROVENANCE.md` 中的改造记录表。
+
+## 中英文适配原则 / Chinese and English
+
+- **调研、精读、实验规划、审稿意见**：优先使用用户指定的交付语言，否则跟随任务指令的语言，不跟随附件或引文的语言。只在用户要求时提供中英双份。
+- **论文正文**：明确指定的语言 → 期刊、会议或学位论文要求 → 被改写稿件的语言；新稿无其他信息时默认英文。正文和解释可用不同语言，例如中文讨论、英文引言。
+- **检索和格式**：按研究范围决定是否同时检索中文和英文，说明覆盖限制；论文题名、DOI、BibTeX 键、代码、文件路径、JSON 键和枚举不翻译。英文语法规则只检查英文段落。
+
+**In English:** Explicit output language wins. Otherwise, analytical deliverables follow the language of the request. Manuscript prose follows venue requirements, then the language of an existing draft, with English as the default for new drafts. Bilingual output is opt-in. Preserve citation identifiers and machine-readable fields.
 
 ## 首批单技能验收
 
@@ -102,6 +110,8 @@ Copy-Item -LiteralPath $src -Destination $target -Recurse -ErrorAction Stop
 | [paper-reader](./agentero-skills/paper-reader/SKILL.md) | 用中文精读这篇本地 PDF，不要保存 | 对话交付；按实际可读范围引用，不生成笔记文件 |
 | [experiment-plan](./auto-empirical-research/experiment-plan/SKILL.md) | 只用这段方案设计消融实验，预算未定 | 产出主张、对照、指标与运行顺序；预算待确认，无需其他技能，也不执行实验 |
 | [check-citations](./auto-empirical-research/check-citations/SKILL.md) | 核查这份公开、测试用的 `.bib`，并观察断网表现（仅在隔离测试环境） | 无需第三方 Python 包；服务不可用不判定为伪造；JSON 可直接解析 |
+
+语言追加验收：分别提交「请用中文精读这篇英文论文」和 “Explain this Chinese paper in English.”，检查说明语言正确且题名、引用定位未改动；再以「请用英文起草引言，用中文解释取舍」检查正文与说明可独立选语言。以上用例在 WorkBuddy 和 DSH 分别执行。
 
 `idea-discovery` 尚依赖未收录的上游技能及包外资料，不纳入首批单装。文字起草、综述和润色按需增加对应技能即可。
 

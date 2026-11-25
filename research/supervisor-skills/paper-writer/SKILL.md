@@ -8,6 +8,7 @@ description: >-
   delivery is clean prose with zero placeholder tags. Use when the user asks
   to write a section, turn an idea or results into paper text, or draft a
   full paper.
+  中文场景：根据现有材料起草论文正文或完整稿件。
 license: CC-BY-NC-SA-4.0
 ---
 
@@ -262,11 +263,7 @@ references/citation-style.md.
 
 ## Output language
 
-Follow an explicit language request first. If the target is a Chinese
-journal or a Chinese thesis, write Chinese academic prose; otherwise default
-to English. Never infer the output language from the language the user typed
-in: describing ideas in Chinese and submitting in English is the normal
-case.
+For manuscript prose, use the explicitly requested language, then the target venue or thesis requirements, then the language of the draft being revised; default to English for a new draft. Use the task request language for explanations unless specified otherwise. Provide both languages only if requested. Keep citation keys, identifiers, and machine-readable fields unchanged.
 
 ## Boundaries with sibling skills
 

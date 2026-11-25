@@ -8,6 +8,7 @@ description: >-
   aligns contributions with challenges, and weaves verified citations.
   Outputs flowing prose by default, or an outline on request. Use when the
   user asks to draft, outline, or restructure an Introduction.
+  中文场景：论文引言起草、引言提纲或重构。
 license: CC-BY-NC-SA-4.0
 ---
 
@@ -206,6 +207,4 @@ through that skill's references when finer wording support is needed.
 
 ## Output language
 
-Follow an explicit language request first; a named Chinese journal or
-Chinese thesis means Chinese prose; otherwise default to English. Never
-infer the output language from the language of the user's message.
+For manuscript prose, use the explicitly requested language, then the target venue or thesis requirements, then the language of the draft being revised; default to English for a new draft. Use the task request language for explanations unless specified otherwise. Provide both languages only if requested. Keep citation keys, identifiers, and machine-readable fields unchanged.

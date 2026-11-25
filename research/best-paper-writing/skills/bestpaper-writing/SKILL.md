@@ -1,9 +1,13 @@
 ---
 name: bestpaper-writing
-description: Draft or rewrite the title, Abstract, Introduction, Method and Experiments of an ML/CV paper in the style of CVPR/ICCV/NeurIPS best papers, distilled from 60 award papers, and plan and draw its figures (Figure 1, method overview, result figures) with award-paper layout and style. Use when the user either (A) fills in the intake form (assets/intake_form.html JSON) or describes problem, idea, method and results, or (B) pastes an existing abstract (or abstract plus introduction) to make it more convincing. Can write directly into a LaTeX template such as the CVPR author kit. Not for related-work surveys, rebuttals or plain proofreading.
+description: Draft or rewrite the title, Abstract, Introduction, Method and Experiments of an ML/CV paper in the style of CVPR/ICCV/NeurIPS best papers, distilled from 60 award papers, and plan and draw its figures (Figure 1, method overview, result figures) with award-paper layout and style. Use when the user either (A) fills in the intake form (assets/intake_form.html JSON) or describes problem, idea, method and results, or (B) pastes an existing abstract (or abstract plus introduction) to make it more convincing. Can write directly into a LaTeX template such as the CVPR author kit. Not for related-work surveys, rebuttals or plain proofreading. 中文场景：顶会论文写作、按最佳论文范式改写摘要。
 ---
 
 # Best-Paper Writing (v1.2): Abstract, Introduction, Method, Experiments, Figures
+
+## Output language
+
+For manuscript prose, use the explicitly requested language, then the target venue or thesis requirements, then the language of the draft being revised; default to English for a new draft. Use the task request language for explanations unless specified otherwise. Provide both languages only if requested. Keep citation keys, identifiers, and machine-readable fields unchanged.
 
 Turn a description of a research project (or a draft abstract) into an Abstract and Introduction that read like a recent CVPR/ICCV/NeurIPS award paper.
 
@@ -77,7 +81,7 @@ Load `references/figures.md`.
 - The paper text contains no move labels, workflow comments, or bracketed notes other than `[TODO: …]` / `\todo{…}`.
 
 ### Step 7 — Check
-1. Run `python3 scripts/check_draft.py <files>` on the abstract and the introduction. Fix every `ERROR`. Each `WARN` means the draft is outside the range of 90% of award papers (connectors, numbers, hedges, boosters, “key insight” formulas, sentence length, runs of short sentences, trailing participial clauses) or shows a known AI-draft habit — revise or justify it in the report. `NOTE`s are information (e.g., the draft promotes the work less than award papers do). `python3 scripts/style_metrics.py <files>` shows every metric with its corpus percentile.
+1. For Chinese prose, manually check the claim–evidence alignment, section structure, readability, and venue conventions; record that the English corpus checker was not run on those passages. For English prose, run `python3 scripts/check_draft.py <files>` on the English abstract and introduction. Fix every `ERROR`. Each `WARN` means the draft is outside the range of 90% of award papers (connectors, numbers, hedges, boosters, “key insight” formulas, sentence length, runs of short sentences, trailing participial clauses) or shows a known AI-draft habit — revise or justify it in the report. `NOTE`s are information (e.g., the draft promotes the work less than award papers do). `python3 scripts/style_metrics.py <files>` shows every metric with its corpus percentile.
 2. If the paper has figures, run `python3 scripts/check_figures.py main.tex`: fix every `ERROR`; each `WARN` (caption length, long first sentence, raster plots, absolute widths, too many floats) is fixed or justified; `NOTE`s list the placeholders still to fill.
 3. Semantic checks:
    - Specific prior work is credited before the gap; the gap is concrete (what fails, when, why) and the tension is resolved by the idea.
@@ -102,7 +106,7 @@ Load `references/figures.md`.
 - No generic openings (“has attracted increasing attention”, bare “plays an important role”) and no adjectives about the method without a concrete follow-up.
 - Do not frame the work as a patch on a naive baseline (ruling out an obvious alternative with a quantified reason is fine).
 - Keep terminology fixed once introduced.
-- **No dashes** in the title, abstract or introduction (author preference): no em dash (—, `---`) and no spaced en dash. Rewrite with a colon, a comma, a short second sentence or parentheses. Numeric ranges (2–3) and hyphenated compounds (image–motion, train–test) are fine. `check_draft.py` reports each dash as an ERROR. Colons are allowed.
+- **No dashes** in the English title, abstract or introduction (author preference); for Chinese prose, follow venue punctuation conventions. For English: no em dash (—, `---`) and no spaced en dash. Rewrite with a colon, a comma, a short second sentence or parentheses. Numeric ranges (2–3) and hyphenated compounds (image–motion, train–test) are fine. `check_draft.py` reports each dash as an ERROR. Colons are allowed.
 - **Name mechanisms, not abstractions.** When the input does not say how a component works (who inspects, what is compared, how something moves), write `[TODO: …]` and ask; do not fill the gap with abstract nouns (“state”, “record”, “inspection”, “protocol”) that sound complete but say nothing.
 - **Describe components by their relation**, not as parallel items: what problem each one answers and what the next one fixes (“A keeps …; because A alone lets errors persist across edits, B …”), rather than “A does … . B does … . C does … .”
 - **Figure and table numbers from notes or intake forms** refer to the author’s full draft. Do not cite them in the abstract or introduction unless the figure is part of the paper being written; list the example and its figure in `report.md`.

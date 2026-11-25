@@ -7,6 +7,10 @@ allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Skil
 
 # Workflow 1: Idea Discovery Pipeline
 
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
+
 > **Before each reviewer slot**, follow [Selectable Reviewers](../shared-references/reviewer-backends.md):
 > resolve invocation → `.aris/reviewer.json` → Claude Code default (Codex MCP)
 > with `reviewer_route.py` through the canonical helper resolver, preserving this

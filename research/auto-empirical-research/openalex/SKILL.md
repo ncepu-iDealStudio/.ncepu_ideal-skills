@@ -1,9 +1,13 @@
 ---
 name: openalex
-description: Use when the user asks about academic literature, research papers, scholarly works, authors, citations, institutions, journals, or any academic metadata. Trigger when users want to search for papers, find author profiles, track citations, discover related works, or explore academic topics. Also use when users mention DOIs, ORCIDs, h-index, publication venues, or research metrics.
+description: Use when the user asks about academic literature, research papers, scholarly works, authors, citations, institutions, journals, or any academic metadata. Trigger when users want to search for papers, find author profiles, track citations, discover related works, or explore academic topics. Also use when users mention DOIs, ORCIDs, h-index, publication venues, or research metrics. 中文场景：用 OpenAlex 查 DOI、作者、期刊或引文。
 ---
 
 # OpenAlex CLI Skill
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 Use the `openalex` CLI to retrieve academic metadata from the OpenAlex API.
 

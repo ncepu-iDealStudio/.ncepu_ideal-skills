@@ -9,10 +9,15 @@ description: >-
   to use AI for research', 'Vibe Coding tips', 'AI-assisted writing
   workflow', 'which AI tool for this', or starts an AI-assisted work
   session.
+  中文场景：AI 辅助科研、科研协作工作流。
 license: CC-BY-4.0
 ---
 
 # Vibe Research Workflow
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 

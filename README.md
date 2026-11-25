@@ -134,7 +134,7 @@
 | `research-weave`（`research/`） | 论文淘金：决定哪些论文值得精读，Scout/Map/Update 三模式产出阅读建议、可追溯证据账本与检索记录 | [SKILL.md](research/research-weave/SKILL.md) |
 | `best-paper-writing`（`research/`） | 最佳论文风格写作：60 篇 CVPR/ICCV/NeurIPS 获奖论文提炼的摘要/引言/方法/实验/配图写作技能，自带草稿检查器 | [SKILL.md](research/best-paper-writing/skills/bestpaper-writing/SKILL.md) · [上游 README](research/best-paper-writing/README.md) |
 | `auto-empirical-research`（`research/`） | 计算机科研实证精选 6 项：idea-discovery（找 idea 全流程）、experiment-plan（主张倒推实验）、dblp-api / openalex / bibliometrix-guide（文献检索与计量）、check-citations（引用真实性核查，自带脚本） | [PROVENANCE](research/auto-empirical-research/references/PROVENANCE.md) |
-| `agentero-skills`（`research/`） | Agentero 工作台技能精选 2 项（已独立化改造）：中文论文精读 `paper-reader`（讲义式 NOTES.md 笔记，已去 CLI 绑定）、英文论文写作规范 `research-paper-writing`（含 37 个写作示例） | [PROVENANCE](research/agentero-skills/references/PROVENANCE.md) |
+| `agentero-skills`（`research/`） | Agentero 工作台技能精选 2 项（已独立化改造）：中英文论文精读 `paper-reader`（可选讲义式笔记，已去 CLI 绑定）、论文写作规范 `research-paper-writing`（含 37 个写作示例） | [PROVENANCE](research/agentero-skills/references/PROVENANCE.md) |
 | `superpowers-zh`（`requirements_analysis/`） | 20 个通用工作流技能（brainstorming、writing-plans、executing-plans、subagent-driven-development、systematic-debugging、TDD 等），供支持 Skill 的 AI 工具加载使用 | 目录：`requirements_analysis/superpowers-zh/` |
 
 - 12 个科研技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
@@ -193,7 +193,7 @@ ncepu_ideal-skills/
 │   └── spring-boot-testing/ / spring-security/
 ├── 📁 research/
 │   ├── best-paper-writing/                         # 🏆 最佳论文风格写作（CC BY 4.0，含 CVPR 模板与语料）
-│   ├── agentero-skills/                            # 🖥️ Agentero 技能精选 2 项（MIT：中文精读/写作规范，已独立化改造）
+│   ├── agentero-skills/                            # 🖥️ Agentero 技能精选 2 项（MIT：中英文精读/写作规范，已独立化改造）
 │   ├── auto-empirical-research/                    # 🧪 实证科研精选 6 技能（CC BY-SA 4.0：idea/实验/文献计量/引用核查）
 │   ├── research-weave/                             # 🧵 论文淘金技能（MIT，SKILL + references/ + scripts/）
 │   └── supervisor-skills/                          # 🔬 12 个科研技能（CC BY-NC-SA 4.0）

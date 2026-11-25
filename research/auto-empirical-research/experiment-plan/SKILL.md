@@ -6,6 +6,10 @@ description: >-
 
 # Experiment Plan: Claim-Driven, Paper-Oriented Validation
 
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
+
 ## Overview
 
 Use this skill after the method is stable enough to design experiments. Accept a proposal, pasted notes, or project files explicitly identified by the user. No upstream skill, web access, or shell is required. Do not run experiments or install software.
@@ -216,7 +220,7 @@ Tracker file: refine-logs/EXPERIMENT_TRACKER.md
 
 - Deliver the plan and compact tracker inline by default, including when writes are unavailable. In that case, omit the file claims from the summary.
 - On a file request, use the requested project path or the default above; treat the paths in the templates as examples. Do not overwrite existing outputs without permission. Write a differently named version or deliver inline if blocked.
-- Match the user’s language. Mark unknown budget, data, or success thresholds as pending confirmation. No manifest or other skill is required.
+- Mark unknown budget, data, or success thresholds as pending confirmation. No manifest or other skill is required.
 
 ## Key Rules
 

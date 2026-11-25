@@ -5,7 +5,7 @@
 - **上游项目**：[gulucaptain/Best-Paper-Writing-Skill](https://github.com/gulucaptain/Best-Paper-Writing-Skill)（v1.2）
 - **拉取日期**：2026-11-23
 - **本仓库落地路径**：`research/best-paper-writing/`（保留上游完整目录结构）
-- **收录范围**：上游全部 150 个文件（剔除 `.gitignore`），零缺失、零改动。含技能本体 `skills/bestpaper-writing/`、60 篇获奖论文清单 `PAPER_LIST.md`、语料数据 `data/`、CVPR 2027 LaTeX 模板 `template/`、语料统计工具 `tools/` 与上游 README。
+- **收录范围**：上游全部 150 个文件（剔除 `.gitignore`），首次收录时未改动。含技能本体 `skills/bestpaper-writing/`、60 篇获奖论文清单 `PAPER_LIST.md`、语料数据 `data/`、CVPR 2027 LaTeX 模板 `template/`、语料统计工具 `tools/` 与上游 README。
 
 ## 技能简介
 
@@ -23,7 +23,7 @@
 
 ## 与本仓库的适配说明
 
-- 技能本体零改动，未新增 license 字段（上游 SKILL.md frontmatter 仅含 `name`/`description`，保持原样）。
+- 后续为入口补充中文触发词及稿件语言规则；中文稿件按中文学术规范人工检查，不套用英文语料阈值。许可字段与来源未变。
 - 上游 `install.sh` 为 bash 一键安装（面向 Claude Code / Codex），Windows 用户直接将 `skills/bestpaper-writing/` 复制到目标工具的技能目录即可。
 - `agents/openai.yaml` 为 Codex 专用界面配置，其他工具自动忽略。
 - `plot_style.py` 依赖 matplotlib（仅绘制结果图时需要）；其余脚本（`check_draft.py` 等）纯 Python 标准库，已在 Python 3.13 下实测可运行。

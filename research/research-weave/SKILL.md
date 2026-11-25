@@ -9,6 +9,12 @@ metadata:
 
 # Research Weave
 
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
+
+When relevant to scope, search Chinese and English terms and disclose language coverage limits. Do not claim searches you did not run.
+
 Help the researcher decide which papers deserve attention and which research judgments they can change. Preserve scope, main conclusions, source dependence and counterevidence; do not turn fluent summaries into equally positive recommendations.
 
 ## Set the decision and effort
@@ -53,7 +59,7 @@ For Scout, lead with the decision and queue in a concise report. If saving a led
 
 For a saved Scout ledger, read only [scout-format.md](references/scout-format.md) for exact field names, enums and a complete small example. The full references are for a requested Map/Update or a specific unresolved analytical question; a compact record needs no invented graph or proposition slots.
 
-For Map/Update or rich proposition/relationship records, read [output-contract.md](references/output-contract.md). Match the user's language. Keep saved runs outside the installed skill and preserve prior runs. A small request may remain inline.
+For Map/Update or rich proposition/relationship records, read [output-contract.md](references/output-contract.md). Keep saved runs outside the installed skill and preserve prior runs. A small request may remain inline.
 
 If Python 3 and shell access are available, validate saved ledgers. Use the host-provided skill directory (not the project working directory) and the actual saved ledger path:
 

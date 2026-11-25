@@ -1,6 +1,6 @@
 ---
 name: bibliometrix-guide
-description: "Perform science mapping and bibliometric analysis with R bibliometrix"
+description: "Perform science mapping and bibliometric analysis with R bibliometrix 中文场景：文献计量、科学知识图谱、共被引分析。"
 metadata:
   openclaw:
     emoji: "📉"
@@ -11,6 +11,10 @@ metadata:
 ---
 
 # Bibliometrix Guide
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 

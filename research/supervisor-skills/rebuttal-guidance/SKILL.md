@@ -7,9 +7,14 @@ description: >-
   historical (review, rebuttal) pairs. Use when the user pastes reviewer
   comments, asks for rebuttal help, rebuttal guidance, response to reviewers,
   how to reply to R1.W2, OpenReview rebuttal, or the reviewer ignored the rebuttal.
+  中文场景：审稿意见回复策略、如何回应审稿人。
 ---
 
 # Rebuttal Guidance
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 

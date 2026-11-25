@@ -6,6 +6,10 @@ description: >-
 
 # check-citations
 
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
+
 Check citation metadata before submission; flags are leads for manual review, not proof that a reference was fabricated. Run the script from the installed skill directory or use its absolute path. Do not send confidential titles or identifiers to external APIs without authorization. If shell or network access is unavailable, offer an offline formatting review and label it as such.
 
 ## When to Use

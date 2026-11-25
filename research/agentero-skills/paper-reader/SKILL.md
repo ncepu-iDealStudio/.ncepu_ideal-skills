@@ -1,10 +1,14 @@
 ---
 name: paper-reader
 description: >-
-  用中文精读单篇科研论文，讲解核心贡献、方法、实验和局限。用于论文精读、解释一篇论文或整理中文讲义式笔记；不用于多篇文献综述或证据图谱。
+  Explain a single research paper in Chinese or English: contributions, methods, experiments, and limitations. Use for paper close reading, study notes, 单篇论文精读、论文讲解或阅读笔记. Not for multi-paper reviews or evidence maps.
 ---
 
 # Paper Reader
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 > **本仓库适配说明**（2026-11-25）：本技能源自 Agentero 应用内置技能，已为独立使用做适配——移除了 `agentero` CLI 依赖（原文的"标记已读"与引用检索校验命令）、去掉了 frontmatter 中的 `version` 字段（避免被应用自动覆盖）。核心精读流程完全自包含；引用路径约定见 Constraints 中说明。原版地址：[poco-ai/Agentero](https://github.com/poco-ai/Agentero)（`templates/vault/.agents/skills/paper-reader/`）。
 
@@ -24,7 +28,7 @@ description: >-
 - [关键] 将关键配图与论文论点对应。默认给出已确认的图号和页码；只有在图像可访问、授权允许且用户要求嵌图时才引用或提取配图。若需要转换，可使用已安装的 `pdftoppm`；不自动安装工具或修改论文源目录。无图像能力时只依据可读的图注和正文，不描述未看到的画面。
 - [关键] 输出内容的详略必须和论文叙述的详略一致。对于作者重点呈现的创新点详细阐述，对于论文中较简略的部分不花大篇输出。
 - [关键] **自适应分析**：严禁生搬硬套某一类论文的分析模板。
-- [格式] 行文语言采用中文，各种术语直接保持用英文，是否简写与论文保持一致。不要中英混杂到难以阅读的程度。
+- [格式] 术语使用目标语言的学术惯用表达；必要时首次附原文，缩写与论文保持一致。缺失信息的提示也用所选语言。
 - [格式] 对于文中出现的复杂数学定义，使用 Markdown 的 LaTeX 格式输出，并根据原文来解释表达式中的变量。严格区分两种公式格式：**行内公式**（inline）使用单 dollar 符号 `$...$`，嵌入在正文句子中；**行间公式**（display）使用双 dollar 符号 `$$...$$`，必须独占一行且上下各留一个空行。禁止在行内公式中使用 `$$`，禁止在行间公式中使用单 `$`。变量、短表达式（如 $s_t$、$p>0$）用行内；独立推导、核心公式用行间。
 - [格式] 保留有效的 Obsidian-style wikilinks `[[...]]`；不要编造目标。
 - [格式] 保存时用 UTF-8，重读确认写入成功。配图与本地 PDF 链接都相对于**笔记所在目录**；含空格的路径用 `%20` 或尖括号。例如 `[第 4 页](../papers/Example%20Paper.pdf#page=4)`。对话中用论文链接或已确认的页码、节号、图号定位，不编造路径和锚点。

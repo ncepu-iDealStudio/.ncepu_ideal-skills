@@ -13,17 +13,17 @@ This skill collection is adapted from **HKUSTDial/Supervisor-Skills** (Superviso
 
 | Source in Supervisor-Skills | Local path | Notes |
 |---|---|---|
-| `skills/<skill>/SKILL.md` (×12) | `research/supervisor-skills/<skill>/SKILL.md` | Verbatim copies; not modified |
+| `skills/<skill>/SKILL.md` (×12) | `research/supervisor-skills/<skill>/SKILL.md` | Upstream copies with local Chinese/English trigger and delivery guidance |
 | `skills/<skill>/references/*` | `research/supervisor-skills/<skill>/references/*` | Verbatim copies |
 | `skills/drawio-reconstruction/scripts/*`, `assets/*`, `examples/*`, `LICENSE`, `agents/openai.yaml` | same relative paths under `research/supervisor-skills/drawio-reconstruction/` | Verbatim copies, including the MIT-licensed helper scripts and case images |
 | `skills/README.md`, `skills/README.en.md` | `README.md`, `README.en.md` | Verbatim upstream reader guides; **see local-additions note below** |
 | — | `references/PROVENANCE.md` (this file) | Added locally |
 | — | `README.zh-CN.md` | Added locally: Chinese quick-start guide adapted to this repository's layout |
 
-All 107 files under upstream `skills/` were copied byte-for-byte; no upstream SKILL.md content was edited.
+The initial import preserved upstream content; later changes to skill entries are noted below.
 
 ## Changes
 
 - Added this provenance/license notice and a repository-specific Chinese guide (`README.zh-CN.md`).
 - The upstream reader guides reference sibling directories (`../handbook/`, top-level `README.md`, `CONTRIBUTING.md`) that were **not** copied into this repository (only the executable `skills/` tree was collected). Their links to those directories will not resolve locally; the upstream source is linked here for readers who need the handbook.
-- No skill logic, trigger conditions, generator options or reference content was changed.
+- Added Chinese discovery phrases, language selection rules, and language-specific manuscript review and polishing guidance.

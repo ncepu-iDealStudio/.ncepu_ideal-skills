@@ -1,6 +1,6 @@
 ---
 name: dblp-api
-description: "Search computer science publications, authors, and venues via DBLP"
+description: "Search computer science publications, authors, and venues via DBLP 中文场景：DBLP 查计算机论文、作者或会议。"
 metadata:
   openclaw:
     emoji: "🔍"
@@ -11,6 +11,10 @@ metadata:
 ---
 
 # DBLP API Guide
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 

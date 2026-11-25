@@ -9,10 +9,15 @@ description: >-
   discussing progress with an advisor, or planning the paper before
   drafting. Also use for 'paper skeleton', 'paper logic chain',
   'thinking template', 'paper-structure planning'.
+  中文场景：技术论文骨架、研究逻辑链。
 license: CC-BY-4.0
 ---
 
 # Tech Paper Template
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 

@@ -9,10 +9,15 @@ description: >-
   this paper', 'audit before submission', 'check the draft', 'find
   issues', 'proofread', or within one week of a submission
   deadline.
+  中文场景：投稿前模拟审稿、按严重度检查完整稿件。
 license: CC-BY-4.0
 ---
 
 # Pre-Submission Reviewer
+
+## Output language
+
+Use the requested output language; otherwise follow the language of the task request, not of quoted or attached sources. Provide both languages only if requested. Keep source identifiers and machine-readable fields unchanged.
 
 ## Overview
 
@@ -152,9 +157,11 @@ Check:
 - No repeated or redundant passages.
 - Abstract covers problem, method, result.
 
-### Step 3: Dimension 3 English grammar review
+### Step 3: Dimension 3 Grammar and academic register
 
-See: references/grammar-rules.md for the canonical list of errors
+Review prose in the manuscript's language, independently of the report language. For Chinese prose, check sentence completeness, modifier scope, connectives, terminology consistency, and punctuation. Use the English checklist below only on English prose (including English abstracts in Chinese manuscripts).
+
+See: references/grammar-rules.md for the canonical list of English errors
 common to non-native English authors, with corrections and
 examples.
 
@@ -203,7 +210,7 @@ For each figure:
 
 See: references/forbidden-patterns.md for the banned-word list.
 
-Scan the full paper for:
+Apply the following list to English prose only. For Chinese prose, flag unsupported promotional language and punctuation that obscures meaning; do not treat Chinese punctuation as a violation of the English em-dash rule. Scan English passages for:
 
 - Em-dashes used as sentence connectors (banned; project rule).
 - AI-tone words: innovative, pioneering, revolutionary paradigm,
@@ -307,7 +314,7 @@ and the delivered review stays free of internal checking rituals.
 ### Dimension 2: Writing details
 <same table shape>
 
-### Dimension 3: English grammar
+### Dimension 3: Grammar and academic register
 <same table shape, citing grammar-rule ID>
 
 ### Dimension 4: LaTeX format

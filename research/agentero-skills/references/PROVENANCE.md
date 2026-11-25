@@ -12,8 +12,8 @@
 
 | 本地目录 | 许可 | 来源 | 独立性 |
 |----------|------|------|--------|
-| `paper-reader/` | Agentero MIT | 一方技能（已适配） | ✅ 独立使用。**中文**论文精读：默认在对话交付讲义式笔记（贡献/方法/实验/局限），可按需保存；配图提取可选 |
-| `research-paper-writing/` | MIT（Master-cai） | 一方技能（致谢 Master-cai） | ✅ 完全自包含。英文论文写作：Abstract/Intro/Related Work/Method/Experiments/Conclusion 分节规范 + 37 个示例文件（introduction 六种写法、method 三要素等） |
+| `paper-reader/` | Agentero MIT | 一方技能（已适配） | ✅ 独立使用。中英文论文精读：默认在对话交付讲义式笔记（贡献/方法/实验/局限），可按需保存；配图提取可选 |
+| `research-paper-writing/` | MIT（Master-cai） | 一方技能（致谢 Master-cai） | ✅ 完全自包含。适配中英文稿件，保留英文示例：Abstract/Intro/Related Work/Method/Experiments/Conclusion 分节规范 + 37 个示例文件（introduction 六种写法、method 三要素等） |
 | `AGENTS.md` | Agentero MIT | 上游 `templates/vault/AGENTS.md` | Vault 级 Agent 约定（paper-reader 引用的阅读流程来源，含 `papers/` 目录约定） |
 | `README.md` | Agentero MIT | 上游 `templates/vault/.agents/skills/README.md` | 内置技能清单与版本升级机制说明（已加编辑注记） |
 
@@ -46,7 +46,7 @@
 | `wikilink.md` | `agentero paper list --json` 确认目标 | 改为直接检查文献库文件；marks 标注链接改为"仅当 marks/ 存在时" |
 | `author-lookup.md` | 输入限定 Agentero vault | 改为任意论文文件夹（保留 `papers/` 约定推荐） |
 
-**`research-paper-writing` 零改动**（本就完全自包含）。当前集合保留 2 个技能：`paper-reader`（中文精读，基本独立）、`research-paper-writing`（写作规范，完全独立）。
+后续中英文适配为两个技能补充任务触发词和独立交付语言规则，保留原有分节方法与示例。
 
 ## 独立使用现状（改造后）
 
