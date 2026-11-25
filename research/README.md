@@ -1,6 +1,8 @@
 # research 技能分类说明
 
-本目录收录面向**科研全流程**的 AI Agent Skills，覆盖从选题立项、文献调研、实验设计、论文写作到投稿答辩的完整研究生命周期。
+本目录收录 **5 个技能包、22 个科研技能**，覆盖选题、文献调研、实验设计、论文写作和投稿前审查。技能可用中文或英文发起；在 WorkBuddy 或 DSH 中优先安装当前任务需要的技能，不必一次安装整个合集。已有上游依赖的技能见下文说明。
+
+**English quick start:** Pick `paper-reader` to explain one paper, `research-weave` to prioritize readings, `deep-research` for a literature synthesis, or `experiment-plan` to design experiments without running them. Import the complete skill folder through WorkBuddy’s Skills UI, or place it directly under `.dsh/skills/` or `.agents/skills/` in a DSH project. Ask in English or Chinese and specify the deliverable language if it differs from your request.
 
 ## 技能总览
 
@@ -26,11 +28,11 @@
 - **tech-paper-template**：用思考模板表搭建技术论文全文逻辑骨架（背景→局限→目标→挑战→方法→贡献）。**动笔前理清论文逻辑时使用**。
 - **intro-drafter**：按六段式流程图起草 Introduction 正文。**论文 Introduction 写不出来时使用**。
 - **paper-writer**：基于作者自己的材料起草可发表的论文段落乃至全文，每条事实性陈述可溯源。**初稿写作时使用**。
-- **paper-polish**：润色已有学术文本——语法与流畅度修复、语气与证据强度校准、去除 AI 味、中译英。**完稿打磨时使用**。
+- **paper-polish**：润色已有的中文或英文学术稿件，并按需翻译；改善流畅度和术语一致性，不加强证据不足的主张。**完稿打磨时使用**。
 - **figure-designer**：设计论文三大核心图（图 1 动机示例、方法总览图、实验结果图）。**画图没思路时使用**。
 - **drawio-reconstruction**：把参考图片（架构图、截图等）重建为高保真、可编辑的 .drawio 文件。**需要复刻或修改他人图的版式时使用**。
 - **benchmark-paper-template**：用五支柱框架（研究空白/构建流水线/评测框架/实证发现/可选配套方法）结构化 Benchmark 论文。**写评测基准类论文时使用**。
-- **pre-submission-reviewer**：投稿前模拟审稿，从宏观逻辑、写作细节、英语语法、LaTeX 格式、图表质量五个维度给出严重度分级意见。**投稿最后一道关使用**。
+- **pre-submission-reviewer**：按严重度检查论文逻辑、写作细节、稿件语言、LaTeX 格式与图表。英文语法规则只用于英文段落，审稿报告可另选语言。**投稿前使用**。
 - **rebuttal-guidance**：审稿意见回复（rebuttal）策略指导——按审稿人心态匹配说服策略，不直接代写全文。**收到审稿意见后使用**。
 
 ### 2. auto-empirical-research — 实证研究自动化（6 项）
@@ -44,7 +46,7 @@
 - **openalex**：通过 OpenAlex 检索学术文献元数据（DOI、ORCID、h 指数、引用追踪、机构信息）。**跨学科文献检索与引用分析时使用**。
 - **bibliometrix-guide**：用 R 的 bibliometrix 包做科学制图与文献计量分析。**需要做领域文献计量、共被引分析时使用**。
 - **experiment-plan**：把研究方案转化为以论点为核心的详细实验路线图（消融矩阵、评测协议、运行顺序、算力预算）。**idea 确定后、动手实验前使用**。
-- **check-citations**：联网对照 CrossRef / Semantic Scholar / OpenAlex 验证参考文献真实性，识别 AI 幻觉引用。**审稿、核查引用、防 AI 编造文献时使用（本仓库已实测可用）**。
+- **check-citations**：联网对照 Crossref、Semantic Scholar 和 OpenAlex 核查 BibTeX。区分「查无匹配」和「服务异常、无法核验」；两者都不能直接判定为伪造。**提交论文前核查引用时使用**。
 
 ### 3. research-weave — 文献证据网络（1 项）
 
@@ -60,7 +62,7 @@
 
 从 60 篇 CVPR/ICCV/NeurIPS 最佳论文中蒸馏的写作风格：起草或重写标题、Abstract、Introduction、Method、Experiments，并按获奖论文的版式规划与绘制论文配图，可直接写入 CVPR author kit 等 LaTeX 模板。
 
-**适用场景**：两种入口——(A) 填写 intake 表单（描述问题、想法、方法、结果），(B) 粘贴已有摘要让推理更有说服力。**追求顶会投稿质量时使用**。不适用于 related work 综述、rebuttal 或纯校对。
+**调用名：`bestpaper-writing`。** 可用中文或英文直接描述研究材料，也可提交 intake 表单或粘贴已有摘要。英文稿可跑语料检查器；中文稿人工检查结构、证据和目标刊物规范，不套用英文阈值。不适用于相关工作综述、审稿回复或纯校对。
 
 ### 5. agentero-skills — 论文精读与写作示例库（2 项，已独立化改造）
 
@@ -111,7 +113,14 @@ Copy-Item -LiteralPath $src -Destination $target -Recurse -ErrorAction Stop
 | [experiment-plan](./auto-empirical-research/experiment-plan/SKILL.md) | 只用这段方案设计消融实验，预算未定 | 产出主张、对照、指标与运行顺序；预算待确认，无需其他技能，也不执行实验 |
 | [check-citations](./auto-empirical-research/check-citations/SKILL.md) | 核查这份公开、测试用的 `.bib`，并观察断网表现（仅在隔离测试环境） | 无需第三方 Python 包；服务不可用不判定为伪造；JSON 可直接解析 |
 
-语言追加验收：分别提交「请用中文精读这篇英文论文」和 “Explain this Chinese paper in English.”，检查说明语言正确且题名、引用定位未改动；再以「请用英文起草引言，用中文解释取舍」检查正文与说明可独立选语言。以上用例在 WorkBuddy 和 DSH 分别执行。
+在 WorkBuddy 和 DSH 分别补跑以下语言用例。**仓库已做入口与打包检查，但未据此认定客户端自动触发已通过。**
+
+| 测试请求 / Prompt | 预期结果 / Expected behavior |
+|---|---|
+| 请用中文精读这篇英文论文，不要保存文件。 | 中文讲解，保留原题名和可核查定位，不写文件。 |
+| Explain this Chinese research paper in English. Keep the original title and page references. | English notes; original title and page references preserved. |
+| 请用英文写引言，并用中文解释写作取舍。 | 英文引言、中文说明，正文与说明不互相套用语言默认值。 |
+| Review this Chinese manuscript and report issues in English. | English review report; Chinese prose is checked using Chinese writing conventions. |
 
 `idea-discovery` 尚依赖未收录的上游技能及包外资料，不纳入首批单装。文字起草、综述和润色按需增加对应技能即可。
 
