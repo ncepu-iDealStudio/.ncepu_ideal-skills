@@ -2,7 +2,6 @@
 name: TeachAnyHE
 version: 2.0.0
 description: "高等教育互动课件开发技能。用于制作或优化大学本科/研究生课程的互动课件、教学动画、AI 助教、TTS 讲解、课程知识图谱、课程设计/实验项目与研讨型页面。覆盖数学、计算机、通信、电气、自动化、机械、物理、化学、经济管理等专业课程。触发词：大学课件、教学设计、算法可视化、公式推导、信号/电路仿真、OBE 课程目标、培养方案、教学大纲、课程设计、实验课、研究生课程。"
-allowed-tools: Read,Write,Edit,Bash,Glob,Grep,Skill
 display_name: "TeachAnyHE"
 display_name_en: "TeachAnyHE (Higher Education)"
 description_en: "Create higher-education interactive courseware for undergraduate/graduate courses: teaching animations, AI tutor, TTS, course knowledge graphs, course design & lab projects."
@@ -81,17 +80,37 @@ cat "$COURSE_DIR/course-graph.json"
 5. 按 `tech/animation-toolchain.md` 选动画工具：数学推导/波形演示优先 Manim；算法流程优先 Motion Canvas；电路/信号仿真优先内置 JS 引擎或引用 Python/Jupyter 结果（对应 TeachAny 的动画工具栈，详见 `tech/animation-toolchain.md`）。
 6. 接入标准模块：AI 助教、教师卡片、TTS 讲解、section hints、课程知识图谱（对应 TeachAny 五件套）。
 7. **学科门类视觉（强制）**：Phase 2 前读 `tech/design-system.md`；`body` 用 `teachanyhe-science` / `teachanyhe-engineering` / `teachanyhe-econ`，理科/工科课不得套用经管/文科的米白典雅风格，反之亦然。
-8. **公式渲染（强制）**：所有数学公式用 KaTeX（或 MathJax）渲染，禁止用纯文本/图片代替；推导过程用 `.derivation` 编号步骤组件（高等教育核心需求，K-12 无）。
+8. **公式渲染（强制）**：所有数学公式用 KaTeX（或 MathJax）渲染，禁止用纯文本/图片代替；推导过程用 `.derivation` 编号步骤组件（高等教育核心需求，K-12 无）。CDN 不可达时用本地 `./assets/katex/`；本地也没有时保留 LaTeX 源码并加可见提示，不得冒充已渲染（见档位 C）。
 9. **代码/算法可视化（计算机类强制）**：算法课必须含可运行的算法可视化（步骤高亮 + 复杂度对比），禁止只贴静态代码块。
-10. **TTS（强制）**：用 Edge Neural TTS 生成 ≥3 个 `tts/*.mp3`，每个 `data-tts` 段落带 `section` 映射；禁止 Web Speech 金属音交付。
-11. **定稿（强制收尾）**：补齐 AI 助教、课程知识图谱、连续音频播放器、分段 mp3。
+10. **TTS（按环境档位）**：先探测本机 TTS 能力（见下「环境探测与交付档位」）。档位 A 用 Edge Neural TTS 生成 ≥3 个 `tts/*.mp3`，每个 `data-tts` 段落带 `section` 映射；档位 B 用浏览器 Web Speech 合成并明确标注为合成音；档位 C 跳过音频，保留 `data-tts` 文本与讲解稿。禁止把合成音冒充为真人录音；也禁止在有真实 TTS 能力时偷懒降档。
+11. **定稿（强制收尾）**：补齐 AI 助教、课程知识图谱；音频播放器按档位决定——有 mp3 则接连续播放器，无 mp3 则播放器降级为文字稿入口，不得留空按钮。
 12. 本地验证后走交付流程（见「交付与发布」）。
 
 ## 模式说明
 
-TeachAnyHE 与 TeachAny 一样**只有完整模式**，没有「快速模式」。所有课件必须完整包含基线项（见 `references/baseline-rules.md`）：manifest、标准模块（AI 助教/教师卡片/TTS/section hints/课程知识图谱）、Hero 图、交付闭环。
+TeachAnyHE 与 TeachAny 一样**只有完整模式**，没有「快速模式」：教学设计与内容基线（六问、ABT、互动、练习、反馈、知识图谱、交付闭环）任何档位都不得省略。
 
-**唯一允许豁免的情形**：某项依赖外部资源（如 CDN 公式库、TTS 引擎、动画渲染工具），在当前网络环境反复尝试（≥2 次，间隔 ≥30 秒）确实无法连接且无本地替代时，该单项可临时跳过，并在交付说明中注明豁免原因（具体报错）、已尝试次数、后续补齐步骤。主观判断（「用户先看看效果」「先做简版」）不构成豁免理由。
+可降级的只有**外部资源依赖类模块**：TTS 音频、动画渲染、AI 助教模型 API、CDN 公式库。这些模块由环境决定档位，不由主观意愿决定。
+
+## 环境探测与交付档位
+
+**先探测，再动手。** 在 Phase 0 完成学生层次定位后，用一条命令或一次尝试确认下列能力是否存在，把结果记入 `PLAN.md`：
+
+| 探测项 | 怎么判定可用 | 对应模块 |
+| --- | --- | --- |
+| Python 命令 | 终端执行 `python --version` 有版本号返回 | TTS、Manim、质检命令 |
+| TTS 引擎 | `edge-tts --version` 可执行，或 `pip show edge-tts` 有输出 | L3 语音讲解 |
+| 网络 / CDN | `templates/course-skeleton.html` 内的 KaTeX CDN 可访问 | 公式渲染、在线 TTS |
+| 浏览器 | 能打开本地 `index.html` 并支持 Web Speech | 档位 B 合成音、互动验证 |
+| 模型 API 凭据 | 环境变量中存在可用的 API Key | AI 助教在线问答 |
+
+按探测结果定档：
+
+- **档位 A（完整）**：Python + TTS 引擎 + 网络均可用。生成 ≥3 个真实 mp3、Manim 动画、在线 AI 助教，交付 `tts/` 目录。
+- **档位 B（合成降级）**：无 TTS 命令，但有浏览器。用 Web Speech 运行时合成语音并明确告知学生是合成音；动画改用内嵌 Canvas/SVG；AI 助教走规则式降级链（见 `tech/page-structure.md`）。
+- **档位 C（离线最小）**：无网络或完全无脚本环境。公式走本地 `./assets/katex/` 或保留 LaTeX 源码并加提示；不做音频，提供完整讲解文字稿；动画用静态 SVG 分步图。课件仍须可双击打开、互动可用、知识点齐全。
+
+**降档的证据要求**：每个降档项在交付说明中写清「探测了什么、报什么错、改用了什么替代」。主观判断（「先看看效果」「做个简版」）不构成降档理由；反过来，环境明明具备能力却主动降级，同样违规。
 
 ## 4-Phase 流程
 
@@ -109,7 +128,7 @@ Phase 4  发布/交付：本地交付 + 可选导出（PDF/PPTX/LaTeX/导入 LMS
 
 1. **模板优先**：新课件先复制 `templates/course-skeleton.html`（分页模板，内置 KaTeX + 学术视觉 + 标准模块接线），不要从空白页手写。复制后删除 `<head>` 内的占位符文档注释块。
 2. **学习闭环优先**：每课必须有问题锚点、推导/仿真/证明尝试、即时反馈、总结迁移；视觉炫技不能替代学习设计。
-3. **标准模块优先**：AI 助教、教师卡片、TTS、section hints、课程知识图谱优先用标准模块，不重复手写。
+3. **标准模块优先**：AI 助教、教师卡片、TTS/讲解稿、section hints、课程知识图谱优先用标准模块，不重复手写；外部依赖类模块按探测档位选实现。
 4. **真实互动**：标题写「互动/仿真/实验/推导/可视化」就必须可操作；静态图不能伪装互动。
 5. **公式必须真渲染**：数学/物理/信号类课件，公式一律 KaTeX/MathJax 渲染；推导要分步、可高亮、可回溯，禁止整段公式图片或纯文本堆砌。
 6. **代码/算法必须可视化**：计算机类课件的算法/数据结构，必须有可运行的逐步可视化 + 复杂度对比，禁止只贴静态代码。
@@ -117,8 +136,8 @@ Phase 4  发布/交付：本地交付 + 可选导出（PDF/PPTX/LaTeX/导入 LMS
 8. **知识体系必须映射**：每个知识点在 `course-graph.json` 中登记 `prerequisites`/`leads_to`/`bloom_verbs`，并尽量标注支撑的毕业要求指标点（OBE）。
 9. **闭环验证**：说「完成/可用」前必须跑命令或浏览器验证，给出关键输出。
 10. **资源引用禁止绝对路径**：课件内引用共享脚本/样式/图片必须用相对路径，禁止 `/assets/` 绝对路径（本地与静态托管根路径不一致会 404）。
-11. **交付先检测环境**：无导出工具/权限时，不假设能生成 PDF/PPTX；先提示或退回本地 HTML 交付。
-12. **依赖豁免须有证据**：外部资源无法连接必须给出具体报错、已重试次数，才允许豁免。
+11. **交付先检测环境**：无导出工具/权限时，不假设能生成 PDF/PPTX；先提示或退回本地 HTML 交付。PPTX 不是必需交付物，当前工具未提供对应能力时直接跳过，不视为豁免。
+12. **降档须有证据**：外部资源无法连接必须给出具体报错、已探测项，才允许降档；教学设计与内容基线不得以「环境受限」为由省略。
 
 完整硬规则、基线清单与反模式见 `references/baseline-rules.md`。
 
@@ -455,11 +474,11 @@ Hero 区（课程标题 + 专业/课程/课型标签 + 知识结构图）
 | --- | --- |
 | **本地 HTML 交付** | 默认交付，单文件/目录自包含，双击即用 |
 | **导出 PDF** | 打印友好样式（`window.print()` / 无头浏览器） |
-| **导出 PPTX** | 结合 pptx 技能转换为演示文稿 |
+| **导出 PPTX** | 当前工具提供 PPTX 转换能力时可用；不提供则跳过此项，本地 HTML 已是可交付成品 |
 | **导出 LaTeX 讲义** | 数学/理论课可选，产出配套讲义 |
 | **导入 LMS** | 学习通/雨课堂/Canvas/Moodle，可导出 SCORM 或页面包 |
 
-**交付标准（制作交付）**：见 `phases/deliverables.md`（含质检命令）。要点：三模块补齐（AI 助教/音频播放器/课程知识图谱）、关键资源存在（index.html / manifest.json / course-graph.json / PLAN.md / assets/ / tts/）、控制台无错、移动端不崩。
+**交付标准（制作交付）**：见 `phases/deliverables.md`（含质检命令）。要点：三模块按档位补齐（AI 助教 / 讲解与播放器 / 课程知识图谱）、关键资源存在（`index.html`、`manifest.json`、`course-graph.json`、`PLAN.md`、`assets/`；档位 A 另有 `tts/`）、控制台无错、移动端不崩。
 
 ---
 

@@ -26,8 +26,8 @@ TeachAnyHE 不是提示词模板，而是一套面向高校专业课程的**教�
 - 课程知识图谱：本地生成 `course-graph.json`（prerequisites / leads_to / bloom_verbs / graduate_attr）
 - 六种课型适配：新授课 / 复习课 / 习题课 / 专题研讨 / 实验课 / **课程设计**（高校特有）
 - 九类专业课程矩阵：数学、计算机、通信、电气、自动化、机械、物理、化学、经管
-- 五件套标准模块：AI 助教、教师卡片、TTS 讲解、section hints、课程知识图谱
-- 19 项交付基线 + 豁免记录机制，保证课件完整性可核验
+- 五件套标准模块：AI 助教、教师卡片、语音讲解（按档位）、section hints、课程知识图谱
+- 19 项交付基线 + 降档记录机制，保证课件完整性可核验
 
 ## 目录结构
 
@@ -66,15 +66,29 @@ TeachAnyHE/
 | Cursor | `~/.cursor/skills/TeachAnyHE/` |
 | Claude Code | `~/.claude/skills/TeachAnyHE/` |
 
+Windows 用户把 `~` 替换为用户目录（如 `C:\Users\你的用户名\`）。整目录复制即可，技能不依赖特定 Agent 工具名，也不绑定任何外部平台。
+
+## 跨工具适配说明
+
+技能不假设运行环境具备某组固定工具。制作前会探测 Python、TTS 引擎、网络/CDN、浏览器、模型 API 凭据，按结果选择交付档位：
+
+| 档位 | 条件 | 语音讲解 | 动画 | 公式 |
+| --- | --- | --- | --- | --- |
+| A 完整 | Python + TTS + 网络可用 | ≥3 个 mp3 + 连续播放器 | Manim / Motion Canvas | KaTeX CDN |
+| B 合成 | 无 TTS 命令，有浏览器 | Web Speech 合成（明确标注） | 内嵌 Canvas/SVG | KaTeX CDN |
+| C 离线 | 无网络或纯文件环境 | 讲解文字稿 | 静态 SVG 分步图 | 本地 KaTeX 或 LaTeX 源码 + 提示 |
+
+教学设计与内容基线（六问、ABT、真实互动、练习与反馈、课程知识图谱）在任何档位都不降级；PPTX 导出是可选能力，当前工具不提供时直接跳过。降档原因与替代方案记入课件的 `PLAN.md`。
+
 ## 快速使用
 
 在 Agent 中直接说：
 
-> 用 TeachAnyHE 制作《信号与系统》第 4 章傅里叶变换的互动课件，本科高年级，含 AI 助教和 TTS 讲解
+> 用 TeachAnyHE 制作《信号与系统》第 4 章傅里叶变换的互动课件，本科高年级，含 AI 助教和语音讲解
 
 或按 `SKILL.md` 的 4-Phase 工作流执行：**Phase 0** 定位培养方案与教学大纲 → **Phase 1** 六问与 ABT 教学设计 → **Phase 2** 学科适配（公式推导/算法可视化/仿真）→ **Phase 3** 构建交付（19 项基线核对）。
 
-交付物清单：`index.html` + `manifest.json` + `course-graph.json` + `PLAN.md` + `assets/` + `tts/`（≥3 mp3）。
+交付物清单：`index.html` + `manifest.json` + `course-graph.json` + `PLAN.md` + `assets/`；档位 A 另含 `tts/`（≥3 mp3），档位 B/C 不生成音频但保留讲解内容。
 
 ## 与上游 TeachAny 的关系
 

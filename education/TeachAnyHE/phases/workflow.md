@@ -35,6 +35,8 @@ Phase 4  交付：本地交付 + 可选导出（PDF/PPTX/LaTeX/LMS）
 
 **强制**：每个知识点登记到 `course-graph.json`（含 `prerequisites`/`leads_to`/`bloom_verbs`/`graduate_attr`）。知识体系来源：专业培养方案 → 课程教学大纲 → 教材目录。方法见 `references/higher-ed-framework.md`。
 
+**同时探测环境并定档**：按主 `SKILL.md`「环境探测与交付档位」检查 Python 命令、TTS 引擎、网络/CDN、浏览器、模型 API 凭据，把探测结果与档位（A/B/C）及降档原因记入 `PLAN.md`。档位只决定外部依赖类模块的实现方式，不影响六问与教学设计。
+
 ## 三、Phase 1：搭建教学骨架 ⛔ CHECKPOINT
 
 1. **ABT 叙事**：And（已知）→ But（已知解决不了）→ Therefore（本课新工具）
@@ -78,8 +80,8 @@ Phase 4  交付：本地交付 + 可选导出（PDF/PPTX/LaTeX/LMS）
 5. 公式一律 KaTeX 渲染；推导用 `.derivation` 分步组件
 6. 计算机类：算法可视化（步骤高亮 + 复杂度对比）
 7. 通信/电气：波形/频谱/电路仿真
-8. 接入标准模块：AI 助教、教师卡片、TTS、section hints、课程知识图谱
-9. 生成 ≥3 个 `tts/*.mp3`（Edge Neural TTS），每个 `data-tts` 段带 `section` 映射
+8. 接入标准模块：AI 助教、教师卡片、语音讲解、section hints、课程知识图谱
+9. 语音讲解按档位实现：档位 A 生成 ≥3 个 `tts/*.mp3`（Edge Neural TTS），档位 B 用 Web Speech 合成，档位 C 用讲解文字稿；每个 `data-tts` 段带 `section` 映射，任何档位都保留讲解内容
 10. 学术里程碑系统（章节完成度/掌握度/连续学习/综合任务完成）
 
 ### ⛔ Completeness Gate：输出完整性审查

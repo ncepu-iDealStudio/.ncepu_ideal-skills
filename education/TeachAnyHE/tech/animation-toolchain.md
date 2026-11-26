@@ -30,11 +30,13 @@
 典型场景：梯度下降的等高线下降动画、极限/导数的几何意义、傅里叶变换的频谱逼近。
 
 ```bash
-# 安装与渲染命令
-pip install manim
+# 安装与渲染命令（在课件根目录执行；python 按本机命令名替换）
+python -m pip install manim
 manim render -pql gradient_descent.py GradientDescent   # 低质量预览
 manim render -pqh gradient_descent.py GradientDescent   # 高质量导出
 ```
+
+Manim 属于档位 A 能力。安装失败或无 Python 环境时直接走下方降级路径，无需重试。
 
 ```python
 # 示例：Manim 绘制梯度下降等高线

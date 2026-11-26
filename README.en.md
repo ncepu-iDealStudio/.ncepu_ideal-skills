@@ -22,7 +22,7 @@
 
 This repository does **one thing**: collect, organize, categorize, and improve skills. It does not host skill testing, nor does it maintain installed skill copies for individual AI tools.
 
-- 📁 **Categorized by domain**: skills live in `requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `research/`, `others/`, one directory per skill (`SKILL.md` + resources)
+- 📁 **Categorized by domain**: skills live in `requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `education/`, `research/`, `others/`, one directory per skill (`SKILL.md` + resources)
 - 🧪 **Testing is external**: no test directories or sample artifacts here; skill validation and regression run in a **separate project**
 - 🔁 **No tool copies**: no skill copies under `.workbuddy/`, `.cursor/`, `.dsh/`, avoiding drift between duplicates
 - 🧩 **Multi-stack**: requirements analysis, database design, backend scaffolds, prototype-to-app, Go / Java conventions, security audits, and research
@@ -31,7 +31,15 @@ This repository does **one thing**: collect, organize, categorize, and improve s
 
 ## 🎯 Skill List
 
-Grouped by directory: **38 skills** (`requirements_analysis` 3, `design` 5, `sql-to` 4, `prototype-to` 7, `java` 5, `go` 4, `security` 6, `research` 3, `ppt` 1, `others` 1), plus the `requirements_analysis/spec-kit` toolkit, 20 general workflow skills, and 1 research skill collection (`supervisor-skills`).
+Skills are grouped by domain below, alongside the `requirements_analysis/spec-kit` toolkit, 20 general workflow skills, and 1 research skill collection (`supervisor-skills`).
+
+### 🎓 Education
+
+| Skill | Purpose | Documentation |
+| --- | --- | --- |
+| `teaching-pptx` | Turn a teaching topic into a slide-by-slide outline; after explicit approval, generate an editable 16:9 PPTX with speaker notes | [SKILL.md](education/teaching-pptx/SKILL.md) · [Guide](education/teaching-pptx/README.md) |
+
+See the [education index](education/README.md) for the full list.
 
 ### 📋 Requirements Analysis & Design (`requirements_analysis/`, 3 skills)
 
