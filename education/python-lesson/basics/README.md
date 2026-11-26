@@ -1,0 +1,118 @@
+# 基础课件
+
+[Python 青少年编程](../README.md)的第一个模块，给小学高年级和初中生，从零开始学 Python。课件是可以离线双击打开的网页：学生看着能自学，老师照着能讲课，代码能一键带到在线 IDE 里运行。
+
+在线看：<https://lixuanan2.github.io/python-for-youth/basics/>
+
+下面的路径和命令都从 `basics/` 文件夹算起。
+
+## 上课
+
+双击 `dist/index.html`，选一节课。
+
+| 按键 | 作用 |
+| --- | --- |
+| `→` `空格` | 下一步，有分步的页面先走完步骤 |
+| `←` | 上一步 |
+| `T` | 显示或收起左侧缩略图 |
+| `G` | 输入页码跳转 |
+| `R` | 带着本页代码打开 IDE |
+| `I` | IDE 设置：主题、布局、打开后是否自动运行 |
+| `F` | 全屏，全屏时动一下鼠标显示控制条 |
+| `B` | 黑屏，按任意键回来 |
+| `D` | 画笔：拿起或收起，也可以点舞台边上的圆球（动一下鼠标才出现；拖到哪边就贴在哪边，这台电脑记住）。拿着笔时点击不翻页，方向键照常翻页；收笔或翻页，笔迹就清掉，不进打印和 PDF |
+| `1` `2` `3` | 拿着笔时换颜色：红、蓝、荧光笔（划代码行） |
+| `C` | 擦掉笔迹，笔还拿着；白板开着时擦白板 |
+| `W` | 白板：在课件上面打开一块带方格的板，自动拿起笔，只在板上写。拖顶上的横栏移动，拖右下角改大小，位置和大小这台电脑记住。后面的课件变暗、点不动；翻页键照常翻页，白板和写的东西都留着。再按 `W`、`Esc` 或点 × 关掉，白板清掉 |
+| `Esc` | 关白板；没开白板就收笔 |
+| `1`–`4` | 小测选答案（没拿笔时） |
+| `?` | 查看快捷键 |
+
+底部时间轴一格一页，颜色表示这页的任务，可以拖动，旁边是章节跳转。
+
+上课时把整个 `dist/` 复制到教室电脑，里面有课件和起始程序，没有答案。IDE 按钮要联网，第一次打开要等十几秒，其余功能离线可用。
+
+IDE 里的 Python 是在浏览器里跑的。Edge 开着“增强的安全性”时会关掉它要用的功能，表现是点了运行右边一直空白。教室电脑用 Edge 的话，先在 Edge 设置里搜“增强的安全性”，在“例外”里添加 `lixuanan2.github.io`；或者改用 Chrome。C++ 的 IDE 在服务器上编译，不受这个影响。
+
+## 课程
+
+| 课 | 主题 | 页数 |
+| --- | --- | --- |
+| [01](dist/01-input-output/index.html) | 输入输出 | 26 |
+| [02](dist/02-variables/index.html) | 变量与数据类型 | 27 |
+| [03](dist/03-arithmetic/index.html) | 算术运算 | 29 |
+| [04](dist/04-conditions/index.html) | 条件判断 | 24 |
+| [05](dist/05-logic/index.html) | 逻辑运算 | 27 |
+| [06](dist/06-for-loop/index.html) | for 循环 | 31 |
+| [07](dist/07-while-loop/index.html) | while 循环 | 24 |
+| [08](dist/08-loop-tally/index.html) | 累加和计数 | 24 |
+| [09](dist/09-max-min/index.html) | 最大值和最小值 | 22 |
+| [10](dist/10-list-basics/index.html) | 列表基础 | 25 |
+| [11](dist/11-list-loop/index.html) | 列表遍历 | 22 |
+| [12](dist/12-string-basics/index.html) | 字符串基础 | 25 |
+| [13](dist/13-string-methods/index.html) | 字符串常用方法 | 23 |
+| [14](dist/14-functions/index.html) | 函数定义与调用 | 22 |
+| [15](dist/15-params-return/index.html) | 参数与返回值 | 23 |
+| [16](dist/16-math-functions/index.html) | 常用数学函数 | 23 |
+| [17](dist/17-dict-basics/index.html) | 字典基础 | 22 |
+| [18](dist/18-nested-loops/index.html) | 嵌套循环与图形 | 23 |
+| [19](dist/19-list-tools/index.html) | 列表常用操作 | 22 |
+| [20](dist/20-2d-lists/index.html) | 二维列表 | 21 |
+| [21](dist/21-random-games/index.html) | 随机数与小游戏 | 20 |
+| [22](dist/22-try-except/index.html) | 接住报错：try 和 except | 22 |
+| [23](dist/23-recursion/index.html) | 递归入门 | 19 |
+| [24](dist/24-bubble-sort/index.html) | 冒泡排序 | 19 |
+| [25](dist/25-enumeration/index.html) | 枚举：把可能都试一遍 | 20 |
+| [26](dist/26-binary-search/index.html) | 二分查找 | 19 |
+| [27](dist/27-break-continue/index.html) | break 和 continue | 19 |
+| [28](dist/28-f-strings/index.html) | f-string 格式化输出 | 19 |
+| [29](dist/29-sets/index.html) | 集合 | 19 |
+| [30](dist/30-tuples/index.html) | 元组 | 20 |
+
+## 做新课
+
+在 Claude Code 里说“做下一课：if 判断”，会走 [python-lesson](../.claude/skills/python-lesson/SKILL.md) 流程。用别的 AI 时，把 [PROMPT.md](PROMPT.md) 发过去。
+
+一节课页面太多时分成上下集，规则见 [PROMPT.md](PROMPT.md)。手动改课后，在 `basics/` 里运行：
+
+```sh
+python3 tools/build.py --pdf
+python3 tools/check.py
+node tools/check_browser.mjs --changed
+```
+
+浏览器检查不带参数会查全部课，要 15 到 20 分钟；`--changed` 只查上次在这台电脑上通过后改过的课，写课的编号（如 `06-for-loop`）只查那几节，`--status` 列出每节课要不要查。推送后 GitHub 上的 CI 每次都查全部。
+
+`--pdf` 用 Chrome 把页面变了的课重新打印成 PDF，改了课件正文或模板都要带上。[pdf.json](pdf.json) 记着每份 PDF 照哪一版页面打印，PDF 跟不上页面时 `check.py` 会报错。没装 Chrome 时怎么办，见 [CONTRIBUTING.md](../CONTRIBUTING.md)。
+
+## 目录
+
+```text
+lessons/    每节课的页面、题目和测试，唯一内容源
+template/   所有课共用的外壳、样式和脚本
+tools/      构建和检查
+dist/       生成结果，复制它去上课
+pdf.json    每份 PDF 照哪一版页面打印，检查用
+vendor/     字体和舞台样式，含许可
+site.json   网站名称、语言和 IDE 平台
+PROMPT.md   做课提示词和教学要求
+AGENTS.md   这个模块的规则
+```
+
+## 教学设计
+
+每节课按“讲一点、练一点”推进，最后自己挑战一道新题，卡住了有一条一条的提示，做完再翻参考答案。课堂结构以 [PROMPT.md](PROMPT.md) 为准；设计时参考过 MIT Media Lab 的[创意学习](https://www.media.mit.edu/groups/lifelong-kindergarten/overview/)。
+
+## 参与
+
+欢迎提意见和改进，怎么提看 [CONTRIBUTING.md](../CONTRIBUTING.md)。
+
+## 许可
+
+课件内容用 CC BY-NC-SA 4.0，代码用 MIT，详见 [LICENSE.md](../LICENSE.md)。
+
+## 致谢
+
+- 固定舞台样式来自 [Frontend Slides](https://github.com/zarazhangrui/frontend-slides)（MIT）。
+- 字体 [JetBrains Mono](https://www.jetbrains.com/lp/mono/)（SIL OFL 1.1）。
+- 在线 IDE 是本仓库发布的 [JupyterLite](https://jupyterlite.readthedocs.io/)（BSD-3-Clause），Python 是一起发布的 [Pyodide](https://pyodide.org/)（MPL-2.0），打开时不从别的网站下载。学生代码在浏览器里运行，但会放在打开的链接地址中。

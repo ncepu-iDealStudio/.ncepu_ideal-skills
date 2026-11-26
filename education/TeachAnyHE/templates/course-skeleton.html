@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  ============================================================
+  TeachAnyHE 课件骨架模板 v2.0（高等教育版 · 复制即用）
+  ============================================================
+  使用说明（制作完成后删除本注释块）：
+  1. 学科门类模式三选一，body class 与下方 :root 配色必须一致：
+     - teachanyhe-science      理科（数学/物理/化学）：深蓝学术
+     - teachanyhe-engineering  工科（计算机/通信/电气/自动化/机械）：浅色工程（本模板默认）
+     - teachanyhe-econ         经管/文科：米白典雅
+  2. KaTeX 为理工课强制；经管/文科课可移除 KaTeX 三个标签。
+     无网络环境：将 KaTeX 下载到 ./assets/katex/ 并改用相对路径。
+     本模板已内置 KaTeX 降级检测（CDN 不可达时公式以 LaTeX 源码原文显示，并在顶部弹提示条）。
+  3. 必备文件：index.html（本文件）、manifest.json、course-graph.json、
+     PLAN.md、assets/、tts/（≥3 个 mp3 或豁免记录）。
+  4. 标准模块五件套已内置最小可运行实现，按 tech/page-structure.md 扩展：
+     AI 助教（规则问答 + 静态提示卡降级）/ 教师卡片 / TTS 播放器 /
+     section hints / 课程知识图谱（course-graph.json 渲染 + 静态降级）。
+  5. 前端闭环命名空间：teachanyhe_（进度/掌握度/复习/里程碑），
+     已内置 localStorage 禁用降级与 course-graph 加载失败降级。
+  ============================================================
+-->
+<meta name="teachanyhe-stage" content="engineering"><!-- science | engineering | econ -->
+<meta name="teachanyhe-course" content="课程名称"><!-- 例：信号与系统 -->
+<meta name="teachanyhe-major" content="专业名称"><!-- 例：电子信息工程 -->
+<title>课程名称 · 章节标题 | TeachAnyHE 课件</title>
+
+<!-- KaTeX 公式渲染（理工课强制；无网络时改相对路径 ./assets/katex/） -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+<style>
+/* ============ 学科门类设计令牌（默认 engineering；切换时整组替换） ============ */
+:root{
+  --bg:#f8fafc; --surface:#ffffff; --primary:#2563eb; --secondary:#0891b2;
+  --accent:#f59e0b; --text:#0f172a; --muted:#64748b;
+  --radius:10px; --shadow:0 2px 12px rgba(15,23,42,.08);
+  --serif:"Noto Serif SC","Source Han Serif SC",Georgia,serif;
+  --mono:Consolas,"SF Mono",Menlo,monospace;
+}
+/* science（理科深色）：--bg:#0f172a; --surface:rgba(30,41,59,.7); --primary:#60a5fa; --secondary:#2dd4bf; --accent:#fbbf24; --text:#e2e8f0; --muted:#94a3b8; */
+/* econ（经管米白）：--bg:#fdfdfa; --surface:#ffffff; --primary:#1f6f5f; --secondary:#b8860b; --accent:#b5533c; --text:#1a202c; --muted:#6b7280; */
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.8}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* ---------- Hero ---------- */
+.hero{padding:72px 0 48px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+.hero .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.hero .tag{background:rgba(255,255,255,.18);padding:4px 14px;border-radius:999px;font-size:13px}
+.hero h1{font-size:34px;font-weight:700;margin-bottom:12px}
+.hero .hook{font-size:17px;opacity:.95;max-width:760px}
+
+/* ---------- 通用区块 ---------- */
+section.module{margin:44px 0}
+h2{font-size:26px;margin-bottom:18px;padding-left:14px;border-left:4px solid var(--primary)}
+h3{font-size:20px;margin:28px 0 12px;color:var(--primary)}
+.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:18px}
+
+/* ---------- 高等教育特有组件 ---------- */
+.formula-box{background:var(--surface);border-left:4px solid var(--accent);border-radius:var(--radius);
+  padding:18px 24px;margin:18px 0;font-family:var(--serif);overflow-x:auto;box-shadow:var(--shadow)}
+.theorem,.definition{background:var(--surface);border-radius:var(--radius);padding:20px 24px;margin:18px 0;box-shadow:var(--shadow)}
+.theorem{border-top:3px solid var(--primary)} .definition{border-top:3px solid var(--secondary)}
+.theorem::before{content:"定理";display:inline-block;background:var(--primary);color:#fff;font-size:12px;padding:2px 10px;border-radius:4px;margin-bottom:8px}
+.definition::before{content:"定义";display:inline-block;background:var(--secondary);color:#fff;font-size:12px;padding:2px 10px;border-radius:4px;margin-bottom:8px}
+.proof{margin:12px 0} .proof summary{cursor:pointer;color:var(--primary);font-weight:600}
+.derivation{counter-reset:step;margin:18px 0}
+.derivation-step{position:relative;padding:14px 18px 14px 52px;background:var(--surface);border-radius:var(--radius);margin-bottom:10px;box-shadow:var(--shadow);counter-increment:step;opacity:.45;transition:opacity .2s}
+.derivation-step::before{content:counter(step);position:absolute;left:16px;top:14px;width:24px;height:24px;border-radius:50%;
+  background:var(--primary);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+.derivation-step.active{outline:2px solid var(--accent);opacity:1}
+.code-block{background:#0f172a;color:#e2e8f0;border-radius:var(--radius);padding:18px 20px;font-family:var(--mono);font-size:14px;overflow-x:auto;margin:18px 0}
+.algo-viz{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin:18px 0}
+.graduate-attr{display:inline-block;background:var(--secondary);color:#fff;font-size:12px;padding:3px 12px;border-radius:999px;margin:4px 6px 4px 0}
+.references{font-size:14px;color:var(--muted)} .references li{margin-bottom:6px}
+
+/* ---------- 互动组件 ---------- */
+.quiz .opt{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--muted);
+  border-radius:8px;padding:12px 16px;margin:8px 0;cursor:pointer;font-size:15px;color:var(--text)}
+.quiz .opt:hover{border-color:var(--primary)}
+.quiz .opt.correct{border-color:#16a34a;background:rgba(22,163,74,.1)}
+.quiz .opt.wrong{border-color:#dc2626;background:rgba(220,38,38,.08)}
+.feedback{display:none;margin-top:12px;padding:14px 18px;border-radius:8px;font-size:15px}
+.feedback.show{display:block}
+.feedback.ok{background:rgba(22,163,74,.1);border-left:4px solid #16a34a}
+.feedback.no{background:rgba(220,38,38,.08);border-left:4px solid #dc2626}
+.slider-row{display:flex;align-items:center;gap:14px;margin:12px 0}
+.slider-row input[type=range]{flex:1;accent-color:var(--primary)}
+canvas.viz{width:100%;border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+.bars{display:flex;align-items:flex-end;gap:4px;height:160px;margin:12px 0}
+.bars .bar{flex:1;background:var(--primary);border-radius:4px 4px 0 0;transition:height .2s,background .2s}
+.bars .bar.compare{background:var(--accent)}
+.bars .bar.sorted{background:#16a34a}
+.complexity{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px}
+.complexity th,.complexity td{border:1px solid rgba(100,116,139,.25);padding:6px 10px;text-align:center}
+.complexity th{background:rgba(37,99,235,.08)}
+
+/* ---------- 标准模块 ---------- */
+.module-hint{background:rgba(37,99,235,.06);border:1px dashed var(--primary);border-radius:8px;padding:14px 18px;font-size:14px;color:var(--muted);margin:18px 0}
+
+/* ---------- AI 助教（左下悬浮） ---------- */
+#ai-tutor{position:fixed;left:20px;bottom:20px;z-index:50}
+#ai-tutor-btn{background:var(--primary);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:14px;cursor:pointer;box-shadow:var(--shadow)}
+#ai-tutor-panel{display:none;background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:10px;width:280px;max-height:60vh;overflow-y:auto}
+#ai-tutor-panel.open{display:block}
+#ai-tutor-panel h4{margin-bottom:8px}
+#ai-tutor-panel .faq-item{border-bottom:1px solid rgba(100,116,139,.2);padding:8px 0}
+#ai-tutor-panel .faq-q{color:var(--primary);cursor:pointer;font-size:14px}
+#ai-tutor-panel .faq-a{display:none;font-size:13px;color:var(--muted);margin-top:4px}
+#ai-tutor-panel .faq-a.show{display:block}
+
+/* ---------- TTS 播放器（右下悬浮） ---------- */
+#tts-player{position:fixed;right:20px;bottom:20px;z-index:50}
+#tts-toggle{background:var(--secondary);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:14px;cursor:pointer;box-shadow:var(--shadow)}
+#tts-list{display:none;background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-top:10px;width:240px}
+#tts-list.open{display:block}
+#tts-list button{display:block;width:100%;text-align:left;background:none;border:none;padding:8px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--text)}
+#tts-list button:hover{background:rgba(37,99,235,.06)}
+#tts-list button.playing{background:rgba(37,99,235,.12);color:var(--primary)}
+[data-tts]{transition:background .3s,outline .3s}
+[data-tts].tts-active{outline:2px solid var(--accent);background:rgba(245,158,11,.08);border-radius:8px}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:600px){
+  .hero{padding:48px 0 36px}.hero h1{font-size:26px}
+  h2{font-size:22px}.card{padding:18px}
+  #ai-tutor-panel{width:220px}#tts-list{width:200px}
+}
+</style>
+</head>
+
+<body class="teachanyhe-engineering"><!-- 切换门类时同步换 :root 令牌与 meta -->
+
+<!-- ================= Hero ================= -->
+<header class="hero"><div class="wrap">
+  <div class="tags">
+    <span class="tag">本科专业课程</span>
+    <span class="tag">课程名称</span>
+    <span class="tag">新授课</span><!-- 课型：新授/复习/习题/研讨/实验/课程设计 -->
+  </div>
+  <h1>章节标题（核心问题锚点式命名）</h1>
+  <p class="hook" data-tts="section1">一句话核心问题：为什么……？（ABT 中的 But，给学生学习动机）</p>
+</div></header>
+
+<main class="wrap">
+
+<!-- MODULE:section-hint -->
+<div class="module-hint">本节目标：……；前置回顾：……（section hints 标准模块）</div>
+
+<!-- ================= 课程目标（OBE 可追溯） ================= -->
+<section class="module" id="objectives">
+  <h2>课程目标</h2>
+  <div class="card">
+    <ul>
+      <li>目标1（可观察能力，非「讲完」）：……</li>
+      <li>目标2：……</li>
+    </ul>
+    <p style="margin-top:12px">
+      <span class="graduate-attr">毕业要求 3-2</span>
+      <span class="graduate-attr">毕业要求 1-1</span>
+    </p>
+  </div>
+</section>
+
+<!-- ================= 前测（先修诊断 → 自适应分支点1） ================= -->
+<section class="module" id="pretest">
+  <h2>前测</h2>
+  <div class="card quiz" data-branch="review-prereq">
+    <p><strong>Q1（先修诊断）：</strong>……</p>
+    <button class="opt" data-ans="0">A. ……</button>
+    <button class="opt" data-ans="1">B. ……</button>
+    <div class="feedback" data-ok="回答正确，继续。" data-no="先修知识掌握不足，建议先看「先修回顾」卡片，也可以跳过继续。"></div>
+  </div>
+</section>
+
+<!-- ================= 自适应分支内容区（由 TeachAnyHEAdaptive.decideBranch 决定显示哪张卡片） ================= -->
+<section class="module" id="branch-area">
+  <div class="card" data-branch-card="review-prereq" hidden>先修回顾路径：前置课程/知识点回顾卡片 + 「继续学习」按钮（永不阻断）。</div>
+  <div class="card" data-branch-card="scaffold" hidden>脚手架路径：额外分步例题 + 低 Bloom 层练习 + 更多可视化类比。</div>
+  <div class="card" data-branch-card="challenge" hidden>挑战路径：高 Bloom 任务（分析/评价/创造）+ 跨章综合题或开放探究。</div>
+</section>
+
+<!-- ================= 知识模块 ×N（ABT → 讲解 → 五镜 → 互动 → 练习 → 诊断） ================= -->
+<section class="module" id="mod1">
+  <h2>模块一：……</h2>
+
+  <!-- ABT 导入（data-tts="section2" 对应 tts/section2.mp3，播放时高亮本段） -->
+  <div class="card" data-tts="section2">
+    <p><strong>And：</strong>你已经会……</p>
+    <p><strong>But：</strong>但……解决不了</p>
+    <p><strong>Therefore：</strong>所以本模块引入……</p>
+  </div>
+
+  <!-- 核心讲解：定义/定理 + 公式渲染 -->
+  <div class="definition">……（定义内容，公式行内 \( \nabla f(x) \) 用 KaTeX）</div>
+  <div class="formula-box">\[ x_{k+1} = x_k - \alpha_k \nabla f(x_k) \tag{1} \]</div>
+  <div class="theorem">……（定理陈述）</div>
+  <details class="proof"><summary>证明（点击展开）</summary>
+    <div class="derivation" data-derivation>
+      <div class="derivation-step">第一步：……</div>
+      <div class="derivation-step">第二步：……</div>
+      <div class="derivation-step">第三步：……</div>
+      <p style="margin-top:10px"><button class="btn-next-step" data-step-target="0">下一步</button></p>
+    </div>
+  </details>
+
+  <!-- 互动/仿真：参数滑块 + Canvas（控制变量三元组：改什么/保持什么/测什么） -->
+  <div class="card">
+    <h3>互动探究</h3>
+    <p>改变：<em>步长 α</em>；保持不变：<em>目标函数与起点</em>；测量：<em>迭代轨迹与收敛性</em>。</p>
+    <div class="slider-row"><label>α</label><input type="range" min="0.01" max="1" step="0.01" value="0.1" id="alpha"><span id="alpha-val">0.10</span></div>
+    <canvas class="viz" id="viz1" width="960" height="420"></canvas>
+  </div>
+
+  <!-- 即时练习（自适应分支点2） -->
+  <div class="card quiz" data-branch="scaffold-challenge">
+    <p><strong>练习（应用层）：</strong>……</p>
+    <button class="opt" data-ans="0">A. ……</button>
+    <button class="opt" data-ans="1">B. ……</button>
+    <div class="feedback" data-ok="正确。错因提示：……" data-no="错在哪：……；为什么：……；怎么改：……。"></div>
+  </div>
+</section>
+
+<!-- ================= 综合任务（含脚手架层级） ================= -->
+<section class="module" id="project" data-tts="section3">
+  <h2>综合任务</h2>
+  <div class="card">
+    <p><strong>任务：</strong>……（课程设计/综合应用，最终成果物：……）</p>
+    <p><strong>脚手架：</strong>L1 模板补全 / L2 结构提示 / L3 独立完成（按学生层次三选一开放）</p>
+  </div>
+</section>
+
+<!-- ================= 算法可视化示例（计算机类强制；非计算机课可删除本节） ================= -->
+<section class="module" id="algo-demo">
+  <h2>算法可视化示例：选择排序</h2>
+  <div class="card algo-viz" data-algo="selection-sort">
+    <p>改变：<em>数组规模</em>；保持不变：<em>算法</em>；测量：<em>比较/交换次数</em>。</p>
+    <div class="bars" id="bars"></div>
+    <p style="margin:12px 0">
+      <button id="algo-step">下一步</button>
+      <button id="algo-reset">重置</button>
+      <span id="algo-info"></span>
+    </p>
+    <table class="complexity">
+      <tr><th>算法</th><th>最好</th><th>平均</th><th>最坏</th><th>空间</th></tr>
+      <tr><td>选择排序</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td></tr>
+      <tr><td>冒泡排序</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 后测 ================= -->
+<section class="module" id="posttest">
+  <h2>后测</h2>
+  <div class="card quiz">
+    <p><strong>Q1：</strong>……（覆盖 ≥3 层 Bloom：记忆/理解/应用/分析/评价/创造）</p>
+    <button class="opt" data-ans="0">A. ……</button>
+    <button class="opt" data-ans="1">B. ……</button>
+    <div class="feedback" data-ok="……" data-no="……"></div>
+  </div>
+</section>
+
+<!-- ================= 拓展资源 ================= -->
+<section class="module" id="extend">
+  <h2>拓展资源</h2>
+  <div class="card">
+    <ol class="references">
+      <li>教材/文献 1（研究生课含前沿论文）……</li>
+      <li>……</li>
+    </ol>
+  </div>
+</section>
+
+<!-- MODULE:course-graph 课程知识图谱（course-graph.json 渲染；失败降级为静态清单） -->
+<section class="module" id="graph">
+  <h2>课程知识图谱</h2>
+  <div class="card">
+    <div id="course-graph-mount">（正在加载 course-graph.json……）</div>
+    <ul id="graph-fallback" hidden></ul>
+  </div>
+</section>
+
+<!-- MODULE:teacher-card 教师卡片 -->
+<section class="module" id="teacher">
+  <h2>授课教师</h2>
+  <div class="card"><p><strong>教师：</strong>……　<strong>答疑方式：</strong>……（教师/助教信息 + 联系方式）</p></div>
+</section>
+
+</main>
+
+<!-- MODULE:ai-tutor AI 助教（左下悬浮，规则问答 + 静态提示卡降级） -->
+<div id="ai-tutor">
+  <button id="ai-tutor-btn">AI 助教</button>
+  <div id="ai-tutor-panel">
+    <h4>本课常见疑问</h4>
+    <div class="faq-item"><div class="faq-q">▸ 这个知识点最难理解在哪？</div><div class="faq-a">……（规则式回答）</div></div>
+    <div class="faq-item"><div class="faq-q">▸ 常见错误是什么？</div><div class="faq-a">……（错因诊断）</div></div>
+    <div class="faq-item"><div class="faq-q">▸ 想进一步了解该看什么？</div><div class="faq-a">……（文献/教材建议，标注「请自行核对最新版本」）</div></div>
+  </div>
+</div>
+
+<!-- MODULE:tts TTS 连续播放器（右下悬浮，≥3 个 tts/*.mp3，段落高亮） -->
+<div id="tts-player">
+  <button id="tts-toggle">▶ 播放讲解</button>
+  <div id="tts-list">
+    <button data-src="tts/section1.mp3" data-section="section1">第 1 段 · 引言</button>
+    <button data-src="tts/section2.mp3" data-section="section2">第 2 段 · 核心讲解</button>
+    <button data-src="tts/section3.mp3" data-section="section3">第 3 段 · 小结</button>
+  </div>
+</div>
+
+<!-- MODULE:milestone 学术里程碑提示条（克制，无 emoji 弹窗；达成时显示） -->
+<div id="milestone-box" style="position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:var(--surface);border:1px solid var(--muted);border-radius:8px;padding:8px 16px;font-size:13px;color:var(--text);box-shadow:var(--shadow);z-index:40;display:none"></div>
+
+<script>
+/* ================= TeachAnyHE 前端闭环（零后端，localStorage） =================
+   命名空间 teachanyhe_：progress / mastery / review / milestones
+   自适应分支：TeachAnyHEAdaptive.decideBranch(mastery) → review-prereq | scaffold | normal | challenge
+   里程碑：chapter-complete / mastery-80 / streak-7 / project-done（克制风格，无 emoji 弹窗）
+   边界降级：localStorage 禁用 → 内存回退；course-graph.json 加载失败 → 静态清单；
+   KaTeX CDN 不可达 → 公式以 LaTeX 源码原文显示 + 顶部提示条。
+============================================================================= */
+
+/* ---- 存储封装（localStorage 禁用时回退内存） ---- */
+const _mem = {};
+const HE = {
+  key:(k)=>`teachanyhe_${k}`,
+  save(k,v){try{localStorage.setItem(HE.key(k),JSON.stringify(v))}catch(e){_mem[k]=v}},
+  load(k,d){try{const r=localStorage.getItem(HE.key(k));return r==null?d:JSON.parse(r)}catch(e){return (k in _mem)?_mem[k]:d}}
+};
+
+/* ---- 自适应分支判定 ---- */
+const TeachAnyHEAdaptive = {
+  decideBranch(mastery, hasPrereq){
+    if(!hasPrereq) return 'review-prereq';   // 先修不牢 → 回顾
+    if(mastery < 0.3) return 'scaffold';     // 低掌握 → 脚手架
+    if(mastery >= 0.8) return 'challenge';   // 高掌握 → 挑战
+    return 'normal';                          // 0.3–0.8 → 标准
+  }
+};
+
+/* ---- 学术里程碑（克制风格：达标时底部提示条，无 emoji 弹窗） ---- */
+function checkMilestones(){
+  const box=document.getElementById('milestone-box');
+  if(!box) return;
+  const m=HE.load('mastery',0.5), prog=HE.load('progress',0);
+  const ms=[];
+  if(prog>=1) ms.push('章节完成');
+  if(m>=0.8) ms.push('掌握度 ≥80%');
+  if((HE.load('streak',0)||0)>=7) ms.push('连续学习 7 天');
+  if(HE.load('project',false)) ms.push('综合任务完成');
+  if(ms.length){box.textContent='已达成学术里程碑：'+ms.join(' · ');box.style.display='block';}
+}
+
+/* ---- 客观题即时反馈 + 掌握度记录 + 自适应分支触发 ---- */
+document.querySelectorAll('.quiz').forEach(q=>{
+  const fb=q.querySelector('.feedback');
+  q.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+    const ok=b.dataset.ans==='1';
+    q.querySelectorAll('.opt').forEach(x=>x.classList.remove('correct','wrong'));
+    b.classList.add(ok?'correct':'wrong');
+    fb.textContent=ok?fb.dataset.ok:fb.dataset.no;
+    fb.className='feedback show '+(ok?'ok':'no');
+    // 记录掌握度（答对 +0.1，答错 -0.05，夹在 [0,1]）
+    const m=Math.min(1,Math.max(0,HE.load('mastery',0.5)+(ok?0.1:-0.05)));
+    HE.save('mastery',m);
+    checkMilestones();
+    if(q.dataset.branch){
+      const b2=TeachAnyHEAdaptive.decideBranch(m,true);
+      document.querySelectorAll('[data-branch-card]').forEach(c=>{c.hidden=(c.dataset.branchCard!==b2);});
+      console.log('[TeachAnyHE] 分支判定:', b2, '掌握度:', m.toFixed(2));
+    }
+  }));
+});
+
+/* ---- 参数滑块 + Canvas 绘图（最小示例：正弦波，α 控制频率）----
+   替换为具体课程内容：数学类→函数图，信号类→波形/频谱，电路类→响应曲线 */
+const alpha=document.getElementById('alpha'),alphaVal=document.getElementById('alpha-val'),
+      viz=document.getElementById('viz1');
+function drawViz(){
+  if(!viz||!viz.getContext) return;                       // Canvas 不支持 → 静默降级
+  const ctx=viz.getContext('2d'), W=viz.width, H=viz.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='#e2e8f0'; ctx.beginPath();
+  ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();    // 横轴
+  const f=+alpha.value;                                    // 频率 = 滑块值
+  ctx.strokeStyle='#2563eb'; ctx.lineWidth=2; ctx.beginPath();
+  for(let x=0;x<W;x++){const t=x/W*4*Math.PI*f; const y=H/2 - Math.sin(t)*H*0.35; x?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+  ctx.stroke();
+}
+if(alpha){alpha.addEventListener('input',()=>{alphaVal.textContent=(+alpha.value).toFixed(2);drawViz()});drawViz();}
+
+/* ---- 推导步骤逐步高亮 ---- */
+document.querySelectorAll('.btn-next-step').forEach(btn=>{
+  const der=btn.closest('[data-derivation]'), steps=der.querySelectorAll('.derivation-step');
+  btn.addEventListener('click',()=>{
+    const from=+btn.dataset.stepTarget;
+    steps.forEach((s,i)=>s.classList.toggle('active',i<=from));
+    btn.dataset.stepTarget=Math.min(from+1,steps.length-1);
+    if(from>=steps.length-1){steps.forEach(s=>s.classList.add('active'));btn.textContent='已全部展开';}
+  });
+});
+
+/* ---- 算法可视化（选择排序示例：数组条 + 步骤高亮 + 复杂度对比） ---- */
+const barsEl=document.getElementById('bars'),algoInfo=document.getElementById('algo-info');
+if(barsEl){
+  let arr=[6,3,8,1,5,9,2,7,4], i=0, j=1, minIdx=0, cmp=0, swap=0, done=false;
+  function renderBars(){
+    barsEl.innerHTML=arr.map((v,idx)=>{
+      let cls='bar';
+      if(done||idx<i) cls+=' sorted';
+      else if(idx===j||idx===minIdx) cls+=' compare';
+      return `<div class="${cls}" style="height:${v*16}px"></div>`;
+    }).join('');
+  }
+  function algoStep(){
+    if(done){algoInfo.textContent=`完成：比较 ${cmp} 次，交换 ${swap} 次`;return;}
+    if(i>=arr.length-1){done=true;algoInfo.textContent=`完成：比较 ${cmp} 次，交换 ${swap} 次`;renderBars();return;}
+    if(j<arr.length){
+      cmp++;
+      if(arr[j]<arr[minIdx]) minIdx=j;
+      j++;
+      algoInfo.textContent=`第 ${i+1} 轮扫描中：已比较 ${cmp} 次`;
+    } else {
+      if(minIdx!==i){[arr[i],arr[minIdx]]=[arr[minIdx],arr[i]];swap++;}
+      i++; j=i+1; minIdx=i;
+      algoInfo.textContent=`第 ${i} 轮完成：交换 ${swap} 次`;
+    }
+    renderBars();
+  }
+  document.getElementById('algo-step').addEventListener('click',algoStep);
+  document.getElementById('algo-reset').addEventListener('click',()=>{arr=[6,3,8,1,5,9,2,7,4];i=0;j=1;minIdx=0;cmp=0;swap=0;done=false;algoInfo.textContent='';renderBars();});
+  renderBars();
+}
+
+/* ---- 课程知识图谱渲染（fetch + 静态降级） ---- */
+const graphMount=document.getElementById('course-graph-mount'),
+      graphFallback=document.getElementById('graph-fallback');
+function renderGraphFallback(){
+  if(!graphMount) return;
+  graphMount.textContent='（course-graph.json 未加载，显示静态知识点清单）';
+  if(graphFallback){graphFallback.hidden=false;graphFallback.innerHTML='<li>知识点 1（先修：……）</li><li>知识点 2（后继：……）</li>';}
+}
+fetch('course-graph.json')
+  .then(r=>{if(!r.ok)throw 0;return r.json()})
+  .then(g=>{
+    if(!graphMount) return;
+    const items=(g.nodes||[]).map(n=>
+      `<li><strong>${n.name}</strong> — 先修：${(n.prerequisites||[]).join('、')||'无'}；后继：${(n.leads_to||[]).join('、')||'无'}</li>`).join('');
+    graphMount.innerHTML='<ul>'+items+'</ul>';
+  })
+  .catch(renderGraphFallback);                             // file:// 下 fetch 受限 → 降级
+
+/* ---- AI 助教（规则问答：FAQ 展开/收起） ---- */
+const aiBtn=document.getElementById('ai-tutor-btn'),aiPanel=document.getElementById('ai-tutor-panel');
+if(aiBtn&&aiPanel){
+  aiBtn.addEventListener('click',()=>aiPanel.classList.toggle('open'));
+  aiPanel.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>q.nextElementSibling.classList.toggle('show')));
+}
+
+/* ---- TTS 播放器（连续播放 + 当前段高亮 + 正文 data-tts 段落联动高亮） ---- */
+let audio=new Audio();
+const ttsToggle=document.getElementById('tts-toggle'),ttsList=document.getElementById('tts-list');
+function highlightTtsSection(section){
+  document.querySelectorAll('[data-tts]').forEach(el=>el.classList.remove('tts-active'));
+  if(section) document.querySelectorAll('[data-tts="'+section+'"]').forEach(el=>el.classList.add('tts-active'));
+}
+if(ttsToggle&&ttsList){
+  ttsToggle.addEventListener('click',()=>ttsList.classList.toggle('open'));
+  ttsList.querySelectorAll('button[data-src]').forEach(b=>b.addEventListener('click',()=>{
+    ttsList.querySelectorAll('button').forEach(x=>x.classList.remove('playing'));
+    b.classList.add('playing');
+    highlightTtsSection(b.dataset.section);               // 高亮正文对应 data-tts 段落
+    audio.src=b.dataset.src; audio.play().catch(()=>{/* 音频缺失 → 静默降级 */});
+  }));
+  audio.addEventListener('ended',()=>{
+    const cur=ttsList.querySelector('button.playing');
+    const next=cur?cur.nextElementSibling:null;
+    if(next){next.click();} else {ttsList.querySelectorAll('button').forEach(x=>x.classList.remove('playing')); highlightTtsSection(null);}
+  });
+}
+
+/* ---- KaTeX 降级检测（CDN 不可达时：顶部提示条 + 公式以 LaTeX 源码原文显示） ---- */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    if(typeof renderMathInElement==='undefined' && document.querySelector('.katex')==null){
+      console.warn('[TeachAnyHE] KaTeX 未加载，公式以 LaTeX 源码原文显示');
+      const bar=document.createElement('div');
+      bar.style.cssText='position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#1a202c;padding:8px 16px;font-size:14px;z-index:99;text-align:center';
+      bar.textContent='公式渲染库未加载（离线环境请改用本地 ./assets/katex/，公式暂以 LaTeX 源码显示）';
+      document.body.prepend(bar);
+    }
+  },1500);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "manifest_version": "1.0",
+  "course_id": "signal-systems-fourier",
+  "course_name": "信号与系统",
+  "chapter": "第4章 傅里叶变换",
+  "major": "电子信息工程",
+  "level": "本科高年级",
+  "course_type": "新授课",
+  "subject_category": "engineering",
+  "graduate_attributes": ["毕业要求3-2 复杂问题建模与求解"],
+  "knowledge_points": [
+    {
+      "id": "fourier-transform",
+      "name": "傅里叶变换",
+      "bloom": ["understand", "apply"]
+    }
+  ],
+  "tts_segments": ["section1", "section2", "section3"],
+  "built_with": "TeachAnyHE 2.0"
+}
