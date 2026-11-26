@@ -37,9 +37,12 @@ Skills are grouped by domain below, alongside the `requirements_analysis/spec-ki
 
 | Skill | Purpose | Documentation |
 | --- | --- | --- |
-| `teaching-pptx` | Turn a teaching topic into a slide-by-slide outline; after explicit approval, generate an editable 16:9 PPTX with speaker notes | [SKILL.md](education/teaching-pptx/SKILL.md) · [Guide](education/teaching-pptx/README.md) |
+| `lesson-prep-assistant` | Draft an outline for teacher approval, then produce a Markdown self-study handout with code examples and illustrations | [SKILL.md](education/lesson-prep-assistant/SKILL.md) · [Guide (Chinese)](education/lesson-prep-assistant/README.md) |
+| `teaching-pptx` | Turn a teaching topic into a slide-by-slide outline; after explicit approval, generate an editable 16:9 PPTX with speaker notes | [SKILL.md](education/teaching-pptx/SKILL.md) · [Guide (Chinese)](education/teaching-pptx/README.md) |
+| `prepkit` | Plan informatics competition lessons and review teaching quality using an ADDIE-based framework | [SKILL.md](education/prepkit/SKILL.md) |
+| `TeachAnyHE` | Build interactive higher-education courseware, simulations, and course knowledge graphs | [SKILL.md](education/TeachAnyHE/SKILL.md) · [Guide (Chinese)](education/TeachAnyHE/README.md) |
 
-See the [education index](education/README.md) for the full list.
+See the [education index (Chinese)](education/README.md) for installation guidance and licensing notes.
 
 ### 📋 Requirements Analysis & Design (`requirements_analysis/`, 3 skills)
 
@@ -192,6 +195,11 @@ ncepu_ideal-skills/
 │   ├── fastapi-api-security-authentication/ / go-security-audit/
 │   ├── golang-continuous-integration/ / security-audit/
 │   └── spring-boot-testing/ / spring-security/
+├── 📁 education/                                   # 🎓 Lesson planning and courseware
+│   ├── lesson-prep-assistant/                      # Self-study handouts and materials
+│   ├── teaching-pptx/                             # Editable teaching slides after outline approval
+│   ├── prepkit/                                   # Informatics competition lesson planning
+│   └── TeachAnyHE/                                # Interactive higher-education courseware
 ├── 📁 research/
 │   ├── best-paper-writing/                         # 🏆 Award-paper-style writing (CC BY 4.0, CVPR templates & corpus)
 │   ├── research-weave/                             # 🧵 Paper prospecting skill (MIT, SKILL + references/ + scripts/)
@@ -264,7 +272,7 @@ Contributions are welcome, especially new Skills or improvements to existing one
 **💡 Recommended Workflow**：
 
 1. 🍴 Fork this repository and create a feature branch
-2. 📁 Add the new skill under the matching category (`requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `research/`, `others/`), including `SKILL.md`, `README.md`, and needed resources
+2. 📁 Add the new skill under the matching category (`requirements_analysis/`, `design/`, `sql-to/`, `prototype-to/`, `go/`, `java/`, `security/`, `education/`, `research/`, `others/`), including `SKILL.md`, `README.md`, and needed resources
 3. 📝 Update the root README skill list and repository structure
 4. 🔄 Submit a Pull Request
 5. 🧪 Run skill tests and regression in a separate testing project — do not add test directories or sample artifacts to this repository

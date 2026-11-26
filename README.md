@@ -23,7 +23,7 @@
 
 本仓库**只做一件事**：收集、整理、分类存放并持续优化各种技能。它不承载技能在AI工具中的测试与验证，技能测试可以由用户自行，参照帮助文档在独立项目中进行。
 
-- 📁 **按领域分类**：技能按用途归入 `requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`ppt/`、`research/`、`info-research/`、`others/` 等目录，每个技能一个独立目录（`SKILL.md` + 资源）
+- 📁 **按领域分类**：技能按用途归入 `requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`education/`、`ppt/`、`research/`、`info-research/`、`others/` 等目录，每个技能一个独立目录（`SKILL.md` + 资源）
 - 🧪 **测试外置**：本仓库不含测试目录与样例产物；技能的验证与回归测试在**独立项目**中进行
 - 🔁 **无工具副本**：不再向 `.workbuddy/`、`.cursor/`、`.dsh/` 等 AI 工具目录拷贝技能副本，避免多份副本不同步
 - 🧩 **多技术栈**：覆盖需求分析、数据库设计、后端脚手架、前端原型转工程、Go / Java 工程规范、安全审计与科研等场景
@@ -283,7 +283,7 @@ it-requirement-analysis（PRD / 验收标准）
 **💡 建议流程**：
 
 1. 🍴 Fork 本仓库并新建分支
-2. 📁 在对应分类目录（`requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`research/`、`others/`）中新建技能目录，包含 `SKILL.md`、`README.md` 及必要资源
+2. 📁 在对应分类目录（`requirements_analysis/`、`design/`、`sql-to/`、`prototype-to/`、`go/`、`java/`、`security/`、`education/`、`research/`、`others/`）中新建技能目录，包含 `SKILL.md`、`README.md` 及必要资源
 3. 📝 更新根 README 的技能清单与仓库结构
 4. 🔄 发起 Pull Request
 5. 🧪 技能测试与回归请在独立测试项目中进行，不要在本仓库添加测试目录或样例产物

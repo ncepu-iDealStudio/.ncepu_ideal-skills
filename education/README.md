@@ -2,14 +2,27 @@
 
 本目录集中收录面向 AI 助手的教学技能，覆盖备课、讲义编写、PPT 与互动课件制作、竞赛培训等环节。`lesson-prep-assistant` 和 `teaching-pptx` 由本仓库维护，其他技能的来源与许可见下表。
 
+## 目录结构
+
+```text
+education/
+├── README.md               # 本索引
+├── lesson-prep-assistant/  # 自学讲义与材料包
+├── teaching-pptx/          # 教师确认提纲后生成教学 PPTX
+├── prepkit/                # 信息学竞赛备课
+└── TeachAnyHE/             # 高校互动课件与仿真
+```
+
+四项技能各有自己的 `SKILL.md`。在 WorkBuddy 等支持技能目录的工具中，按需导入**单个技能的完整目录**，保留其参考资料、模板和脚本；不要把整个 `education/` 当作一个技能导入。
+
 ## 技能总览
 
 | 技能 | 面向对象 | 主要产出 | 一句话定位 |
 | --- | --- | --- | --- |
-| [`lesson-prep-assistant`](lesson-prep-assistant/) | 高校计算机专业教师 | Markdown 自学讲义 + 示例代码 + 配图 | 先出提纲、教师确认后再生成整套自学材料包 |
-| [`teaching-pptx`](teaching-pptx/) | 任课教师与助教 | 可编辑的 16:9 PPTX + 演讲者备注 | 只给知识点即可起步，逐页提纲经教师确认后才出片 |
-| [`prepkit`](prepkit/) | 信息学奥赛教练 | 备课思路与质量参照 | 不设固定流程的竞赛备课思考框架 |
-| [`TeachAnyHE`](TeachAnyHE/) | 高校教师 / 助教 / 研究生 | 互动课件、仿真、知识图谱等 | 面向本科与研究生课程的互动学习体验开发 |
+| [`lesson-prep-assistant`](lesson-prep-assistant/SKILL.md) · [使用说明](lesson-prep-assistant/README.md) | 高校计算机专业教师 | Markdown 自学讲义 + 示例代码 + 配图 | 先出提纲、教师确认后再生成整套自学材料包 |
+| [`teaching-pptx`](teaching-pptx/SKILL.md) · [使用说明](teaching-pptx/README.md) | 任课教师与助教 | 可编辑的 16:9 PPTX + 演讲者备注 | 只给知识点即可起步，逐页提纲经教师确认后才出片 |
+| [`prepkit`](prepkit/SKILL.md) | 信息学奥赛教练 | 备课思路与质量参照 | 不设固定流程的竞赛备课思考框架 |
+| [`TeachAnyHE`](TeachAnyHE/SKILL.md) · [使用说明](TeachAnyHE/README.md) | 高校教师 / 助教 / 研究生 | 互动课件、仿真、知识图谱等 | 面向本科与研究生课程的互动学习体验开发 |
 
 ## 各技能简介
 
