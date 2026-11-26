@@ -32,7 +32,7 @@
 
 ## 🎯 技能清单
 
-按目录分组，共 **38 个技能**（`requirements_analysis` 3、`design` 5、`sql-to` 4、`prototype-to` 7、`java` 5、`go` 4、`security` 6、`research` 3、`ppt` 1、`others` 1），另有 `requirements_analysis/spec-kit` 工具包、20 个通用工作流技能、1 组科研技能集（`supervisor-skills`）与 1 组计算机科研实证精选集（`auto-empirical-research`，6 项技能）。
+按目录分组，共 **39 个技能**（`requirements_analysis` 3、`design` 5、`sql-to` 4、`prototype-to` 7、`java` 5、`go` 4、`security` 6、`research` 3、`ppt` 1、`education` 1、`others` 1），另有 `requirements_analysis/spec-kit` 工具包、20 个通用工作流技能、1 组科研技能集（`supervisor-skills`）与 1 组计算机科研实证精选集（`auto-empirical-research`，6 项技能）。
 
 ### 📋 需求分析与设计（`requirements_analysis/`，3 个技能）
 
@@ -123,6 +123,14 @@
 
 ---
 
+### 🎓 教学（`education/`，1 个技能）
+
+| 技能 | 说明 | 文档 |
+| --- | --- | --- |
+| `lesson-prep-assistant`（备课辅助助手） | 计算机专业教师备课技能：输入知识点 + 教学目标 → 先出教学内容提纲供审阅，确认后再生成按五段认知逻辑（是什么/为什么/发展历程/应用现状/如何开始使用）展开的 Markdown 讲义 + 可运行示例代码 + 配图，成品为可在 VSCode 中打开自学的材料包（原创） | [SKILL.md](education/lesson-prep-assistant/SKILL.md) · [中文导读](education/lesson-prep-assistant/README.md) |
+
+---
+
 ### 🧩 其他技能
 
 | 技能 | 说明 | 文档 |
@@ -191,6 +199,8 @@ ncepu_ideal-skills/
 │   ├── fastapi-api-security-authentication/ / go-security-audit/
 │   ├── golang-continuous-integration/ / security-audit/
 │   └── spring-boot-testing/ / spring-security/
+├── 📁 education/                                   # 🎓 教学（1 个技能）
+│   └── lesson-prep-assistant/                      # 备课辅助助手（原创：两阶段门控 + 五段认知逻辑 + 自学材料包）
 ├── 📁 research/
 │   ├── best-paper-writing/                         # 🏆 最佳论文风格写作（CC BY 4.0，含 CVPR 模板与语料）
 │   ├── agentero-skills/                            # 🖥️ Agentero 技能精选 2 项（MIT：中英文精读/写作规范，已独立化改造）
