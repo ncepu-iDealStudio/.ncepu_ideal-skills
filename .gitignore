@@ -89,3 +89,8 @@ bin-release/
 
 # WorkBuddy 本地工作日志（不入版本控制）
 .workbuddy/
+
+# Python 测试运行缓存
+.pytest_cache/
+__pycache__/
+*.pyc

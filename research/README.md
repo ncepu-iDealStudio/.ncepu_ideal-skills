@@ -1,8 +1,8 @@
 # research 技能分类说明
 
-本目录收录 **5 个技能包、22 个科研技能**，覆盖选题、文献调研、实验设计、论文写作和投稿前审查。技能可用中文或英文发起；在 WorkBuddy 或 DSH 中优先安装当前任务需要的技能，不必一次安装整个合集。已有上游依赖的技能见下文说明。
+本目录收录 **6 个技能包、23 个科研技能**，覆盖选题、文献调研、实验设计、论文写作和投稿前审查。技能可用中文或英文发起；在 WorkBuddy 或 DSH 中优先安装当前任务需要的技能，不必一次安装整个合集。已有上游依赖的技能见下文说明。
 
-**English quick start:** Pick `paper-reader` to explain one paper, `research-weave` to prioritize readings, `deep-research` for a literature synthesis, or `experiment-plan` to design experiments without running them. Import the complete skill folder through WorkBuddy’s Skills UI, or place it directly under `.dsh/skills/` or `.agents/skills/` in a DSH project. Ask in English or Chinese and specify the deliverable language if it differs from your request.
+**English quick start:** Pick `paper-reader` to explain one paper, `research-weave` to prioritize readings, `deep-research` (in `supervisor-skills`) for a literature synthesis, `deep-research-auditable` for an auditable multi-source evidence trail, or `experiment-plan` to design experiments without running them. Import the complete skill folder through WorkBuddy’s Skills UI, or place it directly under `.dsh/skills/` or `.agents/skills/` in a DSH project. Ask in English or Chinese and specify the deliverable language if it differs from your request.
 
 ## 技能总览
 
@@ -13,6 +13,7 @@
 | research-weave | 1 | 文献证据网络：追溯学术谱系、梳理研究脉络 | MIT |
 | best-paper-writing | 1 | 顶会最佳论文风格写作（60 篇获奖论文蒸馏） | CC BY 4.0 |
 | agentero-skills | 2 | 论文精读讲解 + ML 论文写作示例库 | MIT |
+| deep-research-auditable | 1 | 可审计深度研究：验证分级 + 饱和停止 + 有界否定（已改名避免同名冲突） | MIT |
 
 ## 各技能详细介绍
 
@@ -71,6 +72,14 @@
 - **paper-reader**：中英文精读单篇科研论文。支持本地 PDF、链接或粘贴文本，默认在对话中交付讲义，按需保存笔记。**读不懂论文或需要精读笔记时使用**。
 - **research-paper-writing**：面向 ML/CV/NLP 论文的写作质量提升，附 37 个真实获奖论文的写作示例库（Abstract/Introduction/Related Work/Method/Experiments 各节的模板与范例）。**写作某一节不知道怎么组织时查阅对应示例**。
 
+### 6. deep-research-auditable — 可审计深度研究（1 项，已改名适配）
+
+来源：[hyderhusainarastu/deep-research-skill](https://github.com/hyderhusainarastu/deep-research-skill)（MIT；因技能名 `deep-research` 与本目录 supervisor-skills 内的同名技能冲突，本地改名并同步更新测试断言，方法论内容保持上游原文）
+
+给一个需要大量来源的问题，产出一条别人能复核的证据链。四个核心机制：**验证分级**（每条来源只能处于 DISCOVERED→FULL-TEXT-VERIFIED 五级之一，不可虚标）、**饱和停止规则**（8 条条件全满足才停，防止无限查或查太浅）、**有界否定结论**（"在所检索材料中未找到"+列出检索范围）、**角色分离**（发现者与验证者分开，另有对抗式审查 Wave）。两档运行：FULL 用并行 agent、SCOPED 用于单聊。自带两个离线 Python 脚本（CSV 校验、词干审计），收录时 `pytest` 12 项全通过。
+
+**适用场景**：严谨的文献/证据盘点、需要区分"搜到"与"真读"、需要诚实报告负面证据时。**不适用**：快速事实查询（用普通检索即可）。与 `supervisor-skills/deep-research`（偏出综述报告）、`research-weave`（偏决定读什么）互补。详见[中文导读](deep-research-auditable/README.zh-CN.md)与[来源与许可](deep-research-auditable/references/PROVENANCE.md)。
+
 ## 使用说明
 
 1. **安装单位**：安装包含 `SKILL.md` 的整棵子目录，保留其中的 `references/`、`scripts/`、`assets/` 等资源。入口的 YAML 至少有 `name` 和 `description`；不要把合集外壳当成技能，也不要只复制入口文件。分发或分享前，按对应来源说明附上合集或技能级许可与署名。
@@ -127,7 +136,7 @@ Copy-Item -LiteralPath $src -Destination $target -Recurse -ErrorAction Stop
 ## 推荐使用路径
 
 - **开题/找方向**：vibe-research-workflow → idea-evaluator / idea-discovery → deep-research
-- **文献调研**：dblp-api / openalex 检索 → research-weave 梳理脉络 → bibliometrix-guide 计量分析
+- **文献调研**：dblp-api / openalex 检索 → research-weave 梳理脉络 → bibliometrix-guide 计量分析；需要可审计证据链时改用 deep-research（出综述报告）或 deep-research-auditable（分级+停止规则+有界否定）
 - **实验设计**：experiment-plan（产出消融矩阵与算力预算）
 - **论文写作**：tech-paper-template 搭骨架 → paper-writer / bestpaper-writing / research-paper-writing 起草 → intro-drafter 攻克 Introduction → paper-polish 润色 → figure-designer / drawio-reconstruction 处理配图
 - **投稿与答辩**：check-citations 核查引用 → pre-submission-reviewer 模拟审稿 → rebuttal-guidance 撰写回复策略

@@ -139,6 +139,7 @@
 | 技能 | 说明 | 文档 |
 | --- | --- | --- |
 | `dsh-plugin-starter`（`others/`） | 一句话需求或插件原型 → DSH 插件起步项目，四类插件 + 内置开发者指南 | [README](others/dsh-plugin-starter/README.md) |
+| `patent-disclosure-skill`（`others/`） | 中国专利技能合集（MIT，10 个子技能）：挖点/交底书、申请文件四件套、案卷会稿、专利蒸馏、著录与海外检索、通俗解读、权要对照表、专利地图、审查答复、政策简报；根 SKILL.md 路由 + 须点名门禁 | [中文导读](others/patent-disclosure-skill/README.zh-CN.md) · [PROVENANCE](others/patent-disclosure-skill/references/PROVENANCE.md) |
 | `last30days`（`info-research/`） | 全网信息调研：拉取 Reddit/X/YouTube/HN/Polymarket/小红书等最近 30 天帖文与互动，综合生成带引用的调研报告 | [SKILL.md](info-research/last30days/SKILL.md) |
 | `gorden-ppt-skill`（`ppt/`） | 21 套中文 PPTX 模板 + python-pptx 非破坏性纯文字编辑：工作汇报、述职竞聘、教学课件、商务提案、数据可视化等成品 PPT | [SKILL.md](ppt/gorden-ppt-skill/SKILL.md) |
 | `supervisor-skills`（`research/`） | 12 个科研全流程技能（Idea 评估、文献调研、论文写作、投稿审核、Rebuttal） | [中文导读](research/supervisor-skills/README.zh-CN.md) |
@@ -146,6 +147,7 @@
 | `best-paper-writing`（`research/`） | 最佳论文风格写作：60 篇 CVPR/ICCV/NeurIPS 获奖论文提炼的摘要/引言/方法/实验/配图写作技能，自带草稿检查器 | [SKILL.md](research/best-paper-writing/skills/bestpaper-writing/SKILL.md) · [上游 README](research/best-paper-writing/README.md) |
 | `auto-empirical-research`（`research/`） | 计算机科研实证精选 6 项：idea-discovery（找 idea 全流程）、experiment-plan（主张倒推实验）、dblp-api / openalex / bibliometrix-guide（文献检索与计量）、check-citations（引用真实性核查，自带脚本） | [PROVENANCE](research/auto-empirical-research/references/PROVENANCE.md) |
 | `agentero-skills`（`research/`） | Agentero 工作台技能精选 2 项（已独立化改造）：中英文论文精读 `paper-reader`（可选讲义式笔记，已去 CLI 绑定）、论文写作规范 `research-paper-writing`（含 37 个写作示例） | [PROVENANCE](research/agentero-skills/references/PROVENANCE.md) |
+| `deep-research-auditable`（`research/`） | 可审计深度研究（MIT，源自上游 deep-research-skill；已改名避免与 supervisor-skills/deep-research 冲突）：验证分级 + 查询日志 + 饱和停止规则 + 有界否定结论，FULL 并行 / SCOPED 单聊两档，自带离线脚本与 12 项测试 | [中文导读](research/deep-research-auditable/README.zh-CN.md) · [PROVENANCE](research/deep-research-auditable/references/PROVENANCE.md) |
 | `superpowers-zh`（`requirements_analysis/`） | 20 个通用工作流技能（brainstorming、writing-plans、executing-plans、subagent-driven-development、systematic-debugging、TDD 等），供支持 Skill 的 AI 工具加载使用 | 目录：`requirements_analysis/superpowers-zh/` |
 
 - 12 个科研技能需**作为一组整体安装**（技能间相互引用），多数为纯提示词；`drawio-reconstruction` 额外依赖 Python 脚本与 draw.io CLI
@@ -156,6 +158,8 @@
 - `last30days` 为 **MIT** 许可；自带 Python 调研引擎（需 Python 3.12+），多数据源凭据**可选**（首次使用有 setup wizard 引导，亦有 keyless 模式）；调研境外平台需网络可达；详见 [`references/PROVENANCE.md`](info-research/last30days/references/PROVENANCE.md)
 - `auto-empirical-research` 合集为 **CC BY-SA 4.0**，选择性收录 6 项科研技能。`experiment-plan` 和 `check-citations` 支持单独安装；`idea-discovery` 仍依赖未收录的上游组件，`openalex` 和 `bibliometrix-guide` 有外部运行要求。见[科研技能安装指南](research/README.md)和[来源与许可](research/auto-empirical-research/references/PROVENANCE.md)。
 - `agentero-skills` 为 **MIT**（源自 Agentero 应用）。`paper-reader` 不依赖 Agentero CLI 或 Vault，默认在对话交付，配图提取可选；`research-paper-writing` 可独立使用。见[改造说明](research/agentero-skills/references/PROVENANCE.md)。
+- `deep-research-auditable` 为 **MIT**（源自 hyderhusainarastu/deep-research-skill）。因技能名与原 `supervisor-skills/deep-research` 冲突，本地改名并同步更新测试断言；两个 Python 脚本仅依赖标准库、离线可用，收录时 `pytest` 12 项全通过。见[来源与许可](research/deep-research-auditable/references/PROVENANCE.md)与[中文导读](research/deep-research-auditable/README.zh-CN.md)。
+- `patent-disclosure-skill` 为 **MIT**（源自 handsomestWei/patent-disclosure-skill）。10 个子技能的路由式合集，560 文件完整收录；核心路由与解读/检索流程无第三方依赖，Word 出图/公式/Mermaid 需 `requirements.txt`，CNIPA 抓取与 STEP 解析为可选；对照表/FTO 初筛/审查答复均为底稿，**不构成法律意见**。见[来源与许可](others/patent-disclosure-skill/references/PROVENANCE.md)与[中文导读](others/patent-disclosure-skill/README.zh-CN.md)。
 
 ---
 
@@ -212,13 +216,15 @@ ncepu_ideal-skills/
 │   ├── agentero-skills/                            # 🖥️ Agentero 技能精选 2 项（MIT：中英文精读/写作规范，已独立化改造）
 │   ├── auto-empirical-research/                    # 🧪 实证科研精选 6 技能（CC BY-SA 4.0：idea/实验/文献计量/引用核查）
 │   ├── research-weave/                             # 🧵 论文淘金技能（MIT，SKILL + references/ + scripts/）
+│   ├── deep-research-auditable/                    # 🔍 可审计深度研究（MIT，已改名避免同名冲突；验证分级/饱和停止/离线脚本）
 │   └── supervisor-skills/                          # 🔬 12 个科研技能（CC BY-NC-SA 4.0）
 ├── 📁 info-research/                               # 📰 全网信息调研（1 个技能）
 │   └── last30days/                                 # 🗞️ 最近 30 天全网舆情调研（MIT，自带 Python 引擎）
 ├── 📁 ppt/                                         # 📊 PPT 生成（1 个技能）
 │   └── gorden-ppt-skill/                           # 🎨 21 套中文模板 PPT 生成（代码 MIT / 模板非商业）
 ├── 📁 others/
-│   └── dsh-plugin-starter/                         # 🧩 DSH 插件起步项目生成技能
+│   ├── dsh-plugin-starter/                         # 🧩 DSH 插件起步项目生成技能
+│   └── patent-disclosure-skill/                    # 🇨🇳 中国专利技能合集（MIT，10 子技能：交底/申请/检索/解读/地图/审查答复等）
 ```
 
 > 说明：仓库中**不含** `test/` 样例目录，也不含 `.codebuddy/`、`.agents/`、`.workbuddy/`、`.cursor/`、`.dsh/` 等工具专用技能副本。这些测试与安装副本已移出本仓库，验证工作在独立项目中进行。通用工作流技能以 `requirements_analysis/superpowers-zh/` 为唯一本体，按需安装到具体工具。
