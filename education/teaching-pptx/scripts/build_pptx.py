@@ -6,7 +6,14 @@ import json
 import re
 import sys
 import unicodedata
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional, Tuple
+
+
+METADATA_START = '[[TEACHING_PPTX_METADATA]]'
+METADATA_END = '[[/TEACHING_PPTX_METADATA]]'
+METADATA_VERSION = 1
 
 
 # layout: minimum points, maximum points, maximum width units per point
@@ -17,6 +24,31 @@ LAYOUTS = {
     'steps': (2, 4, 60),
     'practice': (1, 3, 60),
 }
+
+
+@dataclass(frozen=True)
+class SlideSpec:
+    title: str
+    label: str
+    points: Tuple[str, ...]
+    notes: str
+    layout: str
+    activity: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class DeckSpec:
+    title: str
+    subtitle: str
+    cover_notes: str
+    slides: Tuple[SlideSpec, ...]
+    audience: Optional[str] = None
+    learning_objectives: Optional[Tuple[str, ...]] = None
+    duration_minutes: Optional[int] = None
+
+    @property
+    def has_teaching_metadata(self):
+        return self.audience is not None
 
 
 def units(text):
@@ -47,6 +79,37 @@ def parse_spec(path):
     pages = spec.get('slides')
     if not isinstance(pages, list) or not pages:
         raise ValueError('deck.slides must contain at least one teaching slide')
+
+    top_fields = ('audience', 'learning_objectives', 'duration_minutes')
+    top_present = [field in spec for field in top_fields]
+    activity_present = [isinstance(item, dict) and 'activity' in item for item in pages]
+    legacy = not any(top_present) and not any(activity_present)
+    if not legacy:
+        for field, present in zip(top_fields, top_present):
+            if not present:
+                raise ValueError(f'deck.{field} is required when teaching metadata is used')
+        for index, present in enumerate(activity_present, start=2):
+            if not present:
+                raise ValueError(f'page {index}.activity is required when teaching metadata is used')
+
+        audience = text_field(spec, 'audience', 'deck')
+        objectives = spec.get('learning_objectives')
+        if not isinstance(objectives, list) or not 2 <= len(objectives) <= 3:
+            raise ValueError('deck.learning_objectives must contain 2–3 items')
+        learning_objectives = tuple(
+            text_field({'text': objective}, 'text', f'deck.learning_objectives[{i}]')
+            for i, objective in enumerate(objectives)
+        )
+        duration_minutes = spec.get('duration_minutes')
+        if (isinstance(duration_minutes, bool)
+                or not isinstance(duration_minutes, int)
+                or duration_minutes <= 0):
+            raise ValueError('deck.duration_minutes must be a positive integer')
+    else:
+        audience = None
+        learning_objectives = None
+        duration_minutes = None
+
     slides = []
     for i, item in enumerate(pages, start=2):
         prefix = f'page {i}'
@@ -55,6 +118,7 @@ def parse_spec(path):
         heading = text_field(item, 'title', prefix, limit=46)
         label = text_field(item, 'label', prefix, limit=20)
         notes = text_field(item, 'notes', prefix, multiline=True)
+        activity = None if legacy else text_field(item, 'activity', prefix, multiline=True)
         layout = item.get('layout', 'bullets')
         if not isinstance(layout, str) or layout not in LAYOUTS:
             raise ValueError(f'{prefix}.layout must be one of {", ".join(LAYOUTS)}')
@@ -63,10 +127,44 @@ def parse_spec(path):
         if not isinstance(points, list) or not minimum <= len(points) <= maximum:
             count = str(minimum) if minimum == maximum else f'{minimum}–{maximum}'
             raise ValueError(f'{prefix}.points must contain {count} lines for {layout}')
-        lines = [text_field({'text': point}, 'text', f'{prefix}.points[{j}]', limit=limit)
-                 for j, point in enumerate(points)]
-        slides.append((heading, label, lines, notes, layout))
-    return title, subtitle, cover_notes, slides
+        lines = tuple(
+            text_field({'text': point}, 'text', f'{prefix}.points[{j}]', limit=limit)
+            for j, point in enumerate(points)
+        )
+        slides.append(SlideSpec(heading, label, lines, notes, layout, activity))
+    return DeckSpec(
+        title, subtitle, cover_notes, tuple(slides), audience,
+        learning_objectives, duration_minutes,
+    )
+
+
+def notes_with_metadata(notes, metadata):
+    if metadata is None:
+        return notes
+    payload = json.dumps(
+        {'version': METADATA_VERSION, **metadata},
+        ensure_ascii=False,
+        separators=(',', ':'),
+    )
+    return f'{notes}\n\n{METADATA_START}\n{payload}\n{METADATA_END}'
+
+
+def parse_notes(notes):
+    if METADATA_START not in notes and METADATA_END not in notes:
+        return notes, None
+    pattern = re.compile(
+        rf'\n\n{re.escape(METADATA_START)}\n([^\n]+)\n{re.escape(METADATA_END)}\Z'
+    )
+    match = pattern.search(notes)
+    if match is None:
+        raise ValueError('PPTX verification failed: malformed teaching metadata block')
+    try:
+        metadata = json.loads(match.group(1))
+    except json.JSONDecodeError as exc:
+        raise ValueError('PPTX verification failed: invalid teaching metadata JSON') from exc
+    if not isinstance(metadata, dict) or metadata.pop('version', None) != METADATA_VERSION:
+        raise ValueError('PPTX verification failed: unsupported teaching metadata version')
+    return notes[:match.start()], metadata
 
 
 def render(spec):
@@ -119,17 +217,31 @@ def render(spec):
         slide.notes_slide.notes_text_frame.text = notes
         return slide
 
-    title, subtitle, cover_notes, pages = spec
     deck = Presentation()
     deck.slide_width, deck.slide_height = Inches(40 / 3), Inches(7.5)
-    deck.core_properties.title = title
+    deck.core_properties.title = spec.title
     titles = []
-    cover = page('10243B', cover_notes)
+    cover_metadata = None
+    if spec.has_teaching_metadata:
+        cover_metadata = {
+            'kind': 'deck',
+            'audience': spec.audience,
+            'learning_objectives': list(spec.learning_objectives),
+            'duration_minutes': spec.duration_minutes,
+        }
+    cover = page('10243B', notes_with_metadata(spec.cover_notes, cover_metadata))
     rect(cover, 0.85, 2.03, 0.85, 0.07, '4DDCC0')
-    titles.append(textbox(cover, title, 0.85, 2.32, 11.5, 1.05, 43, 'FFFFFF', True).shape_id)
-    textbox(cover, subtitle, 0.88, 3.7, 11.5, 0.8, 23, 'BCD3E5')
-    for i, (heading, label, points, notes, layout) in enumerate(pages, start=2):
-        slide = page(white, notes)
+    titles.append(textbox(cover, spec.title, 0.85, 2.32, 11.5, 1.05, 43, 'FFFFFF', True).shape_id)
+    textbox(cover, spec.subtitle, 0.88, 3.7, 11.5, 0.8, 23, 'BCD3E5')
+    for i, slide_spec in enumerate(spec.slides, start=2):
+        heading = slide_spec.title
+        label = slide_spec.label
+        points = slide_spec.points
+        layout = slide_spec.layout
+        metadata = None
+        if spec.has_teaching_metadata:
+            metadata = {'kind': 'slide', 'activity': slide_spec.activity}
+        slide = page(white, notes_with_metadata(slide_spec.notes, metadata))
         textbox(slide, label, 0.85, 0.48, 9.0, 0.34, 16, accent, True)
         titles.append(textbox(slide, heading, 0.85, 0.96, 11.5, 1.05, 34, ink, True).shape_id)
         rect(slide, 0.85, 2.06, 11.63, 0.02, 'D8E2E8')
@@ -154,20 +266,36 @@ def render(spec):
                 else:
                     rect(slide, 0.91, y + 0.39, 0.10, 0.10, accent)
                 textbox(slide, line, 1.6, y, 10.78, 0.87, 23, ink)
-        textbox(slide, f'{i:02d} / {len(pages) + 1:02d}', 11.14, 6.85, 1.3, 0.34, 14, muted)
+        textbox(slide, f'{i:02d} / {len(spec.slides) + 1:02d}', 11.14, 6.85, 1.3, 0.34, 14, muted)
 
     stream = io.BytesIO()
     deck.save(stream)
     stream.seek(0)
     reopened = Presentation(stream)
-    expected = [(title, cover_notes)] + [(h, n) for h, _, _, n, _ in pages]
+    expected = [(spec.title, spec.cover_notes, cover_metadata)] + [
+        (
+            slide.title,
+            slide.notes,
+            {'kind': 'slide', 'activity': slide.activity}
+            if spec.has_teaching_metadata else None,
+        )
+        for slide in spec.slides
+    ]
     if len(reopened.slides) != len(expected):
         raise ValueError('PPTX verification failed: incorrect slide count')
-    for i, (slide, (heading, notes), shape_id) in enumerate(zip(reopened.slides, expected, titles), 1):
-        saved_title = next((s.text for s in slide.shapes if s.shape_id == shape_id and s.has_text_frame), None)
-        saved_notes = slide.notes_slide.notes_text_frame
-        if saved_title != heading or saved_notes is None or saved_notes.text != notes:
-            raise ValueError(f'PPTX verification failed on page {i}: title or notes differ')
+    for i, (slide, (heading, notes, metadata), shape_id) in enumerate(
+            zip(reopened.slides, expected, titles), 1):
+        saved_title = next(
+            (shape.text for shape in slide.shapes
+             if shape.shape_id == shape_id and shape.has_text_frame),
+            None,
+        )
+        saved_notes_frame = slide.notes_slide.notes_text_frame
+        if saved_notes_frame is None:
+            raise ValueError(f'PPTX verification failed on page {i}: notes are missing')
+        saved_notes, saved_metadata = parse_notes(saved_notes_frame.text)
+        if saved_title != heading or saved_notes != notes or saved_metadata != metadata:
+            raise ValueError(f'PPTX verification failed on page {i}: title, notes, or metadata differ')
     return stream.getvalue(), len(expected)
 
 

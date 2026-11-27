@@ -94,3 +94,4 @@ bin-release/
 .pytest_cache/
 __pycache__/
 *.pyc
+.trae/documents/扩展教学PPTX规格.md
